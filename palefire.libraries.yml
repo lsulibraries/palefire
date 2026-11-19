@@ -685,6 +685,16 @@ podcast:
     - core/drupal
     - core/once
 
+# An oral history project's full interviews under its exhibition
+# (includes/exhibit-interviews.html.twig, src/ExhibitInterviews.php).
+# Attached by that template. CSS only: the players are the exhibition's
+# (palefire/exhibition, js/exhibition.js), already on the page.
+exhibit-interviews:
+  version: 1.0.0
+  css:
+    component:
+      css/exhibit-interviews.css: {}
+
 # The field recorder mark (includes/recorder-mark.html.twig, drawn by
 # build/recorder-mark.js): a Sony PCM-D10 in hairlines, recording in a loop.
 # Attached by that include. Styles: its own entry (scss/recorder.scss).

@@ -1,0 +1,1110 @@
+{
+  "_about": "Built by scripts/palefire_exhibit_mossville_interviews_build.js from the 2017 Mossville directory page; do not edit by hand.",
+  "files": "https://lib.lsu.edu/sites/all/files/oralhistory/presentations/mossvilledirectory",
+  "summaries": "https://lib.lsu.edu/sites/all/files/oralhistory/abstracts/mossville",
+  "narrators": [
+    {
+      "name": "Lenoria Ambrose",
+      "interviewers": [
+        "Chelsea Arseneault"
+      ],
+      "accessions": [
+        "4700.2466"
+      ],
+      "portrait": "ambrose_lenoria_and_interviewer_2.jpg",
+      "tapes": [
+        {
+          "tape": "T4402",
+          "seconds": 1419,
+          "audio": "Ambrose_Lenoria_T4402.mp3",
+          "transcript": "Ambrose_Lenoria_T4402.pdf",
+          "summary": "Ambrose_Lenoria_T4402_T4484_T4485_abs.pdf"
+        },
+        {
+          "tape": "T4484",
+          "seconds": 5066,
+          "audio": "Ambrose_Lenoria_T4484.mp3",
+          "transcript": "Ambrose_Lenoria_T4484.pdf",
+          "summary": "Ambrose_Lenoria_T4402_T4484_T4485_abs.pdf"
+        },
+        {
+          "tape": "T4485",
+          "seconds": 5098,
+          "audio": "Ambrose_Lenoria_T4485.mp3",
+          "transcript": "Ambrose_Lenoria_T4485.pdf",
+          "summary": "Ambrose_Lenoria_T4402_T4484_T4485_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Shirley Andrus and Carolyn Marshall",
+      "interviewers": [
+        "Chelsea Arseneault"
+      ],
+      "accessions": [
+        "4700.2466"
+      ],
+      "portrait": "andrus_shirley_and_marshall_carolyn_1.jpg",
+      "tapes": [
+        {
+          "tape": "T4426",
+          "seconds": 1682,
+          "audio": "Andrus_Shirley_and_Marshall_Carolyn_T4426.mp3",
+          "transcript": "Andrus_Shirley_and_Marshall_Carolyn_T4426.pdf",
+          "summary": "Andrus_Shirley_and_Marshall_Carolyn_T4426_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Ronnie Banks",
+      "interviewers": [
+        "Kathleen Donner"
+      ],
+      "accessions": [
+        "4700.2466"
+      ],
+      "portrait": "banks_ronnie_3.jpg",
+      "tapes": [
+        {
+          "tape": "T4403",
+          "seconds": 1077,
+          "audio": "Banks_Ronnie_T4403.mp3",
+          "transcript": "Banks_Ronnie_T4403.pdf",
+          "summary": "Banks_Ronnie_T4403_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Delma and Christine Bennett",
+      "interviewers": [
+        "Chelsea Arseneault"
+      ],
+      "accessions": [
+        "4700.2466"
+      ],
+      "portrait": "bennet_delma_and_christine.jpg",
+      "tapes": [
+        {
+          "tape": "T4620",
+          "seconds": 8146,
+          "audio": "Bennett_Delma_and_Christine_T4620.mp3",
+          "transcript": "Bennett_Delma_and_Christine_T4620.pdf",
+          "summary": "Bennett_Delma_and_Christine_T4620_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Charlotte Bernard",
+      "interviewers": [
+        "Stephanie Dragoon"
+      ],
+      "accessions": [
+        "4700.2664"
+      ],
+      "portrait": "bernard_charlotte_2.jpg",
+      "tapes": [
+        {
+          "tape": "T4621",
+          "seconds": 3833,
+          "audio": "Bernard_Charlotte_T4621.mp3",
+          "transcript": "Bernard_Charlotte_T4621.pdf",
+          "summary": "Bernard_Charlotte_T4621_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "John Bernard",
+      "interviewers": [
+        "Doug Mungin"
+      ],
+      "accessions": [
+        "4700.2506"
+      ],
+      "portrait": "bernard_john_1.jpg",
+      "tapes": [
+        {
+          "tape": "T4427",
+          "seconds": 1224,
+          "audio": "Bernard_John_T4427.mp3",
+          "transcript": "Bernard_John_T4427.pdf",
+          "summary": "Bernard_John_T4427_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Donald Braxton",
+      "interviewers": [
+        "Jennifer A. Cramer"
+      ],
+      "accessions": [
+        "4700.2462"
+      ],
+      "portrait": "braxton_donald_close_up.jpg",
+      "tapes": [
+        {
+          "tape": "T4398",
+          "seconds": 2022,
+          "audio": "Braxton_Donald_T4398.mp3",
+          "transcript": "Braxton_Donald_T4398.pdf",
+          "summary": "Braxton_Donald_T4398_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "George Braxton and Velma Carheel",
+      "interviewers": [
+        "Doug Mungin",
+        "Stephanie Dragoon"
+      ],
+      "accessions": [
+        "4700.2507",
+        "4700.2553"
+      ],
+      "portrait": "braxton_george_1.jpg",
+      "tapes": [
+        {
+          "tape": "T4428",
+          "seconds": 2251,
+          "audio": "Braxton_George_and_Carheel_Velma_T4428.mp3",
+          "transcript": "Braxton_George_and_Carheel_Velma_T4428.pdf",
+          "summary": "Braxton_George_and_Carheel_Velma_T4428_abs.pdf"
+        },
+        {
+          "tape": "T4489",
+          "seconds": 6381,
+          "audio": "Braxton_George_and_Carheel_Velma_T4489.mp3",
+          "transcript": "Braxton_George_and_Carheel_Velma_T4489.pdf",
+          "summary": "Braxton_George_and_Carheel_Velma_T4489_T4524_abs.pdf"
+        },
+        {
+          "tape": "T4524",
+          "seconds": 7240,
+          "audio": "Braxton_George_and_Carheel_Velma_T4524.mp3",
+          "transcript": "Braxton_George_and_Carheel_Velma_T4524.pdf",
+          "summary": "Braxton_George_and_Carheel_Velma_T4489_T4524_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Daren Dotson Sr.",
+      "interviewers": [
+        "Doug Mungin"
+      ],
+      "accessions": [
+        "4700.2460"
+      ],
+      "portrait": "dotson_daren.jpg",
+      "tapes": [
+        {
+          "tape": "T4425",
+          "seconds": 1193,
+          "audio": "Dotson_Daren_Sr_T4425.mp3",
+          "transcript": "Dotson_Daren_Sr_T4425.pdf",
+          "summary": "Dotson_Daren_Sr_T4425_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Della Dotson",
+      "interviewers": [
+        "Rebecca Cooper"
+      ],
+      "accessions": [
+        "4700.2552"
+      ],
+      "portrait": "dotson_della_looks_at_family_photos.jpg",
+      "tapes": [
+        {
+          "tape": "T4488",
+          "seconds": 6996,
+          "audio": "Dotson_Della_T4488.mp3",
+          "transcript": "Dotson_Della_T4488.pdf",
+          "summary": "Dotson_Della_T4488_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Barry Edwards",
+      "interviewers": [
+        "Chelsea Arseneault"
+      ],
+      "accessions": [
+        "4700.2508"
+      ],
+      "portrait": "edwards_barry_2.jpg",
+      "tapes": [
+        {
+          "tape": "T4429",
+          "seconds": 2038,
+          "audio": "Edwards_Barry_T4429.mp3",
+          "transcript": "Edwards_Barry_T4429.pdf",
+          "summary": "Edwards_Barry_T4429_T4521_abs.pdf"
+        },
+        {
+          "tape": "T4521",
+          "seconds": 2696,
+          "audio": "Edwards_Barry_T4521.mp3",
+          "transcript": "Edwards_Barry_T4521.pdf",
+          "summary": "Edwards_Barry_T4429_T4521_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "McKenneth Edwards",
+      "interviewers": [
+        "Jamie Digilormo"
+      ],
+      "accessions": [
+        "4700.2577"
+      ],
+      "portrait": "edwards_mckenneth_1.jpg",
+      "tapes": [
+        {
+          "tape": "T4520",
+          "seconds": 1061,
+          "audio": "Edwards_McKenneth_T4520.mp3",
+          "transcript": "Edwards_McKenneth_T4520.pdf",
+          "summary": "Edwards_McKenneth_T4520_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Dorothy Felix and Evelyn Gasaway Shelton",
+      "interviewers": [
+        "Jennifer A. Cramer"
+      ],
+      "accessions": [
+        "4700.2468"
+      ],
+      "portrait": "felix_left_and_shelton_right_with_cramer_2.jpg",
+      "tapes": [
+        {
+          "tape": "T4404",
+          "seconds": 2215,
+          "audio": "Felix_Dorothy_and_Gasaway_Evelyn_Shelton_T4404.mp3",
+          "transcript": "Felix_Dorothy_and_Gasaway_Evelyn_Shelton_T4404.pdf",
+          "summary": "Felix_Dorothy_and_Shelton_Evelyn_T4404_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Kevin Fondel Sr.",
+      "interviewers": [
+        "Doug Mungin"
+      ],
+      "accessions": [
+        "4700.2464"
+      ],
+      "portrait": "fondel_kevin_1.jpg",
+      "tapes": [
+        {
+          "tape": "T4400",
+          "seconds": 1294,
+          "audio": "Fondel_Kevin_Sr_T4400.mp3",
+          "transcript": "Fondel_Kevin_Sr_T4400.pdf",
+          "summary": "Fondel_Kevin_Sr_T4400_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Janie Gardner",
+      "interviewers": [
+        "Elizabeth Gelvin"
+      ],
+      "accessions": [
+        "4700.2471"
+      ],
+      "portrait": "gardner_janie.jpg",
+      "tapes": [
+        {
+          "tape": "T4407",
+          "seconds": 1314,
+          "audio": "Gardner_Janie_T4407.mp3",
+          "transcript": "Gardner_Janie_T4407.pdf",
+          "summary": "Gardner_Janie_T4407_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Edward Julia Lemelle Gordwin",
+      "interviewers": [
+        "Jennifer A. Cramer"
+      ],
+      "accessions": [
+        "4700.2473"
+      ],
+      "portrait": "gordwin_julia_edward_lemelle.jpg",
+      "tapes": [
+        {
+          "tape": "T4409",
+          "seconds": 6649,
+          "audio": "Gordwin_Edward_Julia_Lemelle_T4409.mp3",
+          "transcript": "Gordwin_Edward_Julia_Lemelle_T4409.pdf",
+          "summary": "Gordwin_Edward_Julia_Lemelle_T4409_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Mildred Calvin Guidry",
+      "interviewers": [
+        "Chelsea Arseneault"
+      ],
+      "accessions": [
+        "4700.2554"
+      ],
+      "portrait": "guidry_mildred_and_chelsea.jpg",
+      "tapes": [
+        {
+          "tape": "T4490",
+          "seconds": 3467,
+          "audio": "Guidry_Mildred_T4490.mp3",
+          "transcript": "Guidry_Mildred_T4490.pdf",
+          "summary": "Guidry_Mildred_T4490_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Audrey Sims Guillory",
+      "interviewers": [
+        "Rebecca Cooper"
+      ],
+      "accessions": [
+        "4700.2559"
+      ],
+      "portrait": "guillory_audrey_mossville_majorettes_sweater2.jpg",
+      "tapes": [
+        {
+          "tape": "T4550",
+          "seconds": 5978,
+          "audio": "Guillory_Audrey_Sims_T4550.mp3",
+          "transcript": "Guillory_Audrey_Sims_T4550.pdf",
+          "summary": "Guillory_Audrey_Sims_T4550_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Jawanna Mayo Huntsberry",
+      "interviewers": [
+        "Chelsea Arseneault"
+      ],
+      "accessions": [
+        "4700.2667"
+      ],
+      "portrait": "huntsberry_jawanna_mayo_1.jpg",
+      "tapes": [
+        {
+          "tape": "T4624",
+          "seconds": 6782,
+          "audio": "Huntsberry_Jawanna_T4624.mp3",
+          "transcript": "Huntsberry_Jawanna_T4624.pdf",
+          "summary": "Huntsberry_Jawanna_T4624_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Roger Clay Jackson",
+      "interviewers": [
+        "Chelsea Arseneault"
+      ],
+      "accessions": [
+        "4700.2587"
+      ],
+      "portrait": "jackson_roger_clay_2.jpg",
+      "tapes": [
+        {
+          "tape": "T4535",
+          "seconds": 5522,
+          "audio": "Jackson_Roger_Clay_T4535.mp3",
+          "transcript": "Jackson_Roger_Clay_T4535.pdf",
+          "summary": "Jackson_Roger_Clay_T4535_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Brenda Cole Jones",
+      "interviewers": [
+        "Stephanie Dragoon"
+      ],
+      "accessions": [
+        "4700.2665"
+      ],
+      "portrait": "jones_brenda_close_up.jpg",
+      "tapes": [
+        {
+          "tape": "T4622",
+          "seconds": 6950,
+          "audio": "Jones_Brenda_Cole_T4622.mp3",
+          "transcript": "Jones_Brenda_Cole_T4622.pdf",
+          "summary": "Jones_Brenda_Cole_T4622_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Mary Jane Jones",
+      "interviewers": [
+        "Jamie Digilormo"
+      ],
+      "accessions": [
+        "4700.2576"
+      ],
+      "portrait": "jones_mary_jane_wide.jpg",
+      "tapes": [
+        {
+          "tape": "T4519",
+          "seconds": 587,
+          "audio": "Jones_MaryJane_T4519.mp3",
+          "transcript": "Jones_MaryJane_T4519.pdf",
+          "summary": "Jones_Mary_Jane_T4519_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Jourdan Family",
+      "interviewers": [
+        "Chelsea Arseneault"
+      ],
+      "accessions": [
+        "4700.2668"
+      ],
+      "portrait": null,
+      "tapes": [
+        {
+          "tape": "T4625",
+          "seconds": 6250,
+          "audio": "Jourdan_Family_T4625.mp3",
+          "transcript": "Jourdan_Family_T4625.pdf",
+          "summary": "Jourdan_Family_T4625_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Enola Margaret LaTour-Pitre",
+      "interviewers": [
+        "Stephanie Dragoon"
+      ],
+      "accessions": [
+        "4700.2584"
+      ],
+      "portrait": "latour-pitre_enola_close_up_2.jpg",
+      "tapes": [
+        {
+          "tape": "T4532",
+          "seconds": 6830,
+          "audio": "LaTour-Pitre_Enola_Margaret_T4532.mp3",
+          "transcript": "LaTour-Pitre_Enola_Margaret_T4532.pdf",
+          "summary": "LaTour-Pitre_Enola_Margaret_T4532_T4544_abs.pdf"
+        },
+        {
+          "tape": "T4544",
+          "seconds": 5009,
+          "audio": "LaTour-Pitre_Enola_Margaret_T4544.mp3",
+          "transcript": "LaTour-Pitre_Enola_Margaret_T4544.pdf",
+          "summary": "LaTour-Pitre_Enola_Margaret_T4532_T4544_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Arthur Kenneth Lee",
+      "interviewers": [
+        "Doug Mungin",
+        "Chelsea Arseneault"
+      ],
+      "accessions": [
+        "4700.2472",
+        "4700.2583"
+      ],
+      "portrait": "lee_kenneth_2.jpg",
+      "tapes": [
+        {
+          "tape": "T4408",
+          "seconds": 1822,
+          "audio": "Lee_Arthur_Kenneth_T4408.mp3",
+          "transcript": "Lee_Arthur_Kenneth_T4408.pdf",
+          "summary": "Lee_Arthur_Kenneth_T4408_abs.pdf"
+        },
+        {
+          "tape": "T4531",
+          "seconds": 6069,
+          "audio": "Lee_Arthur_Kenneth_T4531.mp3",
+          "transcript": "Lee_Arthur_Kenneth_T4531.pdf",
+          "summary": "Lee_Arthur_Kenneth_T4531_T4536_abs.pdf"
+        },
+        {
+          "tape": "T4536",
+          "seconds": 8138,
+          "audio": "Lee_Arthur_Kenneth_T4536.mp3",
+          "transcript": "Lee_Arthur_Kenneth_T4536.pdf",
+          "summary": "Lee_Arthur_Kenneth_T4531_T4536_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Theresa Lee",
+      "interviewers": [
+        "Chelsea Arseneault"
+      ],
+      "accessions": [
+        "4700.2666"
+      ],
+      "portrait": "lee_theresa_5.jpg",
+      "tapes": [
+        {
+          "tape": "T4623",
+          "seconds": 8141,
+          "audio": "Lee_Theresa_T4623.mp3",
+          "transcript": "Lee_Theresa_T4623.pdf",
+          "summary": "Lee_Theresa_T4623_T4674_abs.pdf",
+          "note": "With Dawn Holman"
+        },
+        {
+          "tape": "T4674",
+          "seconds": 2472,
+          "audio": "Lee_Theresa_T4674.mp3",
+          "transcript": "Lee_Theresa_T4674.pdf",
+          "summary": "Lee_Theresa_T4623_T4674_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Edward “Butch” Lemelle Jr.",
+      "interviewers": [
+        "Jennifer A. Cramer"
+      ],
+      "accessions": [
+        "4700.2579"
+      ],
+      "portrait": "lemelle_butch_edward.jpg",
+      "tapes": [
+        {
+          "tape": "T4522",
+          "seconds": 2353,
+          "audio": "Lemelle_Edward_Jr_T4522.mp3",
+          "transcript": "Lemelle_Edward_Jr_T4522.pdf",
+          "summary": "Lemelle_Edward_Jr_T4522_4545_4557_abs.pdf"
+        },
+        {
+          "tape": "T4545",
+          "seconds": 5256,
+          "audio": "Lemelle_Edward_Jr_T4545.mp3",
+          "transcript": "Lemelle_Edward_Jr_T4545.pdf",
+          "summary": "Lemelle_Edward_Jr_T4522_4545_4557_abs.pdf"
+        },
+        {
+          "tape": "T4557",
+          "seconds": 4876,
+          "audio": "Lemelle_Edward_Jr_T4557.mp3",
+          "transcript": "Lemelle_Edward_Jr_T4557.pdf",
+          "summary": "Lemelle_Edward_Jr_T4522_4545_4557_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Hal McMillin",
+      "interviewers": [
+        "Chelsea Arseneault"
+      ],
+      "accessions": [
+        "4700.2681"
+      ],
+      "portrait": "mcmillin_hal_1.jpg",
+      "tapes": [
+        {
+          "tape": "T4641",
+          "seconds": 7083,
+          "audio": "McMillin_Hal_T4641.mp3",
+          "transcript": "McMillin_Hal_T4641.pdf",
+          "summary": "McMillin_Hal_T4641_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Wesley Montgomery",
+      "interviewers": [
+        "Jamie Digilormo"
+      ],
+      "accessions": [
+        "4700.2571"
+      ],
+      "portrait": "montgomery_wesley_laughs.jpg",
+      "tapes": [
+        {
+          "tape": "T4513",
+          "seconds": 3394,
+          "audio": "Montgomery_Wesley_T4513.mp3",
+          "transcript": "Montgomery_Wesley_T4513.pdf",
+          "summary": "Montgomery_Wesley_T4513_T4514_abs.pdf"
+        },
+        {
+          "tape": "T4514",
+          "seconds": 4987,
+          "audio": "Montgomery_Wesley_T4514.mp3",
+          "transcript": "Montgomery_Wesley_T4514.pdf",
+          "summary": "Montgomery_Wesley_T4513_T4514_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Judy Montgomery-Gauthia",
+      "interviewers": [
+        "Kathleen Donner",
+        "Jamie Digilormo"
+      ],
+      "accessions": [
+        "4700.2575"
+      ],
+      "portrait": "montgomery-gauthia_judy_1.jpg",
+      "tapes": [
+        {
+          "tape": "T4401",
+          "seconds": 747,
+          "audio": "Montgomery-Gauthia_Judy_T4401.mp3",
+          "transcript": "Montgomery-Gauthia_Judy_T4401.pdf",
+          "summary": "Montgomery-Gauthia_Judy_T4401_abs.pdf"
+        },
+        {
+          "tape": "T4518",
+          "seconds": 901,
+          "audio": "Montgomery-Gauthia_Judy_T4518.mp3",
+          "transcript": "Montgomery-Gauthia_Judy_T4518.pdf",
+          "summary": "Montgomery-Gauthia_Judy_T4518_4547_abs.pdf"
+        },
+        {
+          "tape": "T4547",
+          "seconds": 3818,
+          "audio": "Montgomery-Gauthia_Judy_T4547.mp3",
+          "transcript": "Montgomery-Gauthia_Judy_T4547.pdf",
+          "summary": "Montgomery-Gauthia_Judy_T4518_4547_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Judy Montgomery-Gauthia and Elaine Robinson",
+      "interviewers": [
+        "Chelsea Arseneault"
+      ],
+      "accessions": [
+        "4700.2615"
+      ],
+      "portrait": "montgomery-gauthia_left_and_robinson_right.jpg",
+      "tapes": [
+        {
+          "tape": "T4569",
+          "seconds": 5463,
+          "audio": "Montgomery-Gauthia_Judy_and_Robinson_Elaine_T4569.mp3",
+          "transcript": "Montgomery-Gauthia_Judy_and_Robinson_Elaine_T4569.pdf",
+          "summary": "Montgomery-Gauthia_Judy_and_Robinson_Elaine_T4569_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Julia Paige",
+      "interviewers": [
+        "Chelsea Arseneault"
+      ],
+      "accessions": [
+        "4700.2580"
+      ],
+      "portrait": "paige_julia.jpg",
+      "tapes": [
+        {
+          "tape": "T4523",
+          "seconds": 1365,
+          "audio": "Paige_Julia_T4523.mp3",
+          "transcript": "Paige_Julia_T4523.pdf",
+          "summary": "Paige_Julia_T4523_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Barbara Payne",
+      "interviewers": [
+        "Jamie Digilormo"
+      ],
+      "accessions": [
+        "4700.2582"
+      ],
+      "portrait": null,
+      "tapes": [
+        {
+          "tape": "T4529",
+          "seconds": 1566,
+          "audio": "Payne_Barbara_T4529.mp3",
+          "transcript": "Payne_Barbara_T4529.pdf",
+          "summary": "Payne_Barbara_T4529_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Joseph Payne",
+      "interviewers": [
+        "Doug Mungin"
+      ],
+      "accessions": [
+        "4700.2463"
+      ],
+      "portrait": "payne_joseph_3.jpg",
+      "tapes": [
+        {
+          "tape": "T4399",
+          "seconds": 1668,
+          "audio": "Payne_Joseph_T4399.mp3",
+          "transcript": "Payne_Joseph_T4399.pdf",
+          "summary": "Payne_Joseph_T4399_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Larry Payne",
+      "interviewers": [
+        "Teresha Ussin"
+      ],
+      "accessions": [
+        "4700.2503"
+      ],
+      "portrait": "payne_larry_with_theresha_1.jpg",
+      "tapes": [
+        {
+          "tape": "T4421",
+          "seconds": 1430,
+          "audio": "Payne_Larry_T4421.mp3",
+          "transcript": "Payne_Larry_T4421.pdf",
+          "summary": "Payne_Larry_T4421_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Vera Payne",
+      "interviewers": [
+        "Doug Mungin",
+        "Chelsea Arseneault"
+      ],
+      "accessions": [
+        "4700.2501",
+        "4700.2550"
+      ],
+      "portrait": "payne_vera_1.jpg",
+      "tapes": [
+        {
+          "tape": "T4419",
+          "seconds": 1535,
+          "audio": "Payne_Vera_T4419.mp3",
+          "transcript": "Payne_Vera_T4419.pdf",
+          "summary": "Payne_Vera_T4419_abs.pdf"
+        },
+        {
+          "tape": "T4483",
+          "seconds": 5748,
+          "audio": "Payne_Vera_T4483.mp3",
+          "transcript": "Payne_Vera_T4483.pdf",
+          "summary": "Payne_Vera_T4483_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Morris Prater",
+      "interviewers": [
+        "Doug Mungin",
+        "Chelsea Arseneault"
+      ],
+      "accessions": [
+        "4700.2606"
+      ],
+      "portrait": "prater_morris_3.jpg",
+      "tapes": [
+        {
+          "tape": "T4558",
+          "seconds": 2689,
+          "audio": "Prater_Morris_T4558.mp3",
+          "transcript": "Prater_Morris_T4558.pdf",
+          "summary": "Prater_Morris_T4558_T4563_abs.pdf"
+        },
+        {
+          "tape": "T4563",
+          "seconds": 6567,
+          "audio": "Prater_Morris_T4563.mp3",
+          "transcript": "Prater_Morris_T4563.pdf",
+          "summary": "Prater_Morris_T4558_T4563_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Jimmie Lee Williams Riggs",
+      "interviewers": [
+        "Chelsea Arseneault"
+      ],
+      "accessions": [
+        "4700.2616"
+      ],
+      "portrait": "riggs_jimmie_lee_williams_4.jpg",
+      "tapes": [
+        {
+          "tape": "T4570",
+          "seconds": 10342,
+          "audio": "Riggs_Jimmie_Lee_T4570.mp3",
+          "transcript": "Riggs_Jimmie_Lee_T4570.pdf",
+          "summary": "Riggs_Jimmie_Lee_T4570_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Carolyn Rigmaiden-Frank",
+      "interviewers": [
+        "Chelsea Arseneault"
+      ],
+      "accessions": [
+        "4700.2551"
+      ],
+      "portrait": "rigmaiden-frank_carolyn.jpg",
+      "tapes": [
+        {
+          "tape": "T4486",
+          "seconds": 5085,
+          "audio": "Rigmaiden-Frank_Carolyn_T4486.mp3",
+          "transcript": "Rigmaiden-Frank_Carolyn_T4486.pdf",
+          "summary": "Rigmaiden-Frank_Carolyn_T4486_T4508_abs.pdf"
+        },
+        {
+          "tape": "T4508",
+          "seconds": 6710,
+          "audio": "Rigmaiden-Frank_Carolyn_T4508.mp3",
+          "transcript": "Rigmaiden-Frank_Carolyn_T4508.pdf",
+          "summary": "Rigmaiden-Frank_Carolyn_T4486_T4508_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Gloria Rogers",
+      "interviewers": [
+        "Chelsea Arseneault"
+      ],
+      "accessions": [
+        "4700.2574"
+      ],
+      "portrait": "rogers_gloria.jpg",
+      "tapes": [
+        {
+          "tape": "T4517",
+          "seconds": 1442,
+          "audio": "Rogers_Gloria_T4517.mp3",
+          "transcript": "Rogers_Gloria_T4517.pdf",
+          "summary": "Rogers_Gloria_T4517_T4530_abs.pdf"
+        },
+        {
+          "tape": "T4530",
+          "seconds": 3649,
+          "audio": "Rogers_Gloria_T4530.mp3",
+          "transcript": "Rogers_Gloria_T4530.pdf",
+          "summary": "Rogers_Gloria_T4517_T4530_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Myrtle Marie Rosamore",
+      "interviewers": [
+        "Chelsea Arseneault"
+      ],
+      "accessions": [
+        "4700.2470"
+      ],
+      "portrait": "rosamore_myrtle_1.jpg",
+      "tapes": [
+        {
+          "tape": "T4406",
+          "seconds": 1856,
+          "audio": "Rosamore_Myrtle_Marie_T4406.mp3",
+          "transcript": "Rosamore_Myrtle_Marie_T4406.pdf",
+          "summary": "Rosamore_Myrtle_Marie_T4406_T4482_abs.pdf"
+        },
+        {
+          "tape": "T4482",
+          "seconds": 5255,
+          "audio": "Rosamore_Myrtle_Marie_T4482.mp3",
+          "transcript": "Rosamore_Myrtle_Marie_T4482.pdf",
+          "summary": "Rosamore_Myrtle_Marie_T4406_T4482_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Patricia Prater Rubit",
+      "interviewers": [
+        "Teresha Ussin"
+      ],
+      "accessions": [
+        "4700.2500"
+      ],
+      "portrait": "rubit_patricia_prater_1.jpg",
+      "tapes": [
+        {
+          "tape": "T4418",
+          "seconds": 877,
+          "audio": "Rubit_Patricia_Prater_T4418.mp3",
+          "transcript": "Rubit_Patricia_Prater_T4418.pdf",
+          "summary": "Rubit_Patricia_Prater_T4418_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Evelyn Gasaway Shelton",
+      "interviewers": [
+        "Rebecca Cooper"
+      ],
+      "accessions": [
+        "4700.2596"
+      ],
+      "portrait": "shelton_evelyn_gasaway.jpg",
+      "tapes": [
+        {
+          "tape": "T4548",
+          "seconds": 4765,
+          "audio": "Shelton_Evelyn_Gasaway_T4548.mp3",
+          "transcript": "Shelton_Evelyn_Gasaway_T4548.pdf",
+          "summary": "Shelton_Evelyn_Gasaway_T4548_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Huber “Mickey” Smith Sr.",
+      "interviewers": [
+        "Chelsea Arseneault"
+      ],
+      "accessions": [
+        "4700.2586"
+      ],
+      "portrait": "smith_huber.jpg",
+      "tapes": [
+        {
+          "tape": "T4534",
+          "seconds": 6667,
+          "audio": "Smith_Huber_Sr_T4534.mp3",
+          "transcript": "Smith_Huber_T4534.pdf",
+          "summary": "Smith_Huber_T4534_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Marie Towner and Lenoria Ambrose",
+      "interviewers": [
+        "Chelsea Arseneault"
+      ],
+      "accessions": [
+        "4700.2595"
+      ],
+      "portrait": null,
+      "tapes": [
+        {
+          "tape": "T4546",
+          "seconds": 7364,
+          "audio": "Towner_Marie_and_Ambrose_Lenoria_T4546.mp3",
+          "transcript": "Towner_Marie_and_Ambrose_Lenoria_T4546.pdf",
+          "summary": "Towner_Marie_and_Ambrose_Lenoria_T4546_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Rufus Victorian",
+      "interviewers": [
+        "Elizabeth Gelvin"
+      ],
+      "accessions": [
+        "4700.2502"
+      ],
+      "portrait": "victorian_rufus_with_gelvin_1.jpg",
+      "tapes": [
+        {
+          "tape": "T4420",
+          "seconds": 840,
+          "audio": "Victorian_Rufus_T4420.mp3",
+          "transcript": "Victorian_Rufus_T4420.pdf",
+          "summary": "Victorian_Rufus_T4420_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Haki Vincent",
+      "interviewers": [
+        "Chelsea Arseneault"
+      ],
+      "accessions": [
+        "4700.2510"
+      ],
+      "portrait": "vincent_haki_5_smiles.jpg",
+      "tapes": [
+        {
+          "tape": "T4430",
+          "seconds": 1310,
+          "audio": "Vincent_Haki_T4430.mp3",
+          "transcript": "Vincent_Haki_T4430.pdf",
+          "summary": "Vincent_Haki_T4430_T4487_T4509_T4568_abs.pdf"
+        },
+        {
+          "tape": "T4487",
+          "seconds": 2938,
+          "audio": "Vincent_Haki_T4487.mp3",
+          "transcript": "Vincent_Haki_T4487.pdf",
+          "summary": "Vincent_Haki_T4430_T4487_T4509_T4568_abs.pdf"
+        },
+        {
+          "tape": "T4509",
+          "seconds": 6166,
+          "audio": "Vincent_Haki_T4509.mp3",
+          "transcript": "Vincent_Haki_T4509.pdf",
+          "summary": "Vincent_Haki_T4430_T4487_T4509_T4568_abs.pdf"
+        },
+        {
+          "tape": "T4568",
+          "seconds": 4168,
+          "audio": "Vincent_Haki_T4568.mp3",
+          "transcript": "Vincent_Haki_T4568.pdf",
+          "summary": "Vincent_Haki_T4430_T4487_T4509_T4568_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "Lillian Washington",
+      "interviewers": [
+        "Chelsea Arseneault"
+      ],
+      "accessions": [
+        "4700.2597"
+      ],
+      "portrait": "washington_lillian.jpg",
+      "tapes": [
+        {
+          "tape": "T4549",
+          "seconds": 6981,
+          "audio": "Washington_Lillian_T4549.mp3",
+          "transcript": "Washington_Lillian_T4549.pdf",
+          "summary": "Washington_Lillian_T4549_abs.pdf"
+        }
+      ]
+    },
+    {
+      "name": "LaSalle Williams",
+      "interviewers": [
+        "Chelsea Arseneault",
+        "Stephanie Dragoon"
+      ],
+      "accessions": [
+        "4700.2509",
+        "4700.2600"
+      ],
+      "portrait": "williams_lasalle_3.jpg",
+      "tapes": [
+        {
+          "tape": "T4431",
+          "seconds": 3597,
+          "audio": "Williams_LaSalle_T4431.mp3",
+          "transcript": "Williams_LaSalle_T4431.pdf",
+          "summary": "Williams_LaSalle_T4431_abs.pdf"
+        },
+        {
+          "tape": "T4551",
+          "seconds": 7149,
+          "audio": "Williams_LaSalle_T4551.mp3",
+          "transcript": "Williams_LaSalle_T4551.pdf",
+          "summary": "Williams_LaSalle_T4551_abs.pdf"
+        }
+      ]
+    }
+  ]
+}

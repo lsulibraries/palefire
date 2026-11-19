@@ -1,0 +1,214 @@
+// Palefire — an oral history project's full interviews under its exhibition
+// (includes/exhibit-interviews.html.twig, src/ExhibitInterviews.php). Its
+// own entry point (css/exhibit-interviews.css, library
+// palefire/exhibit-interviews), so only a page with "[interviews:<set>]"
+// loads it.
+//
+// A catalog of narrators on the soft hairline: a 3:2 portrait, the name,
+// who interviewed them and the accession number in the mono voice, then
+// each tape ruled under it with its length, the exhibition's round Play
+// (.pf-audio, _exhibition.scss, in style.css) and its PDFs. One column on
+// a phone, up to four on a wide screen. The portraits come up gently as
+// they load; nothing moves with reduced motion.
+//
+// No literal colors: the exhibition's tokens.
+
+@import "variables";
+
+// The block leaves the reading measure for the gallery's width; its opening
+// text keeps the measure. The gallery body is also a .pf-guide, a reading
+// column, as the podcast's section is (podcast.scss).
+.pf-guide:has(> .pf-guide-block--interviews) {
+  max-width: none;
+}
+
+.pf-guide-block--interviews {
+  max-width: none;
+
+  > .pf-guide-prose {
+    max-width: var(--pf-exhibit-prose, 42rem);
+  }
+}
+
+.pf-interviews {
+  margin-top: 2.5rem;
+}
+
+.pf-interviews__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+  margin: 0 0 2rem;
+  padding-bottom: 1rem;
+  font: 700 var(--pf-mono-label)/1.5 var(--pf-exhibit-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pf-exhibit-muted);
+  border-bottom: 1px solid $pf-hairline;
+}
+
+.pf-interviews__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 16.5rem), 1fr));
+  gap: 3.5rem clamp(1.5rem, 3vw, 2.5rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pf-interview {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.pf-interview__photo {
+  aspect-ratio: 3 / 2;
+  margin-bottom: 1.1rem;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--bs-body-color) 6%, transparent);
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+// Fades up as it arrives, where the browser can tell (Chrome, Safari 18).
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .pf-interview__photo img {
+      animation: pf-interview-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+    }
+  }
+}
+
+@keyframes pf-interview-in {
+  from {
+    opacity: 0;
+    transform: scale(1.03);
+  }
+}
+
+.pf-interview__initials {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  font-size: 2.25rem;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  color: var(--pf-exhibit-muted);
+}
+
+.pf-interview__name {
+  margin: 0 0 0.35rem;
+  font-size: 1.1875rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+.pf-interview__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin: 0 0 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--pf-exhibit-muted);
+}
+
+.pf-interview__accession {
+  font: var(--pf-mono-label)/1.5 var(--pf-exhibit-mono);
+  letter-spacing: 0.06em;
+}
+
+// Summary, Transcript: quiet text links, a mono "PDF" after each.
+.pf-interview__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+
+  a {
+    color: var(--bs-body-color);
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: $pf-hairline;
+    text-underline-offset: 0.25em;
+    transition: text-decoration-color $pf-hover-out ease, color $pf-hover-out ease;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--pf-g-hover, var(--pf-exhibit-accent));
+      text-decoration-color: currentColor;
+      transition-duration: $pf-hover-in;
+    }
+  }
+}
+
+.pf-interview > .pf-interview__links {
+  margin-bottom: 0.75rem;
+}
+
+.pf-interview__type {
+  margin-inline-start: 0.2em;
+  font: 700 0.625rem/1 var(--pf-exhibit-mono);
+  letter-spacing: 0.1em;
+  color: var(--pf-exhibit-muted);
+}
+
+// The tapes, each ruled off: number and length, the player, its PDFs.
+.pf-interview__tapes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid $pf-hairline;
+}
+
+.pf-tape {
+  padding: 0.85rem 0 1rem;
+  border-bottom: 1px solid $pf-hairline;
+}
+
+.pf-tape__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.85rem;
+  margin: 0 0 0.6rem;
+  font: var(--pf-mono-label)/1.5 var(--pf-exhibit-mono);
+  letter-spacing: 0.06em;
+  color: var(--pf-exhibit-muted);
+}
+
+.pf-tape__number {
+  font-weight: 700;
+  color: var(--bs-body-color);
+}
+
+// The round Play a size down, so a card holds it with the seek bar.
+.pf-tape__audio {
+  margin-bottom: 0.6rem;
+
+  &.is-custom {
+    gap: 0.75rem;
+  }
+
+  .pf-audio__play {
+    width: 2.5rem;
+    height: 2.5rem;
+
+    svg {
+      width: 0.95rem;
+      height: 0.95rem;
+    }
+  }
+}

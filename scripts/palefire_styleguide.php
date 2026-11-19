@@ -280,6 +280,7 @@ HTML),
 <li>Bulleted lists for everything else.</li>
 </ol>
 HTML),
+  $note('<p><strong>Full interviews</strong>: a text block that is only [interviews:mossville] draws an oral history project’s full interviews: a portrait, the name, interviewer and accession number, then each tape with its length, a player and its summary and transcript. The narrators come from a data file in the theme (data/mossville-interviews.json), so there is no live example here; see The Full Interviews in the Mossville History Project.</p>'),
   $note('<p><strong>Corrections table</strong>: a table whose Before cells hold struck-out text (&lt;del&gt;) and After cells inserted text (&lt;ins&gt;). The old text is muted, the new at full strength, and a note in italics drops below either. On a phone each row stacks, labeled Before and After. Used by the Exhibition Migration Review; the Where column is optional.</p>'),
   $text(<<<'HTML'
 <table>

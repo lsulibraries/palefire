@@ -1,0 +1,93 @@
+{#
+/**
+ * @file
+ * An oral history project's full interviews ("[interviews:<set>]" in a
+ * guide text block; src/ExhibitInterviews.php), styled by
+ * css/exhibit-interviews.css (library palefire/exhibit-interviews, attached
+ * here only).
+ *
+ * A grid of narrators, A to Z by family name: the portrait (or initials),
+ * the name, who interviewed them and the accession number, then each tape
+ * with its length, a player and its PDFs. The player is the exhibition's
+ * own (js/exhibition.js swaps <audio controls> for its round Play, seek and
+ * time); preload="none", so nothing streams until Play. The portrait sits
+ * beside the name it shows, so it is alt="".
+ *
+ * The names are h3s (the gallery's <h2> is above), kept out of "On this
+ * page" by data-toc-skip so 49 names don't flood it.
+ *
+ * - narrators: [{id, name, initials, interviewers, accessions, photo
+ *   (_palefire_exhibit_image() values or NULL), summary (one PDF for all
+ *   the tapes, or NULL), tapes: [{number, length, note, audio, transcript,
+ *   summary}]}].
+ * - tape_count, hours: the facts line.
+ */
+#}
+{{ attach_library('palefire/exhibit-interviews') }}
+<div class="pf-interviews" data-toc-skip>
+  <p class="pf-interviews__facts">
+    <span>{{ '@count interviews'|t({ '@count': narrators|length }) }}</span>
+    <span>{{ '@count recordings'|t({ '@count': tape_count }) }}</span>
+    <span>{{ 'About @count hours'|t({ '@count': hours }) }}</span>
+  </p>
+  <ul class="pf-interviews__grid" role="list">
+    {% for narrator in narrators %}
+      <li class="pf-interview" aria-labelledby="{{ narrator.id }}">
+        <div class="pf-interview__photo">
+          {% if narrator.photo %}
+            {% set photo = narrator.photo %}
+            <img src="{{ photo.src }}" srcset="{{ photo.srcset }}" sizes="{{ photo.sizes }}"{% if photo.width %} width="{{ photo.width }}" height="{{ photo.height }}"{% endif %} alt="" loading="lazy" decoding="async"{% if photo.focus %} style="object-position: {{ photo.focus }}"{% endif %}>
+          {% else %}
+            <span class="pf-interview__initials" aria-hidden="true">{{ narrator.initials }}</span>
+          {% endif %}
+        </div>
+        <h3 class="pf-interview__name" id="{{ narrator.id }}">{{ narrator.name }}</h3>
+        {% if narrator.interviewers or narrator.accessions %}
+          <p class="pf-interview__meta">
+            {% if narrator.interviewers %}
+              <span>{{ 'Interviewed by @names'|t({ '@names': narrator.interviewers|join(', ', ' and ') }) }}</span>
+            {% endif %}
+            {% if narrator.accessions %}
+              <span class="pf-interview__accession"><span class="visually-hidden">{{ 'Accession'|t }} </span>{{ narrator.accessions|join(', ') }}</span>
+            {% endif %}
+          </p>
+        {% endif %}
+        {% if narrator.summary %}
+          <p class="pf-interview__links">
+            <a href="{{ narrator.summary }}">{{ 'Summary'|t }}<span class="visually-hidden"> {{ 'of the interview with @name'|t({ '@name': narrator.name }) }},</span> <span class="pf-interview__type">PDF</span></a>
+          </p>
+        {% endif %}
+        <ol class="pf-interview__tapes">
+          {% for tape in narrator.tapes %}
+            {% set tape_id = narrator.id ~ '-' ~ loop.index %}
+            <li class="pf-tape">
+              <p class="pf-tape__head">
+                <span class="pf-tape__number" id="{{ tape_id }}"><span class="visually-hidden">{{ 'Tape'|t }} </span>{{ tape.number }}</span>
+                {% if tape.length %}<span class="pf-tape__length">{{ tape.length }}</span>{% endif %}
+                {% if tape.note %}<span class="pf-tape__note">{{ tape.note }}</span>{% endif %}
+              </p>
+              {% if tape.audio %}
+                <div class="pf-audio pf-tape__audio" data-pf-audio>
+                  <audio class="pf-audio__native" controls preload="none" aria-labelledby="{{ narrator.id }} {{ tape_id }}">
+                    <source src="{{ tape.audio }}" type="audio/mpeg">
+                    <a href="{{ tape.audio }}">{{ 'Download the audio'|t }}</a>
+                  </audio>
+                </div>
+              {% endif %}
+              {% if tape.transcript or tape.summary %}
+                <p class="pf-interview__links">
+                  {% if tape.transcript %}
+                    <a href="{{ tape.transcript }}">{{ 'Transcript'|t }}<span class="visually-hidden"> {{ 'of tape @tape'|t({ '@tape': tape.number }) }},</span> <span class="pf-interview__type">PDF</span></a>
+                  {% endif %}
+                  {% if tape.summary %}
+                    <a href="{{ tape.summary }}">{{ 'Summary'|t }}<span class="visually-hidden"> {{ 'of tape @tape'|t({ '@tape': tape.number }) }},</span> <span class="pf-interview__type">PDF</span></a>
+                  {% endif %}
+                </p>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ol>
+      </li>
+    {% endfor %}
+  </ul>
+</div>

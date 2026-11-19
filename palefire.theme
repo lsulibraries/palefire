@@ -25,6 +25,7 @@ use Drupal\taxonomy\TermInterface;
 use Drupal\palefire\AnalyticsReport;
 use Drupal\palefire\AskAnswer;
 use Drupal\palefire\ExhibitFieldGuide;
+use Drupal\palefire\ExhibitInterviews;
 use Drupal\palefire\ExhibitSources;
 use Drupal\palefire\ExhibitTimeline;
 use Drupal\palefire\GlossaryTerms;
@@ -3079,6 +3080,7 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
   $variables['analytics'] = NULL;
   $variables['research'] = NULL;
   $variables['podcast'] = NULL;
+  $variables['interviews'] = NULL;
   $variables['newsletter'] = NULL;
   $variables['newsletter_archive'] = NULL;
   $variables['newsletter_compare'] = NULL;
@@ -3154,6 +3156,18 @@ function palefire_preprocess_paragraph__guide_text(array &$variables): void {
       CacheableMetadata::createFromRenderArray($variables)
         ->addCacheTags([PodcastFeed::CACHE_TAG])
         ->applyTo($variables);
+    }
+    // "[interviews:<set>]": an oral history project's full interviews follow
+    // (ExhibitInterviews, data/<set>-interviews.json).
+    if (isset($item['#text']) && preg_match(ExhibitInterviews::MARKER, (string) $item['#text'], $interviews_match)) {
+      $item['#text'] = preg_replace(ExhibitInterviews::MARKER, '', (string) $item['#text']);
+      $interviews_cache = CacheableMetadata::createFromRenderArray($variables);
+      $variables['interviews'] = ExhibitInterviews::view(strtolower($interviews_match[1]), $interviews_cache);
+      $interviews_cache->applyTo($variables);
+      // The block takes the gallery's full width (exhibit-interviews.scss).
+      if ($variables['interviews']) {
+        $variables['attributes']['class'][] = 'pf-guide-block--interviews';
+      }
     }
     if ($newsletter_ready && isset($item['#text']) && preg_match(NewsletterReview::MARKER, (string) $item['#text'], $newsletter_match)) {
       $item['#text'] = preg_replace(NewsletterReview::MARKER, '', (string) $item['#text']);

@@ -773,6 +773,12 @@ HTML),
 <li>The small facts (year, the chest, clips and how long they run) now sit under the description, just above Enter the exhibition, like the line at the foot of a museum label.</li>
 </ul>
 HTML),
+  $text('Thu Nov 19: The full Mossville interviews', <<<'HTML'
+<ul>
+<li>The Mossville History Project exhibition has a new gallery before About the Project, The Full Interviews: every interview the project recorded, in full. Each narrator has a portrait, who interviewed them and the accession number, then each tape with its length, a player and its summary and transcript.</li>
+<li>It takes the place of the separate directory page made in 2017. Many of that page’s links played the wrong person’s recording; each tape now plays its own. Three interviews that were on the server but missing from the page are included.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------
