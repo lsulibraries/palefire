@@ -11,6 +11,7 @@
 // No literal colors: the swatch's tokens.
 
 @import "variables";
+@import "base/mixins";
 
 // The exhibitions' tokens, which only html[data-pf-mode="exhibition"] sets.
 .pf-podcast,
@@ -1089,22 +1090,85 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #{$pf-cassette-ink}
   }
 }
 
-// Captions in the docked bar (js/podcast.js, transcripts/podcast/*.vtt).
-// Only once an episode's captions have loaded (.has-captions): CC and
-// Transcript join the bar before Close, square and ruled like it. The
-// caption line sits over the bar, a plate of the same width: who in mono
-// capitals, then the phrase. It keeps its room while it fades between
-// phrases, so the bar never jumps. Transcript opens a panel there instead:
-// the phrases in paragraphs by voice, the one heard on a soft tint.
+// The docked bar, podcast version (js/podcast.js builds it; the base is
+// .pf-listen in _exhibition.scss). Play leads at the far left, then the
+// episode, the seek bar with the time, Mute and Volume; the bar is wider
+// than a clip's (60rem) so the seek bar keeps its length beside them.
+// Once an episode's captions have loaded (.has-captions), CC and
+// Transcript join it before Close, square and ruled like it.
+//
+// Captions (transcripts/podcast/*.vtt) ride on the bar as its top band,
+// one surface with it, split by the hairline: the phrase heard, and the
+// one before it muted above, as broadcast captions roll, so a phrase cut
+// at a comma still reads. A speaker's name (mono capitals) leads their
+// first line. Transcript opens a panel in the band's place: the phrases
+// in paragraphs by voice, the one heard on a soft tint.
+//
+// The band, the bar and the panel are frosted glass: the page color at
+// 88% over the site’s glass blur, so the words keep 4.5:1 even over
+// white (5.1:1 on the dark swatch); solid for reduced transparency or
+// more contrast.
 .pf-listen--podcast {
-  &.has-captions .pf-listen__inner {
-    grid-template-columns: minmax(0, 1fr) auto auto auto;
-    grid-template-areas: "expand cc text close" "player player player player";
+  .pf-listen__inner,
+  .pf-listen__caption,
+  .pf-listen__transcript {
+    max-width: 60rem;
+    color: var(--bs-body-color);
+    background: color-mix(in srgb, var(--bs-body-bg) 88%, transparent);
+    -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+    backdrop-filter: var(--pf-glass-filter, blur(26px));
+  }
+
+  .pf-listen__inner {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas: "play expand close" "player player player";
+    column-gap: .75rem;
 
     // md, as the bar's own row (_exhibition.scss).
     @media (min-width: 768px) {
-      grid-template-columns: minmax(0, 15rem) minmax(0, 1fr) auto auto auto;
-      grid-template-areas: "expand player cc text close";
+      grid-template-columns: auto minmax(0, 12rem) minmax(0, 1fr) auto;
+      grid-template-areas: "play expand player close";
+      column-gap: 1rem;
+    }
+  }
+
+  // Phones: the tools join the seek bar's row, so the title keeps its room.
+  &.has-captions .pf-listen__inner {
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    grid-template-areas: "play expand expand close" "player player cc text";
+
+    @media (min-width: 768px) {
+      grid-template-columns: auto minmax(0, 12rem) minmax(0, 1fr) auto auto auto;
+      grid-template-areas: "play expand player cc text close";
+    }
+  }
+
+  .pf-listen__play {
+    grid-area: play;
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  &.is-playing .pf-listen__play {
+    .pf-audio__icon-play {
+      display: none;
+    }
+
+    .pf-audio__icon-pause {
+      display: inline;
+    }
+  }
+
+  // Play left the player: the seek bar is its first column.
+  .pf-listen__player .pf-audio.is-custom {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  // Phones: no Mute (their own buttons are the volume), so the seek bar
+  // keeps its length beside the time and the tools.
+  @media (max-width: 767.98px) {
+    .pf-audio__mute {
+      display: none;
     }
   }
 
@@ -1168,34 +1232,55 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #{$pf-cassette-ink}
     background: var(--bs-body-color);
   }
 
+  // The band and the panel sit on the bar, sharing its hairline.
   .pf-listen__caption,
   .pf-listen__transcript {
-    max-width: 50rem;
-    margin: 0 auto .5rem;
-    color: var(--bs-body-color);
-    // Solid, as the bar is: words over a page that shows through don't read.
-    background: var(--bs-body-bg);
+    margin: 0 auto;
     border: 1px solid $pf-hairline;
+    border-bottom: 0;
+    pointer-events: auto;
   }
 
   .pf-listen__caption {
     display: none;
     gap: .25rem;
-    // Two lines of words and the name, so a short phrase doesn't shrink it.
-    min-height: calc(2 * 1.4 * clamp(1rem, .95rem + .25vw, 1.125rem) + 1.5rem + 1.25rem);
-    align-content: end;
-    padding: .625rem 1rem .75rem;
-    opacity: 0;
-    translate: 0 .25rem;
+    padding: .75rem 1rem .625rem;
   }
 
-  &.has-captions:not(.is-cc-off, .is-reading) .pf-listen__caption {
+  &.has-captions:not(.is-cc-off, .is-reading) .pf-listen__caption.is-shown {
     display: grid;
   }
 
-  .pf-listen__caption.is-shown {
-    opacity: 1;
-    translate: 0 0;
+  .pf-listen__caption-prev,
+  .pf-listen__caption-text {
+    margin: 0;
+    max-width: 48rem;
+  }
+
+  // The line before: smaller, muted, two lines at most.
+  .pf-listen__caption-prev {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    font-size: .875rem;
+    line-height: 1.45;
+    color: var(--pf-exhibit-muted);
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  .pf-listen__caption-text {
+    font-size: clamp(1rem, .95rem + .25vw, 1.125rem);
+    line-height: 1.4;
+    text-wrap: pretty;
+  }
+
+  // A pause: the words stay, in the muted ink, till the next phrase.
+  .pf-listen__caption.is-idle .pf-listen__caption-text {
+    color: var(--pf-exhibit-muted);
   }
 
   .pf-listen__caption-who,
@@ -1206,22 +1291,14 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #{$pf-cassette-ink}
     color: var(--pf-exhibit-muted);
   }
 
-  .pf-listen__caption-who:empty {
-    display: none;
-  }
-
-  .pf-listen__caption-text {
-    font-size: clamp(1rem, .95rem + .25vw, 1.125rem);
-    line-height: 1.4;
-    text-wrap: balance;
+  .pf-listen__caption-who {
+    margin-inline-end: .25rem;
   }
 
   .pf-listen__transcript {
     display: grid;
     grid-template-rows: auto minmax(0, 1fr);
     max-height: min(50svh, 26rem);
-    box-shadow: 0 1rem 2.5rem -1.5rem rgba(0, 0, 0, .45);
-    pointer-events: auto;
 
     &[hidden] {
       display: none;
@@ -1283,12 +1360,22 @@ $pf-cassette-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #{$pf-cassette-ink}
 
 @media (prefers-reduced-motion: no-preference) {
   html:not(.pf-a11y-motion) .pf-listen--podcast {
-    .pf-listen__caption {
-      transition: opacity .2s ease, translate .3s $pf-exhibit-ease;
+    .pf-listen__caption-text {
+      transition: color .4s ease;
     }
 
     .pf-listen__phrase {
       transition: background-color .2s ease;
     }
+  }
+}
+
+// Less transparency or more contrast (the OS or the Settings drawer): the
+// band, the bar and the panel go solid.
+@include pf-solid-chrome {
+  .pf-listen--podcast :is(.pf-listen__inner, .pf-listen__caption, .pf-listen__transcript) {
+    background: var(--bs-body-bg);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 }

@@ -252,12 +252,34 @@
     files: new Map(),
     cues: [],
     index: -1,
+    // The cue the band shows (it stays through a pause).
+    shown: null,
     src: '',
     frame: 0,
     follow: true,
     quiet: 0,
   };
   const CC_KEY = 'pf-podcast-captions';
+  const LEVEL_KEY = 'pf-podcast-level';
+  // Some browsers (iOS) ignore a page's volume: the slider would do nothing.
+  const canSetVolume = (() => {
+    const probe = document.createElement('audio');
+    probe.volume = 0.5;
+    return probe.volume === 0.5;
+  })();
+
+  function readLevel() {
+    try {
+      const saved = JSON.parse(window.localStorage.getItem(LEVEL_KEY) || 'null');
+      if (saved && saved.volume >= 0 && saved.volume <= 1) {
+        return { volume: saved.volume, muted: !!saved.muted };
+      }
+    }
+    catch (e) {
+      // Blocked storage: full volume.
+    }
+    return { volume: 1, muted: false };
+  }
   const ccOn = () => {
     try {
       return window.localStorage.getItem(CC_KEY) !== 'off';
@@ -362,6 +384,10 @@
     captions.cues = [];
     captions.index = -1;
     captions.src = url;
+    captions.shown = null;
+    const band = bar.querySelector('.pf-listen__caption');
+    band.classList.remove('is-shown');
+    band.querySelectorAll('p').forEach((line) => { line.textContent = ''; });
     bar.classList.remove('has-captions');
     tools.forEach((tool) => { tool.hidden = true; });
     showTranscript(false);
@@ -386,18 +412,44 @@
     }).catch(() => captions.files.delete(url));
   }
 
-  // The line over the bar: who (mono capitals) and the phrase. It fades
-  // between phrases and clears in a pause, unless motion is reduced.
-  function paintCaption(cue) {
-    const line = state.bar && state.bar.querySelector('.pf-listen__caption');
-    if (!line) {
+  // The caption band over the bar, rolling as broadcast captions do: the
+  // phrase heard, and the one before it muted above, so a phrase that ends
+  // on a comma still reads. A speaker's name (mono capitals) leads their
+  // first line. In a pause both stay, dimmed; the new line rises in
+  // unless motion is reduced.
+  function writeLine(el, cue, named) {
+    el.textContent = '';
+    if (!cue) {
       return;
     }
-    const shown = !!cue && ccOn() && !state.bar.classList.contains('is-reading');
-    line.classList.toggle('is-shown', shown);
-    if (cue) {
-      line.querySelector('.pf-listen__caption-who').textContent = cue.who;
-      line.querySelector('.pf-listen__caption-text').textContent = cue.text;
+    if (named && cue.who) {
+      const who = document.createElement('span');
+      who.className = 'pf-listen__caption-who';
+      who.textContent = cue.who;
+      el.append(who, ' ');
+    }
+    el.append(cue.text);
+  }
+
+  function paintCaption(cue) {
+    const band = state.bar && state.bar.querySelector('.pf-listen__caption');
+    if (!band) {
+      return;
+    }
+    band.classList.toggle('is-idle', !cue);
+    if (!cue || captions.shown === cue) {
+      return;
+    }
+    const before = captions.cues[captions.cues.indexOf(cue) - 1];
+    // The line before only if it was just shown (not after a seek).
+    const prev = before && captions.shown === before ? before : null;
+    writeLine(band.querySelector('.pf-listen__caption-prev'), prev, true);
+    const now = band.querySelector('.pf-listen__caption-text');
+    writeLine(now, cue, !prev || prev.who !== cue.who);
+    captions.shown = cue;
+    band.classList.add('is-shown');
+    if (!reduceMotion() && now.animate) {
+      now.animate([{ opacity: 0, transform: 'translateY(.35rem)' }, { opacity: 1, transform: 'none' }], { duration: 260, easing: 'cubic-bezier(.2, .7, .2, 1)' });
     }
   }
 
@@ -491,10 +543,11 @@
       + '<div class="pf-listen__lines" tabindex="0"></div>'
       + '</div>'
       + '<div class="pf-listen__caption" aria-hidden="true">'
-      + '<span class="pf-listen__caption-who"></span>'
-      + '<span class="pf-listen__caption-text"></span>'
+      + '<p class="pf-listen__caption-prev"></p>'
+      + '<p class="pf-listen__caption-text"></p>'
       + '</div>'
       + '<div class="pf-listen__inner">'
+      + '<button type="button" class="pf-audio__play pf-listen__play"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path class="pf-audio__icon-play" d="M5 3.2v9.6L12.6 8z"/><path class="pf-audio__icon-pause" d="M4.5 3h2.5v10H4.5zM9 3h2.5v10H9z"/></svg><span class="visually-hidden"></span></button>'
       + '<button type="button" class="pf-listen__expand">'
       + '<span class="pf-listen__kicker"></span>'
       + '<span class="pf-listen__title"></span>'
@@ -502,9 +555,10 @@
       + '<svg class="pf-listen__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M8 2.5v10M3.5 8.5 8 13l4.5-4.5"/></svg>'
       + '</button>'
       + '<div class="pf-listen__player"><div class="pf-audio is-custom" data-pf-audio>'
-      + '<button type="button" class="pf-audio__play"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path class="pf-audio__icon-play" d="M5 3.2v9.6L12.6 8z"/><path class="pf-audio__icon-pause" d="M4.5 3h2.5v10H4.5zM9 3h2.5v10H9z"/></svg><span class="visually-hidden"></span></button>'
       + '<input type="range" class="pf-audio__seek" min="0" max="1000" step="1" value="0">'
       + '<span class="pf-audio__time" aria-hidden="true">0:00 / 0:00</span>'
+      + '<button type="button" class="pf-audio__mute" aria-pressed="false"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M2.5 6h2.5L8.5 3v10L5 10H2.5z"/><path class="pf-audio__waves" d="M10.5 5.75a3 3 0 0 1 0 4.5M12.25 4a5.5 5.5 0 0 1 0 8"/><path class="pf-audio__cross" d="M10.5 6l4 4m0-4-4 4"/></svg><span class="visually-hidden">' + Drupal.t('Mute') + '</span></button>'
+      + (canSetVolume ? '<input type="range" class="pf-audio__seek pf-audio__volume" min="0" max="100" step="5" value="100" aria-label="' + Drupal.t('Volume') + '">' : '')
       + '<audio preload="none"></audio>'
       + '</div></div>'
       + '<button type="button" class="pf-listen__tool pf-listen__cc" aria-pressed="true" hidden>'
@@ -532,6 +586,7 @@
     const sync = () => {
       const paused = audio.paused;
       wrap.classList.toggle('is-playing', !paused);
+      bar.classList.toggle('is-playing', !paused);
       playText.textContent = paused ? Drupal.t('Play') : Drupal.t('Pause');
       const duration = audio.duration || 0;
       if (!seek.matches(':active')) {
@@ -608,6 +663,47 @@
       }
       sync();
     });
+
+    // Mute, and the volume where the browser lets a page set it (not iOS:
+    // its buttons are the volume). Kept for the next episode and visit.
+    const mute = bar.querySelector('.pf-audio__mute');
+    const volume = bar.querySelector('.pf-audio__volume');
+    const level = readLevel();
+    const syncLevel = () => {
+      wrap.classList.toggle('is-muted', audio.muted || (canSetVolume && audio.volume === 0));
+      mute.setAttribute('aria-pressed', String(audio.muted));
+      if (volume) {
+        const percent = audio.muted ? 0 : Math.round(audio.volume * 100);
+        volume.value = String(percent);
+        volume.style.setProperty('--pf-audio-progress', percent + '%');
+        volume.setAttribute('aria-valuetext', audio.muted ? Drupal.t('Muted') : percent + '%');
+      }
+    };
+    const setLevel = (vol, muted) => {
+      audio.muted = muted;
+      if (canSetVolume) {
+        audio.volume = vol;
+      }
+      try {
+        window.localStorage.setItem(LEVEL_KEY, JSON.stringify({ volume: vol, muted }));
+      }
+      catch (e) {
+        // Private windows: this page only.
+      }
+    };
+    audio.addEventListener('volumechange', syncLevel);
+    mute.addEventListener('click', () => {
+      // Unmuting at no volume would stay silent: back to half.
+      setLevel(audio.volume || 0.5, !audio.muted);
+    });
+    if (volume) {
+      volume.addEventListener('input', () => setLevel(Number(volume.value) / 100, false));
+    }
+    audio.muted = level.muted;
+    if (canSetVolume) {
+      audio.volume = level.volume;
+    }
+    syncLevel();
 
     bar.querySelector('.pf-listen__expand').addEventListener('click', () => {
       const list = document.getElementById('podcast');

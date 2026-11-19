@@ -770,7 +770,8 @@ HTML),
 HTML),
   $text('Thu Nov 19: Captions for What Endures', <<<'HTML'
 <ul>
-<li>The podcast player now shows live captions: the words being said, and who says them, just above the player, with a CC button to turn them off. A Transcript button opens the whole episode as text, following along as it plays; click any line to jump there. The interview excerpts use the transcriptions the Center published on its old blog, word for word; the rest was transcribed by computer, and the transcript says so.</li>
+<li>The podcast player now shows live captions: the words being said, and who says them, on top of the player, with the line before just above so a sentence reads whole, and a CC button to turn them off. A Transcript button opens the whole episode as text, following along as it plays; click any line to jump there. The interview excerpts use the transcriptions the Center published on its old blog, word for word; the rest was transcribed by computer, and the transcript says so.</li>
+<li>The player itself: Play is now at the far left, there is a volume control (on computers; phones use their own buttons), and the player and captions sit on frosted glass over the page.</li>
 </ul>
 HTML),
   $text('Thu Nov 19: The treasure chest, and facts at the foot', <<<'HTML'
