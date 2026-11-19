@@ -626,7 +626,6 @@ HTML),
 <li>The tape deck now threads the tape properly: it passes over the capstan, and the rubber pinch roller closes on it when a series plays. The series name under the deck is always gold.</li>
 <li>Oral History’s series: a small surprise on the tape deck. Its PLAY, PAUSE and STOP keys can be clicked, and PLAY keeps the reels turning after you move away.</li>
 <li>What Endures: the episodes now come five to a page instead of in a small scrolling box. Arrows under the list step through the pages, and the episode you point at still shows at the top of the section.</li>
-<li>The tape deck is now set up the way archives digitize: the LINE and REPRO switches are pressed in with softly lit lamps, and the record switches are off. Its small labels are also straighter.</li>
 </ul>
 HTML),
   $text('Thu Nov 19: Scholarly Repository full text', <<<'HTML'
@@ -658,6 +657,11 @@ HTML),
   $text('Thu Nov 19: Background video saves battery and data', <<<'HTML'
 <ul>
 <li>The opening video on landing pages now also pauses while you’re on another browser tab and picks up again when you come back, and the next clip in a playlist only starts downloading once the video has been on screen. It already paused when scrolled out of view.</li>
+</ul>
+HTML),
+  $text('Thu Nov 19: Oral History hero column lists the page', <<<'HTML'
+<ul>
+<li>The column beside the title on Oral History’s homepage now works as the page’s contents: under the Find us map, numbered rows for the Quick Start, the Series, the exhibitions and What Endures (with the newest episode and its Play button), each jumping down to its section with the same number its heading carries. The map stays up while you move down the list; only the podcast row brings up a picture of its own. Find us now opens directions, since it used to link back to the page itself. A new box on the Landing hero, Contents in the column, switches any hero between this and the usual highlights; Oral History has it ticked.</li>
 </ul>
 HTML),
 ]);

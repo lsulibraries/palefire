@@ -5207,7 +5207,9 @@ $pf-stage: 'html:root .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landi
           }
         }
 
-        &:not(:has(.pf-hero-banner__link:is(:hover, :focus-visible))) > .pf-hero-banner.is-shown .pf-hero-banner__media,
+        // A row with no picture of its own (Contents in the column: a
+        // section's row) leaves the resting picture up.
+        &:not(:has(.pf-hero-banner__link:is(:hover, :focus-visible) .pf-hero-banner__media)) > .pf-hero-banner.is-shown .pf-hero-banner__media,
         .pf-hero-banner__link:is(:hover, :focus-visible) .pf-hero-banner__media {
           opacity: 1;
           transition-delay: .12s;
@@ -5266,7 +5268,7 @@ $pf-stage: 'html:root .pf-landing.pf-landing--cover > .pf-landing__lead.pf-landi
           display: none;
         }
 
-        &:not(:has(.pf-hero-banner__link:is(:hover, :focus-visible))) > .pf-hero-banner.is-shown .pf-hero-banner__plate,
+        &:not(:has(.pf-hero-banner__link:is(:hover, :focus-visible) .pf-hero-banner__media)) > .pf-hero-banner.is-shown .pf-hero-banner__plate,
         > .pf-hero-banner:has(.pf-hero-banner__link:is(:hover, :focus-visible)) .pf-hero-banner__plate {
           opacity: 1;
           transition-delay: .08s;
@@ -6861,6 +6863,40 @@ $pf-wash: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf-landin
   }
 }
 
+
+// --- Contents in the column -------------------------------------------------
+// The hero's Contents in the column box (field_hero_toc, Oral History): the
+// column's rows are the page's sections (includes/landing.html.twig), each
+// its label over its name, the name led by its rule's number in the mono
+// label voice and the section title's color (in the name, not the label,
+// which a short window hides). The Find us map stays first and is the picture the column
+// rests on; a row with no picture of its own leaves it up (the stage,
+// above), so moving down the contents never drops to the film. The
+// podcast's row shows the newest episode's cover. Under the poster the
+// index's own counter gives way to the rule's number (data-pf-num), so the
+// numbers are the page's; the map's row has none.
+.pf-hero-banner__num {
+  margin-right: .75em;
+  font-family: var(--pf-landing-label);
+  font-size: var(--pf-mono-label);
+  font-weight: 700;
+  letter-spacing: .08em;
+  font-variant-numeric: tabular-nums;
+  vertical-align: .125em;
+  color: var(--pf-g-title, var(--pf-toc-active));
+}
+
+@container pf-cover (width < 44rem) {
+  #{$pf-wash-narrow} .pf-hero-banners--toc > .pf-hero-banner {
+    &::before {
+      content: attr(data-pf-num) / "";
+    }
+
+    .pf-hero-banner__num {
+      display: none;
+    }
+  }
+}
 
 // --- No spotlight ---------------------------------------------------------------
 // The hero's Spotlight box unticked (field_hero_spotlight, palefire.theme):

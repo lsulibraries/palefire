@@ -596,6 +596,13 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
       PodcastFeed::heroBanner($variables);
     }
     $variables['oral_history_series'] = isset($variables['hero_index']['series']) ? _palefire_oral_history_series($variables) : [];
+    // Contents in the column (field_hero_toc,
+    // scripts/palefire_hero_toc_setup.php): the page's sections in place of
+    // the Highlights. Until the field exists, Oral History has them.
+    $variables['hero_toc'] = $paragraph->hasField('field_hero_toc')
+      ? (bool) $paragraph->get('field_hero_toc')->value
+      : ($variables['hero_unit'] ?? '') === 'oral_history';
+    $variables['hero_toc_sections'] = $variables['hero_toc'] ? _palefire_hero_toc($paragraph, $variables) : [];
     // On the hero the map is a section of the page: its heading is an h2
     // (map.heading_tag). Its own render-cache entry.
     if (!empty($variables['landing_map'])) {
@@ -683,6 +690,83 @@ function _palefire_hero_banners(ParagraphInterface $paragraph, array &$variables
   }
   $cache->applyTo($variables);
   return $banners;
+}
+
+/**
+ * The page's sections after the Landing hero, for its column's contents.
+ *
+ * With Contents in the column ticked (hero_toc), the column lists the
+ * hero's own sections (includes/landing.html.twig, from hero_index) and
+ * then these: each section the TOC lists, numbered as
+ * palefire_preprocess_field() numbers its rule, so the column's numbers are
+ * the page's. Keys: num ('' for a section with no rule), label (its
+ * Eyebrow, the podcast's "The podcast"), title, url ('#' . its anchor),
+ * episode (the podcast's: the newest episode's banner, from
+ * PodcastFeed::heroBanner(), for its picture and Play).
+ */
+function _palefire_hero_toc(ParagraphInterface $hero, array &$variables): array {
+  $host = $hero;
+  for ($i = 0; $i < 5 && $host instanceof ParagraphInterface; $i++) {
+    $host = $host->getParentEntity();
+  }
+  if (!$host instanceof NodeInterface || !$host->hasField('field_scroll_section')) {
+    return [];
+  }
+  $cache = CacheableMetadata::createFromRenderArray($variables);
+  $anchors = PalefireHooks::sectionData($host);
+  $drawn = _palefire_hero_tabs($hero)?->id();
+  $episode = NULL;
+  foreach ($variables['hero_banners'] ?? [] as $banner) {
+    if (!empty($banner['episode'])) {
+      $episode = $banner;
+      break;
+    }
+  }
+  $count = 0;
+  $after = FALSE;
+  $rows = [];
+  foreach ($host->get('field_scroll_section')->referencedEntities() as $section) {
+    if (!$section instanceof ParagraphInterface || !$section->isPublished()) {
+      continue;
+    }
+    if ($section->bundle() === 'landing_hero') {
+      $count += count(_palefire_hero_index($section));
+      $after = $after || $section->uuid() === $hero->uuid();
+      continue;
+    }
+    if ($section->id() === $drawn) {
+      continue;
+    }
+    $cache->addCacheableDependency($section);
+    $num = '';
+    $label = '';
+    $podcast = FALSE;
+    if ($section->hasField('field_tile_eyebrow') && !$section->get('field_tile_eyebrow')->isEmpty()) {
+      $num = sprintf('%02d', ++$count);
+      $label = (string) $section->get('field_tile_eyebrow')->value;
+    }
+    elseif (PodcastFeed::isSection($section)) {
+      $num = sprintf('%02d', ++$count);
+      $label = (string) t('The podcast');
+      $podcast = TRUE;
+    }
+    elseif (_palefire_location_index($section, $cache)) {
+      $num = sprintf('%02d', ++$count);
+    }
+    $data = $anchors[$section->uuid()] ?? NULL;
+    if (!$after || !$data || !$data['toc']) {
+      continue;
+    }
+    $rows[] = [
+      'num' => $num,
+      'label' => $label,
+      'title' => $data['label'],
+      'url' => '#' . $data['anchor'],
+      'episode' => $podcast ? $episode : NULL,
+    ];
+  }
+  $cache->applyTo($variables);
+  return $rows;
 }
 
 /**

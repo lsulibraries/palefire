@@ -61,6 +61,10 @@
  * - toc_home_id, toc_map_id: ids for the TOC's "Home" (the lead) and "Map"
  *   (the map) links, when this landing opens the page
  *   (PalefireHooks::heroTocIds()).
+ * - hero_toc: the hero's Contents in the column box (field_hero_toc; Oral
+ *   History without the field): the column lists the page's sections in
+ *   place of the Highlights. hero_toc_sections: the sections after the hero
+ *   (_palefire_hero_toc()).
  *
  * "Search LSU Libraries" (not on the hero) and the map heading are h3s so
  * the TOC lists them.
@@ -325,7 +329,8 @@
          one (no picture of its own for the letters: they stay solid). #}
       {% set title_still = cover and bg_videos and bg_poster %}
       {% set banner_room = (hero_map_banner ? 4 : 5) - (hero_blog ? 1 : 0) %}
-      {% set title_pics = title_still ? (hero_map_banner ? [{ still: '' }] : [])|merge(hero_banners|slice(0, banner_room))|merge(hero_blog ? [hero_blog] : []) : [] %}
+      {# Contents in the column (hero_toc): no pictures for the letters. #}
+      {% set title_pics = title_still and not hero_toc ? (hero_map_banner ? [{ still: '' }] : [])|merge(hero_banners|slice(0, banner_room))|merge(hero_blog ? [hero_blog] : []) : [] %}
       {% set title_feature = title_pics ? title_pics|first.still %}
       {# Oral History: the Center's mark in place of the page's name, its
          two rows filling a solid frame (_landing-features.scss, "Center
@@ -525,17 +530,43 @@
            unit's room lit, linking down to the map. The featured picture
            the column rests on (js/hero-highlights.js); never the next
            event, which takes the first banner after it. #}
-      {% if hero_blog or hero_banners or hero_map_banner %}
+      {# Contents in the column (hero_toc, field_hero_toc): in place of the
+         Banners and the blog post, the page's sections as rows, each its
+         rule's number and label over its name, linking down to it: the
+         hero's own (hero_index: the Quick Start, Series, Rooms and access,
+         Hours and directions), then the page's (hero_toc_sections,
+         _palefire_hero_toc()). Five rows at most, the Find us banner one of
+         them; it stays first, the picture the column rests on. The podcast's
+         row has the newest episode's cover and Play. #}
+      {% set toc_rows = [] %}
+      {% if hero_toc %}
+        {% set hero_rows = {
+          guide: { label: 'Start your research'|t, title: quick_guide.title|default('Quick Guide'|t), url: '#' ~ (toc_start_id ?: input_id ~ '-quick-guide') },
+          series: { label: 'Browse by series'|t, title: 'Series'|t, url: '#' ~ input_id ~ '-series' },
+          rooms: { label: 'Rooms and access'|t, title: 'Map'|t, url: toc_map_id ? '#' ~ toc_map_id : '' },
+          hours: { label: 'Hours and directions'|t, title: 'Visit'|t, url: toc_hours_id ? '#' ~ toc_hours_id : '' },
+        } %}
+        {% for rule, num in hero_index|default({}) %}
+          {% if hero_rows[rule].url|default('') %}
+            {% set toc_rows = toc_rows|merge([hero_rows[rule]|merge({ num: num })]) %}
+          {% endif %}
+        {% endfor %}
+        {% set toc_rows = (toc_rows|merge(hero_toc_sections|default([])))|slice(0, hero_map_banner ? 4 : 5) %}
+      {% endif %}
+      {% if hero_toc ? (hero_map_banner or toc_rows) : (hero_blog or hero_banners or hero_map_banner) %}
         {% set hero_listed = hero_banners|slice(0, (hero_map_banner ? 4 : 5) - (hero_blog ? 1 : 0)) %}
-        <ul class="pf-hero-banners" role="list" aria-label="{{ 'Highlights'|t }}">
+        <ul class="pf-hero-banners{{ hero_toc ? ' pf-hero-banners--toc' }}" role="list" aria-label="{{ hero_toc ? 'On this page'|t : 'Highlights'|t }}">
           {% if hero_map_banner %}
             <li class="pf-hero-banner pf-hero-banner--map">
               {# Find us: down to Hours and directions when the page has it,
                  else the room's page, else directions in Google Maps (a new
                  tab). In hand, the building's photo takes the drawing's
                  place (.pf-hero-banner__photo, _landing-features.scss). #}
-              {% set map_out = not toc_hours_id and not hero_map_banner.url and visit.maps_url %}
-              <a class="pf-hero-banner__link" href="{{ toc_hours_id ? '#' ~ toc_hours_id : (hero_map_banner.url ?: (visit.maps_url ?: '#' ~ (toc_map_id ?: hero_map_banner.anchor))) }}"{% if map_out %} target="_blank" rel="noopener"{% endif %}>
+              {# On the unit's own homepage the room's page is this page, so
+                 directions instead. #}
+              {% set map_page = hero_unit ? '' : hero_map_banner.url %}
+              {% set map_out = not toc_hours_id and not map_page and visit.maps_url %}
+              <a class="pf-hero-banner__link" href="{{ toc_hours_id ? '#' ~ toc_hours_id : (map_page ?: (visit.maps_url ?: '#' ~ (toc_map_id ?: hero_map_banner.anchor))) }}"{% if map_out %} target="_blank" rel="noopener"{% endif %}>
                 <span class="pf-hero-banner__media pf-hero-banner__media--map" aria-hidden="true">
                   <span class="pf-hero-banner__photo"></span>
                   <span class="pf-hero-banner__map">
@@ -549,7 +580,30 @@
               </a>
             </li>
           {% endif %}
-          {% for banner in hero_listed %}
+          {% for row in toc_rows %}
+            <li class="pf-hero-banner pf-hero-banner--toc{{ row.episode ? ' pf-hero-banner--episode' }}"{% if row.num %} data-pf-num="{{ row.num }}"{% endif %}>
+              {% if row.episode %}
+                {{ attach_library('palefire/podcast') }}
+                <button type="button" class="pf-podcast__play pf-hero-banner__play" data-pf-podcast-src="{{ row.episode.episode.mp3 }}" data-pf-podcast-title="{{ row.episode.episode.title }}" data-pf-podcast-kicker="{{ row.episode.episode.kicker }}">
+                  <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path class="pf-podcast__icon-play" d="M5 3.2v9.6L12.6 8z"/><path class="pf-podcast__icon-pause" d="M4.5 3h2.5v10H4.5zM9 3h2.5v10H9z"/></svg>
+                  <span class="visually-hidden" data-pf-podcast-state>{{ 'Play @title'|t({ '@title': row.episode.episode.title }) }}</span>
+                </button>
+              {% endif %}
+              <a class="pf-hero-banner__link" href="{{ row.url }}">
+                {% if row.episode and row.episode.image %}
+                  <span class="pf-hero-banner__media" aria-hidden="true">{{ row.episode.image }}</span>
+                {% endif %}
+                <span class="pf-hero-banner__text">
+                  <span class="pf-hero-banner__label">{{ row.episode ? row.episode.label : row.label }}</span>
+                  <span class="pf-hero-banner__title">
+                    {%- if row.num %}<span class="pf-hero-banner__num" aria-hidden="true">{{ row.num }}</span>{% endif -%}
+                    {{- row.title -}}
+                  </span>
+                </span>
+              </a>
+            </li>
+          {% endfor %}
+          {% for banner in (hero_toc ? [] : hero_listed) %}
             <li class="pf-hero-banner{{ banner.episode ? ' pf-hero-banner--episode' }}"{% if loop.first %} data-pf-hero-event{% endif %}>
               {# Oral History's newest podcast episode (PodcastFeed::heroBanner()):
                  Play beside the link, never in it, in the docked player
@@ -581,7 +635,7 @@
               {% endif %}
             </li>
           {% endfor %}
-          {% if hero_blog %}
+          {% if hero_blog and not hero_toc %}
             <li class="pf-hero-banner pf-hero-banner--blog">
               <a class="pf-hero-banner__link" href="{{ hero_blog.url }}">
                 {% if hero_blog.image %}
