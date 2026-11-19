@@ -170,7 +170,7 @@ HTML, 'callout'),
     ['running', 'Alma placeholder', 'Research and Special Collections list Alma (coming soon) as a dimmed source that can\'t be chosen, with a line in What are these? It searches nothing yet.'],
     ['running', 'Journals', 'The homepage\'s e-journal search, brought into Research as its own section: journals, newspapers, newsletters and reports the Libraries can read online, each with where to read it and which years, and a Type filter. A search that is a journal\'s name (Nature, The New York Times) shows that journal first, above Discovery\'s results. It uses Discovery\'s own connection, so it moves to Alma with Discovery. Needs a check on production.'],
     ['running', 'Finishing touches', 'Results rise into place in turn, counts count up, the term searched is set large over the results and rises in letter by letter, and in Special Collections the empty field types out searches to try. Ctrl+K jumps to the search field and the arrow keys move between results. A search with no results offers searches to try and a picture from the exhibitions. Nothing moves for anyone who has asked for reduced motion. Needs a check on production.'],
-    ['running', 'Scholarly Repository', 'Its own section again in All and Research, with highlighted abstracts, authors, type and year, a Year published filter and newest or oldest sorting. The repository\'s search turns away requests from our server, so the site keeps its own copy of the repository\'s records, refreshed daily. It searches titles, authors, abstracts and keywords; a note under the heading and a Go to link send people to the repository for the full text of each document. Needs the first copy made on production.'],
+    ['running', 'Scholarly Repository', 'Its own section in All and Research, searched through the full text of each document by the repository\'s own search, which lets our server through again. Rows show highlighted abstracts, authors, type and year, with Open online when there\'s a file, a Year published filter and relevance or newest sorting. The site\'s daily copy of the records adds the abstracts, and answers without full text when the repository\'s search doesn\'t.'],
     ['todo', 'Staff comparison of Discovery and Alma', 'A staff-only page showing both results side by side, with room for notes. Waiting on the Alma sandbox details.'],
     ['running', 'Feedback question', 'Under the results, Did you find what you needed? Yes, Partly or No opens a short feedback form with the search already filled in, and a Feedback link beside Search tips opens it from the top of the page. Both appear once the form is made on production. Needs a check on production before testers get the link.'],
     ['running', 'What searches find', 'Analytics counts searches that find nothing anywhere (with their words) and which results people open, by source and place in the list, never the result itself. Staff see both on the Website Analytics page. Live once the theme is pulled; figures start the next night.'],
@@ -254,7 +254,6 @@ $section('Next steps', [
 <li>Click Request to view on a record with several boxes, and confirm the form receives the right box.</li>
 <li>Review the page's design together, and choose a design for the result rows.</li>
 <li>Add Palefire pages to the search index and reindex, along with the date range, title sorting and exact phrases.</li>
-<li>Make the first copy of the Scholarly Repository on production, and ask the repository team whether our server can use its search, for full-text matches.</li>
 <li>Move the site's search forms to Combined Search and redirect /bento.</li>
 <li>Decide what requesters sign in with once requests move to Alma, and add that to the request note. Visitors see what they sign in with, not the system's name.</li>
 <li>Connect Alma when the sandbox is ready.</li>
@@ -435,6 +434,21 @@ HTML),
 <li>Show all for Research Guides and Databases now stays on this page, filtered to that source, as every other section does, instead of opening the guides site. A Go to link under each heading still leads to the guides site or the A–Z list.</li>
 <li>A source chosen on its own now shows its count in the Source filter, as the site’s own sources always did: Databases with nutrition says 18 beside its tick. Outside sources that aren’t chosen still show their count once their section loads, and none while only another is listed.</li>
 <li>A source chosen on its own now keeps its line on what it holds above its results, as its section does among the others (Databases: Collections the Libraries subscribe to…). On a phone it stays hidden there too, where What are these? says it.</li>
+<li>Place hold opens the catalog in a new tab, so the results stay where they were: the catalog’s sign-in redirects left Back several steps from them, with the location panel closed. Screen readers hear “opens in a new tab”. Title links and the other buttons still open in the same tab.</li>
+</ul>
+HTML),
+  $text('Thu Nov 19: Scholarly Repository full text', <<<'HTML'
+<ul>
+<li>The repository team let our server through the repository’s firewall, so the Scholarly Repository is searched through its own search again, which reads the full text of each document, not only its title, authors, abstract and keywords. Nutrition finds 4,764 records.</li>
+<li>That search sends no abstracts, so each row still shows its abstract from the site’s daily copy of the records, matched by its address. A row gets an Open online button when the record has a file to read.</li>
+<li>If the repository’s search stops answering, the copy answers instead, with a note above the results saying it doesn’t know the full text.</li>
+<li>Oldest first is gone from this source’s sorting: the repository’s search sorts only by relevance or newest. Its line under What are these? now says it searches the full text.</li>
+</ul>
+HTML),
+  $text('Thu Nov 19: Oral histories keep their locations', <<<'HTML'
+<ul>
+<li>Oral histories searched on their own often lost their Show location panels. Each abstract’s Catalog record is looked up by its tape number, twenty at once, and on a first search some of those answers took longer than the five seconds allowed, so their rows showed none. A second search found them all, which is why choosing Catalog first seemed to help.</li>
+<li>Now the answer says when some records didn’t arrive in time, and the page asks again for those rows, up to twice, before giving up on them. Records already found are kept on the server for a day, so the second answer comes quickly. Live tests: jazz found 12 of 20 at first and all 20 on the second ask; plantation 16, then 20.</li>
 </ul>
 HTML),
 ]);

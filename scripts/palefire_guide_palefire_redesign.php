@@ -621,6 +621,16 @@ HTML),
 <li>Oral History’s series: the tape deck’s two level meters now light up softly and their needles drift gently while a series plays, then settle back when you move away.</li>
 </ul>
 HTML),
+  $text('Thu Nov 19: Scholarly Repository full text', <<<'HTML'
+<ul>
+<li>Combined Search: the Scholarly Repository is searched through the full text of each document again, now that the repository lets our website through its firewall. The site’s own copy of its records still adds abstracts and stands in if the repository doesn’t answer.</li>
+</ul>
+HTML),
+  $text('Thu Nov 19: Oral history locations', <<<'HTML'
+<ul>
+<li>Combined Search: oral histories searched on their own keep their Show location panels. When the catalog is slow to answer on a first search, the page asks again for the rows it missed instead of leaving them without one.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------
