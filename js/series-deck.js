@@ -18,9 +18,12 @@
  * are turned here, not by CSS, so they spin up and down like a motor's:
  * at playing speed (PLAY down and the pinch roller in once the tape has
  * settled) for as long as the pointer is on the series or the focus in
- * them, slowing to a stop after.
+ * them, slowing to a stop after. The meters light and their needles rise
+ * to playing level and wander slowly about it, each channel its own way,
+ * then sink back to rest.
  * At rest it shows the largest series. Reduced motion (or the Settings
- * drawer's "Reduce motion"): the caption and the tape change, nothing runs.
+ * drawer's "Reduce motion"): the caption and the tape change, the meters
+ * light with their needles at playing level (CSS), nothing runs.
  *
  * Decorative throughout: the deck and its caption are aria-hidden, and each
  * card already says its name and count and is described by its
@@ -215,6 +218,16 @@
     const PLAY = [-360 / 5, -360 / 7];
     const EASE = 0.3;
     let reels = [[], []];
+    // The VU needles, left and right: at rest and at playing level as the
+    // exhibitions' deck has them (_exhibition.scss .needle, and is-held in
+    // _landing-features.scss), the level wandering a few degrees (two slow
+    // waves, a second and a half and three seconds, out of step between the
+    // channels); NEEDLE_EASE seconds to follow, so none of it is a flicker.
+    const NEEDLE_REST = -38;
+    const NEEDLE_PLAY = -12;
+    const NEEDLE_EASE = 0.4;
+    let needles = [];
+    const needle = [NEEDLE_REST, NEEDLE_REST];
     const angle = [0, 0];
     const speed = [0, 0];
     let winding = null;
@@ -252,6 +265,14 @@
         });
         moving = moving || Math.abs(speed[i]) > 0.5;
       });
+      const kn = 1 - Math.exp(-dt / NEEDLE_EASE);
+      const s = time / 1000;
+      needles.forEach((el, i) => {
+        const to = held ? NEEDLE_PLAY + 3.5 * Math.sin(s * 2.1 + i * 2.4) + 2 * Math.sin(s * 4.2 + i * 1.1) : NEEDLE_REST;
+        needle[i] += (to - needle[i]) * kn;
+        el.style.rotate = needle[i].toFixed(2) + 'deg';
+        moving = moving || Math.abs(to - needle[i]) > 0.2;
+      });
       if (moving) {
         motor = window.requestAnimationFrame(turn);
       }
@@ -264,6 +285,12 @@
     };
 
     const run = () => {
+      // Reduced motion: the needles back to CSS (playing level while held).
+      if (still()) {
+        needles.forEach((el) => {
+          el.style.rotate = '';
+        });
+      }
       if (svg && !motor && !still()) {
         last = 0;
         motor = window.requestAnimationFrame(turn);
@@ -341,6 +368,11 @@
       window.clearTimeout(swap);
       if (quiet || still()) {
         fill();
+        // Reduced motion still holds it (the gold name, the meters lit),
+        // though nothing turns.
+        if (!quiet) {
+          hold(true);
+        }
         return;
       }
       now.classList.add('is-swapping');
@@ -367,6 +399,7 @@
         svg.setAttribute('preserveAspectRatio', 'xMidYMax meet');
         machine.append(svg);
         reels = [Array.from(svg.querySelectorAll('.spin--0')), Array.from(svg.querySelectorAll('.spin--1'))];
+        needles = Array.from(svg.querySelectorAll('.needle'));
         counter();
         tape(true);
       }).catch(() => {

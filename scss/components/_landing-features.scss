@@ -6474,8 +6474,21 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
 // rule: the cards have their own edges). The deck is as large as the column allows with the
 // heading and caption. Its tones are the exhibitions' (.pf-deck__svg,
 // _exhibition.scss); while a series goes on it the reels run, the tape
-// winds to the series' share, PLAY lights, the pinch roller presses in and
-// the needles lift.
+// winds to the series' share, PLAY lights, the pinch roller presses in,
+// the meters light and their needles lift and drift (js/series-deck.js;
+// with reduced motion they hold at playing level).
+// Held: the meters' lamps on, a faint warmth on their faces, and the
+// needles at playing level (the script moves them from there, inline).
+.pf-series__deck.is-held .pf-deck__svg {
+  .vu-face {
+    fill: color-mix(in srgb, var(--pf-deck-gold) 18%, var(--pf-deck-bg));
+  }
+
+  .needle {
+    rotate: -12deg;
+  }
+}
+
 .pf-series__deck {
   --pf-deck-bg: var(--pf-g-bg, var(--bs-body-bg));
   --pf-deck-gold: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
@@ -6621,18 +6634,12 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
       opacity: 0;
     }
 
-    .pf-series__deck .pf-deck__svg .needle {
-      transition: rotate .6s cubic-bezier(.2, .7, .2, 1);
+    .pf-series__deck .pf-deck__svg .vu-face {
+      transition: fill .6s ease;
     }
 
-    .pf-series__deck.is-playing .pf-deck__svg {
-      .pinch {
-        translate: -5.22px -6.33px;
-      }
-
-      .needle {
-        rotate: -12deg;
-      }
+    .pf-series__deck.is-playing .pf-deck__svg .pinch {
+      translate: -5.22px -6.33px;
     }
   }
 }
