@@ -34,8 +34,12 @@
 // silkscreened (sans, not mono: the section eyebrows keep the mono voice).
 // text-transform only, so screen readers hear them in sentence case.
 //
-// Motion: the key slides (.45s), the label and icon brighten a beat after
-// the tap (.12s), and the panels follow the key: the old one steps aside
+// Motion: the key slides (.45s); the tab it leaves goes dark at once, and
+// the one it goes to lights as the key lands (--pf-tabs-arrive, .2s: the
+// key is nearly there by then, its ease-out front-loaded), quickly (.15s),
+// rising over the key only then, so the key arrives and the legend prints;
+// sooner after a dragged key's snap (.08s), which starts close by. The
+// panels follow the key: the old one steps aside
 // the way the key left and fades (.12s), the new one comes in 24px from the
 // side the key travels toward and lands with it, then its parts rise 8px,
 // 60ms apart (Palefire's content reveal, capped at 8). The key can also be
@@ -206,7 +210,7 @@ html:not(.pf-reading-dark) .pf-tabs {
   background: none;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-  transition: color .3s var(--pf-tabs-ease) .12s;
+  transition: color .2s var(--pf-tabs-ease);
 
   &:focus-visible {
     outline: none;
@@ -271,7 +275,7 @@ html:not(.pf-reading-dark) .pf-tabs {
   place-items: center;
   line-height: 1;
   color: var(--pf-tabs-carve);
-  transition: color .3s var(--pf-tabs-ease) .12s;
+  transition: color .2s var(--pf-tabs-ease);
 
   // A legend on the key, not a picture: 20px on phones (smaller and the
   // carving clogs the details), 28px from md.
@@ -281,7 +285,7 @@ html:not(.pf-reading-dark) .pf-tabs {
     height: 1.25rem;
     fill: currentColor;
     filter: drop-shadow(-1px -1px .5px var(--pf-tabs-carve-wall)) drop-shadow(1px 1px .5px var(--pf-tabs-carve-lip));
-    transition: filter .3s var(--pf-tabs-ease) .12s, opacity .3s var(--pf-tabs-ease) .12s;
+    transition: filter .2s var(--pf-tabs-ease), opacity .2s var(--pf-tabs-ease);
   }
 
   // With a Light icon of the same name: its outline waits, unseen, for the
@@ -314,7 +318,7 @@ html:not(.pf-reading-dark) .pf-tabs {
   border-radius: 50%;
   background: var(--pf-tabs-carve);
   box-shadow: inset 1px 1px 1px var(--pf-tabs-carve-wall), inset -1px -1px 0 var(--pf-tabs-carve-lip);
-  transition: background-color .3s var(--pf-tabs-ease) .12s, box-shadow .3s var(--pf-tabs-ease) .12s;
+  transition: background-color .2s var(--pf-tabs-ease), box-shadow .2s var(--pf-tabs-ease);
 }
 
 // On: the selected tab, or while dragging, the slot under the key.
@@ -346,6 +350,45 @@ html:not(.pf-reading-dark) .pf-tabs {
   .pf-tabs__dot {
     background: var(--pf-tabs-light-on);
     box-shadow: 0 0 0 .5px var(--pf-tabs-light-edge), 0 0 4px 1px var(--pf-tabs-light-glow), 0 0 12px 3px var(--pf-tabs-light-bloom);
+  }
+}
+
+// Lit as the key lands (Motion, above): the chosen tab's rise over the
+// key, label weight, icon and lamp wait --pf-tabs-arrive, then light over
+// --pf-tabs-light-in. While dragging, the slot under the key lights at once
+// (the rule above), as live feedback.
+.pf-tabs__list {
+  --pf-tabs-arrive: .2s;
+  --pf-tabs-light-in: .15s;
+}
+
+.pf-tabs__key.is-snapping ~ .pf-tabs__tab {
+  --pf-tabs-arrive: .08s;
+}
+
+.pf-tabs__list:not(.is-dragging) .pf-tabs__tab[aria-selected="true"] {
+  transition:
+    color var(--pf-tabs-light-in) var(--pf-tabs-ease) var(--pf-tabs-arrive),
+    z-index 0s linear var(--pf-tabs-arrive);
+
+  .pf-tabs__label {
+    transition: font-weight 0s linear var(--pf-tabs-arrive);
+  }
+
+  .pf-tabs__icon {
+    transition: color var(--pf-tabs-light-in) var(--pf-tabs-ease) var(--pf-tabs-arrive);
+
+    svg {
+      transition:
+        filter var(--pf-tabs-light-in) var(--pf-tabs-ease) var(--pf-tabs-arrive),
+        opacity var(--pf-tabs-light-in) var(--pf-tabs-ease) var(--pf-tabs-arrive);
+    }
+  }
+
+  .pf-tabs__dot {
+    transition:
+      background-color var(--pf-tabs-light-in) var(--pf-tabs-ease) var(--pf-tabs-arrive),
+      box-shadow var(--pf-tabs-light-in) var(--pf-tabs-ease) var(--pf-tabs-arrive);
   }
 }
 
@@ -567,6 +610,12 @@ html:not(.pf-reading-dark) .pf-tabs {
 
 // Reduced motion: everything switches at once.
 @mixin pf-tabs-still {
+  .pf-tabs__list,
+  .pf-tabs__key.is-snapping ~ .pf-tabs__tab {
+    --pf-tabs-arrive: 0s;
+    --pf-tabs-light-in: 0s;
+  }
+
   .pf-tabs__key,
   .pf-tabs__key.is-snapping,
   .pf-tabs__tab,
