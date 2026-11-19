@@ -743,6 +743,9 @@ function _palefire_hero_toc(ParagraphInterface $hero, array &$variables): array 
     $num = '';
     $label = '';
     $podcast = FALSE;
+    // News and events: its row is live, the next event and its forecast
+    // (_palefire_news_next()), as the podcast's row shows the newest episode.
+    $next = $section->bundle() === 'news_events' ? _palefire_news_next($section, $cache) : NULL;
     if ($section->hasField('field_tile_eyebrow') && !$section->get('field_tile_eyebrow')->isEmpty()) {
       $num = sprintf('%02d', ++$count);
       $label = (string) $section->get('field_tile_eyebrow')->value;
@@ -766,14 +769,207 @@ function _palefire_hero_toc(ParagraphInterface $hero, array &$variables): array 
     $anchor = $anchors[$section->uuid()]['anchor'] ?? (PalefireHooks::slug($title) ?: 'section-' . substr((string) $section->uuid(), 0, 8));
     $rows[] = [
       'num' => $num,
-      'label' => $label,
-      'title' => $title,
+      'label' => $next ? $next['label'] : $label,
+      'title' => $next ? $next['title'] : $title,
       'url' => '#' . $anchor,
       'episode' => $podcast ? $episode : NULL,
     ];
   }
   $cache->applyTo($variables);
   return $rows;
+}
+
+/**
+ * The hero column's row for News and events: the next event, or NULL.
+ *
+ * label: "Next · Thu, Dec 3 · 64° Mostly sunny" (the forecast only when the
+ * day has one), title: the event's. NULL with no upcoming event, and the
+ * row then names the section as any other does.
+ */
+function _palefire_news_next(ParagraphInterface $section, CacheableMetadata $cache): ?array {
+  $event = _palefire_news_events($section, $cache)['events'][0] ?? NULL;
+  if (!$event) {
+    return NULL;
+  }
+  $parts = [(string) t('Next'), $event['wd'] . ', ' . $event['mon'] . ' ' . $event['n']];
+  if ($event['weather']) {
+    $parts[] = $event['weather']['high'] !== NULL ? $event['weather']['high'] . '° ' . $event['weather']['condition'] : $event['weather']['condition'];
+  }
+  return ['label' => implode(' · ', array_filter($parts)), 'title' => $event['title']];
+}
+
+/**
+ * News and events: the next events, the newest blog post, the latest
+ * Instagram post (paragraph--news-events.html.twig).
+ *
+ * Events and Instagram come from libcal_gantt (its news_events and
+ * instagram services; without the module both are empty and the section
+ * shows the blog post alone). Built once per paragraph per request, since
+ * the hero column (_palefire_news_next()) asks for the same events.
+ *
+ * Returns:
+ * - events: up to four, each: i, title, url, kind (its first category, else
+ *   "Event"), n (3), d ('03'), mon ('Dec'), month ('December'), wd ('Thu'),
+ *   weekday ('Thursday'), iso (start, ISO 8601), end (ISO 8601), date (full,
+ *   for screen readers), time ('4–5 pm', 'All day'), place, meta (time and
+ *   place), image, image_alt, weather (icon, high, low, condition, pop,
+ *   onset, source) or NULL.
+ * - blog: _palefire_blog_posts()'s newest, with image (a cover render
+ *   array), or NULL.
+ * - instagram: caption, url, date, iso, handle, image (render array), or
+ *   NULL.
+ *
+ * Cache: the page is cached for a day, so each event's start and end are in
+ * the markup and js/news-events.js drops any that has ended. The tag
+ * libcal_gantt:news is cleared every hour by libcal_gantt's pull, so a new
+ * event shows within the hour.
+ */
+function _palefire_news_events(ParagraphInterface $paragraph, CacheableMetadata $cache): array {
+  $built = &drupal_static(__FUNCTION__, []);
+  $key = $paragraph->id() ?: spl_object_id($paragraph);
+  $cache->addCacheTags(['libcal_gantt', 'libcal_gantt:news', 'libcal_gantt:instagram']);
+  if (isset($built[$key])) {
+    return $built[$key];
+  }
+  $data = ['events' => [], 'blog' => NULL, 'instagram' => NULL];
+
+  if (\Drupal::hasService('libcal_gantt.news_events')) {
+    $result = \Drupal::service('libcal_gantt.news_events')->upcoming(4);
+    foreach ($result['events'] as $i => $event) {
+      /** @var \DateTimeImmutable $start */
+      $start = $event['start'];
+      $end = $event['end'];
+      $time = $event['allDay'] ? (string) t('All day') : _palefire_news_time($start, $end);
+      $place = $event['location'] ?: '';
+      $weather = NULL;
+      if (is_array($event['weather'])) {
+        $w = $event['weather'];
+        $onset = '';
+        if (!empty($w['sustained'])) {
+          $onset = (string) t('most of the day');
+        }
+        elseif (isset($w['startHour']) && is_numeric($w['startHour'])) {
+          $onset = (string) t('from ~@time', ['@time' => $start->setTime((int) $w['startHour'], 0)->format('g A')]);
+        }
+        $weather = [
+          'icon' => (string) ($w['icon'] ?? ''),
+          'paths' => _palefire_news_icon((string) ($w['icon'] ?? '')),
+          'high' => isset($w['high']) && is_numeric($w['high']) ? (int) $w['high'] : NULL,
+          'low' => isset($w['low']) && is_numeric($w['low']) ? (int) $w['low'] : NULL,
+          'condition' => (string) ($w['condition'] ?? ''),
+          'pop' => isset($w['pop']) && (int) $w['pop'] >= 30 ? (int) $w['pop'] : NULL,
+          'onset' => $onset,
+          'source' => (string) ($w['source'] ?? ''),
+        ];
+      }
+      $data['events'][] = [
+        'i' => $i,
+        'title' => $event['title'],
+        'url' => $event['url'],
+        'kind' => $event['categories'][0] ?? (string) t('Event'),
+        'n' => $start->format('j'),
+        'd' => $start->format('d'),
+        'mon' => $start->format('M'),
+        'month' => $start->format('F'),
+        'wd' => $start->format('D'),
+        'weekday' => $start->format('l'),
+        'iso' => $start->format('c'),
+        'end' => $end->format('c'),
+        'date' => $start->format('l, F j'),
+        'time' => $time,
+        'place' => $place,
+        'meta' => implode(' · ', array_filter([$time, $place])),
+        'image' => $event['image'],
+        'image_alt' => $event['imageAlt'],
+        'weather' => $weather,
+      ];
+    }
+  }
+
+  $posts = _palefire_blog_posts($paragraph, 1, $cache);
+  if ($post = $posts[0] ?? NULL) {
+    $post['image'] = $post['image_item'] ? _palefire_responsive_cover($post['image_item'], 'tile_showcase_portrait', $cache, '(min-width: 64rem) 10rem, 5.5rem') : NULL;
+    unset($post['image_item']);
+    $data['blog'] = $post;
+  }
+
+  if (\Drupal::hasService('libcal_gantt.instagram') && ($ig = \Drupal::service('libcal_gantt.instagram')->latest())) {
+    $image = [
+      '#uri' => $ig['uri'],
+      '#width' => $ig['width'],
+      '#height' => $ig['height'],
+      '#alt' => '',
+      '#attributes' => ['loading' => 'lazy', 'decoding' => 'async'],
+    ];
+    $style = \Drupal::entityTypeManager()->getStorage('image_style')->load('tile_showcase_portrait_md');
+    $image += $style ? ['#theme' => 'image_style', '#style_name' => $style->id()] : ['#theme' => 'image'];
+    if ($style) {
+      $cache->addCacheableDependency($style);
+    }
+    $caption = trim(preg_replace('/\s+/u', ' ', (string) $ig['caption']) ?? '');
+    $data['instagram'] = [
+      'caption' => $caption !== '' ? $caption : (string) t('See the post on Instagram'),
+      'url' => $ig['permalink'],
+      'date' => \Drupal::service('date.formatter')->format((int) $ig['timestamp'], 'custom', 'M j'),
+      'iso' => \Drupal::service('date.formatter')->format((int) $ig['timestamp'], 'custom', 'c'),
+      'handle' => $ig['username'] !== '' ? '@' . $ig['username'] : '',
+      'image' => $image,
+    ];
+  }
+
+  return $built[$key] = $data;
+}
+
+/**
+ * A forecast's icon as SVG path data (24 by 24, stroked), or [].
+ *
+ * libcal_gantt's own icons (WEATHER_ICON_PATHS in the day carousel), so
+ * the section and the carousel draw the same weather; the keys are
+ * WeatherClient::iconKey()'s.
+ */
+function _palefire_news_icon(string $key): array {
+  return [
+    'sun' => ['M12 8.2a3.8 3.8 0 1 0 0 7.6 3.8 3.8 0 0 0 0-7.6z', 'M12 2.6v2.1M12 19.3v2.1M2.6 12h2.1M19.3 12h2.1M5.4 5.4l1.5 1.5M17.1 17.1l1.5 1.5M18.6 5.4l-1.5 1.5M6.9 17.1l-1.5 1.5'],
+    'part' => ['M9.4 7.6a3.4 3.4 0 0 1 4.6 4', 'M9.4 2.9v1.7M3.9 8.4h1.7M5.5 4.5l1.2 1.2', 'M8 19.4h8.1a3.3 3.3 0 0 0 .3-6.6A5.2 5.2 0 0 0 6.8 11.4 3.9 3.9 0 0 0 8 19.4z'],
+    'cloud' => ['M8 18.6h8.1a3.4 3.4 0 0 0 .3-6.7A5.3 5.3 0 0 0 6.7 10.6 3.9 3.9 0 0 0 8 18.6z'],
+    'rain' => ['M8 15.2h8.1a3.4 3.4 0 0 0 .3-6.7A5.3 5.3 0 0 0 6.7 7.2 3.9 3.9 0 0 0 8 15.2z', 'M8.6 18.1l-.8 2.4M12 18.1l-.8 2.4M15.4 18.1l-.8 2.4'],
+    'storm' => ['M8 14.4h8.1a3.4 3.4 0 0 0 .3-6.7A5.3 5.3 0 0 0 6.7 6.4 3.9 3.9 0 0 0 8 14.4z', 'M12.9 16.4l-2.6 3.4h2.3l-1.3 2.6'],
+    'snow' => ['M8 14.6h8.1a3.4 3.4 0 0 0 .3-6.7A5.3 5.3 0 0 0 6.7 6.6 3.9 3.9 0 0 0 8 14.6z', 'M9.2 17.4v3.2M7.8 18.2l2.8 1.6M10.6 18.2l-2.8 1.6', 'M14.8 17.4v3.2M13.4 18.2l2.8 1.6M16.2 18.2l-2.8 1.6'],
+    'fog' => ['M8 13.6h8.1a3.4 3.4 0 0 0 .3-6.7A5.3 5.3 0 0 0 6.7 5.6 3.9 3.9 0 0 0 8 13.6z', 'M5.6 17.4h12.8M7.6 20.6h8.8'],
+  ][$key] ?? [];
+}
+
+/**
+ * An event's time as the page writes it: "4–5 pm", "11 am–1 pm", "4 pm".
+ */
+function _palefire_news_time(\DateTimeImmutable $start, \DateTimeImmutable $end): string {
+  $clock = static fn (\DateTimeImmutable $t): string => $t->format('i') === '00' ? $t->format('g') : $t->format('g:i');
+  $half = static fn (\DateTimeImmutable $t): string => $t->format('a');
+  if ($end <= $start || $end->format('Y-m-d') !== $start->format('Y-m-d')) {
+    return $clock($start) . ' ' . $half($start);
+  }
+  if ($half($start) === $half($end)) {
+    return $clock($start) . '–' . $clock($end) . ' ' . $half($end);
+  }
+  return $clock($start) . ' ' . $half($start) . '–' . $clock($end) . ' ' . $half($end);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for paragraph--news-events.
+ *
+ * News and events (scripts/palefire_news_events_setup.php): its rule,
+ * heading and Lede come from the section wrapper like any Eyebrow section;
+ * this adds news (_palefire_news_events()) and an id for its parts.
+ */
+function palefire_preprocess_paragraph__news_events(array &$variables): void {
+  $paragraph = $variables['paragraph'] ?? NULL;
+  if (!$paragraph instanceof ParagraphInterface) {
+    return;
+  }
+  $cache = CacheableMetadata::createFromRenderArray($variables);
+  $variables['news'] = _palefire_news_events($paragraph, $cache);
+  $variables['news_id'] = 'pf-news-' . ($paragraph->id() ?: 'new');
+  $cache->applyTo($variables);
 }
 
 /**

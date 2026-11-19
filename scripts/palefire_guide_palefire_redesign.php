@@ -828,6 +828,14 @@ HTML),
 <li>Each picture is now exactly as tall as the description beside it, from the title down to the facts. On the Exhibitions page, a picture’s caption sits just below it.</li>
 </ul>
 HTML),
+  $text('Thu Nov 19: News and events on Special Collections', <<<'HTML'
+<ul>
+<li>A new News and events section, “Happening at Hill,” right under the Special Collections opening screen. The next event shows large with its date and, when it is 16 days away or less, the day’s forecast; the next few are listed beside it, and the event’s photo fills the section behind a soft wash. Pointing at or tabbing to an event brings it forward; on a phone the event stays pinned while the list scrolls.</li>
+<li>Under the events: the newest blog post beside the latest Instagram post, so the section stays fresh between blog posts.</li>
+<li>The events come from LibCal: those tagged with a new “Special Collections” category, or, until staff start tagging, everything at Hill Memorial. The LibCal Gantt module now also pulls the latest Instagram post every hour and keeps a local copy of its picture; its key lives on the server only.</li>
+<li>The opening screen’s column can now be a table of contents, as on Oral History: the News and events row names the next event and its forecast.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------

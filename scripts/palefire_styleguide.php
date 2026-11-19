@@ -388,6 +388,21 @@ HTML),
   ]);
 }
 
+if (ParagraphsType::load('news_events')) {
+  $gallery('News and events', 'news', [
+    $text(<<<'HTML'
+<p>A page section for what is coming up: the next event large on the left, with its day in the accent and the day’s forecast when it is 16 days away or less, the next few in a ruled list beside it, and the event’s photo washed across the whole section. Pointing at or tabbing to a row brings its event forward; on a phone the event pins under the header and the row in the middle of the screen is the one shown. Under them, the newest blog post beside the latest Instagram post.</p>
+HTML),
+    $note('<p><strong>' . $label('news_events') . '</strong>: add it as a page section and fill in the Eyebrow, Title, Lede and Link like any other. Pick the blog categories whose newest post it shows. The events come from LibCal (the LibCal Gantt settings choose the calendar and the category, “Special Collections”); the Instagram post from the hourly pull. Nothing to keep up by hand. The example below shows whatever is live.</p>'),
+  ]);
+  $sections[] = Paragraph::create([
+    'type' => 'news_events',
+    'field_section_title' => 'Happening at Hill',
+    'field_tile_eyebrow' => 'News and events',
+    'field_tile_lede' => 'A live example: the same events, post and picture as the Special Collections homepage.',
+  ]);
+}
+
 // The page. ------------------------------------------------------------------
 
 $values = [

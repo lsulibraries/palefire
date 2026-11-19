@@ -1,0 +1,154 @@
+{#
+/**
+ * @file
+ * News and events: the next events, the newest blog post and the latest
+ * Instagram post (scripts/palefire_news_events_setup.php).
+ *
+ * The selected event, the next one until a row is pointed at or focused
+ * (on a phone, the row in the middle of the screen: js/news-events.js),
+ * shows large on the left: its day, title, time and place, and its
+ * forecast when it is 16 days away or less. Its LibCal picture fills the
+ * whole section behind a wash of the page color (decorative, so
+ * aria-hidden); an event without one shows its day as a ghosted numeral.
+ *
+ * Each of the four features is drawn and stacked in one cell; only the
+ * selected one is visible, the others are inert, so keyboard and screen
+ * reader users meet one feature and the list. The list names every event
+ * in full by itself.
+ *
+ * Cached with the page for a day: each event carries its start and end,
+ * and the script drops any that has ended and writes "in N days".
+ *
+ * Variables from palefire_preprocess_paragraph__news_events():
+ * - news.events, news.blog, news.instagram: see _palefire_news_events().
+ * - news_id: an id prefix for this section's parts.
+ *
+ * The section <h2>, rule and Lede come from the scroll-section field
+ * template, so these headings are <h3>s; data-toc-skip keeps them out of
+ * the TOC, which lists the section itself.
+ */
+#}
+{% macro wx_icon(paths) %}
+  <svg class="pf-news__wx-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+    {%- for d in paths %}<path d="{{ d }}"/>{% endfor -%}
+  </svg>
+{% endmacro %}
+{% set events = news.events %}
+{% if events or news.blog or news.instagram %}
+  {{ attach_library('palefire/news-events') }}
+  <div{{ attributes.addClass('pf-news', events ? 'pf-news--events' : 'pf-news--quiet') }} data-pf-news data-toc-skip>
+    {% if events %}
+      <div class="pf-news__backdrop" aria-hidden="true">
+        {% for event in events %}
+          <div class="pf-news__layer{{ loop.first ? ' is-on' }}" data-i="{{ event.i }}">
+            {% if event.image %}
+              {# Only the first is fetched with the page; the script loads the
+                 others when the section nears the screen. #}
+              <img {{ loop.first ? 'src' : 'data-src' }}="{{ event.image }}" alt="" loading="lazy" decoding="async" width="1200" height="800">
+            {% else %}
+              <span class="pf-news__ghost">{{ event.n }}</span>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="pf-news__main">
+        <div class="pf-news__stack">
+          {% for event in events %}
+            <article class="pf-news__feature{{ loop.first ? ' is-on is-next' }}" data-i="{{ event.i }}" data-start="{{ event.iso }}" data-end="{{ event.end }}" aria-labelledby="{{ news_id }}-f{{ event.i }}"{{ not loop.first ? ' inert' }}>
+              <p class="pf-news__kind">
+                <span class="pf-news__next">{{ 'Next'|t }}<span class="pf-news__when" data-pf-news-when></span> · </span>{{ event.kind }}
+              </p>
+              <p class="pf-news__day" aria-hidden="true">{{ event.n }}</p>
+              <p class="pf-news__month"><span class="visually-hidden">{{ event.date }}</span><span aria-hidden="true">{{ event.month }} · {{ event.weekday }}</span></p>
+              <h3 class="pf-news__title" id="{{ news_id }}-f{{ event.i }}">{{ event.title }}</h3>
+              {% if event.meta %}
+                <p class="pf-news__meta">{{ event.meta }}</p>
+              {% endif %}
+              {% if event.weather %}
+                {% set w = event.weather %}
+                <p class="pf-news__wx">
+                  {% if w.paths %}{{ _self.wx_icon(w.paths) }}{% endif %}
+                  {% if w.high is not null %}
+                    <span class="pf-news__wx-temp"><span class="visually-hidden">{{ 'Forecast: high'|t }} </span><b>{{ w.high }}°</b>{% if w.low is not null %}<span class="visually-hidden">, {{ 'low'|t }}</span><span aria-hidden="true"> /</span> {{ w.low }}°{% endif %}</span>
+                  {% endif %}
+                  <span class="pf-news__wx-text">
+                    {{- w.condition -}}
+                    {%- if w.onset and w.pop %} {{ w.onset }}{% endif -%}
+                    {%- if w.pop %} · {{ '@pop% chance of precipitation'|t({'@pop': w.pop}) }}{% endif -%}
+                    {%- if w.source == 'open-meteo' %} · <a class="pf-news__wx-credit" href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">{{ 'Forecast: Open-Meteo'|t }}<span class="visually-hidden"> {{ '(opens in a new tab)'|t }}</span></a>{% endif -%}
+                  </span>
+                </p>
+              {% endif %}
+              {% if event.url %}
+                <p class="pf-news__actions">
+                  <a class="pf-news__action" href="{{ event.url }}">{{ 'Details'|t }}<span class="visually-hidden">: {{ event.title }}</span> <span aria-hidden="true">→</span></a>
+                </p>
+              {% endif %}
+            </article>
+          {% endfor %}
+        </div>
+
+        <div class="pf-news__upcoming">
+          <h3 class="pf-news__label" id="{{ news_id }}-up">{{ 'Upcoming'|t }}</h3>
+          <ol class="pf-news__rows" role="list" aria-labelledby="{{ news_id }}-up">
+            {% for event in events %}
+              <li class="pf-news__item" data-i="{{ event.i }}" data-start="{{ event.iso }}" data-end="{{ event.end }}">
+                <a class="pf-news__row{{ loop.first ? ' is-on' }}" href="{{ event.url ?: '#' ~ news_id ~ '-f' ~ event.i }}" data-i="{{ event.i }}">
+                  <span class="pf-news__date" aria-hidden="true">{{ event.n }}<span>{{ event.mon }}</span></span>
+                  <span class="pf-news__row-body">
+                    <span class="visually-hidden">{{ event.date }}: </span>
+                    <span class="pf-news__row-title">{{ event.title }}</span>
+                    <span class="pf-news__row-meta">{{ event.kind }}{% if event.time %} · {{ event.time }}{% endif %}</span>
+                  </span>
+                  {% if event.weather and event.weather.high is not null %}
+                    <span class="pf-news__row-wx">
+                      {%- if event.weather.paths %}{{ _self.wx_icon(event.weather.paths) }}{% endif -%}
+                      <span class="visually-hidden">{{ 'Forecast high'|t }} </span>{{ event.weather.high }}°
+                    </span>
+                  {% endif %}
+                </a>
+              </li>
+            {% endfor %}
+          </ol>
+        </div>
+      </div>
+    {% endif %}
+
+    {% if news.blog or news.instagram %}
+      <div class="pf-news__social">
+        {% if news.blog %}
+          {% set post = news.blog %}
+          <a class="pf-news__card" href="{{ post.url }}">
+            {% if post.image %}
+              <span class="pf-news__card-media" aria-hidden="true">{{ post.image }}</span>
+            {% endif %}
+            <span class="pf-news__card-body">
+              <span class="pf-news__card-label">{{ 'From the blog'|t }} · <time datetime="{{ post.datetime }}">{{ post.date }}</time></span>
+              <span class="pf-news__card-title">{{ post.title }}</span>
+              {% if post.excerpt %}
+                <span class="pf-news__card-text">{{ post.excerpt }}</span>
+              {% endif %}
+            </span>
+          </a>
+        {% endif %}
+        {% if news.instagram %}
+          {% set ig = news.instagram %}
+          <a class="pf-news__card pf-news__card--ig" href="{{ ig.url }}" rel="noopener">
+            <span class="pf-news__card-media" aria-hidden="true">{{ ig.image }}</span>
+            <span class="pf-news__card-body">
+              <span class="pf-news__card-label">
+                <svg class="pf-news__ig-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r=".9" fill="currentColor" stroke="none"/></svg>
+                {{- 'Instagram'|t }} · <time datetime="{{ ig.iso }}">{{ ig.date }}</time>
+              </span>
+              <span class="pf-news__card-caption">{{ ig.caption }}</span>
+              {% if ig.handle %}
+                <span class="pf-news__card-handle">{{ ig.handle }}<span class="visually-hidden"> {{ 'on Instagram'|t }}</span></span>
+              {% endif %}
+            </span>
+          </a>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+{% endif %}

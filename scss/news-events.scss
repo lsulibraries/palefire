@@ -1,0 +1,635 @@
+// Palefire — News and events (paragraph--news-events.html.twig,
+// js/news-events.js). Its own entry point (css/news-events.css, library
+// palefire/news-events), so only a page with the section loads it.
+//
+// The selected event large on the left, the upcoming list on the right,
+// and the event's photo washed across the whole section behind both. Under
+// them, the newest blog post beside the latest Instagram post.
+//
+// No literal colors: the page's and the swatch's tokens, so it follows the
+// page into light or dark.
+
+@import "variables";
+
+$pf-news-ease: $pf-exhibit-ease;
+$pf-news-accent: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+$pf-news-muted: var(--pf-g-muted, var(--bs-secondary-color));
+$pf-news-mono: 'Consolas', 'Monaco', 'Liberation Mono', monospace;
+$pf-news-wash: var(--bs-body-bg);
+
+// The backdrop is placed against the section, not the inner column, so it
+// runs edge to edge: the inner column gives up its positioning here, and
+// everything in it is lifted above the backdrop instead. The section is
+// also the size container: one on .pf-news would hold the backdrop in
+// (size containment makes a containing block).
+.pf-section:has(> .pf-section__inner .pf-news) {
+  container: pf-news / inline-size;
+}
+
+.pf-section:has(> .pf-section__inner .pf-news--events) {
+  overflow: clip;
+
+  > .pf-section__inner {
+    position: static;
+
+    // .pf-news stays static too; its own parts are lifted below.
+    > :not(.pf-news) {
+      position: relative;
+      z-index: 1;
+    }
+  }
+}
+
+.pf-news {
+  > :not(.pf-news__backdrop) {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Backdrop
+// ---------------------------------------------------------------------------
+
+.pf-news__backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+
+  // The wash: strongest over the list and the bottom edge, lightest behind
+  // the feature, so the text keeps its contrast over any photo. The muted
+  // text holds 4.5:1 even over a pure white (dark pages) or black (light
+  // swatches) pixel: a black pixel darkens a light page more, so the light
+  // swatches need the stronger wash (measured 2026-11-19).
+  --pf-news-wash-left: 86%;
+  --pf-news-wash-mid: 88%;
+
+  html:not([data-pf-theme]) &,
+  html[data-pf-theme="twilight"] & {
+    --pf-news-wash-left: 68%;
+    --pf-news-wash-mid: 80%;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to top, $pf-news-wash 0, color-mix(in srgb, #{$pf-news-wash} 0%, transparent) 35%),
+      linear-gradient(to right, color-mix(in srgb, #{$pf-news-wash} var(--pf-news-wash-left), transparent) 0%, color-mix(in srgb, #{$pf-news-wash} var(--pf-news-wash-mid), transparent) 45%, color-mix(in srgb, #{$pf-news-wash} 94%, transparent) 72%);
+  }
+}
+
+.pf-news__layer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.1s $pf-news-ease;
+
+  &.is-on {
+    opacity: 1;
+  }
+
+  img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 35%;
+    opacity: .42;
+    filter: saturate(.75) contrast(.95);
+    transform: scale(1.06);
+    transition: transform 7s cubic-bezier(.2, .6, .2, 1);
+  }
+
+  &.is-on img {
+    transform: none;
+  }
+}
+
+.pf-news__ghost {
+  position: absolute;
+  right: -.04em;
+  bottom: -.18em;
+  font: 300 clamp(10rem, 40cqi, 26rem) / 1 $pf-font-readable;
+  letter-spacing: -.06em;
+  color: transparent;
+  -webkit-text-stroke: 1px color-mix(in srgb, #{$pf-news-accent} 28%, transparent);
+}
+
+// ---------------------------------------------------------------------------
+// Feature and list
+// ---------------------------------------------------------------------------
+
+.pf-news__main {
+  display: grid;
+  gap: 2rem;
+}
+
+@container pf-news (min-width: 44rem) {
+  .pf-news__main {
+    grid-template-columns: 6fr 5fr;
+    gap: 3.5rem;
+    align-items: end;
+    min-height: 26rem;
+  }
+}
+
+// All features share one cell, so the tallest sets the height and a change
+// of selection moves nothing.
+.pf-news__stack {
+  display: grid;
+}
+
+.pf-news__feature {
+  grid-area: 1 / 1;
+  display: grid;
+  align-content: end;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(.5rem);
+  transition: opacity .2s ease-out, transform .3s ease-out, visibility 0s .2s;
+
+  &.is-on {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition: opacity .5s $pf-news-ease .2s, transform .7s $pf-news-ease .2s, visibility 0s;
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+.pf-news__kind,
+.pf-news__label,
+.pf-news__month,
+.pf-news__card-label,
+.pf-news__card-handle {
+  font: 500 .6875rem / 1.4 $pf-news-mono;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.pf-news__kind {
+  color: $pf-news-muted;
+}
+
+// "Next" only on the next event (js/news-events.js moves it when the
+// first has ended since the page was cached).
+.pf-news__next {
+  display: none;
+
+  .is-next & {
+    display: inline;
+  }
+}
+
+.pf-news__day {
+  margin: 1.25rem 0 0 -.06em !important;
+  font: 300 clamp(6rem, 3rem + 14cqi, 11rem) / .78 $pf-font-readable;
+  letter-spacing: -.055em;
+  color: $pf-news-accent;
+  font-variant-numeric: tabular-nums;
+}
+
+.pf-news__month {
+  margin-top: 1.1rem !important;
+  letter-spacing: .2em;
+}
+
+.pf-news__title {
+  margin: .9rem 0 0;
+  font-size: clamp(1.5rem, 1.1rem + 2cqi, 2.25rem);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -.01em;
+}
+
+// Not the swatch's heading color: the day above is already the accent.
+// The heading rules read these variables, so setting them here wins
+// without out-ranking html[data-pf-theme] .pf-main :is(h1, ...).
+.pf-news__title {
+  --pf-g-title: var(--bs-emphasis-color, var(--bs-body-color));
+  --bs-heading-color: var(--bs-emphasis-color, var(--bs-body-color));
+}
+
+.pf-news__meta {
+  margin-top: .6rem !important;
+  font-size: .9375rem;
+  color: $pf-news-muted;
+}
+
+// The forecast: icon, high / low, condition (and when rain starts, for
+// today and tomorrow), and the Open-Meteo credit for days 8 to 16.
+.pf-news__wx {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .35rem .65rem;
+  margin-top: .9rem !important;
+  font-size: .875rem;
+  color: $pf-news-muted;
+}
+
+.pf-news__wx-icon {
+  flex: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: $pf-news-accent;
+}
+
+.pf-news__wx-temp {
+  font-size: 1.125rem;
+  font-weight: 300;
+  color: var(--bs-body-color);
+  font-variant-numeric: tabular-nums;
+
+  b {
+    font-weight: 500;
+  }
+}
+
+.pf-news__wx-credit {
+  font-size: .75rem;
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid $pf-hairline;
+
+  &:hover {
+    color: var(--bs-body-color);
+  }
+}
+
+.pf-news__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1.5rem;
+  margin-top: 1.25rem !important;
+}
+
+.pf-news__action {
+  padding: .55rem 0;
+  font: 500 .6875rem / 1.4 $pf-news-mono;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--bs-body-color);
+  text-decoration: none;
+  border-bottom: 1px solid $pf-hairline;
+  transition: border-color .3s;
+
+  &:hover {
+    border-color: $pf-news-accent;
+  }
+}
+
+.pf-news__label {
+  margin: 0 0 .5rem;
+  color: $pf-news-muted;
+}
+
+.pf-news__rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid $pf-hairline;
+}
+
+.pf-news__row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 3.5rem minmax(0, 1fr);
+  gap: 1rem;
+  padding: .95rem 0 .95rem .75rem;
+  color: var(--bs-body-color);
+  text-decoration: none;
+  border-bottom: 1px solid $pf-hairline;
+  transition: background-color .5s $pf-news-ease;
+
+  &:has(.pf-news__row-wx) {
+    grid-template-columns: 3.5rem minmax(0, 1fr) auto;
+  }
+
+  // The selected row's rule draws in from its middle.
+  &::before {
+    content: "";
+    position: absolute;
+    top: .95rem;
+    bottom: .95rem;
+    left: 0;
+    width: 2px;
+    background: $pf-news-accent;
+    transform: scaleY(0);
+    transition: transform .5s $pf-news-ease;
+  }
+
+  &.is-on {
+    background: color-mix(in srgb, var(--bs-body-color) 4%, transparent);
+
+    &::before {
+      transform: none;
+    }
+  }
+
+  &:hover .pf-news__row-title {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: .2em;
+  }
+}
+
+.pf-news__date {
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+
+  span {
+    display: block;
+    margin-top: .35rem;
+    font: 500 .5625rem / 1 $pf-news-mono;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: $pf-news-muted;
+  }
+}
+
+.pf-news__row-title,
+.pf-news__card-title {
+  color: var(--bs-emphasis-color, var(--bs-body-color));
+}
+
+.pf-news__row-title {
+  display: block;
+  font-size: 1.0625rem;
+  line-height: 1.3;
+}
+
+.pf-news__row-meta {
+  display: block;
+  margin-top: .25rem;
+  font-size: .8125rem;
+  color: $pf-news-muted;
+}
+
+.pf-news__row-wx {
+  display: flex;
+  align-self: center;
+  align-items: center;
+  gap: .3rem;
+  font-size: .9375rem;
+
+  .pf-news__wx-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Blog and Instagram
+// ---------------------------------------------------------------------------
+
+.pf-news__social {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 2.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid $pf-hairline;
+}
+
+.pf-news--quiet .pf-news__social {
+  margin-top: 0;
+}
+
+@container pf-news (min-width: 44rem) {
+  .pf-news__social {
+    grid-template-columns: 7fr 5fr;
+    gap: 2.5rem;
+  }
+
+  // Alone, either card takes the width.
+  .pf-news__social > :only-child {
+    grid-column: 1 / -1;
+  }
+}
+
+.pf-news__card {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+  color: var(--bs-body-color);
+  text-decoration: none;
+
+  &:hover .pf-news__card-title,
+  &:hover .pf-news__card-caption {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: .2em;
+  }
+}
+
+@container pf-news (min-width: 44rem) {
+  .pf-news__card {
+    grid-template-columns: 10rem minmax(0, 1fr);
+    gap: 1.25rem;
+  }
+
+  .pf-news__card--ig {
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+  }
+}
+
+.pf-news__card-media {
+  display: block;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--bs-body-color) 6%, transparent);
+
+  .pf-news__card--ig & {
+    aspect-ratio: 1;
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .9s $pf-news-ease;
+  }
+
+  .pf-news__card:hover & img {
+    transform: scale(1.03);
+  }
+}
+
+.pf-news__card-body {
+  display: grid;
+  gap: .4rem;
+}
+
+.pf-news__card-label {
+  color: $pf-news-muted;
+}
+
+.pf-news__card-title {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.pf-news__card-text {
+  display: none;
+  font-size: .8125rem;
+  line-height: 1.5;
+  color: $pf-news-muted;
+}
+
+@container pf-news (min-width: 44rem) {
+  .pf-news__card-text {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+}
+
+.pf-news__card-caption {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: .875rem;
+  line-height: 1.45;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.pf-news__card-handle {
+  letter-spacing: .06em;
+  text-transform: none;
+  color: $pf-news-muted;
+}
+
+.pf-news__ig-icon {
+  width: .95rem;
+  height: .95rem;
+  margin-right: .4em;
+  vertical-align: -.2em;
+}
+
+// ---------------------------------------------------------------------------
+// Phone: the feature pins under the header (and the page's pinned
+// breadcrumb bar, --pf-news-bar from js/news-events.js) while the rows
+// scroll under it. Compact, so the rows keep most of the screen: the day
+// beside the words, no Details (the row is the same link).
+// ---------------------------------------------------------------------------
+
+@container pf-news (max-width: 43.99rem) {
+  .pf-news__stack {
+    position: sticky;
+    top: calc(var(--pf-header-h, #{$pf-header-fallback}) + var(--pf-news-bar, 0px));
+    z-index: 2;
+    margin-inline: calc(-1 * var(--bs-gutter-x, 1.5rem) * .5);
+    padding: .9rem calc(var(--bs-gutter-x, 1.5rem) * .5) 1rem;
+    background: color-mix(in srgb, #{$pf-news-wash} 86%, transparent);
+    -webkit-backdrop-filter: blur(14px) saturate(1.2);
+    backdrop-filter: blur(14px) saturate(1.2);
+    border-bottom: 1px solid $pf-hairline;
+  }
+
+  .pf-news__feature {
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 1rem;
+    align-content: start;
+
+    > * {
+      grid-column: 2;
+    }
+  }
+
+  .pf-news__kind {
+    grid-column: 1 / -1 !important;
+  }
+
+  .pf-news__day {
+    grid-column: 1 !important;
+    grid-row: 2 / span 4;
+    margin: .5rem 0 0 -.04em !important;
+    font-size: 3.5rem;
+  }
+
+  .pf-news__month {
+    margin-top: .55rem !important;
+    letter-spacing: .16em;
+  }
+
+  .pf-news__title {
+    margin-top: .3rem;
+    font-size: 1.125rem;
+  }
+
+  .pf-news__meta,
+  .pf-news__wx {
+    margin-top: .35rem !important;
+  }
+
+  .pf-news__meta {
+    font-size: .8125rem;
+  }
+
+  .pf-news__wx {
+    gap: .2rem .5rem;
+    font-size: .8125rem;
+  }
+
+  .pf-news__wx-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .pf-news__wx-temp {
+    font-size: 1rem;
+  }
+
+  .pf-news__actions {
+    display: none !important;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Focus, motion, forced colors
+// ---------------------------------------------------------------------------
+
+.pf-news a:focus-visible {
+  outline: 2px solid var(--pf-ui-gold, #{$pf-news-accent});
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-news__layer,
+  .pf-news__layer img,
+  .pf-news__feature,
+  .pf-news__row,
+  .pf-news__row::before,
+  .pf-news__card-media img {
+    transition: none !important;
+  }
+
+  .pf-news__layer img,
+  .pf-news__feature,
+  .pf-news__card:hover .pf-news__card-media img {
+    transform: none !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .pf-news__backdrop {
+    display: none;
+  }
+
+  .pf-news__row.is-on::before {
+    background: Highlight;
+  }
+}

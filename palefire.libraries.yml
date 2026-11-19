@@ -359,6 +359,20 @@ stacks-stage:
     - core/drupal
     - core/once
 
+# News and events (paragraph--news-events.html.twig): the selected event,
+# its photo behind the section, the list, the blog and Instagram cards.
+# Attached by its template, so only a page with the section loads it.
+news-events:
+  version: 1.0.0
+  css:
+    theme:
+      css/news-events.css: {}
+  js:
+    js/news-events.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
 # Visit card in the landing (Modular page Visit fields): LibCal hours and the
 # click-to-load Google map. Attached by _palefire_landing_visit() in
 # palefire.theme only when the page fills in a Visit field.
