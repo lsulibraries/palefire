@@ -79,9 +79,10 @@
 {# The title page's mark for a physical show (exhibit-cover.html.twig);
    nothing where the server has no FA Pro files. #}
 {% set chest = source('libraries/fontawesome-pro/svgs/light/treasure-chest.svg', ignore_missing = true) %}
+{% set captioned = items|filter(ex => ex.object)|length > 0 %}
 {% if items %}
   {{ attach_library('palefire/exhibit-showcase') }}
-  <section class="pf-showcase__carousel" id="{{ id }}" aria-roledescription="{{ 'carousel'|t }}" aria-label="{{ label }}" data-pf-showcase-carousel>
+  <section class="pf-showcase__carousel{{ captioned ? ' pf-showcase__carousel--captioned' }}" id="{{ id }}" aria-roledescription="{{ 'carousel'|t }}" aria-label="{{ label }}" data-pf-showcase-carousel>
     {# The plate: two layers that crossfade, given their pictures by
        js/exhibit-showcase.js once the band nears the screen (none without
        script: it is decorative). #}
@@ -100,7 +101,6 @@
       </div>
     {% endif %}
 
-    {% set captioned = items|filter(ex => ex.object)|length > 0 %}
     <div class="pf-showcase__stage{{ captioned ? ' pf-showcase__stage--captioned' }}">
       <div class="pf-showcase__rail" aria-hidden="true" tabindex="-1" data-pf-showcase-scene>
         {% for ex in items %}

@@ -780,13 +780,6 @@ HTML),
 <li>It takes the place of the separate directory page made in 2017. Many of that page’s links played the wrong person’s recording; each tape now plays its own. Three interviews that were on the server but missing from the page are included.</li>
 </ul>
 HTML),
-  $text('Thu Nov 19: More of the transcript on phones', <<<'HTML'
-<ul>
-<li>On phones and tablets, an oral history clip now opens with its transcript on the whole screen, over a soft blur of its photo. The photo is a small thumbnail beside the title: tap it to see it whole, and Transcript to go back. The arrows to the next clip sit beside the count at the top. Computers look as they did.</li>
-<li>The full Mossville interviews open the same way as the clips, instead of a player on every card. Each card opens its interview a tape at a time, and the arrows step through every tape.</li>
-<li>Their typed transcripts, until now only PDFs, are the text beside the recording, word for word and in the same order, and light up line by line as it plays, as the clips do. The timing comes from speech recognition lined up with the transcript; the transcript’s own words always win. Recognition is still working through the 82 hours, and the tapes it hasn’t reached are timed from the transcribers’ own time marks for now.</li>
-</ul>
-HTML),
   $text('Thu Nov 19: A facts row, and pictures shown whole', <<<'HTML'
 <ul>
 <li>Each exhibition in the band now ends with four facts in the same places every time: the year, how many clips, how long they run, and whether it was also shown in the building, with a link to the post about it. A dash means there is none.</li>
@@ -815,10 +808,11 @@ HTML),
 <li>The film behind Oral History’s Quick Start now fades into the page color above and below it, so there is no lighter strip where it ends.</li>
 </ul>
 HTML),
-  $text('Thu Nov 19: Still life back on Research, drawings reach the edge', <<<'HTML'
+  $text('Thu Nov 19: One line under the pictures', <<<'HTML'
 <ul>
-<li>The film behind Oral History’s Quick Start is gone; the line drawing of recording formats is back on the Research tab.</li>
-<li>That drawing and the Record tab’s recorder now run right to the bottom edge of the band, where a thin strip of plain color used to show under them.</li>
+<li>Under the exhibition pictures there is now a single line, across the full width, that fills in as you move through the exhibitions, with the count at its end. The extra lines above the facts and the arrows are gone.</li>
+<li>Enter the exhibition fills the width of the description, and the arrows are the same height as it.</li>
+<li>Each picture is now exactly as tall as the description beside it, from the title down to the facts. On the Exhibitions page, a picture’s caption sits just below it.</li>
 </ul>
 HTML),
 ]);

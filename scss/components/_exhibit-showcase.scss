@@ -34,6 +34,7 @@ $pf-showcase-ease-out: cubic-bezier(.45, 0, .25, 1);
   --pf-showcase-muted: var(--pf-g-muted, var(--pf-section-muted, var(--bs-secondary-color)));
   --pf-showcase-line: #{$pf-hairline};
   --pf-showcase-blank: #{$pf-grey-800};
+  --pf-showcase-control: 3.5rem; // Enter's and the arrows' height
   --pf-landing-label: var(--pf-toc-font, 'Consolas', 'Monaco', monospace); // .pf-index-rule
   color: var(--pf-showcase-fg);
 
@@ -199,10 +200,27 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
   @include media-breakpoint-up(lg) {
     grid-template-columns: repeat(var(--pf-showcase-cols), minmax(0, 1fr));
 
+    // The canvas fills the label's row, its top level with the title and
+    // its foot with the facts: the stage is a size container that adds no
+    // height of its own (the tallest label sets the row, at least 22rem),
+    // and each canvas is the row's height, 3:4 wide
+    // up to 70% of the stage (narrower, so cropped a little more, where a
+    // label runs tall).
     .pf-showcase__stage {
       grid-column: 3 / -1;
       grid-row: 2;
-      align-self: start;
+      align-self: stretch;
+      container: pf-showcase / size;
+    }
+
+    .pf-showcase__rail {
+      --pf-showcase-h: calc(100cqh - var(--pf-showcase-room) - var(--pf-showcase-foot));
+      --pf-showcase-w: min(var(--pf-showcase-h) * .75, 70cqi);
+    }
+
+    .pf-showcase__card {
+      aspect-ratio: auto;
+      height: var(--pf-showcase-h);
     }
 
     // Its summaries, arrows and progress line become cells of this grid.
@@ -211,40 +229,54 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
       display: contents;
     }
 
-    .pf-showcase__browse {
-      grid-column: 3 / -1;
+    // The progress line is the band's one rule, full width between the
+    // canvas row and Enter and the arrows, the count at its end.
+    .pf-showcase__progress {
+      grid-column: 1 / -1;
       grid-row: 3;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--pf-showcase-line);
     }
 
-    .pf-showcase__progress {
+    .pf-showcase__browse {
       grid-column: 3 / -1;
       grid-row: 4;
-      margin-top: calc(1.25rem - var(--pf-hero-rule-gap, 1.5rem));
     }
 
     .pf-showcase__summaries {
       grid-column: 1 / span 2;
-      grid-row: 2 / span 2;
+      grid-row: 2 / span 3;
       grid-template-rows: subgrid;
     }
 
     // Its label fills the first row (the facts at its foot), Enter the
-    // second; the rows' gap is the band's.
+    // third, under the rule (the second); the rows' gap is the band's.
     .pf-showcase__summary {
-      grid-area: 1 / 1 / span 2;
+      grid-area: 1 / 1 / span 3;
       display: grid;
       grid-template-rows: subgrid;
       align-items: stretch;
       row-gap: normal;
     }
 
-    // Enter, centered on the arrows' line (their rule and padding above).
+    .pf-showcase__label {
+      grid-row: 1;
+      min-height: 22rem;
+    }
+
     .pf-showcase__actions {
+      grid-row: 3;
       align-items: center;
       margin-top: 0;
-      padding-top: calc(1.5rem + 1px);
+    }
+
+    // A footnote hangs under the row (the stage reaches down over it, so
+    // its fade still covers it), and the progress line drops to clear it:
+    // every canvas keeps the label's height, footnote or not.
+    .pf-showcase__stage--captioned {
+      margin-bottom: calc(-1 * var(--pf-showcase-foot));
+    }
+
+    &.pf-showcase__carousel--captioned .pf-showcase__progress {
+      margin-top: var(--pf-showcase-foot);
     }
   }
 }
@@ -257,8 +289,18 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
   }
 }
 
+// Above and below the canvas: its shadow's room; under it, the room or
+// (with a footnote) 1rem and the footnote's fixed 4.5rem.
+.pf-showcase__carousel {
+  --pf-showcase-room: 2.5rem;
+  --pf-showcase-foot: var(--pf-showcase-room);
+}
+
+.pf-showcase__carousel--captioned {
+  --pf-showcase-foot: 5.5rem;
+}
+
 .pf-showcase__stage {
-  --pf-showcase-room: 2.5rem; // above and below the canvas: its shadow
   // The room hangs outside the box, so the canvas itself sits on the grid.
   margin-block: calc(-1 * var(--pf-showcase-room));
   min-width: 0;
@@ -423,12 +465,15 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
 // only the room above), so with it the facts line up with its foot. All
 // in one cell; only the shown one is visible, crossfading as the summary
 // does.
+// Under the canvas: 1rem, then the footnote in a fixed 4.5rem, so the
+// canvas's height can be worked out from the stage's.
 .pf-showcase__stage--captioned {
   margin-bottom: 0;
 }
 
 .pf-showcase__captions {
   display: grid;
+  height: 4.5rem;
   margin-top: calc(1rem - var(--pf-showcase-room));
 }
 
@@ -628,7 +673,6 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
   align-self: stretch;
   margin-top: auto;
   padding-top: 1.25rem;
-  border-top: 1px solid var(--pf-showcase-line);
 
   dd {
     margin: 0;
@@ -740,21 +784,28 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
   line-height: 1.6;
 }
 
-// Enter (or Read about it).
+// Enter (or Read about it): a slab the label's full width, as tall as
+// the arrows, its words at the start and its arrow at the end.
 .pf-showcase__actions {
   display: flex;
-  flex-wrap: wrap;
-  gap: .75rem;
+  align-self: stretch;
   margin-top: .5rem;
+
+  > .pf-exhibit-button {
+    flex: 1 1 auto;
+    justify-content: space-between;
+    min-height: var(--pf-showcase-control);
+    padding-inline: 1.5rem;
+  }
 }
 
 // Browsing. Hidden (visibility) until the script is ready (.is-ready),
 // but holding its place.
+// One column: the progress line (the rule, the count at its end) over the
+// arrows.
 .pf-showcase__controls {
   display: grid;
-  gap: 1.25rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--pf-showcase-line);
+  gap: 1.5rem;
   visibility: hidden;
 
   .pf-showcase.is-ready & {
@@ -774,8 +825,8 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
   display: inline-grid;
   flex: 0 0 auto;
   place-items: center;
-  width: 3.5rem;
-  height: 3.5rem;
+  width: var(--pf-showcase-control);
+  height: var(--pf-showcase-control);
   padding: 0;
   color: var(--pf-showcase-fg);
   background: transparent;
@@ -842,22 +893,24 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
 }
 
 .pf-showcase__progress {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+  display: grid;
+  order: -1;
+  gap: .5rem;
+
+  .pf-showcase__count {
+    justify-self: end;
+  }
 }
 
 .pf-showcase__count span {
   color: var(--pf-showcase-fg);
 }
 
-// How far along: a hairline, filled in the text color up to the shown
-// exhibition. Decorative: the count says it, and the changes are
-// announced.
+// How far along: the band's rule, full width, filled in the text color
+// up to the shown exhibition. Decorative: the count says it, and the
+// changes are announced.
 .pf-showcase__meter {
   position: relative;
-  flex: 1 1 auto;
-  max-width: 18rem;
   height: 2px;
   overflow: hidden;
   background: var(--pf-showcase-line);
