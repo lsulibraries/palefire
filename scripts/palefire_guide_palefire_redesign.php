@@ -484,6 +484,7 @@ HTML),
 <li>The Oral History homepage has tabs under its intro, Listen, Record and Explore, like the old page’s three parts, and its series are shown as tape reels in their boxes, each rolling out when you point at it. Explore shows the online exhibitions across the full width as film stills, each with its title underneath.</li>
 <li>On Special Collections and Oral History, the Quick Start’s diamonds light up in gold again, one after another, every time you come back to their tab, not only the first time.</li>
 <li>Oral History’s Ask us tab has the same speech-bubbles icon as Special Collections’.</li>
+<li>The sliding key on the tab bars now covers the other icons as it moves, like a real key on top of its track.</li>
 <li>The faded film behind the Oral History intro now sinks into the dark page like ink, its light parts the page’s own color and its dark parts soft shadows, instead of sitting on top as a gray panel.</li>
 <li>The Oral History homepage has a podcast section, What Endures, with the newest episode and the five before it, played in the same small player at the foot of the screen as the exhibitions’ clips. The episodes come from the Center’s SoundCloud each night, so a new one appears the next morning with nothing for staff to do, and the podcast picture in the top column is now the newest episode with its own Play button.</li>
 <li>The Oral History homepage no longer repeats the whole Hill map and its rooms; its Find us map in the top right now jumps to the hours and directions.</li>
@@ -628,7 +629,6 @@ HTML),
 <li>Oral History’s series: a small surprise on the tape deck. Its PLAY, PAUSE and STOP keys can be clicked, and PLAY keeps the reels turning after you move away.</li>
 <li>What Endures: the episodes now come five to a page instead of in a small scrolling box. Arrows under the list step through the pages, and the episode you point at still shows at the top of the section.</li>
 <li>The tape deck is now set up the way archives digitize: the LINE and REPRO switches are pressed in with softly lit lamps, and the record switches are off. Its small labels are also straighter.</li>
-<li>The tape deck’s lit lamps no longer show a dark square around them.</li>
 <li>The tape deck’s lit lamps no longer show a dark square around them.</li>
 </ul>
 HTML),

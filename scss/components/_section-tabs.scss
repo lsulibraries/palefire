@@ -158,8 +158,12 @@ html:not(.pf-reading-dark) .pf-tabs {
   pointer-events: none;
 }
 
+// Over the tabs (z-index 1), so as it slides it covers the carved icons it
+// passes; only the tab that's on rises above it (below), its icon printed
+// on the key.
 .pf-tabs__key {
   position: absolute;
+  z-index: 2;
   top: calc(var(--pf-tabs-label-h) + var(--pf-tabs-gap));
   left: 0;
   width: 0;
@@ -316,6 +320,7 @@ html:not(.pf-reading-dark) .pf-tabs {
 // On: the selected tab, or while dragging, the slot under the key.
 .pf-tabs__list:not(.is-dragging) .pf-tabs__tab[aria-selected="true"],
 .pf-tabs__list.is-dragging .pf-tabs__tab.is-near {
+  z-index: 3;
   color: var(--pf-tabs-strong);
 
   .pf-tabs__label {
