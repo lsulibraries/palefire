@@ -42,7 +42,7 @@
  */
 #}
 {% macro play(episode, label) %}
-  <button type="button" class="pf-podcast__play" data-pf-podcast-src="{{ episode.mp3 }}" data-pf-podcast-title="{{ episode.title }}" data-pf-podcast-kicker="{{ episode.kicker }}">
+  <button type="button" class="pf-podcast__play" data-pf-podcast-src="{{ episode.mp3 }}" data-pf-podcast-title="{{ episode.title }}" data-pf-podcast-kicker="{{ episode.kicker }}"{% if episode.captions %} data-pf-podcast-captions="{{ episode.captions }}"{% endif %}>
     <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path class="pf-podcast__icon-play" d="M5 3.2v9.6L12.6 8z"/><path class="pf-podcast__icon-pause" d="M4.5 3h2.5v10H4.5zM9 3h2.5v10H9z"/></svg>
     {%- if label -%}
       <span class="pf-podcast__play-text" aria-hidden="true">{{ 'Play'|t }} · {{ episode.time }}</span>

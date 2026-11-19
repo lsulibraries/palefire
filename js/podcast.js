@@ -13,6 +13,10 @@
  *
  * The MP3 is requested only on Play (preload none).
  *
+ * An episode with captions (data-pf-podcast-captions, a WebVTT file from
+ * scripts/palefire_podcast_vtt.py) adds CC and Transcript to the bar: a
+ * caption line over it and a transcript panel (see "Captions" below).
+ *
  * The section's head shows one episode: the one pointed at or focused in
  * the list, else the one playing. Its photo (the feed's, 500px, set only
  * then) fades in as the section's backdrop, and the cassette's tape is its
@@ -237,11 +241,231 @@
     });
   }
 
+  // Captions (transcripts/podcast/<track>.vtt, scripts/palefire_podcast_vtt.py,
+  // data-pf-podcast-captions): a line over the bar with the phrase being
+  // heard and who says it, and a transcript panel with every phrase, the
+  // one heard lit. The line is the eyes' copy of the sound, so screen
+  // readers skip it (it would talk over the voice); the transcript is the
+  // text for everyone. CC turns the line off and on, remembered in this
+  // browser. Fetched on the first Play of an episode that has them.
+  const captions = {
+    files: new Map(),
+    cues: [],
+    index: -1,
+    src: '',
+    frame: 0,
+    follow: true,
+    quiet: 0,
+  };
+  const CC_KEY = 'pf-podcast-captions';
+  const ccOn = () => {
+    try {
+      return window.localStorage.getItem(CC_KEY) !== 'off';
+    }
+    catch (e) {
+      return true;
+    }
+  };
+
+  const vttTime = (stamp) => stamp.split(':').reduce((sum, part) => sum * 60 + Number(part), 0);
+  const unescape = (text) => text.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+
+  // WebVTT as [{start, end, text, who, auto}] and its source note.
+  function parseVtt(body) {
+    const cues = [];
+    const notes = [];
+    body.replace(/\r/g, '').split(/\n\n+/).forEach((block) => {
+      const lines = block.split('\n');
+      if (lines[0].startsWith('NOTE ')) {
+        notes.push(lines[0].slice(5));
+        return;
+      }
+      const at = lines.findIndex((line) => line.includes('-->'));
+      if (at < 0) {
+        return;
+      }
+      const [start, end] = lines[at].split('-->').map((part) => vttTime(part.trim().split(/\s/)[0]));
+      const payload = lines.slice(at + 1).join(' ');
+      const voice = payload.match(/^<v ([^>]+)>/);
+      cues.push({
+        start,
+        end,
+        who: voice ? unescape(voice[1]) : '',
+        auto: payload.includes('<c.auto>'),
+        text: unescape(payload.replace(/<[^>]+>/g, '')).trim(),
+      });
+    });
+    return { cues, source: notes[1] || '' };
+  }
+
+  // The cue heard at a time, or -1 in a pause.
+  function cueAt(time) {
+    const cues = captions.cues;
+    let lo = 0;
+    let hi = cues.length - 1;
+    while (lo <= hi) {
+      const mid = (lo + hi) >> 1;
+      if (time < cues[mid].start) {
+        hi = mid - 1;
+      }
+      else if (time >= cues[mid].end) {
+        lo = mid + 1;
+      }
+      else {
+        return mid;
+      }
+    }
+    return -1;
+  }
+
+  // The transcript: phrases in paragraphs, a new one at each change of
+  // voice (the blog's speakers; the automatic text has none), and in a long
+  // stretch of one voice at a sentence's end after a pause or about sixty
+  // words. A click on a phrase plays from it.
+  function fillTranscript(data) {
+    const panel = state.bar.querySelector('.pf-listen__transcript');
+    const body = panel.querySelector('.pf-listen__lines');
+    panel.querySelector('.pf-listen__source').textContent = data.source;
+    panel.querySelector('.pf-listen__source').hidden = !data.source;
+    body.textContent = '';
+    let para = null;
+    let last = null;
+    let words = 0;
+    data.cues.forEach((cue, i) => {
+      const ended = !!last && /[.!?]["”’)]?$/.test(last.text);
+      const gap = last ? cue.start - last.end : 0;
+      if (!para || cue.who !== last.who || cue.auto !== last.auto || gap > 2.5 || (ended && (gap > 0.9 || words > 60))) {
+        words = 0;
+        para = document.createElement('p');
+        para.className = 'pf-listen__para' + (cue.auto ? ' is-auto' : '');
+        if (cue.who) {
+          const who = document.createElement('span');
+          who.className = 'pf-listen__who';
+          who.textContent = cue.who;
+          para.append(who, ' ');
+        }
+        body.append(para);
+      }
+      const phrase = document.createElement('span');
+      phrase.className = 'pf-listen__phrase';
+      phrase.dataset.cue = String(i);
+      phrase.textContent = cue.text;
+      para.append(phrase, ' ');
+      words += cue.text.split(/\s+/).length;
+      last = cue;
+    });
+  }
+
+  function loadCaptions(url) {
+    const bar = state.bar;
+    const tools = bar.querySelectorAll('.pf-listen__cc, .pf-listen__text');
+    captions.cues = [];
+    captions.index = -1;
+    captions.src = url;
+    bar.classList.remove('has-captions');
+    tools.forEach((tool) => { tool.hidden = true; });
+    showTranscript(false);
+    paintCaption(null);
+    if (!url) {
+      return;
+    }
+    const got = captions.files.get(url) || fetch(url, { credentials: 'same-origin' })
+      .then((response) => (response.ok ? response.text() : Promise.reject(response.status)))
+      .then(parseVtt);
+    captions.files.set(url, got);
+    got.then((data) => {
+      // Still this episode, and the bar still open.
+      if (captions.src !== url || state.bar !== bar || !data.cues.length) {
+        return;
+      }
+      captions.cues = data.cues;
+      fillTranscript(data);
+      bar.classList.add('has-captions');
+      tools.forEach((tool) => { tool.hidden = false; });
+      syncCaption();
+    }).catch(() => captions.files.delete(url));
+  }
+
+  // The line over the bar: who (mono capitals) and the phrase. It fades
+  // between phrases and clears in a pause, unless motion is reduced.
+  function paintCaption(cue) {
+    const line = state.bar && state.bar.querySelector('.pf-listen__caption');
+    if (!line) {
+      return;
+    }
+    const shown = !!cue && ccOn() && !state.bar.classList.contains('is-reading');
+    line.classList.toggle('is-shown', shown);
+    if (cue) {
+      line.querySelector('.pf-listen__caption-who').textContent = cue.who;
+      line.querySelector('.pf-listen__caption-text').textContent = cue.text;
+    }
+  }
+
+  function syncCaption() {
+    const audio = state.audio;
+    if (!audio || !captions.cues.length) {
+      return;
+    }
+    const index = cueAt(audio.currentTime);
+    if (index === captions.index) {
+      return;
+    }
+    captions.index = index;
+    paintCaption(index < 0 ? null : captions.cues[index]);
+    const panel = state.bar.querySelector('.pf-listen__transcript');
+    panel.querySelectorAll('.pf-listen__phrase.is-current').forEach((el) => el.classList.remove('is-current'));
+    const phrase = index < 0 ? null : panel.querySelector('[data-cue="' + index + '"]');
+    if (!phrase) {
+      return;
+    }
+    phrase.classList.add('is-current');
+    // The text follows the voice, unless the reader scrolled it in the
+    // last few seconds.
+    if (!panel.hidden && Date.now() - captions.quiet > 4000) {
+      const box = panel.querySelector('.pf-listen__lines');
+      const top = phrase.offsetTop - box.offsetTop - box.clientHeight / 3;
+      box.scrollTo({ top, behavior: reduceMotion() ? 'auto' : 'smooth' });
+      captions.auto = Date.now();
+    }
+  }
+
+  // Every frame while playing, for a line in step with the voice; the
+  // audio's own timeupdate keeps it going in a background tab.
+  function captionLoop() {
+    cancelAnimationFrame(captions.frame);
+    const tick = () => {
+      syncCaption();
+      if (state.audio && !state.audio.paused) {
+        captions.frame = requestAnimationFrame(tick);
+      }
+    };
+    captions.frame = requestAnimationFrame(tick);
+  }
+
+  function showTranscript(open) {
+    const bar = state.bar;
+    const panel = bar.querySelector('.pf-listen__transcript');
+    const button = bar.querySelector('.pf-listen__text');
+    panel.hidden = !open;
+    button.setAttribute('aria-expanded', open ? 'true' : 'false');
+    bar.classList.toggle('is-reading', open);
+    captions.index = -1;
+    if (open) {
+      captions.quiet = 0;
+    }
+    syncCaption();
+    if (!captions.cues.length) {
+      paintCaption(null);
+    }
+  }
+
   function close() {
     const { bar, audio, trigger } = state;
     if (!bar) {
       return;
     }
+    cancelAnimationFrame(captions.frame);
+    captions.src = '';
     audio.pause();
     audio.removeAttribute('src');
     audio.load();
@@ -262,7 +486,15 @@
     const bar = document.createElement('section');
     bar.className = 'pf-listen pf-listen--podcast';
     bar.setAttribute('aria-label', Drupal.t('Now playing'));
-    bar.innerHTML = '<div class="pf-listen__inner">'
+    bar.innerHTML = '<div class="pf-listen__transcript" id="pf-listen-transcript" role="region" aria-label="' + Drupal.t('Transcript') + '" hidden>'
+      + '<p class="pf-listen__source"></p>'
+      + '<div class="pf-listen__lines" tabindex="0"></div>'
+      + '</div>'
+      + '<div class="pf-listen__caption" aria-hidden="true">'
+      + '<span class="pf-listen__caption-who"></span>'
+      + '<span class="pf-listen__caption-text"></span>'
+      + '</div>'
+      + '<div class="pf-listen__inner">'
       + '<button type="button" class="pf-listen__expand">'
       + '<span class="pf-listen__kicker"></span>'
       + '<span class="pf-listen__title"></span>'
@@ -275,6 +507,14 @@
       + '<span class="pf-audio__time" aria-hidden="true">0:00 / 0:00</span>'
       + '<audio preload="none"></audio>'
       + '</div></div>'
+      + '<button type="button" class="pf-listen__tool pf-listen__cc" aria-pressed="true" hidden>'
+      + '<span class="pf-listen__cc-mark" aria-hidden="true">CC</span>'
+      + '<span class="visually-hidden">' + Drupal.t('Captions') + '</span>'
+      + '</button>'
+      + '<button type="button" class="pf-listen__tool pf-listen__text" aria-expanded="false" aria-controls="pf-listen-transcript" hidden>'
+      + '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M2.5 4h11M2.5 8h11M2.5 12h7"/></svg>'
+      + '<span class="visually-hidden">' + Drupal.t('Transcript') + '</span>'
+      + '</button>'
       + '<button type="button" class="pf-listen__close">'
       + '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M3.5 3.5l9 9m0-9-9 9"/></svg>'
       + '<span class="visually-hidden">' + Drupal.t('Stop and close the player') + '</span>'
@@ -301,8 +541,12 @@
       time.textContent = clock(audio.currentTime) + ' / ' + clock(duration);
       seek.setAttribute('aria-valuetext', Drupal.t('@now of @total', { '@now': clock(audio.currentTime), '@total': clock(duration) }));
     };
-    ['play', 'pause', 'timeupdate', 'durationchange', 'ended'].forEach((type) => audio.addEventListener(type, () => {
+    ['play', 'pause', 'timeupdate', 'durationchange', 'ended', 'seeked'].forEach((type) => audio.addEventListener(type, () => {
       sync();
+      syncCaption();
+      if (type === 'play') {
+        captionLoop();
+      }
       if (type !== 'timeupdate') {
         syncButtons();
       }
@@ -310,6 +554,45 @@
         syncCassettes();
       }
     }));
+
+    // CC: the caption line off and on, kept for the next visit.
+    const cc = bar.querySelector('.pf-listen__cc');
+    cc.setAttribute('aria-pressed', ccOn() ? 'true' : 'false');
+    bar.classList.toggle('is-cc-off', !ccOn());
+    cc.addEventListener('click', () => {
+      const on = !ccOn();
+      try {
+        window.localStorage.setItem(CC_KEY, on ? 'on' : 'off');
+      }
+      catch (e) {
+        // Private windows: on for this page only.
+      }
+      cc.setAttribute('aria-pressed', on ? 'true' : 'false');
+      bar.classList.toggle('is-cc-off', !on);
+      captions.index = -1;
+      paintCaption(null);
+      syncCaption();
+    });
+    bar.querySelector('.pf-listen__text').addEventListener('click', (event) => {
+      showTranscript(event.currentTarget.getAttribute('aria-expanded') !== 'true');
+    });
+    const lines = bar.querySelector('.pf-listen__lines');
+    // A scroll the reader made (not the follow's own) holds the text still.
+    lines.addEventListener('scroll', () => {
+      if (Date.now() - (captions.auto || 0) > 900) {
+        captions.quiet = Date.now();
+      }
+    }, { passive: true });
+    lines.addEventListener('click', (event) => {
+      const phrase = event.target.closest('.pf-listen__phrase');
+      if (phrase && captions.cues[phrase.dataset.cue]) {
+        audio.currentTime = captions.cues[phrase.dataset.cue].start + 0.01;
+        captions.quiet = 0;
+        if (audio.paused) {
+          audio.play();
+        }
+      }
+    });
     // One clip at a time: this one pauses the page's others.
     audio.addEventListener('play', () => {
       document.querySelectorAll('[data-pf-audio] audio').forEach((other) => {
@@ -344,7 +627,14 @@
     bar.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') {
         event.preventDefault();
-        close();
+        // The transcript first, then the player.
+        if (bar.classList.contains('is-reading')) {
+          showTranscript(false);
+          bar.querySelector('.pf-listen__text').focus();
+        }
+        else {
+          close();
+        }
       }
     });
 
@@ -375,6 +665,7 @@
     state.bar.querySelector('.pf-listen__title').textContent = button.dataset.pfPodcastTitle || '';
     state.audio.dataset.src = src;
     state.audio.src = src;
+    loadCaptions(button.dataset.pfPodcastCaptions || '');
     // The head shows it: its photo, its tape.
     const row = rowFor(src);
     if (row) {

@@ -199,7 +199,22 @@ final class PodcastFeed {
     $episode['kicker'] = $episode['number'] ? t('Episode @n · @date', ['@n' => $episode['number'], '@date' => $date]) : $date;
     // Pulls from before the full description was kept have none.
     $episode += ['body' => [], 'credits' => '', 'photo' => ''];
+    $episode['captions'] = preg_match('#/stream/(\d+)#', (string) $episode['mp3'], $track) ? self::captions($track[1]) : '';
     return $episode;
+  }
+
+  /**
+   * The episode's captions, or '' without them.
+   *
+   * transcripts/podcast/<track id>.vtt in the theme, made on a dev machine
+   * by scripts/palefire_podcast_vtt.py: the blog's interview excerpts as
+   * written, the rest by Whisper. Its date in the address, so a new file is
+   * fetched anew. js/podcast.js shows it as a caption line and a transcript.
+   */
+  private static function captions(string $track): string {
+    $path = \Drupal::service('extension.list.theme')->getPath('palefire') . '/transcripts/podcast/' . $track . '.vtt';
+    $file = DRUPAL_ROOT . '/' . $path;
+    return is_file($file) ? \Drupal::request()->getBasePath() . '/' . $path . '?v=' . filemtime($file) : '';
   }
 
   /**

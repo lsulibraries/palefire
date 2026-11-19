@@ -768,6 +768,11 @@ HTML),
 <li>Each exhibition with oral history clips now says how many it has, how long they run in all, and how long one runs on average, in small tags beside its year. The lengths come from the audio files themselves, so a new or replaced clip counts without anyone typing a number.</li>
 </ul>
 HTML),
+  $text('Thu Nov 19: Captions for What Endures', <<<'HTML'
+<ul>
+<li>The podcast player now shows live captions: the words being said, and who says them, just above the player, with a CC button to turn them off. A Transcript button opens the whole episode as text, following along as it plays; click any line to jump there. The interview excerpts use the transcriptions the Center published on its old blog, word for word; the rest was transcribed by computer, and the transcript says so.</li>
+</ul>
+HTML),
   $text('Thu Nov 19: The treasure chest, and facts at the foot', <<<'HTML'
 <ul>
 <li>An exhibition that also had a show in the building now shows the same treasure chest its title page uses, instead of the words.</li>
