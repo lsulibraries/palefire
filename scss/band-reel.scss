@@ -6,11 +6,18 @@
 // The loop runs behind the whole band, edge to edge: from the band's top
 // edge (--pf-quick-band-top, where the guide's ::before band starts,
 // _sections.scss) to its foot, one screen wide whatever the guide's
-// column. It is graded dark (brightness about 40%) and laid at 30% with a
-// luminosity blend, so it only ever shades the band: the background stays
-// at or below the band's own lightness and every line of text keeps its
-// contrast. Its top and bottom fade into the band. Decorative: off where
-// contrast comes first.
+// column. It is graded dark (brightness about 40%) and laid at 30%, so it
+// only ever shades the band: the background stays at or below the band's
+// own lightness and every line of text keeps its contrast. Its top and
+// bottom fade into the band. Decorative: off where contrast comes first.
+//
+// Only behind the first tab (Research): on another tab it fades out and
+// stops (.is-off, js/band-reel.js), and its button goes with it.
+//
+// No mix-blend-mode: a blend over a screen-wide video cost about a third
+// of the frames while scrolling (2026-11-19 trace: 364–441 frames against
+// 599–709 without it), and on gray footage over a near-gray band it looked
+// the same.
 //
 // Pause / Play (WCAG 2.2.2) sits in the band's foot, at the guide's right
 // edge, in the room under the panels.
@@ -30,6 +37,14 @@
   width: 100vw;
   overflow: hidden;
   pointer-events: none;
+  contain: strict;
+  transition: opacity .4s ease, visibility 0s linear 0s;
+
+  &.is-off {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .4s ease, visibility 0s linear .4s;
+  }
 
   video {
     position: absolute;
@@ -41,7 +56,6 @@
     object-fit: cover;
     object-position: 70% 30%;
     opacity: .3;
-    mix-blend-mode: luminosity;
   }
 
   // The fades into the band, top and bottom.
@@ -101,6 +115,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .pf-quick-guide__reel,
+  .pf-quick-guide__reel.is-off,
   .pf-quick-guide__reel-toggle {
     transition: none;
   }

@@ -10,7 +10,9 @@
  * the Settings drawer's contrast) it pauses. Reduced motion, or the
  * Settings drawer's Reduce motion or Pause background videos, starts it
  * paused; the button plays it. Turning those settings on later pauses it.
- * Without script the poster stays and the button stays hidden.
+ * Without script the poster stays and the button stays hidden. It shows
+ * only behind the first tab (Research): on another tab it fades out
+ * (.is-off), stops, and its button hides.
  */
 (function (Drupal, once) {
   'use strict';
@@ -36,6 +38,11 @@
         let paused = startPaused();
         let onScreen = false;
         let loaded = false;
+        // Only behind the first tab (Research): the first panel is shown
+        // while its tab is selected (section-tabs.js sets hidden on the
+        // others). No panels (no tabs): always on.
+        const panel = box.parentElement.querySelector('[role="tabpanel"]');
+        const onTab = () => !panel || !panel.hidden;
 
         const setState = () => {
           btn.dataset.state = paused ? 'paused' : 'playing';
@@ -57,7 +64,10 @@
           video.load();
         };
         const sync = () => {
-          if (onScreen && !document.hidden && !paused) {
+          const shown = onTab();
+          box.classList.toggle('is-off', !shown);
+          btn.hidden = !shown;
+          if (shown && onScreen && !document.hidden && !paused) {
             load();
             video.play().catch(() => {});
           }
@@ -89,8 +99,12 @@
           sync();
         }).observe(box);
 
+        if (panel) {
+          new MutationObserver(sync).observe(panel, { attributes: true, attributeFilter: ['hidden'] });
+        }
+
         setState();
-        btn.hidden = false;
+        sync();
       });
     },
   };

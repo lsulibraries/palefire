@@ -797,6 +797,12 @@ HTML),
 <li>The credit line under each description is gone (it is on every exhibition’s title page), and the description is a little shorter, so the title lines up with the top of the picture again.</li>
 </ul>
 HTML),
+  $text('Thu Nov 19: Reels only on Research, smoother scrolling', <<<'HTML'
+<ul>
+<li>The film behind Oral History’s Quick Start now shows only on the Research tab and stops on the others.</li>
+<li>Scrolling past it is smooth again: a blending effect on the film was making the browser work much harder than it needed to, and it made no visible difference.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------
