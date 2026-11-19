@@ -753,15 +753,20 @@ function _palefire_hero_toc(ParagraphInterface $hero, array &$variables): array 
     elseif (_palefire_location_index($section, $cache)) {
       $num = sprintf('%02d', ++$count);
     }
-    $data = $anchors[$section->uuid()] ?? NULL;
-    if (!$after || !$data || !$data['toc']) {
+    // The section's id as PalefireHooks::preprocessParagraph() gives it:
+    // sectionData() reads field_sections, so on a modular page (sections
+    // in field_scroll_section) it is the title's slug.
+    $title = $section->hasField('field_section_title') ? trim((string) $section->get('field_section_title')->value) : '';
+    $listed = $title !== '' && (!$section->hasField('field_show_in_toc') || $section->get('field_show_in_toc')->isEmpty() || (bool) $section->get('field_show_in_toc')->value);
+    if (!$after || !$listed) {
       continue;
     }
+    $anchor = $anchors[$section->uuid()]['anchor'] ?? (PalefireHooks::slug($title) ?: 'section-' . substr((string) $section->uuid(), 0, 8));
     $rows[] = [
       'num' => $num,
       'label' => $label,
-      'title' => $data['label'],
-      'url' => '#' . $data['anchor'],
+      'title' => $title,
+      'url' => '#' . $anchor,
       'episode' => $podcast ? $episode : NULL,
     ];
   }
