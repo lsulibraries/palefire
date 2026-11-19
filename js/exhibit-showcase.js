@@ -1,15 +1,16 @@
 /**
  * @file
  * Exhibitions showcase (includes/exhibit-showcase.html.twig) and the
- * exhibitions band it shares with Oral History's Showcase
- * (includes/exhibit-carousel.html.twig).
+ * exhibitions band it shares with tile showcases of online exhibitions
+ * (includes/exhibit-carousel.html.twig: Oral History's Showcase, Off the
+ * Walls, Online).
  *
  * The band: the canvases sit on a rail that scrolls sideways and snaps to
  * each one; the canvas at the rail's start is the one shown. Swipe and
  * trackpad scroll it natively; a mouse grabs and flings it
- * (Drupal.palefireDragGlide, js/drag-glide.js), and Previous / Next, the
- * dots, ← → (while focus is in the band) and a click on a canvas glide it
- * to a canvas. The shown one's summary, count, dot, the title Next brings
+ * (Drupal.palefireDragGlide, js/drag-glide.js), and Previous / Next,
+ * ← → (while focus is in the band) and a click on a canvas glide it to a
+ * canvas. The shown one's summary, count, progress line, the title Next brings
  * and the plate (its picture behind the band) follow the scroll as it goes,
  * the plate a moment behind so a fling past six canvases fetches one
  * picture; the polite announcement waits until the rail comes to rest. A
@@ -36,7 +37,8 @@
     const rail = root.querySelector('[data-pf-showcase-scene]');
     const cards = Array.from(root.querySelectorAll('[data-pf-showcase-card]'));
     const summaries = Array.from(root.querySelectorAll('[data-pf-showcase-summary]'));
-    const dots = Array.from(root.querySelectorAll('[data-pf-showcase-go]'));
+    const meter = root.querySelector('[data-pf-showcase-meter]');
+    const captions = Array.from(root.querySelectorAll('[data-pf-showcase-caption]'));
     const plates = Array.from(root.querySelectorAll('[data-pf-showcase-plate]'));
     const number = root.querySelector('[data-pf-showcase-n]');
     const live = root.querySelector('[data-pf-showcase-live]');
@@ -106,7 +108,12 @@
       current = k;
       cards.forEach((card, i) => card.classList.toggle('is-active', i === k));
       summaries.forEach((summary, i) => summary.classList.toggle('is-active', i === k));
-      dots.forEach((dot, i) => dot.setAttribute('aria-current', String(i === k)));
+      captions.forEach((caption, i) => caption.classList.toggle('is-active', i === k));
+      // The eye stands in front of the shown canvas, whatever its width.
+      rail.style.setProperty('--pf-showcase-ar', cards[k].style.getPropertyValue('--pf-showcase-ar') || '.75');
+      if (meter) {
+        meter.style.transform = `scaleX(${(k + 1) / total})`;
+      }
       if (number) {
         number.textContent = pad(k + 1);
       }
@@ -164,7 +171,6 @@
       nextButton.addEventListener('click', () => go(current + 1));
       prevButton.addEventListener('click', () => go(current - 1));
     }
-    dots.forEach((dot, k) => dot.addEventListener('click', () => go(k)));
 
     region.addEventListener('keydown', (event) => {
       if (event.altKey || event.ctrlKey || event.metaKey || event.target.closest('input, textarea, select')) {

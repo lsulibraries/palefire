@@ -1146,6 +1146,7 @@ class PalefireHooks {
         'year' => $card['year'] ?? ($view['year'] ?? NULL),
         'post' => $post,
         'physical' => (bool) $post,
+        'show' => $post ? self::physicalShow($article) : NULL,
         'featured' => $featured,
         'note' => $featured ? $note : '',
       ] + $card;
@@ -1204,6 +1205,10 @@ class PalefireHooks {
           'featured' => $featured,
           'note' => $featured ? $note : '',
           'physical' => TRUE,
+          'show' => ['url' => ''] + self::physicalShow($post),
+          'credit' => '',
+          'clips' => NULL,
+          'object' => NULL,
           'unpublished' => !$post->isPublished(),
           'title_style' => 'sans',
           'cover' => $image($post, 'field_image'),
@@ -1235,28 +1240,38 @@ class PalefireHooks {
    * editors' order) share it (includes/exhibit-carousel.html.twig).
    *
    * physical: it has a physical exhibition post (field_exhibit_physical_post)
-   * the visitor may see, so it was shown in the building too.
+   * the visitor may see, so it was shown in the building too; show is that
+   * post's address, place and dates (physicalShow()), else NULL.
    *
-   * @return array{title: string, url: string, cta: string, digital: bool, subtitle: string, kicker: string, year: ?int, blurb: string, when: string, post: null, physical: bool, featured: bool, note: string, unpublished: bool, title_style: string, cover: ?array, changed: int}
+   * blurb: the start of the intro (else the credit line); credit: the
+   * credit line under it, '' when it is the blurb. object: its cover's
+   * object label (_palefire_cover_object_label()), or NULL.
+   *
+   * @return array{title: string, url: string, cta: string, digital: bool, subtitle: string, kicker: string, year: ?int, blurb: string, credit: string, when: string, post: null, physical: bool, show: ?array, featured: bool, note: string, unpublished: bool, title_style: string, cover: ?array, changed: int}
    */
   public static function exhibitionCard(NodeInterface $node, CacheableMetadata $cache): array {
     $plain = fn (string $field): string => $node->hasField($field) && !$node->get($field)->isEmpty()
-      ? trim(preg_replace('/\s+/', ' ', Html::decodeEntities(strip_tags((string) $node->get($field)->value))))
+      // A space for each paragraph's or line's end, so they don't run together.
+      ? trim(preg_replace('/\s+/', ' ', Html::decodeEntities(strip_tags(preg_replace('#</(p|div|li|h[1-6]|blockquote)>|<br\s*/?>#i', ' ', (string) $node->get($field)->value)))))
       : '';
-    // The summary: the credit line as text (it names the collection and
-    // curator), else the start of the intro.
-    $blurb = $plain('field_exhibit_credit') ?: $plain('field_intro');
+    // The description: the start of the intro, and the credit line (it
+    // names the collection and curator) under it; with no intro, the
+    // credit is the description.
+    $intro = $plain('field_intro');
+    $credit = $plain('field_exhibit_credit');
     $cover = NULL;
     if ($node->hasField('field_exhibit_cover') && !$node->get('field_exhibit_cover')->isEmpty()
       && ($item = _palefire_media_image_item($node->get('field_exhibit_cover')->first(), $cache))) {
       // Sizes are set in the template.
       $cover = _palefire_exhibit_image($item, '', $cache);
     }
-    $physical = FALSE;
+    $show = NULL;
     if ($node->hasField('field_exhibit_physical_post') && ($post = $node->get('field_exhibit_physical_post')->entity) instanceof NodeInterface) {
       $access = $post->access('view', NULL, TRUE);
       $cache->addCacheableDependency($post)->addCacheableDependency($access);
-      $physical = $access->isAllowed() && $post->isPublished();
+      if ($access->isAllowed() && $post->isPublished()) {
+        $show = self::physicalShow($post);
+      }
     }
     return [
       'title' => $node->label(),
@@ -1265,19 +1280,55 @@ class PalefireHooks {
       'digital' => TRUE,
       'subtitle' => self::stringValue($node, 'field_exhibit_subtitle'),
       'kicker' => self::stringValue($node, 'field_exhibit_kicker') ?: (string) t('Exhibition'),
-      'year' => $node->hasField('field_exhibit_year') && !$node->get('field_exhibit_year')->isEmpty() ? (int) $node->get('field_exhibit_year')->value : NULL,
-      'blurb' => Unicode::truncate($blurb, 240, TRUE, TRUE),
+      'year' => $node->hasField('field_exhibit_year') && !$node->get('field_exhibit_year')->isEmpty() ? (int) $node->get('field_exhibit_year')->value : ($show['year'] ?? NULL),
+      'blurb' => Unicode::truncate($intro ?: $credit, 240, TRUE, TRUE),
+      'credit' => $intro !== '' ? Unicode::truncate($credit, 240, TRUE, TRUE) : '',
       'when' => '',
       'post' => NULL,
-      'physical' => $physical,
+      'physical' => (bool) $show,
+      'show' => $show,
       'featured' => FALSE,
       'note' => '',
       'unpublished' => !$node->isPublished(),
       // Its title page's face, as in exhibitHead().
       'title_style' => self::stringValue($node, 'field_exhibit_title_style') === 'serif' ? 'serif' : 'sans',
       'cover' => $cover,
+      // Its cover's object label, the band's footnote under the canvas.
+      'object' => _palefire_cover_object_label($node),
       'changed' => (int) $node->getChangedTime(),
       'clips' => self::exhibitionClips($node),
+    ];
+  }
+
+  /**
+   * A physical exhibition's place and dates, as the band's facts show them.
+   *
+   * @return array{url: string, where: string, dates: string, year: ?int}
+   *   Its post's address; its place (field_exhibit_where) and dates
+   *   (field_exhibit_on_view) as months, "Apr–Jun 2018", either '' when
+   *   not given; the year it opened, or NULL.
+   */
+  public static function physicalShow(NodeInterface $post): array {
+    $dates = '';
+    $year = NULL;
+    if ($post->hasField('field_exhibit_on_view') && !$post->get('field_exhibit_on_view')->isEmpty()) {
+      $range = $post->get('field_exhibit_on_view')->first();
+      $from = DateTimeImmutable::createFromFormat('!Y-m-d', substr((string) $range->value, 0, 10));
+      $to = DateTimeImmutable::createFromFormat('!Y-m-d', substr((string) ($range->end_value ?: $range->value), 0, 10));
+      if ($from && $to) {
+        $year = (int) $from->format('Y');
+        $dates = match (TRUE) {
+          $from->format('Y-m') === $to->format('Y-m') => $from->format('M Y'),
+          $from->format('Y') === $to->format('Y') => $from->format('M') . '–' . $to->format('M Y'),
+          default => $from->format('M Y') . ' – ' . $to->format('M Y'),
+        };
+      }
+    }
+    return [
+      'url' => $post->toUrl()->toString(),
+      'where' => self::stringValue($post, 'field_exhibit_where'),
+      'dates' => $dates,
+      'year' => $year,
     ];
   }
 

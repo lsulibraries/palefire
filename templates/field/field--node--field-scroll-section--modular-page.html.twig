@@ -20,6 +20,12 @@
  * and the Lede under the heading. With index.aside (a location page's
  * parts), the heading and Lede share a head (.pf-section__head) that sits
  * beside the content from lg, sticky while it scrolls (_location.scss).
+ *
+ * The exhibitions band (item.section.exhibitions, Oral History's
+ * Showcase) is its own header: the rule names the section and each
+ * exhibition describes itself, so the heading is visually hidden (still
+ * the h2 over the band's h3 titles, and the "On this page" target) and
+ * the Lede is left out.
  */
 #}
 {% import '@palefire/includes/landing.html.twig' as pf %}
@@ -38,7 +44,8 @@
       {% endif %}
       {# A tile showcase drawn as the exhibitions band: it holds the band's
          faded plate (palefire_modular_preprocess_field()). #}
-      {% if item.section.exhibitions %}
+      {% set band = item.section.exhibitions %}
+      {% if band %}
         {% set item_attributes = item.attributes.addClass('pf-section--exhibitions') %}
       {% endif %}
       {# The podcast's head (index.mark): the name (an h2 like every
@@ -87,12 +94,12 @@
             </div>
           {% elseif item.section.label %}
             <h2 id="{{ item.section.title_id }}"
-                class="pf-section__title{{ item.section.title_hidden ? ' visually-hidden' }}"
+                class="pf-section__title{{ item.section.title_hidden or band ? ' visually-hidden' }}"
                 tabindex="-1">
               {{- item.section.label -}}
             </h2>
           {% endif %}
-          {% if index.lede and not mark %}
+          {% if index.lede and not mark and not band %}
             <p class="pf-section__lede">{{ index.lede }}</p>
           {% endif %}
           {% if index.aside %}

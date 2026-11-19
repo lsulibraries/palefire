@@ -100,9 +100,9 @@
   {# Ask Special Collections: FAQs and the question form, not cards. #}
   {% include '@palefire/includes/ask-special.html.twig' %}
 {% elseif layout == 'exhibitions' %}
-  {# Every item an oral history exhibition (Showcase on Oral History's
-     homepage): the Exhibitions page's band, under the section's own
-     heading, so each title is an <h3>. Its faded plate fills the section
+  {# Every item an online exhibition (Showcase on Oral History's homepage,
+     Off the Walls, Online on Special Collections'): the Exhibitions page's
+     band, under the section's own heading, so each title is an <h3>. Its faded plate fills the section
      (_exhibit-showcase.scss, .pf-section--exhibitions). #}
   <div{{ attributes.addClass('pf-showcase', 'pf-showcase--embed') }} data-pf-showcase data-toc-skip>
     {% include '@palefire/includes/exhibit-carousel.html.twig' with {

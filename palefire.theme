@@ -1441,21 +1441,23 @@ function _palefire_page_outline(NodeInterface $node, CacheableMetadata $cache): 
 }
 
 /**
- * Whether a Tile showcase lists only oral history exhibitions (two or more).
+ * Whether a Tile showcase lists only online exhibitions (two or more).
  *
  * Such a showcase is drawn as the exhibitions band
  * (palefire_preprocess_paragraph__tile_showcase(), and its section's class
- * in palefire_modular_preprocess_field()). Remembered per paragraph: both
- * ask on the same request.
+ * in palefire_modular_preprocess_field()): Showcase on Oral History's
+ * homepage, Off the Walls, Online on Special Collections'. Remembered per
+ * paragraph: both ask on the same request.
  */
-function _palefire_oral_history_exhibition_tiles(ParagraphInterface $paragraph): bool {
+function _palefire_exhibition_tiles(ParagraphInterface $paragraph): bool {
   $known = &drupal_static(__FUNCTION__, []);
   $key = $paragraph->id() . ':' . $paragraph->getRevisionId();
   if (!isset($known[$key])) {
     $count = 0;
     $all = $paragraph->hasField('field_tiles');
     foreach ($all ? $paragraph->get('field_tiles') : [] as $item) {
-      if (!$item->entity instanceof NodeInterface || !_palefire_is_oral_history_exhibition($item->entity)) {
+      $node = $item->entity;
+      if (!$node instanceof NodeInterface || $node->bundle() !== 'modular_page' || !$node->hasField('field_modular_type') || $node->get('field_modular_type')->value !== 'exhibition') {
         $all = FALSE;
         break;
       }
@@ -3585,12 +3587,13 @@ function palefire_preprocess_paragraph__tile_showcase(array &$variables): void {
 
   $cache = CacheableMetadata::createFromRenderArray($variables);
 
-  // Every item an oral history exhibition (Showcase on Oral History's
-  // homepage): the Exhibitions page's band instead of cards
+  // Every item an online exhibition (Showcase on Oral History's homepage,
+  // Off the Walls, Online on Special Collections'): the Exhibitions page's
+  // band instead of cards
   // (includes/exhibit-carousel.html.twig), in the editors' order, the
   // same canvases, plate and summaries. Any other item keeps the layout.
   $exhibitions = [];
-  if (_palefire_oral_history_exhibition_tiles($paragraph)) {
+  if (_palefire_exhibition_tiles($paragraph)) {
     foreach ($paragraph->get('field_tiles') as $item) {
       $node = $item->entity;
       $access = $node->access('view', NULL, TRUE);
@@ -4151,7 +4154,7 @@ function palefire_preprocess_field(array &$variables): void {
     }
     // A tile showcase drawn as the exhibitions band: its section holds the
     // band's faded plate (.pf-section--exhibitions, _exhibit-showcase.scss).
-    if ($paragraph->bundle() === 'tile_showcase' && _palefire_oral_history_exhibition_tiles($paragraph)) {
+    if ($paragraph->bundle() === 'tile_showcase' && _palefire_exhibition_tiles($paragraph)) {
       $item['section']['exhibitions'] = TRUE;
     }
     $lede = $paragraph->hasField('field_tile_lede') ? trim((string) $paragraph->get('field_tile_lede')->value) : '';

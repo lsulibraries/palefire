@@ -2,8 +2,9 @@
 // page in "showcase" mode. The exhibitions band, then a table of every
 // exhibition. Script: js/exhibit-showcase.js.
 //
-// The band (includes/exhibit-carousel.html.twig, also Oral History's
-// Showcase, .pf-showcase--embed): gallery-wrapped canvases on a rail that
+// The band (includes/exhibit-carousel.html.twig, also tile showcases of
+// online exhibitions, .pf-showcase--embed: Oral History's Showcase, Off
+// the Walls, Online): gallery-wrapped canvases on a rail that
 // scrolls sideways and snaps, the shown exhibition's picture faded behind
 // the whole band. Each canvas has depth: two edges, turned 90° into the
 // wall, carry the picture's own edge, and the rail is seen from one point
@@ -114,13 +115,14 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
 }
 
 // Mono labels, as on the exhibitions' title pages.
-.pf-showcase__tag,
+.pf-showcase__kicker,
+.pf-showcase__draft,
+.pf-showcase__facts dt,
 .pf-showcase__count,
 .pf-showcase__upnext-label,
 .pf-showcase-list thead th,
 .pf-showcase-list__year,
 .pf-showcase-list__kind,
-.pf-showcase__when,
 .pf-showcase-list__when {
   margin: 0;
   color: var(--pf-showcase-muted);
@@ -168,10 +170,12 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
 // column in four equal columns from lg, five once it is 1280px wide (the
 // landing's switch, at about 1440px of window), one gutter
 // (--pf-grid-gutter). The summary takes two columns at the left, the
-// covers the rest, the browse buttons under them, so the buttons stay put
-// whichever summary is shown (summaries differ in length). The covers'
-// tops line up with the summary's first line: the scene's room for the
-// shadow and lift (above and below the cover) hangs outside the row.
+// canvases the rest. Three rows hold still whichever summary is shown
+// (summaries differ in length): the canvases beside the summary's label,
+// its facts on the canvas's foot; Enter on the line of the arrows; the
+// count and progress line under the arrows. The summaries share the rows
+// (subgrid), so the tallest label sets the first. The scene's room for
+// the shadow (above and below the canvas) hangs outside the row.
 .pf-showcase {
   container: pf-showcase-page / inline-size;
 }
@@ -193,28 +197,53 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
 
   @include media-breakpoint-up(lg) {
     grid-template-columns: repeat(var(--pf-showcase-cols), minmax(0, 1fr));
-    grid-template-rows: auto auto 1fr;
 
-    .pf-showcase__stage,
-    .pf-showcase__controls {
+    .pf-showcase__stage {
       grid-column: 3 / -1;
       grid-row: 2;
-      align-self: start;
+      align-self: end;
     }
 
+    // Its summaries, arrows and progress line become cells of this grid.
+    .pf-showcase__panel,
     .pf-showcase__controls {
-      grid-row: 3;
+      display: contents;
     }
 
-    // Its summaries and buttons become cells of this grid.
-    .pf-showcase__panel {
-      display: contents;
+    .pf-showcase__browse {
+      grid-column: 3 / -1;
+      grid-row: 3;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--pf-showcase-line);
+    }
+
+    .pf-showcase__progress {
+      grid-column: 3 / -1;
+      grid-row: 4;
+      margin-top: calc(1.25rem - var(--pf-hero-rule-gap, 1.5rem));
     }
 
     .pf-showcase__summaries {
       grid-column: 1 / span 2;
       grid-row: 2 / span 2;
-      align-self: start;
+      grid-template-rows: subgrid;
+    }
+
+    // Its label fills the first row (the facts at its foot), Enter the
+    // second; the rows' gap is the band's.
+    .pf-showcase__summary {
+      grid-area: 1 / 1 / span 2;
+      display: grid;
+      grid-template-rows: subgrid;
+      align-items: stretch;
+      row-gap: normal;
+    }
+
+    // Enter, centered on the arrows' line (their rule and padding above).
+    .pf-showcase__actions {
+      align-items: center;
+      margin-top: 0;
+      padding-top: calc(1.5rem + 1px);
     }
   }
 }
@@ -241,24 +270,29 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
   mask-image: linear-gradient(to left, #000 78%, transparent);
 }
 
-// The rail: scrolls sideways (hidden scrollbar: the buttons, dots and
-// keys browse it), snaps each canvas to its start, and its end padding
-// lets the last canvas reach the start too. The eye stands in front of
-// the first canvas (perspective-origin), so the shown one is square on.
+// The rail: scrolls sideways (hidden scrollbar: the buttons and keys
+// browse it), snaps each canvas to its start, and its end padding lets
+// the last canvas reach the start too. Every canvas is one height
+// (--pf-showcase-h, a 3:4 canvas's at the old width) and as wide as its
+// picture's proportions (--pf-showcase-ar, set on each in the template),
+// so the whole picture shows; a very wide one stops at 92% of the stage
+// and crops a little. The eye stands in front of the shown canvas
+// (perspective-origin: the rail's --pf-showcase-ar follows it,
+// js/exhibit-showcase.js), so the shown one is square on.
 .pf-showcase__rail {
-  --pf-showcase-w: min(62cqi, 19rem);
+  --pf-showcase-h: min(82.6667cqi, 25.3333rem);
   --pf-showcase-gap: clamp(1rem, 5cqi, 1.75rem);
   --pf-showcase-depth: 1.375rem; // the canvas's depth
   display: flex;
   gap: var(--pf-showcase-gap);
   padding-block: var(--pf-showcase-room);
-  padding-inline-end: calc(100% - var(--pf-showcase-w));
+  padding-inline-end: calc(100% - min(var(--pf-showcase-h) * var(--pf-showcase-last-ar, .75), 92cqi));
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
   perspective: 50rem;
-  perspective-origin: calc(var(--pf-showcase-w) / 2) 50%;
+  perspective-origin: calc(min(var(--pf-showcase-h) * var(--pf-showcase-ar, .75), 92cqi) / 2) 50%;
   cursor: grab;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
@@ -278,20 +312,22 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
 }
 
 [dir="rtl"] .pf-showcase__rail {
-  perspective-origin: calc(100% - var(--pf-showcase-w) / 2) 50%;
+  perspective-origin: calc(100% - min(var(--pf-showcase-h) * var(--pf-showcase-ar, .75), 92cqi) / 2) 50%;
 }
 
 @container pf-showcase (min-width: 36rem) {
   .pf-showcase__rail {
-    --pf-showcase-w: min(44cqi, 21rem);
+    --pf-showcase-h: min(58.6667cqi, 28rem);
     --pf-showcase-depth: 1.625rem;
   }
 }
 
+// Its width, read by its edges' pictures too.
 .pf-showcase__card {
+  --pf-showcase-w: min(var(--pf-showcase-h) * var(--pf-showcase-ar, .75), 92cqi);
   position: relative;
   flex: 0 0 var(--pf-showcase-w);
-  aspect-ratio: 3 / 4;
+  height: var(--pf-showcase-h);
   scroll-snap-align: start;
   transform-style: preserve-3d;
   cursor: pointer;
@@ -383,6 +419,49 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
 
   &::after {
     background: linear-gradient(90deg, rgba($pf-black, .3), rgba($pf-black, .55));
+  }
+}
+
+// The footnote: the shown cover's object label under the canvas, a size
+// down. It takes the canvas's room for the shadow below (the stage keeps
+// only the room above), so with it the facts line up with its foot. All
+// in one cell; only the shown one is visible, crossfading as the summary
+// does.
+.pf-showcase__stage--captioned {
+  margin-bottom: 0;
+}
+
+.pf-showcase__captions {
+  display: grid;
+  margin-top: calc(1rem - var(--pf-showcase-room));
+}
+
+.pf-showcase__caption {
+  grid-area: 1 / 1;
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity .35s ease,
+    visibility 0s .35s;
+
+  &.is-active {
+    visibility: visible;
+    opacity: 1;
+    transition:
+      opacity .5s ease .15s,
+      visibility 0s;
+  }
+
+  .pf-object-label {
+    --pf-label-fg: var(--pf-showcase-muted);
+    --pf-label-strong: var(--pf-showcase-fg);
+    --pf-label-muted: var(--pf-showcase-muted);
+    max-width: 26rem;
+    font-size: .8125rem;
+  }
+
+  .pf-object-label__title {
+    font-size: .9375rem;
   }
 }
 
@@ -514,32 +593,116 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
   }
 }
 
-// Tags under the subtitle: the year, a kicker that isn't plain
-// "Exhibition", "Also a physical exhibition", Unpublished. Square, in a
-// hairline, the mono label voice.
-.pf-showcase__tags {
+// The label: the line over the title, title, subtitle, description,
+// credit and facts, as a wall label. Wide, the facts sit at its foot.
+// The facts' container (not the summaries: a container can't be a
+// subgrid).
+.pf-showcase__label {
   display: flex;
-  flex-wrap: wrap;
-  gap: .5rem;
-  margin: .25rem 0 0;
-  padding: 0;
-  list-style: none;
+  flex-direction: column;
+  align-self: stretch;
+  align-items: flex-start;
+  gap: .875rem;
+  min-width: 0;
+  container: pf-showcase-summary / inline-size;
+
+  > * {
+    margin: 0;
+  }
 }
 
-.pf-showcase__tag {
-  padding: .1875rem .5625rem;
+// A kicker that isn't plain "Exhibition", beside any Featured label.
+.pf-showcase__kicker {
+  color: var(--pf-showcase-fg);
+}
+
+.pf-showcase__draft {
+  padding: .1875rem .5rem;
+  color: var(--pf-showcase-fg);
   border: 1px solid var(--pf-showcase-line);
 }
 
-// A physical show: the title page's treasure chest, in the accent, in a
-// square as tall as the word tags.
-.pf-showcase__tag--icon {
-  display: flex;
-  align-items: center;
-  padding-inline: .375rem;
+// The credit line under the description: who made it, a size down.
+.pf-showcase__credit {
+  max-width: 52ch;
+  color: var(--pf-showcase-muted);
+  font-size: .8125rem;
+  line-height: 1.55;
 }
 
-.pf-showcase__tag-icon {
+// The facts, label over value: four slots every exhibition keeps, so the
+// eye finds the same fact in the same place as the band moves. Two by
+// two where the summary is narrow, one row where it has room.
+.pf-showcase__facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem 1.5rem;
+  align-self: stretch;
+  margin-top: auto;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--pf-showcase-line);
+
+  dd {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.3;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@container pf-showcase-summary (min-width: 28rem) {
+  .pf-showcase__facts {
+    grid-template-columns: minmax(0, .7fr) minmax(0, .6fr) minmax(0, 1fr) minmax(0, 1.7fr);
+  }
+}
+
+.pf-showcase__fact {
+  display: grid;
+  align-content: start;
+  gap: .375rem;
+  min-width: 0;
+}
+
+.pf-showcase__fact-note {
+  display: block;
+  margin-top: .125rem;
+  color: var(--pf-showcase-muted);
+  font-size: .8125rem;
+  font-weight: 400;
+}
+
+.pf-showcase__none {
+  color: var(--pf-showcase-muted);
+}
+
+// In the building: the title page's treasure chest, in the accent, and
+// the post about the show.
+.pf-showcase__fact--place dd {
+  font-size: 1rem;
+}
+
+.pf-showcase__fact-place {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+
+  a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: .2em;
+    transition: text-decoration-color $pf-hover-out ease;
+
+    &:hover {
+      text-decoration-color: var(--pf-exhibit-accent);
+      transition-duration: $pf-hover-in;
+    }
+  }
+}
+
+.pf-showcase__chest {
+  flex: none;
   width: 1.125rem;
   height: 1.125rem;
   color: var(--pf-exhibit-accent);
@@ -550,10 +713,6 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
     height: 100%;
     fill: currentColor;
   }
-}
-
-.pf-showcase__draft {
-  color: var(--pf-showcase-fg);
 }
 
 // The title in its exhibition's face (the title page's: sans by default).
@@ -593,12 +752,7 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
   line-height: 1.6;
 }
 
-// A physical exhibition's place and dates: a mono line in the text color.
-.pf-showcase__when {
-  color: var(--pf-showcase-fg);
-}
-
-// Enter (or Read about it), and the physical exhibition beside it.
+// Enter (or Read about it).
 .pf-showcase__actions {
   display: flex;
   flex-wrap: wrap;
@@ -701,55 +855,36 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
 
 .pf-showcase__progress {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: .25rem 1rem;
+  gap: 1rem;
 }
 
 .pf-showcase__count span {
   color: var(--pf-showcase-fg);
 }
 
-.pf-showcase__dots {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+// How far along: a hairline, filled in the text color up to the shown
+// exhibition. Decorative: the count says it, and the changes are
+// announced.
+.pf-showcase__meter {
+  position: relative;
+  flex: 1 1 auto;
+  max-width: 18rem;
+  height: 2px;
+  overflow: hidden;
+  background: var(--pf-showcase-line);
 }
 
-// A 24px target (WCAG 2.5.8) around a 2px line.
-.pf-showcase__dot {
-  position: relative;
-  width: 1.5rem;
-  height: 1.5rem;
-  padding: 0;
-  border: 0;
-  background: none;
-  cursor: pointer;
-  transition: width .6s $pf-showcase-ease;
+.pf-showcase__meter-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--pf-showcase-fg);
+  transform-origin: left center;
+  transition: transform .6s $pf-showcase-ease;
+}
 
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 50% .1875rem auto;
-    height: 2px;
-    margin-top: -1px;
-    background: var(--pf-showcase-line);
-    transition: background-color .3s ease;
-  }
-
-  &:hover::before {
-    background: var(--pf-showcase-muted);
-  }
-
-  &[aria-current="true"] {
-    width: 3.5rem;
-
-    &::before {
-      background: var(--pf-showcase-fg);
-    }
-  }
+[dir="rtl"] .pf-showcase__meter-fill {
+  transform-origin: right center;
 }
 
 // The table of all of them -----------------------------------------------
@@ -996,5 +1131,9 @@ td .pf-showcase-list__when {
   .pf-showcase__summary,
   .pf-showcase__summary.is-active {
     transform: none;
+  }
+
+  .pf-showcase__meter-fill {
+    transition: none;
   }
 }

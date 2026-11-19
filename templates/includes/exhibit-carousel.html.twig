@@ -4,34 +4,45 @@
  * The exhibitions band: digital exhibitions as gallery-wrapped canvases on
  * a rail, the shown one's summary beside them, its picture faded behind
  * the whole band. Shared by the Exhibitions page
- * (includes/exhibit-showcase.html.twig) and a tile showcase of oral
- * history exhibitions (paragraph--tile-showcase.html.twig, Oral History's
- * Showcase).
+ * (includes/exhibit-showcase.html.twig) and a tile showcase of online
+ * exhibitions (paragraph--tile-showcase.html.twig: Oral History's
+ * Showcase, Off the Walls, Online on Special Collections').
  *
  * - The rail scrolls sideways (swipe and trackpad natively; a mouse grabs
  *   and flings it, js/drag-glide.js) and snaps to each canvas. The canvas
  *   at its start is the one shown. Each canvas has depth: its two edges
  *   carry the picture's own edge, mirrored, as a printer wraps a canvas
  *   round its stretcher, and the rail is seen from one point, so the
- *   canvases to the side show an edge (_exhibit-showcase.scss).
+ *   canvases to the side show an edge (_exhibit-showcase.scss). Every
+ *   canvas is one height, as wide as its picture's proportions make it,
+ *   so the whole picture shows.
+ * - The footnote: under the canvas, the shown cover's object label
+ *   (includes/object-label.html.twig, compact), where the exhibition's
+ *   Cover label fields have a title.
  * - The plate: the shown exhibition's picture (its 640px version) behind
  *   the band, faded under the band's color, crossfading as it changes.
- * - The summary: any Featured label, the title, subtitle, the blurb, then
- *   its facts as a row of tags, as at the foot of a wall label (the year;
- *   the kicker when it isn't plain "Exhibition"; the title page's
- *   treasure chest when it has a physical show, "Also a physical
- *   exhibition" to a screen reader; its clips: how many, their total and
- *   average length, from PalefireHooks::exhibitionClips(); Unpublished),
- *   and Enter.
+ * - The summary, as a wall label: a line over the title (Featured and its
+ *   note, a kicker that isn't plain "Exhibition", Unpublished), the title,
+ *   subtitle, the start of the intro and the credit line under it, then
+ *   the facts at its foot, label over value, four slots every exhibition
+ *   keeps ("—" where it has none): Year; Clips; Listening (the clips'
+ *   total, "about m:ss each" under it: PalefireHooks::exhibitionClips());
+ *   In the building (the title page's treasure chest and a link to the
+ *   post about the show, its place and months under it:
+ *   PalefireHooks::physicalShow()). Then Enter, alone, on the line of the
+ *   arrows. Wide, the facts sit on the canvas's foot and Enter on the
+ *   arrows' line whichever summary is shown (a subgrid,
+ *   _exhibit-showcase.scss), so nothing jumps as it changes.
  * - Browsing: the square Previous / Next (the non-drag way, WCAG 2.5.7),
- *   the next title beside them, the count and dots, ← → while focus is in
- *   the band, a click on a canvas (the shown one opens its exhibition).
- *   The changes are announced politely. Nothing moves by itself.
+ *   the next title beside them, the count and a progress line, ← → while
+ *   focus is in the band, a click on a canvas (the shown one opens its
+ *   exhibition). The changes are announced politely. Nothing moves by
+ *   itself.
  *
- * The canvases and plate are decorative (aria-hidden; the titles are in
- * the text) and the rail is not a tab stop. Without script the rail still
- * scrolls and the first summary shows. Arrows are drawn inline: Font
- * Awesome's font isn't loaded on these pages.
+ * The canvases, plate and progress line are decorative (aria-hidden; the
+ * titles are in the text) and the rail is not a tab stop. Without script
+ * the rail still scrolls and the first summary shows. Arrows are drawn
+ * inline: Font Awesome's font isn't loaded on these pages.
  *
  * Variables:
  * - items: PalefireHooks::exhibitionCard() arrays (showcase() adds post,
@@ -59,9 +70,16 @@
        {% if image.focus %}style="object-position: {{ image.focus }}"{% endif %}
        alt="" loading="{{ eager ? 'eager' : 'lazy' }}"{% if eager %} fetchpriority="high"{% endif %} decoding="async" draggable="false">
 {% endmacro %}
+{# An empty fact: a dash, "None" to a screen reader. #}
+{% macro none() %}
+  <span class="pf-showcase__none" aria-hidden="true">—</span><span class="visually-hidden">{{ 'None'|t }}</span>
+{% endmacro %}
 {% import _self as pf %}
 {% set heading = heading == 'h3' ? 'h3' : 'h2' %}
 {% set shown = items|length %}
+{# The title page's mark for a physical show (exhibit-cover.html.twig);
+   nothing where the server has no FA Pro files. #}
+{% set chest = source('libraries/fontawesome-pro/svgs/light/treasure-chest.svg', ignore_missing = true) %}
 {% if items %}
   {{ attach_library('palefire/exhibit-showcase') }}
   <section class="pf-showcase__carousel" id="{{ id }}" aria-roledescription="{{ 'carousel'|t }}" aria-label="{{ label }}" data-pf-showcase-carousel>
@@ -83,10 +101,14 @@
       </div>
     {% endif %}
 
-    <div class="pf-showcase__stage">
-      <div class="pf-showcase__rail" aria-hidden="true" tabindex="-1" data-pf-showcase-scene>
+    {# Each canvas in its picture's own proportions (width over height),
+       all one height; 3:4 with no picture or no size. #}
+    {% set ratios = items|map(ex => ex.cover and ex.cover.width and ex.cover.height ? (ex.cover.width / ex.cover.height)|round(4) : 0.75) %}
+    {% set captioned = items|filter(ex => ex.object)|length > 0 %}
+    <div class="pf-showcase__stage{{ captioned ? ' pf-showcase__stage--captioned' }}">
+      <div class="pf-showcase__rail" aria-hidden="true" tabindex="-1" style="--pf-showcase-ar: {{ ratios|first }}; --pf-showcase-last-ar: {{ ratios|last }}" data-pf-showcase-scene>
         {% for ex in items %}
-          <div class="pf-showcase__card{{ loop.first ? ' is-active' }}{{ ex.cover ? '' : ' is-blank' }}" data-pf-showcase-card data-url="{{ ex.url }}"{% if ex.cover %} data-plate="{{ ex.cover.small }}"{% endif %}>
+          <div class="pf-showcase__card{{ loop.first ? ' is-active' }}{{ ex.cover ? '' : ' is-blank' }}" style="--pf-showcase-ar: {{ ratios[loop.index0] }}" data-pf-showcase-card data-url="{{ ex.url }}"{% if ex.cover %} data-plate="{{ ex.cover.small }}"{% endif %}>
             {% if ex.cover %}
               <span class="pf-showcase__edge pf-showcase__edge--start">{{ pf.picture(ex.cover, false) }}</span>
               <span class="pf-showcase__face">{{ pf.picture(ex.cover, loop.first) }}</span>
@@ -98,6 +120,19 @@
           </div>
         {% endfor %}
       </div>
+      {# The footnote under the canvas: the shown cover's object label (a
+         museum's caption: maker, title, date, its record), all in one
+         cell so the band never changes height; only the shown one is
+         visible (and read). #}
+      {% if captioned %}
+        <div class="pf-showcase__captions">
+          {% for ex in items %}
+            <div class="pf-showcase__caption{{ loop.first ? ' is-active' }}" data-pf-showcase-caption>
+              {% if ex.object %}{% include '@palefire/includes/object-label.html.twig' with ex.object|merge({compact: true}) only %}{% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
     </div>
 
     <div class="pf-showcase__panel">
@@ -105,50 +140,69 @@
          is visible (and read). #}
       <div class="pf-showcase__summaries">
         {% for ex in items %}
+          {% set plain_kicker = ex.kicker == 'Exhibition'|t %}
           <div class="pf-showcase__summary{{ loop.first ? ' is-active' }}" data-pf-showcase-summary data-title="{{ ex.title }}">
-            {% if ex.featured %}
-              <p class="pf-showcase__feature">
-                <span class="pf-showcase__badge">{{ 'Featured'|t }}</span>
-                {% if ex.note %}<span class="pf-showcase__note">{{ ex.note }}</span>{% endif %}
-              </p>
-            {% endif %}
-            <{{ heading }} class="pf-showcase__title pf-showcase__title--{{ ex.title_style }}{{ ex.title|length > 50 ? ' pf-showcase__title--long' }}">{{ ex.title }}</{{ heading }}>
-            {% if ex.subtitle %}<p class="pf-showcase__subtitle">{{ ex.subtitle }}</p>{% endif %}
-            {% if ex.blurb %}<p class="pf-showcase__blurb">{{ ex.blurb }}</p>{% endif %}
-            {% set plain_kicker = ex.kicker == 'Exhibition'|t %}
-            {% if ex.year or not plain_kicker or ex.physical or ex.clips.count or ex.unpublished %}
-              <ul class="pf-showcase__tags" role="list">
-                {% if ex.year %}<li class="pf-showcase__tag"><span class="visually-hidden">{{ 'Year'|t }}: </span>{{ ex.year }}</li>{% endif %}
-                {% if not plain_kicker %}<li class="pf-showcase__tag">{{ ex.kicker }}</li>{% endif %}
-                {% if ex.physical %}
-                  {# The title page's mark for a physical show (exhibit-cover.html.twig); the words where the server has no FA Pro files. #}
-                  {% set chest = source('libraries/fontawesome-pro/svgs/light/treasure-chest.svg', ignore_missing = true) %}
-                  {% if chest %}
-                    <li class="pf-showcase__tag pf-showcase__tag--icon" title="{{ 'Also a physical exhibition'|t }}"><span class="pf-showcase__tag-icon" aria-hidden="true">{{ chest|raw }}</span><span class="visually-hidden">{{ 'Also a physical exhibition'|t }}</span></li>
-                  {% else %}
-                    <li class="pf-showcase__tag">{{ 'Also a physical exhibition'|t }}</li>
-                  {% endif %}
-                {% endif %}
-                {% if ex.clips.count %}
-                  <li class="pf-showcase__tag">{% trans %}1 clip{% plural ex.clips.count %}{{ count }} clips{% endtrans %}</li>
-                  {% if ex.clips.total %}<li class="pf-showcase__tag"><time datetime="{{ ex.clips.total.iso }}">{{ ex.clips.total.text }}</time> {{ 'total'|t }}</li>{% endif %}
-                  {% if ex.clips.average and ex.clips.count > 1 %}<li class="pf-showcase__tag"><span class="visually-hidden">{{ 'Average clip length'|t }}: </span><time datetime="{{ ex.clips.average.iso }}">{{ ex.clips.average.text }}</time><span aria-hidden="true"> {{ 'average'|t }}</span></li>{% endif %}
-                {% endif %}
-                {% if ex.unpublished %}<li class="pf-showcase__tag pf-showcase__draft">{{ 'Unpublished'|t }}</li>{% endif %}
-              </ul>
-            {% endif %}
+            <div class="pf-showcase__label">
+              {% if ex.featured or not plain_kicker or ex.unpublished %}
+                <p class="pf-showcase__feature">
+                  {% if ex.featured %}<span class="pf-showcase__badge">{{ 'Featured'|t }}</span>{% endif %}
+                  {% if ex.featured and ex.note %}<span class="pf-showcase__note">{{ ex.note }}</span>{% endif %}
+                  {% if not plain_kicker %}<span class="pf-showcase__kicker">{{ ex.kicker }}</span>{% endif %}
+                  {% if ex.unpublished %}<span class="pf-showcase__draft">{{ 'Unpublished'|t }}</span>{% endif %}
+                </p>
+              {% endif %}
+              <{{ heading }} class="pf-showcase__title pf-showcase__title--{{ ex.title_style }}{{ ex.title|length > 50 ? ' pf-showcase__title--long' }}">{{ ex.title }}</{{ heading }}>
+              {% if ex.subtitle %}<p class="pf-showcase__subtitle">{{ ex.subtitle }}</p>{% endif %}
+              {% if ex.blurb %}<p class="pf-showcase__blurb">{{ ex.blurb }}</p>{% endif %}
+              {% if ex.credit %}<p class="pf-showcase__credit">{{ ex.credit }}</p>{% endif %}
+              <dl class="pf-showcase__facts">
+                <div class="pf-showcase__fact">
+                  <dt>{{ 'Year'|t }}</dt>
+                  <dd>{{ ex.year ?: pf.none() }}</dd>
+                </div>
+                <div class="pf-showcase__fact">
+                  <dt>{{ 'Clips'|t }}</dt>
+                  <dd>{{ ex.clips.count ?: pf.none() }}</dd>
+                </div>
+                <div class="pf-showcase__fact">
+                  <dt>{{ 'Listening'|t }}</dt>
+                  <dd>
+                    {% if ex.clips.total %}
+                      <time datetime="{{ ex.clips.total.iso }}">{{ ex.clips.total.text }}</time>
+                      {% if ex.clips.average and ex.clips.count > 1 %}
+                        <span class="pf-showcase__fact-note">{{ 'about'|t }} <time datetime="{{ ex.clips.average.iso }}">{{ ex.clips.average.text }}</time> {{ 'each'|t }}</span>
+                      {% endif %}
+                    {% else %}
+                      {{ pf.none() }}
+                    {% endif %}
+                  </dd>
+                </div>
+                <div class="pf-showcase__fact pf-showcase__fact--place">
+                  <dt>{{ 'In the building'|t }}</dt>
+                  <dd>
+                    {% if ex.show %}
+                      <span class="pf-showcase__fact-place">
+                        {% if chest %}<span class="pf-showcase__chest" aria-hidden="true">{{ chest|raw }}</span>{% endif %}
+                        {% if ex.show.url %}
+                          <a href="{{ ex.show.url }}">{{ ex.show.where ?: 'About the show'|t }}<span class="visually-hidden">: {{ ex.title }}</span></a>
+                        {% else %}
+                          {{ ex.show.where ?: 'Yes'|t }}
+                        {% endif %}
+                      </span>
+                      {% if ex.show.dates %}<span class="pf-showcase__fact-note">{{ ex.show.dates }}</span>{% endif %}
+                    {% else %}
+                      {{ pf.none() }}
+                    {% endif %}
+                  </dd>
+                </div>
+              </dl>
+            </div>
             <div class="pf-showcase__actions">
               <a class="pf-exhibit-button pf-exhibit-button--primary" href="{{ ex.url }}">
                 {{ ex.cta }}<span class="visually-hidden">: {{ ex.title }}</span>
                 <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg>
               </a>
-              {% if ex.post %}
-                <a class="pf-exhibit-button" href="{{ ex.post.url }}">
-                  {{ 'The physical exhibition'|t }}<span class="visually-hidden">: {{ ex.title }}</span>
-                </a>
-              {% endif %}
             </div>
-            {% if ex.post and ex.post.when %}<p class="pf-showcase__when">{{ 'In the building: @when'|t({'@when': ex.post.when}) }}</p>{% endif %}
           </div>
         {% endfor %}
       </div>
@@ -171,15 +225,9 @@
               <span class="pf-showcase__upnext-title" data-pf-showcase-upnext>{{ items[1].title }}</span>
             </p>
           </div>
-          <div class="pf-showcase__progress">
-            <p class="pf-showcase__count" aria-hidden="true"><span data-pf-showcase-n>01</span> / {{ '%02d'|format(shown) }}</p>
-            <ol class="pf-showcase__dots">
-              {% for ex in items %}
-                <li><button type="button" class="pf-showcase__dot" data-pf-showcase-go="{{ loop.index0 }}"{% if loop.first %} aria-current="true"{% endif %}>
-                  <span class="visually-hidden">{{ 'Show @title'|t({'@title': ex.title}) }}</span>
-                </button></li>
-              {% endfor %}
-            </ol>
+          <div class="pf-showcase__progress" aria-hidden="true">
+            <p class="pf-showcase__count"><span data-pf-showcase-n>01</span> / {{ '%02d'|format(shown) }}</p>
+            <span class="pf-showcase__meter"><span class="pf-showcase__meter-fill" style="transform: scaleX({{ 1 / shown }})" data-pf-showcase-meter></span></span>
           </div>
         </div>
         <p class="visually-hidden" aria-live="polite" data-pf-showcase-live></p>

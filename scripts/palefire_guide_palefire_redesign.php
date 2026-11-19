@@ -779,6 +779,17 @@ HTML),
 <li>It takes the place of the separate directory page made in 2017. Many of that page’s links played the wrong person’s recording; each tape now plays its own. Three interviews that were on the server but missing from the page are included.</li>
 </ul>
 HTML),
+  $text('Thu Nov 19: A facts row, and pictures shown whole', <<<'HTML'
+<ul>
+<li>Each exhibition in the band now ends with four facts in the same places every time: the year, how many clips, how long they run, and whether it was also shown in the building, with a link to the post about it. A dash means there is none.</li>
+<li>The description is now the start of the exhibition’s own introduction, with the credit line under it in smaller type.</li>
+<li>Enter the exhibition no longer moves: it sits level with the arrows whichever exhibition is shown, and the facts sit level with the foot of the picture.</li>
+<li>A thin line under the arrows shows how far along the band you are, in place of the dots.</li>
+<li>Every picture is now shown whole, all at one height, so a wide picture makes a wider canvas.</li>
+<li>Where an exhibition’s cover has its label filled in (maker, title, date), it shows under the picture as a small museum caption. Only Audubon’s is filled in so far.</li>
+<li>Off the Walls, Online on the Special Collections homepage is now the same band, and the band’s section title and line of text are gone on it and on Oral History: the numbered rule already names the section.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------
