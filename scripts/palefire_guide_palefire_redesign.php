@@ -621,6 +621,7 @@ HTML),
 <li>Oral History’s series: the tape deck’s two level meters now light up softly and their needles drift gently while a series plays, then settle back when you move away.</li>
 <li>Oral History’s series: the tape deck’s level meters now glow softly from a hidden bulb at the bottom of each window instead of being tinted all over.</li>
 <li>The tape deck’s level meters: the needles no longer poke out below their windows, and the round caps they pivot from are quieter.</li>
+<li>What Endures: the highlight on a pointed-at episode now starts a little before its number, and the episode photos behind the section show their own color, faded under the page color like the location pages’ photos.</li>
 </ul>
 HTML),
   $text('Thu Nov 19: Scholarly Repository full text', <<<'HTML'
@@ -636,6 +637,11 @@ HTML),
   $text('Thu Nov 19: News and Notes newest first', <<<'HTML'
 <ul>
 <li>Combined Search: News and Notes results start with the newest story, in its own list and in its section under All. Relevance and Oldest first are still in the Sort menu.</li>
+</ul>
+HTML),
+  $text('Thu Nov 19: Recording formats behind the Quick Start', <<<'HTML'
+<ul>
+<li>Oral History’s Quick Start: a faint hairline drawing of the formats the interviews were recorded on (a tape reel, a cassette, two clear MiniDiscs and the memory cards) now lies behind the foot of the Research panel, under options A, B and C, as the recorder lies behind the Record tab. It has no labels, since the recordings are digitized and not handed out, and it rises gently into place as it scrolls into view unless motion is reduced.</li>
 </ul>
 HTML),
 ]);

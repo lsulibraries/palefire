@@ -56,14 +56,19 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
   --pf-podcast-fade-bottom: 0px;
   position: relative;
   max-height: min(24rem, 60svh);
-  margin-inline-end: -.25rem;
-  padding-inline-end: .25rem;
+  // The box reaches .75rem left of the list, so a row's wash can start
+  // before its number (the scroll box clips anything outside it); its
+  // hairlines are drawn from the list's edge, where the borders were.
+  margin-inline: -.75rem -.25rem;
+  padding-block: 1px;
+  padding-inline: .75rem .25rem;
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: thin;
   scrollbar-color: $pf-hairline transparent;
-  border-top: 1px solid $pf-hairline;
-  border-bottom: 1px solid $pf-hairline;
+  background:
+    linear-gradient($pf-hairline, $pf-hairline) left .75rem top / calc(100% - .75rem) 1px no-repeat,
+    linear-gradient($pf-hairline, $pf-hairline) left .75rem bottom / calc(100% - .75rem) 1px no-repeat;
   -webkit-mask-image: linear-gradient(to bottom, transparent, #000 var(--pf-podcast-fade-top), #000 calc(100% - var(--pf-podcast-fade-bottom)), transparent);
   mask-image: linear-gradient(to bottom, transparent, #000 var(--pf-podcast-fade-top), #000 calc(100% - var(--pf-podcast-fade-bottom)), transparent);
 
@@ -392,7 +397,10 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
     object-fit: cover;
     object-position: 50% 30%;
     opacity: 0;
-    filter: grayscale(1) contrast(.95) brightness(.9);
+    // Faded, as the location pages' photos and the unit films are: the
+    // photo in its own color under the page-color veil (::after), not black
+    // and white; the same lightness as before, so the contrast holds.
+    filter: contrast(.95) brightness(.9);
   }
 
   img.is-on {
@@ -415,9 +423,12 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
   }
 }
 
-// The row the head shows: a faint wash from its start.
+// The row the head shows: a faint wash, starting .75rem before the row
+// (the shadow carries its full strength out to there) so the number sits
+// inside it, not on its edge.
 .pf-podcast__row.is-current {
   background: linear-gradient(to right, color-mix(in srgb, var(--bs-body-color) 6%, transparent), transparent 80%);
+  box-shadow: -.75rem 0 0 color-mix(in srgb, var(--bs-body-color) 6%, transparent);
 }
 
 // The shown episode's length, or "Playing 2:48 / 8:01" (aria-hidden: the
