@@ -11,7 +11,10 @@
  * - Freshness: the page is cached for a day, so any event that has ended is
  *   removed here, and the first feature's "Next" gets its countdown ("today",
  *   "tomorrow", "in 6 days", "now"). With every event ended, the events part
- *   is removed and the blog and Instagram cards stay.
+ *   is removed and the blog and Instagram cards stay, until the next hourly
+ *   cache clear brings the server's fallback (a recent post or the
+ *   exhibition on view).
+ * - A post or exhibition feature (pf-news--feature) needs none of this.
  */
 (function (Drupal, once) {
   'use strict';
@@ -43,7 +46,7 @@
 
   Drupal.behaviors.palefireNewsEvents = {
     attach(context) {
-      once('pf-news', '[data-pf-news]', context).forEach((news) => {
+      once('pf-news', '[data-pf-news].pf-news--events', context).forEach((news) => {
         const now = new Date();
         const part = (i) => news.querySelectorAll(`[data-i="${i}"]`);
 

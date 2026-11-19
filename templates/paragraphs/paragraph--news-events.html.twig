@@ -19,8 +19,14 @@
  * Cached with the page for a day: each event carries its start and end,
  * and the script drops any that has ended and writes "in N days".
  *
+ * With no event, the feature takes the large place: the newest blog post
+ * when it is under 30 days old, else the exhibition on view at Hill, its
+ * picture behind the section the same way. Beside it, a note that nothing
+ * is scheduled, with the calendar link. With neither, only the cards.
+ *
  * Variables from palefire_preprocess_paragraph__news_events():
- * - news.events, news.blog, news.instagram: see _palefire_news_events().
+ * - news.events, news.feature, news.calendar, news.blog, news.instagram:
+ *   see _palefire_news_events().
  * - news_id: an id prefix for this section's parts.
  *
  * The section <h2>, rule and Lede come from the scroll-section field
@@ -34,9 +40,10 @@
   </svg>
 {% endmacro %}
 {% set events = news.events %}
-{% if events or news.blog or news.instagram %}
+{% set feature = events ? null : news.feature %}
+{% if events or feature or news.blog or news.instagram %}
   {{ attach_library('palefire/news-events') }}
-  <div{{ attributes.addClass('pf-news', events ? 'pf-news--events' : 'pf-news--quiet') }} data-pf-news data-toc-skip>
+  <div{{ attributes.addClass('pf-news', events ? 'pf-news--events' : (feature ? 'pf-news--feature pf-news--' ~ feature.type : 'pf-news--quiet')) }} data-pf-news data-toc-skip>
     {% if events %}
       <div class="pf-news__backdrop" aria-hidden="true">
         {% for event in events %}
@@ -111,6 +118,42 @@
               </li>
             {% endfor %}
           </ol>
+        </div>
+      </div>
+    {% endif %}
+
+    {% if feature %}
+      {% if feature.image %}
+        <div class="pf-news__backdrop" aria-hidden="true">
+          <div class="pf-news__layer is-on">{{ feature.image }}</div>
+        </div>
+      {% endif %}
+      <div class="pf-news__main">
+        <article class="pf-news__feature pf-news__feature--{{ feature.type }} is-on" aria-labelledby="{{ news_id }}-feature">
+          <p class="pf-news__kind">{{ feature.kind }}</p>
+          <h3 class="pf-news__title pf-news__title--feature" id="{{ news_id }}-feature"><a href="{{ feature.url }}">{{ feature.title }}</a></h3>
+          {% if feature.meta %}
+            <p class="pf-news__meta">
+              {%- if feature.type == 'post' and feature.datetime -%}
+                <time datetime="{{ feature.datetime }}">{{ feature.meta }}</time>
+              {%- else -%}
+                {{ feature.meta }}
+              {%- endif -%}
+            </p>
+          {% endif %}
+          {% if feature.text %}
+            <p class="pf-news__text">{{ feature.text }}</p>
+          {% endif %}
+          <p class="pf-news__actions">
+            <a class="pf-news__action" href="{{ feature.url }}" tabindex="-1" aria-hidden="true">{{ feature.action }} <span aria-hidden="true">→</span></a>
+          </p>
+        </article>
+        <div class="pf-news__upcoming pf-news__upcoming--none">
+          <h3 class="pf-news__label">{{ 'Upcoming'|t }}</h3>
+          <p class="pf-news__none">{{ 'No talks or events are scheduled at Hill right now.'|t }}</p>
+          {% if news.calendar %}
+            <a class="pf-news__action" href="{{ news.calendar }}">{{ 'See the full calendar'|t }} <span aria-hidden="true">→</span></a>
+          {% endif %}
         </div>
       </div>
     {% endif %}

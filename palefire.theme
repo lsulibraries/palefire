@@ -783,13 +783,22 @@ function _palefire_hero_toc(ParagraphInterface $hero, array &$variables): array 
  * The hero column's row for News and events: the next event, or NULL.
  *
  * label: "Next · Thu, Dec 3 · 64° Mostly sunny" (the forecast only when the
- * day has one), title: the event's. NULL with no upcoming event, and the
- * row then names the section as any other does.
+ * day has one), title: the event's. With no event, the section's feature:
+ * "From the blog · Nov 12, 2026" or "On view · through Mar 14" and its
+ * title. NULL with neither, and the row names the section as any other.
  */
 function _palefire_news_next(ParagraphInterface $section, CacheableMetadata $cache): ?array {
-  $event = _palefire_news_events($section, $cache)['events'][0] ?? NULL;
+  $news = _palefire_news_events($section, $cache);
+  $event = $news['events'][0] ?? NULL;
   if (!$event) {
-    return NULL;
+    $feature = $news['feature'];
+    if (!$feature) {
+      return NULL;
+    }
+    $label = $feature['type'] === 'post'
+      ? (string) t('From the blog') . ' · ' . $feature['meta']
+      : (string) t('On view') . ($feature['datetime'] ? ' · ' . (string) t('through @date', ['@date' => date('M j', strtotime($feature['datetime']))]) : '');
+    return ['label' => $label, 'title' => $feature['title']];
   }
   $parts = [(string) t('Next'), $event['wd'] . ', ' . $event['mon'] . ' ' . $event['n']];
   if ($event['weather']) {
@@ -818,6 +827,11 @@ function _palefire_news_next(ParagraphInterface $section, CacheableMetadata $cac
  *   array), or NULL.
  * - instagram: caption, url, date, iso, handle, image (render array), or
  *   NULL.
+ * - feature: with no event, what takes its large place: the newest post if
+ *   it is recent (_palefire_news_post_feature(); blog is then NULL), else
+ *   the exhibition on view at Hill (_palefire_news_exhibit_feature()), else
+ *   NULL.
+ * - calendar: the section's Link (field_tile_link) URL, or ''.
  *
  * Cache: the page is cached for a day, so each event's start and end are in
  * the markup and js/news-events.js drops any that has ended. The tag
@@ -887,8 +901,10 @@ function _palefire_news_events(ParagraphInterface $paragraph, CacheableMetadata 
   }
 
   $posts = _palefire_blog_posts($paragraph, 1, $cache);
+  $post_item = NULL;
   if ($post = $posts[0] ?? NULL) {
-    $post['image'] = $post['image_item'] ? _palefire_responsive_cover($post['image_item'], 'tile_showcase_portrait', $cache, '(min-width: 64rem) 10rem, 5.5rem') : NULL;
+    $post_item = $post['image_item'];
+    $post['image'] = $post_item ? _palefire_responsive_cover($post_item, 'tile_showcase_portrait', $cache, '(min-width: 64rem) 10rem, 5.5rem') : NULL;
     unset($post['image_item']);
     $data['blog'] = $post;
   }
@@ -917,7 +933,141 @@ function _palefire_news_events(ParagraphInterface $paragraph, CacheableMetadata 
     ];
   }
 
+  // No event: a recent post, else the exhibition on view at Hill, takes
+  // the event's large place. A featured post leaves the card row.
+  $data['feature'] = NULL;
+  $data['calendar'] = '';
+  if ($paragraph->hasField('field_tile_link') && !$paragraph->get('field_tile_link')->isEmpty()) {
+    try {
+      $data['calendar'] = $paragraph->get('field_tile_link')->first()->getUrl()->toString();
+    }
+    catch (\Exception) {
+      // No usable URL: the note leaves the link out.
+    }
+  }
+  if (!$data['events']) {
+    $data['feature'] = _palefire_news_post_feature($data['blog'], $post_item, $cache) ?? _palefire_news_exhibit_feature($cache);
+    if (($data['feature']['type'] ?? '') === 'post') {
+      $data['blog'] = NULL;
+    }
+  }
+
   return $built[$key] = $data;
+}
+
+/**
+ * Days a blog post stays new enough to stand in for an event.
+ */
+const PALEFIRE_NEWS_POST_DAYS = 30;
+
+/**
+ * The backdrop for a feature: the picture across the section, or NULL.
+ */
+function _palefire_news_backdrop(?FieldItemInterface $item, CacheableMetadata $cache): ?array {
+  $item = $item ? _palefire_media_image_item($item, $cache) : NULL;
+  return $item ? _palefire_responsive_cover($item, 'tile_showcase_landscape', $cache, '100vw') : NULL;
+}
+
+/**
+ * The newest blog post as the section's feature, when it is recent.
+ *
+ * Only within PALEFIRE_NEWS_POST_DAYS of its date: an older post featured
+ * large would only show how long it has been. type 'post', kind, title,
+ * url, meta (the date), datetime, text (the excerpt), action, image (the
+ * backdrop) or NULL.
+ */
+function _palefire_news_post_feature(?array $post, ?FieldItemInterface $item, CacheableMetadata $cache): ?array {
+  if (!$post || empty($post['datetime'])) {
+    return NULL;
+  }
+  $zone = new \DateTimeZone(date_default_timezone_get());
+  $date = \DateTimeImmutable::createFromFormat('!Y-m-d', (string) $post['datetime'], $zone);
+  $today = (new \DateTimeImmutable('@' . \Drupal::time()->getRequestTime()))->setTimezone($zone)->setTime(0, 0);
+  if (!$date || $date > $today || $date->diff($today)->days > PALEFIRE_NEWS_POST_DAYS) {
+    return NULL;
+  }
+  return [
+    'type' => 'post',
+    'kind' => $post['category'] ? (string) t('From the blog') . ' · ' . $post['category'] : (string) t('From the blog'),
+    'title' => $post['title'],
+    'url' => $post['url'],
+    'meta' => $post['date'],
+    'datetime' => $post['datetime'],
+    'text' => $post['excerpt'] ?? '',
+    'action' => (string) t('Read the post'),
+    'image' => _palefire_news_backdrop($item, $cache),
+  ];
+}
+
+/**
+ * The exhibition on view at Hill today as the section's feature, or NULL.
+ *
+ * Exhibitions in the building are Articles with On view dates
+ * (field_exhibit_on_view) and a Where (field_exhibit_where), as on the
+ * Exhibitions band (PalefireHooks::showcase()). Today must be in the dates;
+ * Where must name Hill, or be empty; "Not listed" ones are left out. The
+ * latest to open wins. type 'exhibit', kind, title, url, meta ("Hill
+ * Memorial Library · Through March 14"), datetime (the last day), text,
+ * action, image or NULL.
+ *
+ * The answer changes at midnight, but the page cache keeps it until a tag
+ * is cleared: libcal_gantt's hourly pull clears libcal_gantt:news, and
+ * editing any Article clears node_list:article.
+ */
+function _palefire_news_exhibit_feature(CacheableMetadata $cache): ?array {
+  $storages = \Drupal::service('entity_field.manager')->getFieldStorageDefinitions('node');
+  if (!isset($storages['field_exhibit_on_view'])) {
+    return NULL;
+  }
+  $cache->addCacheTags(['node_list:article']);
+  $zone = new \DateTimeZone(date_default_timezone_get());
+  $today = (new \DateTimeImmutable('@' . \Drupal::time()->getRequestTime()))->setTimezone($zone)->format('Y-m-d');
+  $nodes = \Drupal::entityTypeManager()->getStorage('node');
+  // Day-only ranges store 'Y-m-d', others 'Y-m-dTH:i:s': both compare
+  // correctly as strings against these bounds.
+  $ids = $nodes->getQuery()
+    ->accessCheck(TRUE)
+    ->condition('type', 'article')
+    ->condition('status', 1)
+    ->condition('field_exhibit_on_view.value', $today . 'T23:59:59', '<=')
+    ->condition('field_exhibit_on_view.end_value', $today, '>=')
+    ->sort('field_exhibit_on_view.value', 'DESC')
+    ->range(0, 10)
+    ->execute();
+  $repository = \Drupal::service('entity.repository');
+  foreach ($nodes->loadMultiple($ids) as $node) {
+    if (!$node instanceof NodeInterface || !$node->access('view')) {
+      continue;
+    }
+    $node = $repository->getTranslationFromContext($node);
+    $where = $node->hasField('field_exhibit_where') ? trim((string) $node->get('field_exhibit_where')->value) : '';
+    $listed = $node->hasField('field_exhibit_showcase') ? (string) $node->get('field_exhibit_showcase')->value : '';
+    if ($listed === 'hidden' || ($where !== '' && stripos($where, 'hill') === FALSE)) {
+      continue;
+    }
+    $cache->addCacheableDependency($node);
+    $range = $node->get('field_exhibit_on_view')->first();
+    $end = \DateTimeImmutable::createFromFormat('!Y-m-d', substr((string) ($range->end_value ?: $range->value), 0, 10), $zone);
+    $text = '';
+    foreach ([['field_about_text', 'value'], ['body', 'summary'], ['body', 'value']] as [$field, $property]) {
+      if ($text === '' && $node->hasField($field) && !$node->get($field)->isEmpty()) {
+        $text = _palefire_plain_excerpt((string) $node->get($field)->first()->{$property}, 240);
+      }
+    }
+    $image = $node->hasField('field_image') && !$node->get('field_image')->isEmpty() ? $node->get('field_image')->first() : NULL;
+    return [
+      'type' => 'exhibit',
+      'kind' => (string) t('On view now'),
+      'title' => $node->label(),
+      'url' => $node->toUrl()->toString(),
+      'meta' => implode(' · ', array_filter([$where, $end ? (string) t('Through @date', ['@date' => $end->format('F j')]) : ''])),
+      'datetime' => $end ? $end->format('Y-m-d') : '',
+      'text' => $text,
+      'action' => (string) t('Read about it'),
+      'image' => _palefire_news_backdrop($image, $cache),
+    ];
+  }
+  return NULL;
 }
 
 /**

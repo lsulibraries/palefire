@@ -843,6 +843,13 @@ HTML),
 <li>The opening screen’s column can now be a table of contents, as on Oral History: the News and events row names the next event and its forecast.</li>
 </ul>
 HTML),
+  $text('Thu Nov 19: News and events when nothing is scheduled', <<<'HTML'
+<ul>
+<li>With no event coming up, News and events now leads with something else instead of looking empty: a blog post from the last 30 days, or else the exhibition on view at Hill, set large with its picture behind the section, and a line saying no talks or events are scheduled, with the calendar link.</li>
+<li>To be picked, the exhibition’s post needs its On view dates filled in, and Where set to Hill Memorial Library (or left empty).</li>
+<li>With neither, the blog and Instagram posts sit side by side on their own.</li>
+</ul>
+HTML),
   $text('Thu Nov 19: Longer descriptions, and a sideways step', <<<'HTML'
 <ul>
 <li>Each exhibition’s description in the band now uses whatever room is left beside the picture, so a short title shows more of its introduction, ending in “…” on a whole line. The pictures keep their height.</li>
