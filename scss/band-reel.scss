@@ -9,7 +9,8 @@
 // column. It is graded dark (brightness about 40%) and laid at 30%, so it
 // only ever shades the band: the background stays at or below the band's
 // own lightness and every line of text keeps its contrast. Its top and
-// bottom fade into the band. Decorative: off where contrast comes first.
+// bottom fade into the page around it. Decorative: off where contrast
+// comes first.
 //
 // Only behind the first tab (Research): on another tab it fades out and
 // stops (.is-off, js/band-reel.js), and its button goes with it.
@@ -58,12 +59,15 @@
     opacity: .3;
   }
 
-  // The fades into the band, top and bottom.
+  // The veils, top and bottom: each fades from the color of what the band
+  // touches there (the page: the tab labels above, Browse by series below),
+  // so the darkened film runs out into its neighbors instead of stopping at
+  // a lighter strip of band. Override per edge if a neighbor changes.
   &::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, var(--pf-band) 0, transparent 14%, transparent 82%, var(--pf-band) 100%);
+    background: linear-gradient(to bottom, var(--pf-reel-veil-top, var(--bs-body-bg)) 0, transparent 14%, transparent 82%, var(--pf-reel-veil-bottom, var(--bs-body-bg)) 100%);
   }
 }
 

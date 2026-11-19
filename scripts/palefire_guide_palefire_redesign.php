@@ -803,6 +803,11 @@ HTML),
 <li>Scrolling past it is smooth again: a blending effect on the film was making the browser work much harder than it needed to, and it made no visible difference.</li>
 </ul>
 HTML),
+  $text('Thu Nov 19: Reel edges match the page', <<<'HTML'
+<ul>
+<li>The film behind Oral History’s Quick Start now fades into the page color above and below it, so there is no lighter strip where it ends.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------
