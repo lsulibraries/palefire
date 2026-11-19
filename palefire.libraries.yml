@@ -726,21 +726,6 @@ still-life:
     component:
       css/still-life.css: {}
 
-# Oral History's Quick Start band: the reel-to-reel loop behind it, edge to
-# edge, and its Pause button (includes/landing.html.twig,
-# scss/band-reel.scss). The loop loads and plays only while the band is on
-# screen in the visible tab.
-band-reel:
-  version: 1.0.0
-  css:
-    component:
-      css/band-reel.css: {}
-  js:
-    js/band-reel.js: {}
-  dependencies:
-    - core/drupal
-    - core/once
-
 # The ledger's hover photos (the What Hill Holds section on /v2/special):
 # each row's cover behind the left column while the row is hovered or
 # focused. Attached by paragraph--tile-showcase.html.twig, only when a

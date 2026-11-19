@@ -753,6 +753,15 @@
             visit.parking_url ? { url: visit.parking_url, text: 'Parking & travel'|t },
           ]|filter(link => link), quick_hours) }}
         </div>
+        {# Oral History: the formats its interviews were recorded on, a
+           hairline still life (includes/still-life.html.twig) behind the
+           band's foot, as the Record tab's recorder is (scss/still-life.scss).
+           Decorative: the recordings are digitized, not handed out. #}
+        {% if oral_history %}
+          <div class="pf-quick-guide__still" aria-hidden="true">
+            {% include '@palefire/includes/still-life.html.twig' with { id: quick_id ~ '-still' } only %}
+          </div>
+        {% endif %}
         {% endset %}
         {% if quick_tabs %}
           {# The tab bar first, on the band's top edge (_landing-features.scss),
@@ -865,7 +874,6 @@
                   guide_url ? { url: guide_url, text: 'Collections'|t },
                   { url: 'https://www.louisianadigitallibrary.org/lsu-thwcoh', text: 'Listen online'|t },
                 ],
-                still: true,
               },
             }) %}
           {% endif %}
@@ -908,16 +916,6 @@
                 {{ attach_library('palefire/recorder-defer') }}
                 <div class="pf-quick-guide__specimen" aria-hidden="true" data-pf-recorder-src="{{ file_url(directory) }}/images/recorder-line.svg"></div>
               {% endif %}
-              {# Oral History's Ask us: the formats its interviews were
-                 recorded on, a hairline still life
-                 (includes/still-life.html.twig) behind the panel's foot, as
-                 the Record tab's recorder is (scss/still-life.scss).
-                 Decorative: the recordings are digitized, not handed out. #}
-              {% if copy.still ?? false %}
-                <div class="pf-quick-guide__still" aria-hidden="true">
-                  {% include '@palefire/includes/still-life.html.twig' with { id: quick_id ~ '-still' } only %}
-                </div>
-              {% endif %}
             {% endset %}
             {# A tab with paths shows them in place of its blocks. #}
             {% set aside_paths %}
@@ -930,30 +928,6 @@
           {% include '@palefire/includes/section-tabs.html.twig' with { tabs: quick_tabs.tabs, tabs_label: quick_tabs.label, quick_panel: quick_body, rules: tab_rules, asides: tab_asides, photos: tab_photos, facts: quick_tabs.facts ?? {} } only %}
         {% else %}
           {{ quick_body }}
-        {% endif %}
-        {# Oral History: a reel-to-reel deck turning behind the whole band,
-           edge to edge, graded dark so it only shades the band and the
-           text keeps its contrast (scss/band-reel.scss). The poster shows
-           until the band is on screen, then js/band-reel.js loads the loop
-           (about 150 kB) and plays it while it stays in view; Pause sits
-           in the band's foot. Reduced motion starts it paused. Last in the
-           guide, so the button comes after the panels in tab order. #}
-        {% if oral_history and quick_tabs %}
-          {{ attach_library('palefire/band-reel') }}
-          {# file_url: root-relative (/themes/…), so it holds under /v2/. #}
-          {% set reel_base = file_url(directory) %}
-          <div class="pf-quick-guide__reel" aria-hidden="true" data-pf-band-reel>
-            <video muted loop playsinline preload="none" tabindex="-1" width="1280" height="720"
-                   poster="{{ reel_base }}/images/oral-history-reel.webp"
-                   data-sources="{{ { webm: reel_base ~ '/video/oral-history-reel.webm', mp4: reel_base ~ '/video/oral-history-reel.mp4' }|json_encode }}"></video>
-          </div>
-          <button type="button" class="pf-quick-guide__reel-toggle" data-pf-band-reel-toggle data-state="paused" hidden>
-            <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-              <g class="pf-quick-guide__reel-pause"><rect x="4" y="3" width="2.5" height="10" rx=".6"/><rect x="9.5" y="3" width="2.5" height="10" rx=".6"/></g>
-              <path class="pf-quick-guide__reel-play" d="M5 3.4v9.2c0 .7.8 1.1 1.4.7l7-4.6c.5-.3.5-1.1 0-1.4l-7-4.6C5.8 2.3 5 2.7 5 3.4z"/>
-            </svg>
-            <span class="visually-hidden" data-pf-band-reel-label>{{ 'Play background video'|t }}</span>
-          </button>
         {% endif %}
       </div>
       {# Oral History: the collection's series, A to Z, each with how many

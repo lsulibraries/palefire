@@ -4,10 +4,10 @@
 // own entry (css/still-life.css, library palefire/still-life), attached by
 // the include, so only the page that shows it loads it.
 //
-// On Oral History's Quick Start, in the Ask us tab (includes/landing.html.twig;
-// the Research tab has the reel loop behind the band, band-reel.scss), behind
-// the band's bottom right corner as the Record tab's recorder is
-// (recorder.scss): larger than the space it fills, cropped by the band's
+// On Oral History's Quick Start, in the Research tab
+// (includes/landing.html.twig), behind the band's bottom right corner as
+// the Record tab's recorder is (recorder.scss): larger than the space it
+// fills, cropped by the band's
 // bottom edge and the screen's right edge (the section clips sideways, so
 // it never scrolls), faded toward the top and the left, so it rises out of
 // the corner. Faint, its faces in the band's color, so it reads as a
@@ -38,9 +38,13 @@
   --pf-still-drop: 12cqi; // below the band's bottom edge, cropped
   --pf-still-top: 50%; // the fade from the top
   --pf-still-left: 45%; // the fade from the left
+  // Down to the band's foot: the hero guide's bottom padding
+  // (_landing-features.scss), not --pf-quick-space, which left the
+  // drawing 12px short of the band's edge at 1440.
+  --pf-quick-foot: calc(var(--pf-hero-gap, var(--pf-quick-space, 0px)) - var(--pf-quick-space, 0px) / 2);
 
   position: absolute;
-  inset: auto -100vmax calc(-1 * var(--pf-quick-space, 0px));
+  inset: auto -100vmax calc(-1 * var(--pf-quick-foot));
   z-index: -1;
   height: calc(var(--pf-still-w) * .51 - var(--pf-still-drop));
   overflow: hidden;

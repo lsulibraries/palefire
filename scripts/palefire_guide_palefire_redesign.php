@@ -815,6 +815,12 @@ HTML),
 <li>The film behind Oral History’s Quick Start now fades into the page color above and below it, so there is no lighter strip where it ends.</li>
 </ul>
 HTML),
+  $text('Thu Nov 19: Still life back on Research, drawings reach the edge', <<<'HTML'
+<ul>
+<li>The film behind Oral History’s Quick Start is gone; the line drawing of recording formats is back on the Research tab.</li>
+<li>That drawing and the Record tab’s recorder now run right to the bottom edge of the band, where a thin strip of plain color used to show under them.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------

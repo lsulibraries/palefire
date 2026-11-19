@@ -516,9 +516,13 @@ $pf-recorder-dark: color-mix(in srgb, var(--bs-body-bg) 55%, #{$pf-recorder-ink}
   --pf-specimen-x: -24cqi;
   --pf-specimen-w: 140cqi;
   --pf-specimen-fade: 26%;
+  // Down to the band's foot: the hero guide's bottom padding
+  // (_landing-features.scss), not --pf-quick-space, which left the
+  // drawing 12px short of the band's edge at 1440.
+  --pf-quick-foot: calc(var(--pf-hero-gap, var(--pf-quick-space, 0px)) - var(--pf-quick-space, 0px) / 2);
 
   position: absolute;
-  inset: auto -100vmax calc(-1 * var(--pf-quick-space, 0px));
+  inset: auto -100vmax calc(-1 * var(--pf-quick-foot));
   z-index: -1;
   height: var(--pf-specimen-h);
   pointer-events: none;
