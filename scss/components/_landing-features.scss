@@ -6527,12 +6527,6 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
     fill: var(--pf-deck-lit);
   }
 
-  // While a series is held (pointer or focus on it, js/series-deck.js) its
-  // name under the deck is lit in the deck's gold.
-  &.is-held .pf-series__now-name {
-    color: var(--pf-deck-gold);
-  }
-
   // Slots, sockets and the counter's window are left clear here, outlined
   // only: the exhibitions' fill, darker than the page, stood out beside
   // the series.
@@ -6592,11 +6586,13 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
   color: var(--pf-toc-color);
 }
 
+// The series on the deck named in the deck's gold, held or not.
 .pf-series__now-name {
   display: -webkit-box;
   flex: none;
   margin: 0;
   overflow: hidden;
+  color: var(--pf-deck-gold);
   font: 500 var(--pf-now-name)/1.15 $pf-font-display-serif;
   text-wrap: balance;
   -webkit-box-orient: vertical;
@@ -6646,7 +6642,7 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
 @media (prefers-reduced-motion: no-preference) {
   html:not(.pf-a11y-motion) {
     .pf-series__now :is(.pf-series__now-name, .pf-series__now-text) {
-      transition: opacity .2s ease, color .5s ease;
+      transition: opacity .2s ease;
     }
 
     .pf-series__now.is-swapping :is(.pf-series__now-name, .pf-series__now-text) {
@@ -6658,7 +6654,7 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
     }
 
     .pf-series__deck.is-playing .pf-deck__svg .pinch {
-      translate: -5.22px -6.33px;
+      translate: -1.64px 6.08px;
     }
   }
 }

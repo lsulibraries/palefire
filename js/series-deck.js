@@ -368,8 +368,8 @@
       window.clearTimeout(swap);
       if (quiet || still()) {
         fill();
-        // Reduced motion still holds it (the gold name, the meters lit),
-        // though nothing turns.
+        // Reduced motion still holds it (the meters lit), though nothing
+        // turns.
         if (!quiet) {
           hold(true);
         }

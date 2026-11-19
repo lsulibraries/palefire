@@ -189,7 +189,7 @@ function tan2(A, B) {
 const segP = (a, b) => { const n = Math.max(1, Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1]) / 6)); return Array.from({ length: n + 1 }, (_, i) => [a[0] + (b[0] - a[0]) * i / n, a[1] + (b[1] - a[1]) * i / n]); };
 function arcP(K, a, d) { const a0 = Math.atan2(a[1] - K.c[1], a[0] - K.c[0]), a1 = Math.atan2(d[1] - K.c[1], d[0] - K.c[0]); let dl = a1 - a0; if (K.w > 0) { while (dl < 0) dl += 2 * Math.PI; } else { while (dl > 0) dl -= 2 * Math.PI; } const n = Math.max(2, Math.ceil(Math.abs(dl) * K.r / 5)); return Array.from({ length: n + 1 }, (_, i) => { const t = a0 + dl * i / n; return [K.c[0] + K.r * Math.cos(t), K.c[1] + K.r * Math.sin(t)]; }); }
 function tapePath(rs, rt) {
-  const cs = [{ c: [130, 140], r: rs, w: -1 }, { c: [67, 522], r: 22, w: -1 }, { c: [164, 483], r: 43, w: 1 }, { c: [617, 473], r: 7.5, w: -1 }, { c: [752, 520], r: 22, w: -1 }, { c: [690, 140], r: rt, w: -1 }];
+  const cs = [{ c: [130, 140], r: rs, w: -1 }, { c: [67, 522], r: 22, w: -1 }, { c: [164, 483], r: 43, w: 1 }, { c: [617, 473], r: 7.5, w: 1 }, { c: [752, 520], r: 22, w: -1 }, { c: [690, 140], r: rt, w: -1 }];
   const tg = []; for (let i = 0; i < 5; i++) tg.push(tan2(cs[i], cs[i + 1]));
   let pts = [], gA = 0, cD = 0;
   for (let i = 0; i < 5; i++) { pts.push(...segP(tg[i][0], tg[i][1])); if (i < 4) { const k = i + 1; if (k === 2) gA = pts.length - 1; pts.push(...arcP(cs[k], tg[i][1], tg[k][0])); if (k === 3) cD = pts.length - 1; } }
@@ -210,8 +210,17 @@ const m = RL.map(r => r[0]).join('') + rib(TP.aOut, 'aOut') + rib(TP.b, 'b') + r
 // rest, the reels.
 const FZ = 30, BZ = 12, TZ = 21;
 let d = '';
-const pin = pr([524, 525, 16]), pout = pr([530, 531, 16]);
-d += `<g class="pinch">` + cyl(530, 531, 38, 0, 32, .03, .7) + ring(530, 531, 29, 32, `${T(.22)} stroke-opacity=".6"`) + '</g>';
+// The tape runs over the capstan (617, 473), a short wrap on the inside of
+// its bend down to the right tension arm; the pinch roller sits just
+// outside it, along the wrap's middle (n), clear by 6 at rest and closing
+// on play until it holds the tape to the shaft (capstan 7.5 + its own 22,
+// the tape between them): the capstan's grip is what pulls the tape at
+// speed.
+const PN = [0.2995, -0.9541];
+const pinchAt = gap => [617 + PN[0] * (29.5 + gap), 473 + PN[1] * (29.5 + gap)];
+const [pxo, pyo] = pinchAt(6);
+const pin = pr([...pinchAt(0), 16]), pout = pr([pxo, pyo, 16]);
+d += `<g class="pinch">` + cyl(pxo, pyo, 22, 0, 32, .03, .7) + ring(pxo, pyo, 17, 32, `${T(.22)} stroke-opacity=".6"`) + '</g>';
 [204, 369].forEach((cx, i) => { d += `<g clip-path="url(#pf-vu-window-${i})"><g transform="matrix(${aff(cx, 852, 4, 40)})"><line class="needle gold" x1="0" y1="0" x2="0" y2="-72"/></g></g>`; });
 function reel(R, tin, rp, i) {
   const k = R.k, cx = R.cx;
