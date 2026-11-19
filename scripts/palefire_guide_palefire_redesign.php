@@ -870,6 +870,11 @@ HTML),
 <li>Moving between exhibitions, the text now slides sideways in the direction you’re going, the way the Oral History tabs do, instead of bobbing up and down.</li>
 </ul>
 HTML),
+  $text('Thu Nov 19: Teaching & Research is a list again', <<<'HTML'
+<ul>
+<li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------

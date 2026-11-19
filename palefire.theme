@@ -1918,7 +1918,9 @@ function _palefire_page_outline(NodeInterface $node, CacheableMetadata $cache): 
  * Such a showcase is drawn as the exhibitions band
  * (palefire_preprocess_paragraph__tile_showcase(), and its section's class
  * in palefire_modular_preprocess_field()): Showcase on Oral History's
- * homepage, Off the Walls, Online on Special Collections'. Remembered per
+ * homepage, Off the Walls, Online on Special Collections'. Not where the
+ * editors chose rows (Ledger or Index): Teaching & Research's pages are
+ * exhibition-type Modular pages too, and stay a ledger. Remembered per
  * paragraph: both ask on the same request.
  */
 function _palefire_exhibition_tiles(ParagraphInterface $paragraph): bool {
@@ -1926,7 +1928,8 @@ function _palefire_exhibition_tiles(ParagraphInterface $paragraph): bool {
   $key = $paragraph->id() . ':' . $paragraph->getRevisionId();
   if (!isset($known[$key])) {
     $count = 0;
-    $all = $paragraph->hasField('field_tiles');
+    $layout = $paragraph->hasField('field_tile_layout') ? $paragraph->get('field_tile_layout')->value : NULL;
+    $all = $paragraph->hasField('field_tiles') && !in_array($layout, ['ledger', 'index'], TRUE);
     foreach ($all ? $paragraph->get('field_tiles') : [] as $item) {
       $node = $item->entity;
       if (!$node instanceof NodeInterface || $node->bundle() !== 'modular_page' || !$node->hasField('field_modular_type') || $node->get('field_modular_type')->value !== 'exhibition') {
