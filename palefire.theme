@@ -754,9 +754,11 @@ function _palefire_hero_map_banner(ParagraphInterface $paragraph, array &$variab
  * series (no words, oral_histories:series:<name>). The index's list tag
  * redraws it when records change.
  *
- * Each row also has its short description and its fuller one, when the
- * theme has them (_palefire_oral_history_series_descriptions(),
- * _palefire_oral_history_series_details()), and the radius its tape
+ * Each row also has its short description and its fuller one: an editor's,
+ * from the series' term in the Oral history series vocabulary
+ * (_palefire_oral_history_series_terms()), else the theme's own
+ * (_palefire_oral_history_series_descriptions(),
+ * _palefire_oral_history_series_details()); and the radius its tape
  * pack is wound to on its card's reel (includes/series-reel.html.twig): the
  * pack's area grows with the count, from the hub (50) to full (136) for the
  * largest series.
@@ -776,10 +778,12 @@ function _palefire_oral_history_series(array &$variables): array {
     \Drupal::logger('palefire')->error('Oral history series could not be listed: @message', ['@message' => $e->getMessage()]);
     return [];
   }
-  $variables['#cache']['tags'] = Cache::mergeTags($variables['#cache']['tags'] ?? [], ['search_api_list:bento_search']);
+  // The terms' list tag redraws it when an editor saves a series' term.
+  $variables['#cache']['tags'] = Cache::mergeTags($variables['#cache']['tags'] ?? [], ['search_api_list:bento_search', 'taxonomy_term_list']);
   $rows = [];
-  $descriptions = _palefire_oral_history_series_descriptions();
-  $details = _palefire_oral_history_series_details();
+  $terms = _palefire_oral_history_series_terms();
+  $descriptions = array_merge(_palefire_oral_history_series_descriptions(), array_filter(array_map(static fn (array $term): string => $term['description'], $terms)));
+  $details = array_merge(_palefire_oral_history_series_details(), array_filter(array_map(static fn (array $term): string => $term['details'], $terms)));
   $max = max(1, ...array_map('intval', array_values($counts) ?: [1]));
   foreach ($counts as $name => $count) {
     if ($count > 0) {
@@ -798,6 +802,47 @@ function _palefire_oral_history_series(array &$variables): array {
     }
   }
   return $rows;
+}
+
+/**
+ * The editors' descriptions of the oral history series, by name.
+ *
+ * Each series may have a term in the Oral history series vocabulary
+ * (oral_history_series, set up by hand in Drupal; its terms are seeded by
+ * scripts/palefire_oral_history_series_terms.php), named as the series is.
+ * Its Short summary (field_short_summary) is the series' short description
+ * and its Description the fuller one, as plain text. An empty field, an
+ * unpublished term or no term leaves the theme's own. Without the vocabulary
+ * or the field, nothing is read and the theme's own stand.
+ *
+ * @return array
+ *   ['description' => string, 'details' => string] by series name, with
+ *   straight apostrophes as ’ (as the theme's own are keyed).
+ */
+function _palefire_oral_history_series_terms(): array {
+  $plain = static fn (?string $text): string => trim(preg_replace('/\s+/u', ' ', html_entity_decode(strip_tags((string) $text), ENT_QUOTES | ENT_HTML5, 'UTF-8')) ?? '');
+  $out = [];
+  try {
+    $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+    if (!\Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->load('oral_history_series')) {
+      return [];
+    }
+    foreach ($storage->loadByProperties(['vid' => 'oral_history_series', 'status' => 1]) as $term) {
+      $name = strtr(trim((string) $term->label()), ["'" => '’']);
+      if ($name === '') {
+        continue;
+      }
+      $out[$name] = [
+        'description' => $term->hasField('field_short_summary') ? $plain($term->get('field_short_summary')->value) : '',
+        'details' => $plain($term->get('description')->value),
+      ];
+    }
+  }
+  catch (\Throwable $e) {
+    \Drupal::logger('palefire')->error('Oral history series terms could not be read: @message', ['@message' => $e->getMessage()]);
+    return [];
+  }
+  return $out;
 }
 
 /**

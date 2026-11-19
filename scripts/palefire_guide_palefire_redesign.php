@@ -647,6 +647,11 @@ HTML),
 <li>Oral History’s Quick Start: the formats drawing now stands on a corner of a table instead of in a row, on a tidy grid at the table’s angle (the cassette and MiniDiscs side by side, the reel behind them, the cards in front, one even gap between all), larger, rising out of the panel’s bottom right corner and cropped by the band’s edges, so it reads as a background and not as another row of content.</li>
 </ul>
 HTML),
+  $text('Thu Nov 19: Series descriptions editable in Drupal', <<<'HTML'
+<ul>
+<li>Oral History’s series descriptions (the short line on each card and in the tape deck’s caption, and the fuller one) can now be edited by content editors in Drupal, as terms in an Oral history series vocabulary, one per series, seeded with the current text. Until a term is edited, or if it is cleared, the site keeps showing the text built into the theme. Editors can be assigned to series so they show in My Content.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------
