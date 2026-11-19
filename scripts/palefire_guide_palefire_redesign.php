@@ -620,6 +620,7 @@ HTML),
 <li>What Endures: the cassette’s window is now clear glass: the episode photo shows sharp through it, while the plastic around it stays frosted.</li>
 <li>Oral History’s series: the tape deck’s two level meters now light up softly and their needles drift gently while a series plays, then settle back when you move away.</li>
 <li>Oral History’s series: the tape deck’s level meters now glow softly from a hidden bulb at the bottom of each window instead of being tinted all over.</li>
+<li>The tape deck’s level meters: the needles no longer poke out below their windows, and the round caps they pivot from are quieter.</li>
 </ul>
 HTML),
   $text('Thu Nov 19: Scholarly Repository full text', <<<'HTML'

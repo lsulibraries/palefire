@@ -183,6 +183,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-19:** Tape deck (`build/exhibit-deck.js`, `images/exhibit-deck.svg`): each `.needle` group is clipped by `#pf-vu-window-0/1` (the meter windows' polygons, in `<defs>`); the pivot covers go from `t15`/`.5` to `t11`/`.3`.
 - **2026-11-19:** Series deck meters: `.vu-face` is gone; `.vu-lamp` (a polygon over each face in `images/exhibit-deck.svg`, `opacity="0"` as drawn) fills with the `#pf-vu-lamp` radial gradient (center at the window's bottom center), its stops `.vu-lamp__core/__mid/__edge` colored `--pf-deck-gold` at 16%, 5% and 0%; `.is-held` sets the lamp's opacity to 1 (0.6s).
 - **2026-11-19:** Series deck meters: `.vu-face` (new class on the meter faces in `images/exhibit-deck.svg`, from `build/exhibit-deck.js`) fills with `--pf-deck-gold` at 18% while `.is-held`; `.needle` sits at -12deg while held (CSS, the reduced-motion state) and `js/series-deck.js` drives it inline with the reel motor (two slow sine waves, 0.4s ease).
 - **2026-11-18:** Cassette blur: `.pf-podcast-head__tape::before` is clipped by `$pf-cassette-blur` (`polygon(evenodd, …)`, outline minus window and foot holes); masks do not cut a `backdrop-filter`. Keep the backdrop on its own layer, with no `overflow: hidden` + `border-radius` ancestor between it and the mark, or the clipped blur stops reading it. Review page: `node build/cassette-mockup.js out.html`.

@@ -126,13 +126,18 @@ const lever = (x, t, led) => {
 };
 [[165, 'ATT', 'dim'], [205, 'MIC', 'dim'], [245, 'LINE', 'dim'], [330, 'ATT', 'dim'], [370, 'MIC', 'dim'], [410, 'LINE', 'dim'], [510, 'L', 'red'], [550, 'R', 'red'], [635, 'INPUT', 'red'], [675, 'SYNC', 'amb'], [715, 'REPRO', 'grn']].forEach(a => { s += lever(...a); });
 s += txt(205, 760, 0, 'LEFT', 6.5) + txt(370, 760, 0, 'RIGHT', 6.5);
+// Each meter's window, kept to clip its needle (the pivot sits under the
+// window's foot, behind the cover, so a needle drawn whole showed its tail
+// below the frame).
+const vuWindows = [];
 function vu(x0) {
   const cx = x0 + 74, py = 852, z = 3;
+  vuWindows.push(ps(Z(rectB(x0 + 9, 775, 130, 68), z)));
   let h = prism(rectB(x0, 768, 148, 92), 0, z, .04, .6) + G(Z(rectB(x0 + 9, 775, 130, 68), z), `${T(.09)} stroke-opacity=".4"`)
     + G(Z(rectB(x0 + 9, 775, 130, 68), z), 'class="vu-lamp" fill="url(#pf-vu-lamp)" stroke="none" opacity="0"');
   h += G(Z(arcB(cx, py, 60, -128, -74), z), 'stroke-opacity=".5"', 1) + G(Z(arcB(cx, py, 60, -74, -52, 6), z), 'class="gold" stroke-opacity=".8" stroke-width="2"', 1);
   [['20', -126], ['10', -115], ['7', -107], ['5', -100], ['3', -93], ['0', -74], ['3', -56]].forEach(([t, a]) => { const r = a * RAD; h += txt(cx + 69 * Math.cos(r), py + 69 * Math.sin(r) + 2, z, t, 6.5, 'middle', .55) + L([cx + 60 * Math.cos(r), py + 60 * Math.sin(r), z], [cx + 64 * Math.cos(r), py + 64 * Math.sin(r), z], .5); });
-  h += txt(cx, 826, z, 'VU', 10, 'middle', .6) + G(Z(arcB(cx, 843, 13, 180, 360, 10), z), `${T(.15)} stroke-opacity=".5"`);
+  h += txt(cx, 826, z, 'VU', 10, 'middle', .6) + G(Z(arcB(cx, 843, 13, 180, 360, 10), z), `${T(.11)} stroke-opacity=".3"`);
   return h;
 }
 s += vu(130) + vu(295);
@@ -207,7 +212,7 @@ const FZ = 30, BZ = 12, TZ = 21;
 let d = '';
 const pin = pr([524, 525, 16]), pout = pr([530, 531, 16]);
 d += `<g class="pinch">` + cyl(530, 531, 38, 0, 32, .03, .7) + ring(530, 531, 29, 32, `${T(.22)} stroke-opacity=".6"`) + '</g>';
-[204, 369].forEach(cx => { d += `<g transform="matrix(${aff(cx, 852, 4, 40)})"><line class="needle gold" x1="0" y1="0" x2="0" y2="-72"/></g>`; });
+[204, 369].forEach((cx, i) => { d += `<g clip-path="url(#pf-vu-window-${i})"><g transform="matrix(${aff(cx, 852, 4, 40)})"><line class="needle gold" x1="0" y1="0" x2="0" y2="-72"/></g></g>`; });
 function reel(R, tin, rp, i) {
   const k = R.k, cx = R.cx;
   const spin = (z, inner) => `<g transform="matrix(${aff(cx, 140, z)})"><g class="spin spin--${i}">${inner}</g></g>`;
@@ -242,7 +247,7 @@ const body = (s + m + f + d).replace(/<(polygon|polyline|line|path)\b([^>]*?)\/>
   strokes.add(n);
   return '<' + tag + (/class="/.test(at) ? at.replace(/class="/, () => 'class="s' + n + ' ') : ' class="s' + n + '"' + at) + '/>';
 });
-const svg = `<svg xmlns="http://www.w3.org/2000/svg" class="pf-deck__svg" viewBox="${f2(vx)} ${f2(vy)} ${f2(vw)} ${f2(vh)}" aria-hidden="true" focusable="false">\n<defs><radialGradient id="pf-vu-lamp" cx=".5" cy="1" r=".75"><stop class="vu-lamp__core" offset="0"/><stop class="vu-lamp__mid" offset=".35"/><stop class="vu-lamp__edge" offset="1"/></radialGradient></defs>\n<g fill="none" stroke="currentColor" text-anchor="middle">\n${body.replace(/\/>/g, '/>\n').replace(/<g /g, '\n<g ')}</g>\n</svg>\n`;
+const svg = `<svg xmlns="http://www.w3.org/2000/svg" class="pf-deck__svg" viewBox="${f2(vx)} ${f2(vy)} ${f2(vw)} ${f2(vh)}" aria-hidden="true" focusable="false">\n<defs><radialGradient id="pf-vu-lamp" cx=".5" cy="1" r=".75"><stop class="vu-lamp__core" offset="0"/><stop class="vu-lamp__mid" offset=".35"/><stop class="vu-lamp__edge" offset="1"/></radialGradient>${vuWindows.map((p, i) => `<clipPath id="pf-vu-window-${i}"><polygon points="${p}"/></clipPath>`).join('')}</defs>\n<g fill="none" stroke="currentColor" text-anchor="middle">\n${body.replace(/\/>/g, '/>\n').replace(/<g /g, '\n<g ')}</g>\n</svg>\n`;
 fs.writeFileSync(out, svg.replace(/\n+/g, '\n'));
 const sorted = [...tones].sort((a, b) => a - b);
 console.log(JSON.stringify({ bytes: svg.length, tones: sorted, strokes: [...strokes].sort((a, b) => a - b), aspect: +(vw / vh).toFixed(4), topAspect: +(vw / (topY - vy)).toFixed(4), topFrac: +((topY - vy) / vh).toFixed(4), pinch: [+(pin[0] - pout[0]).toFixed(2), +(pin[1] - pout[1]).toFixed(2)] }));
