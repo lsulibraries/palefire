@@ -39,7 +39,7 @@
   // the one pointed at or focused, else the one playing, else the newest
   // (its tape only, no photo).
   const view = { rows: [], longest: 1, shown: null, page: 0, turn: null };
-  const PER_PAGE = 5;
+  const PER_PAGE = 3;
   const reduceMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.classList.contains('pf-a11y-motion');
 
   const rowFor = (src) => view.rows.find((row) => {
@@ -385,7 +385,7 @@
     }
   }
 
-  // Five episodes to a page (includes/podcast.html.twig), so the head that
+  // Three episodes to a page (includes/podcast.html.twig), so the head that
   // tells the one pointed at stays in view beside the list. The arrows page
   // newer and older; the count says the page (read out politely). Focus
   // stays on the arrow pressed, so it can be pressed again; at an end it
@@ -424,12 +424,14 @@
       number.textContent = pad(page + 1);
       if (announce) {
         const rows = on(page);
-        said.textContent = Drupal.t('Page @page of @count, episodes @first to @last', {
+        const numbers = {
           '@page': page + 1,
           '@count': count,
           '@first': rows[0].querySelector('.pf-podcast__num').textContent,
           '@last': rows[rows.length - 1].querySelector('.pf-podcast__num').textContent,
-        });
+        };
+        // A last page of one: "episode 01", not "episodes 01 to 01".
+        said.textContent = rows.length > 1 ? Drupal.t('Page @page of @count, episodes @first to @last', numbers) : Drupal.t('Page @page of @count, episode @first', numbers);
       }
       buttons.forEach((button) => {
         const step = Number(button.dataset.pfPodcastPage);

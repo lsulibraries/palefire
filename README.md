@@ -1256,6 +1256,7 @@ and number. Add the issue to the page's list with its sent date:
 
 ## Changelog
 
+- **2026-11-19:** What Endures: three episodes to a page instead of five. The list is shorter beside the head (196px at 1440, 353px at 375 instead of 326 and 581), so the cassette, the episode’s text and the episodes stay on one screen even on a phone or a short laptop. A last page of one episode is read out as “episode 01”, not “episodes 01 to 01”.
 - **2026-11-19:** Table of contents: the Section tabs that a Landing hero draws in its Quick Start (`_palefire_hero_tabs()`) are no longer listed (`PalefireHooks::preprocessPalefireModularToc()` drops the item whose id is that section’s anchor). The section itself is left out of the page, so on Oral History its rail link, “Oral History” to `#oral-history`, went nowhere.
 - **2026-11-19:** Table of contents: Oral History’s Browse by series is a TOC section now, as the Quick Start is (`PalefireHooks::heroTocIds()` `series`, `toc_series_id`, the `.pf-series` section’s id `series`), so the rail, the breadcrumb’s Contents menu and the hero’s Contents button list “02 Browse by series” between 01 and 03. Its heading no longer opts in with `data-toc`. Why: the menu jumped from 01 to 03.
 - **2026-11-19:** Tape deck: the LINE and REPRO lamps now light and go dark with the meters. While a series plays, its lamps and their glow come on; at rest, after STOP, or when the pointer leaves, they are dark again, though the switches stay pressed in.

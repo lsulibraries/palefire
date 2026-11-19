@@ -44,7 +44,7 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
   list-style: none;
 }
 
-// Five episodes to a page (js/podcast.js), so the list keeps one height
+// Three episodes to a page (js/podcast.js), so the list keeps one height
 // and the head beside it stays in view. A hairline over the first row;
 // every row closes with its own. Positioned, so it holds the rows'
 // absolutely placed screen-reader text (2026-11-18). The script holds its

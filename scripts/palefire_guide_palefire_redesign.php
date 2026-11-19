@@ -633,6 +633,7 @@ HTML),
 <li>The tape deck is now set up the way archives digitize: the LINE and REPRO switches are pressed in with softly lit lamps, and the record switches are off. Its small labels are also straighter.</li>
 <li>The tape deck’s lit lamps no longer show a dark square around them.</li>
 <li>The tape deck’s switch lamps now turn off with the meters when it stops.</li>
+<li>What Endures: three episodes to a page now, so the list stays short enough to see together with the cassette and the episode’s description.</li>
 </ul>
 HTML),
   $text('Thu Nov 19: Scholarly Repository full text', <<<'HTML'

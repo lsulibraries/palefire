@@ -183,6 +183,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-19:** Podcast pager: three rows a page (`PER_PAGE = 3` in js/podcast.js; the template’s `> 3` and `/ 3` for the pager and its `NN / NN` count must match it). The `[data-pf-podcast-said]` sentence is “Page @page of @count, episode @first” when a page holds one row.
 - **2026-11-19:** Tape deck lamps: `.led-halo` is drawn at `opacity="0"` (like `.vu-lamp`), and the `.led-on` fills moved from `_exhibition.scss` to `.pf-series__deck.is-held` in `_landing-features.scss`, fading in and out over .6s with the meters (no fade with reduced motion).
 - **2026-11-19:** Tape deck lamps: `#pf-led-dim`/`#pf-led-grn` carry their stops' color and opacity as attributes in `images/exhibit-deck.svg`; the `.led-glow` rules are removed from `_exhibition.scss`.
 - **2026-11-19:** Contents in the column, arrow: on the stage `.pf-hero-banner--toc:not(.pf-hero-banner--episode) .pf-hero-banner__text::after` is `"\2193"` at `translate: 0 calc(-50% - .375rem)`, settling to `0 -50%` in hand (the row arrow’s .3s ease-out; none with reduced motion).
