@@ -6,7 +6,7 @@
 // The email is shown like a print on a mat: centered on a quiet plate, at
 // its own 600px width, with Comment buttons in the margin beside it. The
 // feedback form stands to the right and follows the reader down the page
-// once the block is 79rem wide; narrower, it is a sheet opened from a bar
+// once the block is 78.25rem wide; narrower, it is a sheet opened from a bar
 // that sticks to the foot of the screen while the email is in view.
 //
 // No literal colors: the section's own tokens, so it reads on any swatch.
@@ -87,19 +87,20 @@
   align-items: start;
 }
 
-// From 79rem: an 18rem form beside a stage that keeps its 59rem, the full
-// email with the notes cards open in the margin beside it; 21rem from 82rem.
+// From 78.25rem: an 18rem form beside a stage of 58.75rem (56.75rem inside
+// its padding), the full email with the notes cards open in the margin
+// beside it; 21rem from 81.75rem. A 1440px screen has both.
 // Narrower (a 1440px screen with the contents rail), the form is the sheet
 // and the email and its margin take the width. It was 56rem, where the
 // cards had no margin and would have covered half the email.
-@container pf-nlr (min-width: 79rem) {
+@container pf-nlr (min-width: 78.25rem) {
   .pf-nlr__layout {
     grid-template-columns: minmax(0, 1fr) 18rem;
     gap: 1.5rem;
   }
 }
 
-@container pf-nlr (min-width: 82rem) {
+@container pf-nlr (min-width: 81.75rem) {
   .pf-nlr__layout {
     grid-template-columns: minmax(0, 1fr) 21rem;
     gap: 2rem;
@@ -222,10 +223,11 @@
   white-space: nowrap;
 }
 
-// Room beside the email (59rem: a card of 16rem or more): the email moves
+// Room beside the email (56.75rem: a card of 16rem or more): the email moves
 // over so it and a card up to 20rem wide sit centered together, and the
-// words go in the margin. js/newsletter-review.js reads the same 59rem.
-@container pf-nlr-stage (min-width: 59rem) {
+// words go in the margin. js/newsletter-review.js asks for --pf-nlr-card-w
+// to know the cards have the margin.
+@container pf-nlr-stage (min-width: 56.75rem) {
   .pf-nlr__frame,
   .pf-nlr__mark,
   .pf-nlr__pins {
@@ -560,7 +562,7 @@
 }
 
 // In the margin beside the email: the chip and card line up under the words.
-@container pf-nlr-stage (min-width: 59rem) {
+@container pf-nlr-stage (min-width: 56.75rem) {
   .pf-nlr__pin {
     align-items: flex-start;
   }
@@ -726,7 +728,7 @@
 }
 
 // Side by side: the form follows the reader.
-@container pf-nlr (min-width: 79rem) {
+@container pf-nlr (min-width: 78.25rem) {
   .pf-nlr__panel {
     position: sticky;
     top: var(--pf-nlr-top);
@@ -737,7 +739,7 @@
 }
 
 // Narrow: a sheet from the foot of the screen. -----------------------------------
-// The script sets .is-narrow below 79rem and makes the form a popover, so it
+// The script sets .is-narrow below 78.25rem and makes the form a popover, so it
 // opens in the top layer (the block is a size container, which would trap a
 // fixed sheet), closes on Esc or a tap outside, and keeps the page behind it.
 // Without the script the form simply follows the email.

@@ -14,14 +14,17 @@
  * the email that does, and marks it "Your story", so someone featured lands
  * on their own part. Unmatched words do nothing.
  *
- * Below 79rem the form is a popover sheet, opened from a bar at the foot of
+ * Below 78.25rem the form is a popover sheet, opened from a bar at the foot of
  * the screen or by a Comment button.
  *
  * A section with approved notes or thumbs gets a chip under its Comment
  * button ("2 notes · 3 thumbs"); the chip opens a card right below it with
  * that section's thumbs and notes, moved there from Notes and thumbs under
  * the draft (which keeps the whole issue and any section no longer in the
- * email). A card shows its first two notes whole, the rest behind Show
+ * email). A note finds its story by headline whatever the case, quotes,
+ * dashes or end punctuation, or by the story's kicker ("Oral history") when
+ * only one story has it; notes under a second name for a story join its
+ * card, and notes that name no story stay in the list. A card shows its first two notes whole, the rest behind Show
  * more (n). In the margin beside the email the cards start open, and a long
  * one moves the Comment buttons below it down so none overlap; with no
  * margin they open over the email only when asked.
@@ -30,10 +33,14 @@
   'use strict';
 
   // The form beside the email: an 18rem form and 1.5rem gap leave the stage
-  // its 59rem, the full email with the notes cards open in the margin
+  // its 58.75rem, the full email with the notes cards open in the margin
   // (newsletter-review.scss). Narrower, the form is the sheet. It was 56rem,
   // where the cards had no margin and covered half the email.
-  const NARROW_REM = 79;
+  const NARROW_REM = 78.25;
+
+  // Drupal.t() escapes @ placeholders for HTML; as text or an attribute,
+  // "Research &amp; Collections" would be read out with its "amp".
+  const plain = (html) => new DOMParser().parseFromString(html, 'text/html').documentElement.textContent;
 
   const fold = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
 
@@ -60,8 +67,10 @@
     const top = (el) => el.getBoundingClientRect().top + doc.defaultView.scrollY;
     const list = [{ label: Drupal.t('Opening'), top: 0, head: null }];
     heads.forEach((head) => {
-      // Walk back over the photo and kicker that lead into the headline.
+      // Walk back over the photo and kicker that lead into the headline,
+      // keeping the kicker's words: a note may name the story by them.
       let start = head;
+      const kickers = [];
       for (let i = items.indexOf(head) - 1; i >= 0; i--) {
         const el = items[i];
         if (el.contains(head) || head.contains(el)) {
@@ -75,8 +84,11 @@
           break;
         }
         start = el;
+        if (el.tagName !== 'IMG') {
+          kickers.push(el.textContent.replace(/\s+/g, ' ').trim());
+        }
       }
-      list.push({ label: head.textContent.replace(/\s+/g, ' ').trim(), top: Math.min(top(start), top(head)), head });
+      list.push({ label: head.textContent.replace(/\s+/g, ' ').trim(), top: Math.min(top(start), top(head)), head, kickers });
     });
     list.forEach((s, i) => {
       s.bottom = i + 1 < list.length ? list[i + 1].top : end;
@@ -140,8 +152,15 @@
           card.className = 'pf-nlr__card';
           card.id = (root.id || 'pf-nlr') + '-card-' + i;
           card.hidden = true;
-          card.append(votes);
           const notes = group.querySelector('[data-pf-pn-notes]');
+          // Where the thumbs and notes go back to if no section takes them
+          // (unplaced()).
+          const marks = [votes, notes].filter(Boolean).map((el) => {
+            const mark = document.createComment('');
+            el.before(mark);
+            return [mark, el];
+          });
+          card.append(votes);
           const body = document.createElement('div');
           body.className = 'pf-nlr__card-notes';
           if (notes) {
@@ -165,13 +184,64 @@
           // Resolved (n) opened or closed: cut again (toggle doesn't bubble).
           card.addEventListener('toggle', () => fit(card), true);
           group.hidden = true;
-          cards.set(about, { card, notes, group });
+          cards.set(about, { card, notes, group, marks });
         });
+
+        // A note's section, as written, to the story it's about: the same
+        // words whatever the case, quotes, dashes, spacing or end
+        // punctuation ("Oral history." is "Oral history"), and failing that
+        // the story whose kicker it names ("EVENT RECAP"), when only one
+        // story has that kicker. null when none.
+        const key = (s) => fold(s)
+          .replace(/[‘’‚‛ʼ`´]/g, '\'')
+          .replace(/[“”„‟]/g, '"')
+          .replace(/[‐‑‒–—―−]/g, '-')
+          .replace(/^[\s'"]+|[\s.,;:!?…'"-]+$/g, '');
+        function sectionFor(about) {
+          const k = key(about);
+          const named = list.find((s) => key(s.label) === k);
+          if (named) {
+            return named;
+          }
+          const kicked = list.filter((s) => (s.kickers || []).some((kicker) => key(kicker) === k));
+          return kicked.length === 1 ? kicked[0] : null;
+        }
+
+        // A card no section took: its thumbs and notes go back under its
+        // heading in Notes and thumbs below the draft, for good.
+        function unplaced(about, entry) {
+          entry.marks.forEach(([mark, el]) => mark.replaceWith(el));
+          entry.group.hidden = false;
+          entry.card.remove();
+          cards.delete(about);
+        }
+
+        // A second name for a story that already has a card ("Oral history"
+        // beside its headline): the notes join that card; the thumbs, given
+        // to the other name, stay below, and only if there are any.
+        function merged(about, entry, into) {
+          if (entry.notes) {
+            into.card.querySelector('.pf-nlr__card-notes').append(entry.notes);
+          }
+          entry.marks.forEach(([mark, el]) => {
+            if (el === entry.notes) {
+              mark.remove();
+            }
+            else {
+              mark.replaceWith(el);
+            }
+          });
+          const thumbs = Array.from(entry.group.querySelectorAll('[data-pf-pn-count]')).some((c) => (parseInt(c.textContent, 10) || 0) > 0);
+          entry.group.hidden = !thumbs;
+          entry.card.remove();
+          cards.delete(about);
+        }
 
         // "2 notes · 3 thumbs", from the card's own counts, so a thumb just
         // given shows at once.
         function tally(entry) {
-          const n = entry.notes ? entry.notes.querySelectorAll('.pf-pn__n').length : 0;
+          // All the card's notes, merged ones too (merged()).
+          const n = entry.card.querySelectorAll('.pf-pn__n').length;
           let thumbs = 0;
           entry.card.querySelectorAll('[data-pf-pn-count]').forEach((c) => {
             thumbs += parseInt(c.textContent, 10) || 0;
@@ -357,19 +427,44 @@
           frame.style.height = h + 'px';
           list = sections(doc, h);
           pins.querySelectorAll('.pf-nlr__pin').forEach((li) => li.remove());
-          // Cards start open in the margin beside the email (59rem stage,
+          // Cards start open in the margin beside the email (a 56.75rem stage,
           // newsletter-review.scss); with no margin they'd cover the email,
           // so they open only when asked. Set again only when that changes,
           // so a card the reader closed stays closed.
-          const stage = pins.closest('.pf-nlr__stage') || root;
-          const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-          const wide = stage.clientWidth >= 59 * rem;
+          // The stylesheet sets the card's width only where there's a margin.
+          const wide = getComputedStyle(pins).getPropertyValue('--pf-nlr-card-w').trim() !== '';
           if (wide !== margin) {
             margin = wide;
             cards.forEach((entry) => {
               entry.card.hidden = !wide;
             });
           }
+          // Each card to its section, by name first, then by kicker: one card
+          // a section, which takes the notes of any other name for it; cards
+          // no section takes go back to the list below.
+          const bySection = new Map();
+          const byKicker = [];
+          const place = (about, entry, section) => {
+            if (bySection.has(section.label)) {
+              merged(about, entry, bySection.get(section.label));
+            }
+            else {
+              bySection.set(section.label, entry);
+            }
+          };
+          cards.forEach((entry, about) => {
+            const section = sectionFor(about);
+            if (!section) {
+              unplaced(about, entry);
+            }
+            else if (key(section.label) === key(about)) {
+              place(about, entry, section);
+            }
+            else {
+              byKicker.push([about, entry, section]);
+            }
+          });
+          byKicker.forEach(([about, entry, section]) => place(about, entry, section));
           list.forEach((section, i) => {
             const li = document.createElement('li');
             li.className = 'pf-nlr__pin';
@@ -386,10 +481,10 @@
               button.prepend(feedbackMark.cloneNode(true));
             }
             button.lastChild.textContent = Drupal.t('Comment');
-            button.setAttribute('aria-label', Drupal.t('Comment on section @n: @label', { '@n': i + 1, '@label': section.label }));
+            button.setAttribute('aria-label', plain(Drupal.t('Comment on section @n: @label', { '@n': i + 1, '@label': section.label })));
             button.addEventListener('click', () => choose(section, button));
             li.append(button);
-            const entry = cards.get(section.label);
+            const entry = bySection.get(section.label);
             if (entry) {
               const chip = document.createElement('button');
               chip.type = 'button';
@@ -398,7 +493,7 @@
               chip.setAttribute('aria-expanded', String(!entry.card.hidden));
               chip.innerHTML = '<span class="pf-nlr__chip-words"></span><span class="visually-hidden"></span>';
               chip.firstChild.textContent = tally(entry);
-              chip.lastChild.textContent = ' ' + Drupal.t('on @label', { '@label': section.label });
+              chip.lastChild.textContent = ' ' + plain(Drupal.t('on @label', { '@label': section.label }));
               chip.addEventListener('click', () => toggleCard(chip, entry.card, entry.card.hidden));
               li.append(chip, entry.card);
               li.classList.toggle('is-open', !entry.card.hidden);
@@ -459,7 +554,7 @@
               place(el, own.top, own.bottom);
               el.classList.add('is-on');
               if (forNote && forNote.hidden) {
-                forNote.textContent = Drupal.t('Your part is marked in the email: “@label”.', { '@label': own.section.label });
+                forNote.textContent = plain(Drupal.t('Your part is marked in the email: “@label”.', { '@label': own.section.label }));
                 forNote.hidden = false;
                 const input = field('section');
                 if (input && !input.value) {
