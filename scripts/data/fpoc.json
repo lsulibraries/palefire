@@ -137,6 +137,9 @@
   {
    "title": "The Collections",
    "anchor": "collections",
+   "lead": "warburg-floor-sketch-1851.jpg",
+   "focus": "center",
+   "lead_caption": "<p><strong>Eugène Warburg’s sketch of a marble floor for St. Louis Cathedral, sent with his proposal of February 1851. Jules Lion, whose lithograph of the cathedral opened the old exhibition, offered two months earlier, in December 1850, to paint its ceiling.</strong><br>Samuel Wilson, Jr. Collection of St. Louis Cathedral Papers, MSS 166. The Historic New Orleans Collection. <a href=\"https://louisianadigitallibrary.org/islandora/object/fpoc-p16313coll51:58188\">Louisiana Digital Library</a></p>",
    "blocks": [
     {
      "type": "text",
@@ -207,6 +210,9 @@
   {
    "title": "Terminology",
    "anchor": "terminology",
+   "lead": "register-free-colored-persons-page.jpg",
+   "focus": "center",
+   "lead_caption": "<p><strong>A page of the register: each entry gives a name, color, age, birthplace, occupation and when the person was allowed to stay.</strong><br>New Orleans Office of the Mayor (AA 430). New Orleans Public Library, Louisiana Division. <a href=\"https://louisianadigitallibrary.org/islandora/object/fpoc-p16313coll51:41908\">Louisiana Digital Library</a></p>",
    "blocks": [
     {
      "type": "text",
@@ -217,6 +223,9 @@
   {
    "title": "Resources",
    "anchor": "resources",
+   "lead": "bares-varietes-du-carnaval-1875.jpg",
+   "focus": "center",
+   "lead_caption": "<p><strong>Basile Barès, Les Variétés du Carnaval, dedicated to Rex, King of Carnival (New Orleans: Louis Grunewald, 1875), cover. Barès, one of the composers in Golden Age, grew up in the years it describes; the old exhibition showed The Historic New Orleans Collection’s copy.</strong><br>Louisiana Sheet Music Collection, HJA-117, Hogan Archive of New Orleans Music and New Orleans Jazz. Tulane University Special Collections. <a href=\"https://library.search.tulane.edu/discovery/fulldisplay?docid=alma9945515204906326&amp;vid=01TUL_INST:Tulane\">Tulane University Digital Collections</a></p>",
    "blocks": [
     {
      "type": "text",
@@ -263,6 +272,8 @@
   "register-free-colored-persons-page.jpg": "An open ledger with ruled columns of handwritten names, ages, birthplaces, occupations and dates.",
   "sheriffs-sale-taylor-1860.jpg": "A green printed broadside headed “Sheriff’s Sale!” in heavy type, with a small engraving of a house.",
   "desdunes-prospectus-1887.jpg": "A printed sheet in French under an ornament and the heading “Prospectus.”",
+  "warburg-floor-sketch-1851.jpg": "A pen sketch of a floor of diagonal squares, half of them filled in dark brown, with a line of handwriting in French below.",
+  "bares-varietes-du-carnaval-1875.jpg": "A sheet music cover: “Les Variétés du Carnaval” in flowing script over a crowned shield held by two bearded classical figures, one raising lightning bolts, and “Basile Barès” in ornate capitals below.",
   "meullion-receipt-1845.jpg": "A handwritten bill headed “Bellazire Meullion,” listing shoes and cloth with prices in a column, receipted at the foot."
  }
 }
