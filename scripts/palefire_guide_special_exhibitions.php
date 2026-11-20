@@ -290,6 +290,8 @@ $section('Free People of Color in Louisiana: Revealing an Unknown Past', [
 </li><li>LSU catalog links go to Combined Search; LSU and Louisiana State Museum finding aids (PDFs) still work and are kept.
 </li><li>The partners’ old catalog and finding aid links no longer work (The Historic New Orleans Collection’s catalog, Tulane’s Archon and Voyager, the New Orleans Public Library’s nutrias.org pages), so they’re gone; each partner’s entry links to its research center instead.
 </li><li>Resources: the links the Showcase pages had already updated are used (UNC Greensboro, the Amistad Research Center and Le Musée de f.p.c. on the Wayback Machine, Rootsweb). The University of Virginia’s visual record has moved to slaveryimages.org.
+</li><li>Put back (2026-11-20): each collection’s link to its digitized items. The 2015 site had “View the collection online” under each one, pointing to CONTENTdm, which no longer works; it was taken off between 2016 and 2018. Now “In the Louisiana Digital Library” searches the project’s LDL collection for the collection’s name, for 58 of the 60. Jacques’s 1859 passport and the 1860 registration certificate aren’t in the LDL, so they have none. The bakers’ declarations and passports are searched as the LDL titles them, “Office of the Mayor passports”.
+</li><li>Put back (2026-11-20): Terminology’s closing pointer to the encyclopedia entry on Creoles, taken off between 2020 and 2023. KnowLA is now 64 Parishes, so it links to 64parishes.org/entry/creoles.
 </li></ul>
 <h3>To verify</h3>
 <p>Left as written:</p>
@@ -302,6 +304,8 @@ $section('Free People of Color in Louisiana: Revealing an Unknown Past', [
 <ul><li>The credit line.
 </li><li>The twelve captions and alt texts, written from each item’s LDL record.
 </li><li>The cover’s object label (A. Sampson, Letter introducing the sculptor Eugène Warburg, 1852).
+</li><li>The Creoles sentence in Terminology, reworded for 64 Parishes.
+</li><li>The LDL searches are on the collections’ names, so some bring up neighbors too (“Metoyer” papers find each other); each one’s first results are the right items.
 </li></ul>
 HTML),
 ]);

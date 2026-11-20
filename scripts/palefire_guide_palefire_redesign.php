@@ -879,6 +879,12 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Free People of Color links back to its collections', <<<'HTML'
+<ul>
+<li>Each of the 60 collections in The Collections had a “View the collection online” link in 2015, lost when the old digital collection host shut down. 58 now have “In the Louisiana Digital Library”, which finds that collection’s scans in the project’s LDL collection; two items were never put online.</li>
+<li>Terminology ends again with its pointer to the encyclopedia entry on Creoles, now in 64 Parishes, the encyclopedia once called KnowLA.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: Text plates and a reading view for exhibitions', <<<'HTML'
 <ul>
 <li>Exhibition walls can now hang text plates: a number and a short summary set large, like a pull quote, the same height as the pictures beside them, with the title and a reading time underneath. Free People of Color in Louisiana’s The Collections (one plate per partner library) and Terminology are the first, as walls of plates only.</li>
