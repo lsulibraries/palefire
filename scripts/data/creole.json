@@ -1,0 +1,2433 @@
+{
+ "title": "Creole Echoes",
+ "subtitle": "The Francophone Music and Literature of Nineteenth-Century New Orleans",
+ "year": "2001",
+ "credit": "<p>Résonances créoles / Creole Echoes, an exhibition at Hill Memorial Library, August 20 – November 3, 2001. Curated by Frédérique Spill and Jean-Marc Allard Duplantier, with an introduction by Salwa Nacouzi. A joint project of the Center for French and Francophone Studies and LSU Libraries Special Collections. Web exhibition by Steve Radcliffe, Seth Kelly and Quintin Good.</p><p><em>This program is funded under a grant from the Louisiana Endowment for the Humanities, the state affiliate of the National Endowment for the Humanities. The opinions expressed in this program do not necessarily represent the views of either the Louisiana Endowment for the Humanities or the National Endowment for the Humanities.</em></p>",
+ "cover": "mugnier-374-old-spanish-house-royal.jpg",
+ "cover_label": {
+  "maker": "George François Mugnier",
+  "title": "No. 374; Old Spanish House, Royal St.",
+  "date": "About 1880–1910",
+  "medium": "Stereograph, albumen prints",
+  "url": "https://louisianadigitallibrary.org/islandora/object/lsu-sc-gfm:31"
+ },
+ "alt": {
+  "case1-cable_creole_ladies.jpg": "Engraving: Creole ladies with fans",
+  "case1-creole_cigar.jpg": "Photo Etching: La Belle Creole Cigar and Tobacco Factory, 1892",
+  "case1-francomap.jpg": "Engraving: Map of Louisiana, from “Who Are the Creoles?”",
+  "case1-lehmann.jpg": "Sheet Music: La Belle Créole, polka de salon",
+  "case1-poche.jpg": "Pamphlet: Judge Poché’s Creole Day speech, 1886",
+  "case2-claiborne.jpg": "Engraving: W. C. C. Claiborne, the first American governor",
+  "case2-haitian_revolt.jpg": "The taking of Gros Morne",
+  "case2-la_emigrant.jpg": "Pamphlet: Louisiana’s advantages for emigrants, 1886",
+  "case2-la_transfer.jpg": "Engraving: The Louisiana Purchase",
+  "case2-louis_mob.jpg": "Engraving: Louis XVI threatened by the mob, 1792",
+  "case2-napoleon.jpg": "Morning of the 18th Brumaire",
+  "case2-slave_sale.jpg": "Broadside: A slave sale notice",
+  "case2-slave_trade.jpg": "United States slave trade, 1830",
+  "case3-chats_polka_cvr.jpg": "Sheet Music: La Polka des Chats, 1894",
+  "case3-lussan_famille.jpg": "Drama: La famille créole, 1837",
+  "mugnier-420-st-peter-chartres.jpg": "Stereograph: storefronts and men on the sidewalk at St. Peter and Chartres streets",
+  "case3-mugnier_2.jpg": "Photograph: a wide New Orleans street lined with young trees",
+  "mugnier-418-toulouse-dauphine.jpg": "Stereograph: old houses on the corner of Toulouse and Dauphine streets",
+  "mugnier-375-old-house-french-quarter.jpg": "Stereograph: a raised house with columns behind a board fence, seen from a cobblestone street",
+  "mugnier-374-old-spanish-house-royal.jpg": "Stereograph: a three-story building with iron balconies on a corner of Royal Street",
+  "case3-newspaper.jpg": "Engraving: View from a hotel window on a Sunday morning",
+  "case3-sketch.jpg": "Travel Guide: Historical Sketch Book and Guide to New Orleans, 1885",
+  "case3-souvenir.jpg": "Sheet Music: Souvenirs du Bal",
+  "case3-theaters.jpg": "Engraving: The theatres of New Orleans, 1873",
+  "case4-battleofneworleans.jpg": "Engraving: The Battle of New Orleans",
+  "case4-fecan.jpg": "Drama: France et Espagne, 1850",
+  "case4-jacksonsword.jpg": "Engraving: Andrew Jackson",
+  "case4-marigny.jpg": "Memoir: Marigny’s Réflexions, 1848",
+  "case4-martyrsdelalou.jpg": "Drama: Les Martyrs de la Louisiane, 1839",
+  "case4-oreilly.jpg": "Engraving: Governor O’Reilly",
+  "case4-tullius.jpg": "Poetry: Mil huit cent quatorze, 1839",
+  "case5-aboo.jpg": "Pamphlet: A Critical Dialogue Between Aboo and Caboo, 1880",
+  "case5-cable_letter.jpg": "Cable to M. Savini, 1875",
+  "case5-cable_portrait.jpg": "Engraving: George Washington Cable",
+  "case5-chita.jpg": "Fiction: Chita: A Memory of Last Island, 1889",
+  "case5-grandissimes.jpg": "Fiction: The Grandissimes, 1880",
+  "case5-grandi.jpg": "Engraving: A Creole man, from The Grandissimes",
+  "case5-octoroon_broadsheet.jpg": "Broadside: The Octoroon at the Boston Museum, 1861",
+  "case5-old_creole_days.jpg": "Fiction: Old Creole Days, 1879",
+  "case6-bayou.jpg": "Photograph: a steamboat on a bayou, seen from a bridge rail",
+  "case6-creolehistory.jpg": "Speech: The Creoles of History and the Creoles of Romance, 1885",
+  "case6-d_rouquette.jpg": "Poetry: Meschacébéennes, 1839",
+  "case6-n_atala.jpg": "Fiction: La Nouvelle Atala, 1879",
+  "case6-savane_gottschalk.jpg": "Sheet Music: La Savane, ballade créole",
+  "case7-desdunes.jpg": "History: Nos Hommes et Notre Histoire, 1911",
+  "case7-france_militaire.jpg": "Engraving: Black troops of the French army",
+  "case7-vagabondes.jpg": "Poetry: Les Vagabondes, 1874 (1 of 2)",
+  "case7-mulatresse.jpg": "Poetry: Les Vagabondes, 1874 (2 of 2)",
+  "case7-octoroon.jpg": "Drama: The Octoroon, 1859",
+  "case7-p_rousou1.jpg": "Sheet Music: Proclamation de Soulouque aux Haïtiens, 1859 (1 of 2)",
+  "case7-p_rousou2.jpg": "Sheet Music: Proclamation de Soulouque aux Haïtiens, 1859 (2 of 2)",
+  "case7-sejour.jpg": "Drama: Richard III, by Victor Séjour, 1852",
+  "case7-souloque.jpg": "Engraving: Emperor Faustin I (Soulouque)",
+  "case7-toussaint.jpg": "Engraving: Toussaint Louverture",
+  "case8-croissant.jpg": "Engraving: “Elle fut nommée la Ville du Croissant,” 1865",
+  "case8-gaya.jpg": "Photograph: Charles Gayarré",
+  "case8-marseillaise.jpg": "La Marseillaise",
+  "case8-nojoque_1.jpg": "Political Essay: Nojoque, 1867 (1 of 2)",
+  "case8-nojoque_2.jpg": "Political Essay: Nojoque, 1867 (2 of 2)",
+  "case8-panlatinisme.jpg": "Pamphlet: Du Panlatinisme",
+  "case8-racel.jpg": "Pamphlet: La Race Latine en Louisiane",
+  "case8-war_widows.jpg": "Engraving: Widows and daughters in full mourning, 1863",
+  "case8-yank.jpg": "Pamphlet: Les Yankees, Fondateurs d’Esclavage, 1864",
+  "case9-etrenne.jpg": "Pamphlet: Étrenne offerte aux abonnés de l’Athénée, 1888",
+  "case9-fievre.jpg": "Pamphlet: La fièvre jaune, 1860",
+  "case9-mercier.jpg": "Photograph: Alfred Mercier",
+  "case9-nurse_mammy.jpg": "Engraving: A nurse mammy, 1886",
+  "case9-salomon.jpg": "Fiction: Le vieux Salomon, 1872",
+  "case9-ybars_saint.jpg": "Fiction: L’Habitation Saint-Ybars, 1881",
+  "case10-alaloums.jpg": "“À la Louisiane,” in manuscript",
+  "case10-alalou.jpg": "Poetry: Les Préludes de l’Antoniade, 1860 (1 of 2)",
+  "case10-antoniade_2.jpg": "Poetry: Les Préludes de l’Antoniade, 1860 (2 of 2)",
+  "case10-choctaw.jpg": "Engraving: Choctaw women, from New Orleans Characters",
+  "case10-lacombe.jpg": "Photograph: Bayou Lacombe",
+  "case10-rouquette_savanes.jpg": "Poetry: Les Savanes, 1841 (1 of 2)",
+  "case10-regrets.jpg": "Poetry: Les Savanes, 1841 (2 of 2)",
+  "case10-rouquette_chapel.jpg": "Photograph: The chapel at Chinchuba",
+  "case10-rouquette_pic.jpg": "Engraving: Adrien Rouquette",
+  "case10-zozo.jpg": "Sheet Music: Zozo Mokeur, 1887",
+  "case11-carmagnola.jpg": "Drama: Le Comte de Carmagnola, 1856",
+  "case11-placide.jpg": "Photograph: Louis Placide Canonge",
+  "case11-q_opera.jpg": "“À l’Opéra,” by Léona Queyrouze",
+  "case11-vignaud.jpg": "Canonge to Henri Vignaud, 1869",
+  "case12-lecene.jpg": "Photograph: Victoria Lecène, 1867",
+  "case12-mayhaw.jpg": "Engraving: The mayhaw",
+  "case13-combes.jpg": "Newspaper Clipping: A letter from Bordeaux, in L’Abeille, 1885",
+  "case13-qind.jpg": "De l’Indulgence, 1884",
+  "case13-q_baby.jpg": "Photograph: Léona Queyrouze as an infant, held on a woman’s lap",
+  "case13-q_nanny.jpg": "Photograph: Léona Queyrouze as a small child, standing beside an older Black woman in a headwrap",
+  "case13-q_desk.jpg": "Photograph: Léona Queyrouze reading at a desk by a window",
+  "case13-q_face1.jpg": "Photograph: portrait of Léona Queyrouze, by Rivoire of New Orleans",
+  "case13-q_face2.jpg": "Photograph: Léona Queyrouze in profile, wearing a lace veil",
+  "case13-q_zola1.jpg": "Queyrouze to Émile Zola, and his reply (1 of 3)",
+  "case13-q_zola2.jpg": "Queyrouze to Émile Zola, and his reply (2 of 3)",
+  "case13-q_zola3.jpg": "Queyrouze to Émile Zola, and his reply (3 of 3)",
+  "case13-vision_ms.jpg": "“Vision,” in manuscript and in print (1 of 2)",
+  "case13-vision.jpg": "Newspaper Clipping: “Vision,” in manuscript and in print (2 of 2)",
+  "case14-gwcms.jpg": "Essay Collection: Strange True Stories of Louisiana, 1889",
+  "houssaye-home-postcard.jpg": "Postcard: Sidonie de la Houssaye’s weathered wooden house",
+  "case14-houssaye_portrait.jpg": "Newspaper clipping: “Foremost among the French writers of Louisiana”",
+  "case14-quart1.jpg": "Manuscript page 208, where “Octavia la quarteronne” begins",
+  "houssaye-octavia-la-quarteronne-p209.jpg": "Manuscript page 209 of Les Quarteronnes de la Nouvelle-Orléans, in Sidonie de la Houssaye’s hand",
+  "case14-quart.jpg": "Fiction: Les Quarteronnes de la Nouvelle-Orléans, 1894",
+  "houssaye-school-announcement-1882.jpg": "Printed card: Mme. S. Delahoussaye and Miss A. Wallis will open a private school in Franklin",
+  "houssaye-funeral-notice-1894.jpg": "Printed funeral notice for Mrs. S. Delahoussaye, Franklin, February 1894",
+  "case15-bamboula.jpg": "Sheet Music: Bamboula, danse des nègres",
+  "case15-bamb.jpg": "“The Bamboula,” 1886",
+  "case15-bananier.jpg": "Sheet Music: Le Bananier",
+  "case15-gottschalk.jpg": "Sheet Music: Gottschalk’s Choicest Compositions",
+  "case15-got_cdv.jpg": "Photograph: Gottschalk, a carte de visite",
+  "case15-got_ms_let.jpg": "A letter from Gottschalk",
+  "case15-got_nd.jpg": "Sheet Music: Creole Songs from New Orleans, 1909",
+  "case16-bares_belle.jpg": "Sheet Music: La Belle Créole",
+  "case16-bares_louisianaise.jpg": "La Louisianaise, valse brillante, 1884",
+  "case16-bares.jpg": "Engraving: Basile Barès",
+  "case16-bar_coquette.jpg": "Sheet Music: La Coquette, 1866",
+  "case16-bar_cre.jpg": "Sheet Music: La Créole, souvenir de la Louisiane, 1869",
+  "case16-comus.jpg": "Engraving: The Mystic Crew of Comus, 1858",
+  "case17-abeille.jpg": "Newspaper: L’Abeille, January 31, 1912",
+  "case17-ath_dec.jpg": "The founding declaration of L’Athénée (1 of 2)",
+  "case17-ath_sig.jpg": "The founding declaration of L’Athénée (2 of 2)",
+  "case17-beauregard.jpg": "Photograph: P. G. T. Beauregard",
+  "case17-cral.jpg": "Journal: Comptes-rendus de l’Athénée louisianais, 1880",
+  "case17-huard.jpg": "Pamphlet: De l’utilité de la langue française aux États-Unis, 1882",
+  "case17-pierre_soule.jpg": "Photograph: Pierre Soulé",
+  "case18-spiritualiste.jpg": "Newspaper: Le Spiritualiste de la Nouvelle-Orléans, 1857–58 (1 of 2)",
+  "case18-reynes.jpg": "Newspaper: Le Spiritualiste de la Nouvelle-Orléans, 1857–58 (2 of 2)",
+  "case18-roudanez.jpg": "Engraving: Dr. Louis Charles Roudanez",
+  "case18-tribune.jpg": "Newspaper: La Tribune de la Nouvelle-Orléans, November 27, 1864",
+  "case18-union.jpg": "Newspaper: L’Union, July 30, 1863",
+  "case19-biazi.jpg": "Photograph: Mlle de Biazi, première danseuse, 1896–97",
+  "case19-ftnbn.jpg": "Model for Scenery: Scenery model: a courtyard with a fountain and a banana plant",
+  "case19-pre_aux_clerics.jpg": "Libretto: Le Pré aux Clercs",
+  "case19-robert_lediable.jpg": "Libretto: Robert le Diable, 1858",
+  "case19-silvain.jpg": "Libretto: Silvain, 1770",
+  "case19-stone.jpg": "Model for Scenery: Scenery model: a stone facade with three doors",
+  "case20-juive.jpg": "French Opera programs, 1888–1890 (1 of 5)",
+  "case20-hugu.jpg": "French Opera programs, 1888–1890 (2 of 5)",
+  "case20-prophete.jpg": "French Opera programs, 1888–1890 (3 of 5)",
+  "case20-afric.jpg": "French Opera programs, 1888–1890 (4 of 5)",
+  "case20-lucia.jpg": "French Opera programs, 1888–1890 (5 of 5)",
+  "case20-creatore.jpg": "Photograph: Creatore at the French Opera House",
+  "case20-frenchopera_hs.jpg": "Photograph: the French Opera House on a street corner",
+  "case20-invite_opera.jpg": "An invitation to the opera, 1889",
+  "case20-lq_sonnet.jpg": "Newspaper Clipping: “Le Sonnet Impromptu,” 1892",
+  "case20-oprn.jpg": "Engraving: Carmen",
+  "case20-sb_portrait.jpg": "Engraving: Sarah Bernhardt"
+ },
+ "pages": [
+  {
+   "title": "Introduction",
+   "anchor": "introduction",
+   "display": "wall",
+   "lead": "mugnier-375-old-house-french-quarter.jpg",
+   "lead_caption": "Stereograph. “No. 375; Old House, French Quarters.” George François Mugnier, about 1880–1910. Albumen prints.<br>[George François Mugnier New Orleans Scenes, Mss. 1089, 1552]<br><a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-gfm:32\">In the Louisiana Digital Library</a>",
+   "blocks": [
+    {
+     "type": "text",
+     "body": "<p>Salwa Nacouzi, the University of Poitiers, France</p>"
+    },
+    {
+     "type": "entry",
+     "title": "The cradle of French culture in America",
+     "summary": "Because of its large French-speaking population, including an important community of Creoles of color, Louisiana remained the American cradle of French and Francophone arts and culture throughout the Nineteenth Century.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>We will soon celebrate, in 2003, the bicentennial of the transfer of Louisiana from France to the United States. When Louisiana became an American territory, it did not instantly become English-speaking. Because of its large French-speaking population, including an important community of Creoles of color, Louisiana remained the American cradle of French and Francophone arts and culture throughout the Nineteenth Century. For some Louisianians, the preservation of French language and culture in Louisiana, and particularly in New Orleans, became a way for them to maintain ties to their homeland; for others it represented the hope of freedom. The history of Creole Louisiana and its ties to France is often overshadowed by certain well-worn stereotypes. This exhibition—drawn primarily from the Louisiana Collection of LSU Libraries Special Collections, and organized in cooperation with LSU’s Center for French and Francophone Studies—has the modest goal of displaying artifacts that hint at the richness and diversity of Nineteenth Century New Orleans intellectual and cultural life.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Loyal to two homelands",
+     "summary": "In this corner of the American republic there existed a conflicted, bilingual society loyal to two homelands at once.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>The music, theater, literature and other iconographic material of the period show that in this corner of the American republic there existed a conflicted, bilingual society loyal to two homelands at once. Many young Creoles were sent to Paris for their education. Starting at the Collège Louis le Grand and moving on to law or medical school, these young Louisianians were steeped in French science and rhetoric. Exiles from the various French revolutions, from royalists to republicans, found fertile ground in Louisiana for both their journalistic and agricultural ambitions. At the same time, many of Louisiana’s free black Creoles also left in search of a more favorable racial climate. This constant coming and going shaped, for the better part of a hundred years, the life of Louisiana’s people and their cultural institutions. But the Civil War disrupted this society. For their part, many Creole planters lost most of their wealth and social rank during the war and were forced to rely on local institutions for their children’s education. Creole Louisiana was on the defensive, its culture threatened by Anglophone hegemony. In the face of American racial conceptions, Louisiana’s free people of color began to lose their middle social status and their strong connection to France began to unravel. Thus began the long decline of Francophone cultural life; by the beginning of the Twentieth Century French-speaking New Orleans was but a shadow of its former self.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "The cord is cut",
+     "summary": "When France chose not to support the Confederacy, and the South was defeated in the Civil War, the mythic idea of France as a protective mother-culture fell apart in Louisiana.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>This exhibition, in examining the lives of several men and women of the period, helps us understand the dynamic culture in which these Creoles operated and the deep connections that united Paris and New Orleans. A multi-faceted society, Nineteenth Century New Orleans owed its coherence both to its strong cultural ties to France and to the confidence it had in its unique identity. When France chose not to support the Confederacy, and the South was defeated in the Civil War, the mythic idea of France as a protective mother-culture fell apart in Louisiana. Even though the umbilical cord connecting France and Louisiana had been severed, French art and culture persisted in Louisiana for the remainder of the century.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Clearing away the cobwebs",
+     "summary": "By clearing away some of the cobwebs of myth, an exhibition such as this lets us see how the Creoles built group identities from a fluid collective memory.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>An exhibition such as this, by clearing away some of the cobwebs of myth from our understanding of this period, permits us to see how the Creoles built for themselves specific group identities from a fluid collective memory. As we begin a new century, we can look back to rediscover this period, and to reexamine the way in which Creole New Orleans synthesized the cultures of the Old and New Worlds.</p>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "The City of the Belle Créole",
+   "anchor": "belle-creole",
+   "display": "wall",
+   "lead": "case1-lehmann.jpg",
+   "lead_caption": "Sheet Music. “La Belle Créole. Polka de Salon” by H. E. Lehmann. (New Orleans, H.E. Lehmann, nd.) in <em>Music Collection of New Orleans Imprints</em>.<br>[Hill Louisiana Rare Oversize M1. M86 Box 3 No.33]",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "A creole mythology",
+     "summary": "Whether the name of a tobacco factory, a polka, or a steamboat, the emblematic “Belle Créole” originated in a romanticized and exclusionary representation of Francophone New Orleans.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>By the end of the Nineteenth Century, the French language in New Orleans was a rapidly fading vestige of the city’s past. The French-speaking, or Francophone, residents of New Orleans saw the importance of their language and culture decline as the city became largely English-speaking and American in character. In 1886, Judge F.P. Poché gave a speech for “Creole Day” at the “American Exposition”. This text describes the many achievements of the city’s “Creole” people and highlights their role in the city’s history. Poché’s speech, given in English and only later translated into French, asserted that the Creoles of New Orleans were the white descendants of European settlers who brought the “light of civilization” to Louisiana. This assumption about the identity of the Creoles is related to the widely used figure of “La Belle Créole.” Whether the name of a tobacco factory, a polka, or a steamboat, the emblematic “Belle Créole” originated in a romanticized and exclusionary representation of Francophone New Orleans. This recurring image points to what historian Joseph Tregle calls a “creole mythology,” a rigid group identity built on glorified cultural and political achievements of the past. This exhibition looks at the music and literature of Nineteenth Century Creole New Orleans in an effort to understand how the many Francophone voices of the city represented themselves and their place in history. Employing the mythic figure of the “Belle Créole” was but one of the many conflicting ways that Francophone New Orleans used music and literature to create, defend, and contest various group identities.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p class=\"exhibit-see\">See: Joseph G. Tregle, Jr. “Creoles and Americans,” in <em>Creole New Orleans: Race and Americanization</em>, ed. Arnold R. Hirsch and Joseph Logsdon (Baton Rouge: LSU Press, 1992).</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Creole ladies with fans",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case1-cable_creole_ladies.jpg",
+       "caption": "Engraving. Creole ladies with fans in <em>The Grandissimes</em>. George Washington Cable. (New York: C. Scribner’s Sons, 1899).<br>[Hill Louisiana PS 1244 G6 1899].",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "La Belle Creole Cigar and Tobacco Factory, 1892",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case1-creole_cigar.jpg",
+       "caption": "Photo Etching. “La Belle Creole Cigar and Tobacco Factory” in Groenevelt, Carl E. <em>New Orleans Illustrated in Photo Etching</em> (New Orleans: F.F. Hansell and Bro, 1892.)<br>[Hill Louisiana F379. N543 G76].",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Map of Louisiana, from “Who Are the Creoles?”",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case1-francomap.jpg",
+       "caption": "Engraving. Map Of Louisiana. in G. W. Cable, “Who are the Creoles?” Century Magazine, Vol. XXV, 1882-3.<br>[Hill Rare 051 C33]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "La Belle Créole, polka de salon",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case1-lehmann.jpg",
+       "caption": "Sheet Music. “La Belle Créole. Polka de Salon” by H. E. Lehmann. (New Orleans, H.E. Lehmann, nd.) in <em>Music Collection of New Orleans Imprints</em>.<br>[Hill Louisiana Rare Oversize M1. M86 Box 3 No.33]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Judge Poché’s Creole Day speech, 1886",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case1-poche.jpg",
+       "caption": "Pamphlet. <em>Discours de l’Honorable</em> F.P. <em>Poché...Sur Les Créoles de la Louisiane prononcé le 7 Février, 1886, jour des Créoles à l’exposition Américaine...Traduction de l’anglais</em>. Félix Pierre Poché. (New Orleans: Imprimerie du Croissant, 1886).<br>[Hill Louisiana F380 C9 P63]",
+       "layout": "side_start"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Diverse Origins",
+   "anchor": "diverse-origins",
+   "display": "wall",
+   "lead": "case2-la_transfer.jpg",
+   "lead_caption": "Engraving. Louisiana Purchase in <em>A History of Louisiana.Vol.3</em>. Alcée Fortier. (New York: Goupil & co. of Paris, Manzi, Joyant & co., successors, 1904).<br>[Hill Louisiana F369 F74 1904a v.3 c.1, on page following title page]",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "Europe, West Africa and the Caribbean",
+     "summary": "Francophone New Orleans had roots in Europe, West Africa, and the Caribbean. In the decade after the Louisiana Purchase, more than 10,000 refugees from the Haitian Revolution arrived in New Orleans.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Francophone New Orleans had roots in Europe, West Africa, and the Caribbean. Under the French and Spanish colonial governments, Canadian and Caribbean settlers in Louisiana lent their colonial experience to the newly arrived European soldiers and settlers, the Native American tribes in the colony, and West African slaves to create a complex and uneasy colonial culture. While the 1803 Louisiana Purchase and the appointment of William C.C. Claiborne as the first American governor of Louisiana, foretold of the eventual Americanization of the city, the arrival of various groups of French-speaking immigrants provided reinforcements to Creole New Orleans. In the decade after the Louisiana Purchase, more than 10,000 refugees from the Haitian Revolution arrived in New Orleans. These refugees found in Louisiana a three-caste racial order—white, free people of color, and black slaves—that roughly matched the social order in pre-revolutionary Saint Domingue. The cultural and linguistic connection between France and Louisiana also attracted French immigrants to the state. Throughout the century many political refugees from France also arrived in the city—whether from the tumultuous years of the French Revolution, the rise and fall of Napoleon I, the Revolution of 1848, or of other political and social upheaval on the continent. These “Foreign French” residents strengthened the Francophone culture of New Orleans and often took leadership roles in Creole political and cultural institutions.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p class=\"exhibit-see\">See: Carl A. Brasseaux. <em>“The Foreign French”: Nineteenth-Century French Immigration into Louisiana</em>, 3 vols. (Lafayette: The Center for Louisiana Studies, University of Southwestern Louisiana, 1990). Gwendolyn Midlo Hall. <em>Africans in Colonial Louisiana: The Development of Afro-Creole Culture in the Eighteenth Century</em> (Baton Rouge: LSU Press, 1992).</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "W. C. C. Claiborne, the first American governor",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case2-claiborne.jpg",
+       "caption": "Engraving. W.C.C. Claiborne. in <em>A History of Louisiana</em>. Vol.3. Alcée Fortier. (New York: Goupil & co. of Paris, Manzi, Joyant & co., successors, 1904).<br>[Hill Louisiana F393 F74 1904a V.3 c.1]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "The taking of Gros Morne",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case2-haitian_revolt.jpg",
+       "caption": "Engraving “France Militaire—Prise Du Gros Morne.” in <em>Picture Collection</em>.<br>[“West Indies” folder, Picture collection, E67, Box 2, Non-Photographic]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Louisiana’s advantages for emigrants, 1886",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case2-la_emigrant.jpg",
+       "caption": "Pamphlet. <em>La Louisiane. Ses Grands Avantages Attractifs Pour Les Émigrants</em>. (New Orleans: Imprimerie de la “Renaissance Louisianaise,” 1886).<br>[Hill Louisiana F 375. L868]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "The Louisiana Purchase",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case2-la_transfer.jpg",
+       "caption": "Engraving. Louisiana Purchase in <em>A History of Louisiana.Vol.3</em>. Alcée Fortier. (New York: Goupil & co. of Paris, Manzi, Joyant & co., successors, 1904).<br>[Hill Louisiana F369 F74 1904a v.3 c.1, on page following title page]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Louis XVI threatened by the mob, 1792",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case2-louis_mob.jpg",
+       "caption": "Engraving. “Louis XVI threatened by the mob. June 20 1792.” in Picture Collection, Perine- Giles-Sartain Engravings.<br>[Hill Picture Collection.]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Morning of the 18th Brumaire",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case2-napoleon.jpg",
+       "caption": "Engraving “Morning of the 18th Brumaire.” in <em>Picture Collection, Perine-Giles-Sartain Engravings</em>.<br>[Hill Picture Collection.]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "A slave sale notice",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case2-slave_sale.jpg",
+       "caption": "Broadside. “Slave Sale Notice” in <em>Facsimile Collection</em>.<br>[Facsimile Collection OS:F, Folder (2)]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "United States slave trade, 1830",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case2-slave_trade.jpg",
+       "caption": "Engraving “United States Slave Trade, 1830” in <em>Picture Collection</em>.<br>[Hill Picture Collection]",
+       "layout": "side_start"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "The Creole Family",
+   "anchor": "creole-family",
+   "display": "wall",
+   "lead": "mugnier-418-toulouse-dauphine.jpg",
+   "lead_caption": "Stereograph. “No. 418. Old Houses; Toulouse & Dauphine.” George François Mugnier, about 1880–1910. Albumen prints.<br>[George François Mugnier New Orleans Scenes, Mss. 1089, 1552]<br><a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-gfm:36\">In the Louisiana Digital Library</a>",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "A coherent Creole population?",
+     "summary": "The French-language institutions of New Orleans give the impression of a coherent “creole” population, united by a common language and culture; a closer look shows its conflicted and precarious status.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Creole New Orleans prided itself on its literary, theatrical and musical institutions—the city supported several French-language newspapers; ballrooms thrived in a city obsessed with dancing; book and music publishers distributed Francophone cultural production to a larger audience; and several French-language theaters and opera houses nurtured the Creole love of high French culture. Auguste Lussan, a French poet and playwright who came to New Orleans in the 1830s to pursue his acting career, wrote <em>La famille créole</em> (The Creole Family). The play opened on February 28, 1837, at the French Theatre of New Orleans and was later published by one of the many French-language presses in the city. This five act drama alternately set in France and Louisiana, tells the story of a family of slave-holding refugees from the Revolution in St. Domingue (Haiti) that find in Louisiana a haven from both the upheaval in the Caribbean and the French Revolution. The existence of the French-language institutions in New Orleans gives the impression of a coherent “creole” population—a Creole Family—united by a common language and culture. But a closer examination of these literary, musical, and theatrical works shows the conflicted and precarious status of Creole cultural production in New Orleans.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "La Polka des Chats, 1894",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case3-chats_polka_cvr.jpg",
+       "caption": "Sheet Music. “La Polka Des Chats.” by J. Monna (New Orleans: P. Werlein, 1894) in <em>Music Collection of New Orleans Imprints</em>.<br>[Hill Louisiana Rare Oversize M1.M86 Box 7, no.2]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "La famille créole, 1837",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case3-lussan_famille.jpg",
+       "caption": "Drama.<em> La famille créole</em>. Auguste Lussan. (New Orleans: Fremaux et Alfred Moret, 1837).<br>[Hill Louisiana Rare PQ 3939. L87 F3]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "The French Quarter, photographed by George François Mugnier",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "Photographs. New Orleans French Quarter. George François Mugnier. Four of the five are shown here from Mugnier’s stereographs in the Louisiana Digital Library.<br>[Mugnier Collection, U: 105, #7, 8, 9, 14, 23]",
+       "figures": [
+        {
+         "image": "mugnier-420-st-peter-chartres.jpg",
+         "caption": "Stereograph. “No. 420. Old Houses; St. Peters & Chartres.” George François Mugnier, about 1880–1910. Albumen prints.<br>[George François Mugnier New Orleans Scenes, Mss. 1089, 1552]<br><a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-gfm:37\">In the Louisiana Digital Library</a>"
+        },
+        {
+         "image": "case3-mugnier_2.jpg",
+         "caption": "Photographs. New Orleans French Quarter. Mugnier Collection.<br>[Mugnier Collection, U: 105, #7,8,9, 14, 23]"
+        },
+        {
+         "image": "mugnier-418-toulouse-dauphine.jpg",
+         "caption": "Stereograph. “No. 418. Old Houses; Toulouse & Dauphine.” George François Mugnier, about 1880–1910. Albumen prints.<br>[George François Mugnier New Orleans Scenes, Mss. 1089, 1552]<br><a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-gfm:36\">In the Louisiana Digital Library</a>"
+        },
+        {
+         "image": "mugnier-375-old-house-french-quarter.jpg",
+         "caption": "Stereograph. “No. 375; Old House, French Quarters.” George François Mugnier, about 1880–1910. Albumen prints.<br>[George François Mugnier New Orleans Scenes, Mss. 1089, 1552]<br><a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-gfm:32\">In the Louisiana Digital Library</a>"
+        },
+        {
+         "image": "mugnier-374-old-spanish-house-royal.jpg",
+         "caption": "Stereograph. “No. 374; Old Spanish House Royal St.” George François Mugnier, about 1880–1910. Albumen prints.<br>[George François Mugnier New Orleans Scenes, Mss. 1089, 1552]<br><a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-gfm:31\">In the Louisiana Digital Library</a>"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "View from a hotel window on a Sunday morning",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case3-newspaper.jpg",
+       "caption": "Engraving. “Vue d’une fenêtre d’hôtel, le dimanche matin.” in <em>Almanach de la Louisiane</em> (New Orleans: Francis Bouvain, 1866).<br>[Hill Louisiana AY 72 N4 A54]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Historical Sketch Book and Guide to New Orleans, 1885",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case3-sketch.jpg",
+       "caption": "Travel Guide. <em>Historical Sketch Book and Guide to New Orleans</em>. William Head Coleman. (New York: W.H. Coleman, 1885).<br>[Hill Louisiana Rare F 379 N5 C7 1885 c.2]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Souvenirs du Bal",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case3-souvenir.jpg",
+       "caption": "Sheet Music. “Souvenirs Du Bal.” (New Orleans: Grunewalds, nd) in <em>New Orleans Music Imprints</em>.<br>[in NO Music Imprints—Hill Louisiana M1 M85 1800]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "The theatres of New Orleans, 1873",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case3-theaters.jpg",
+       "caption": "Engraving. “The Theatres of New Orleans.” Scribner’s Monthly. Nov 1873.<br>[Hill Rare 051 C33, p.23]",
+       "layout": "side_start"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Conflicting Myths and Loyalties",
+   "anchor": "myths-and-loyalties",
+   "display": "wall",
+   "lead": "case4-battleofneworleans.jpg",
+   "lead_caption": "Engraving. The Battle of New Orleans in A History of Louisiana. Vol.3. Alcée Fortier. (New York: Goupil & co. of Paris, Manzi, Joyant & co., successors, 1904).<br>[Hill Louisiana F369 F74 1904a V.2 c.3]",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "Two foundation myths",
+     "summary": "The revolt of 1768 against Spanish rule and the 1815 Battle of New Orleans were vital to the historical imagination of Creole New Orleans.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>As historical events, the 1764 transfer of Louisiana from France to Spain, and the 1815 Battle of New Orleans were vital to the historical imagination of Creole New Orleans. Two plays written and produced in New Orleans—<em>Les Martyrs de la Louisiane</em> (1839) by Auguste Lussan and <em>France et Espagne, ou La Louisiane en 1768 et 1769</em> (1850), by Louis Placide Canonge—were based on the events of the 1768 revolt by French colonists against Spanish rule and the subsequent execution of the leaders of this revolt by the Spanish Governor O’Reilly. Written at a time when the economic and social power of Anglophone New Orleans began to eclipse that of the Francophone sections of the city, the two plays present patriotic Creole characters battling against the tyranny of an invading culture. In the first act of <em>France et Espagne</em>, we see a patriotic call to arms in a speech by Marquis, a French officer:</p>"
+      },
+      {
+       "type": "text",
+       "body": "<blockquote><p>The title of Frenchman is the only title that we shall never renounce: it is our heritage, it is our glory! It is as necessary to us as the powerful and life giving sun is to the nourishment of these vast lands.</p></blockquote>"
+      },
+      {
+       "type": "text",
+       "body": "<p>The characters in the plays reject Spanish rule and declare that the executed leaders of the revolt are martyrs for the cause of Creole Louisiana. <em>Mil Huit Cent Quatorze</em> (Eighteen-Fourteen) by Tullius St. Céran (1839), a book of poems about the Battle of New Orleans, and <em>Réflexions sur la Campagne du Général André Jackson (Reflections on General Andrew Jackson’s Campaign)</em> by Bernard Marigny (1848), a memoir of a veteran of this battle, demonstrate the importance that Andrew Jackson’s victory held for Creole New Orleans. These two works at once emphasize the Creole contribution to the American victory over the British at Chalmette, and contrast Francophone Louisianians with their English-speaking brothers in arms. Marigny’s memoir of the battle also describes an incident at a ball shortly after the Louisiana Purchase in which a group of Americans insisted that the musicians play a reel or a jig instead of the waltzes and cotillions that the Creoles preferred. A high-born Creole lady argued that during the thirty years of Spanish domination, New Orleans Creoles were never forced to dance the fandango, and that she expected the same respect from the newly-arrived Americans. The representation of these two events, these two creole foundation myths, demonstrates a conflicting impulse to both celebrate the Creole contribution to the American cause and to emphasize and reinforce the differences between the Creoles and their neighbors.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "The Battle of New Orleans",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case4-battleofneworleans.jpg",
+       "caption": "Engraving. The Battle of New Orleans in A History of Louisiana. Vol.3. Alcée Fortier. (New York: Goupil & co. of Paris, Manzi, Joyant & co., successors, 1904).<br>[Hill Louisiana F369 F74 1904a V.2 c.3]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "France et Espagne, 1850",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case4-fecan.jpg",
+       "caption": "Drama.<em> France et Espagne, ou La Louisiane en 1768 et 1769</em>. Louis Placide Canonge. (New Orleans: 1850).<br>[Hill Louisiana Rare PQ 2203. C47 F7]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Andrew Jackson",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case4-jacksonsword.jpg",
+       "caption": "Engraving. Andrew Jackson in<em> A History of Louisiana. Vol.2</em>. Alcée Fortier. (New York: Goupil & co. of Paris, Manzi, Joyant & co., successors, 1904).<br>[Hill Louisiana F369 F74 1904a V.3 c.1]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Marigny’s Réflexions, 1848",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case4-marigny.jpg",
+       "caption": "Memoir.<em> Réflexions sur la campagne du Général André Jackson en Louisiane, en 1814 et 1815</em>. Bernard Marigny. (New Orleans, Sollée, 1848).<br>[Hill Louisiana Rare E355. 6 M37]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Les Martyrs de la Louisiane, 1839",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case4-martyrsdelalou.jpg",
+       "caption": "Drama. <em>Les Martyrs de la Louisiane</em>. Auguste Lussan (Donaldsonville, La.: E. Martin & F. Prou, 1839).<br>[Hill Louisiana Rare PQ 3939. L87 M3]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Governor O’Reilly",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case4-oreilly.jpg",
+       "caption": "Engraving. “O’Reilley.” in <em>A History of Louisiana. Vol.2</em>. Alcée Fortier. (New York: Goupil & co. of Paris, Manzi, Joyant & co., successors, 1904).<br>[Hill Louisiana F369 F74 1904a V.2 c.3]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Mil huit cent quatorze, 1839",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case4-tullius.jpg",
+       "caption": "Poetry. <em>Mil huit cent quatorze et mil huit cent quinze</em>. Tullius Saint-Céran. (New Orleans: Gaux, 1839).<br>[Hill Louisiana Rare E 356. N5 S2 c.1]",
+       "layout": "side_start"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "The View From Outside",
+   "anchor": "view-from-outside",
+   "display": "wall",
+   "lead": "case5-old_creole_days.jpg",
+   "lead_caption": "Fiction. <em>Old Creole Days</em>. George Washington Cable. (New York: C. Scribner’s Sons, 1879).<br>[Hill Louisiana Rare PS 1244 O6 c.1]",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "Given as novels, taken for history",
+     "summary": "George Washington Cable’s stories of Creole New Orleans won American readers and enraged Creole ones, who said his works “were given as novels and taken for history.”",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>At the same time that Creole New Orleanians were producing music and literature about themselves, several Anglophone writers also based stories and novels on the history and culture of Creole New Orleans. Before the Civil War, the playwright Dion Boucicault’s <em>The Octoroon</em> painted a damning portrait of slavery in Louisiana and served to sway public opinion toward the abolitionist cause. After the war, Kate Chopin and Lafcadio Hearn were prominent among the writers of English-language works set in Louisiana. But George Washington Cable’s extensive writings on New Orleans and Louisiana drew the greatest attention, both from the American audience that read his local color novels and stories, and from Creole readers who took great offense at the way in which Cable represented them in his work. Cable was born in New Orleans in 1847, but the fact that he lived in the Anglophone uptown section of the city and was a devout protestant made him an outsider in the Francophone sections of New Orleans about which he would later write. A manuscript letter from Cable to a Mr. Savini of New Orleans demonstrates Cable’s interest in collecting colorful material about the Creoles for his novels. In <em>Old Creole Days</em> and <em>The Grandissimes</em>, Cable portrays decadent characters in a romanticized New Orleans setting and hints at the racial impurity of the white Creole population of the city. This last point inspired a furious backlash from several prominent Creoles, the most stinging of which is Adrien Rouquette’s <em>A Critical Dialogue Between Aboo and Caboo on a New Book</em>, or <em>A Grandissime Ascension</em>. Rouquette’s satirical critique of <em>The Grandissimes</em>, written as an overheard dialogue between two ghosts on the shore of Lake Pontchartrain, mocks Cable’s attempt to imitate the various accents of New Orleans in his dialogue and takes issue with the fact that Cable’s works “were given as novels and taken for history.”</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "A Critical Dialogue Between Aboo and Caboo, 1880",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case5-aboo.jpg",
+       "caption": "Pamphlet. <em>A Critical Dialogue Between Aboo and Caboo on a New Book, or A Grandissime Ascension</em>. Adrien Rouquette. (Mingo City [New Orleans]: Great publishing house of Sam Slick Allspice, 1880).<br>[Hill Louisiana PS 1244 G7 R6 c.2]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Cable to M. Savini, 1875",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case5-cable_letter.jpg",
+       "caption": "MS Letter, George Washington Cable to M. Savini, 1875. in <em>George Washington Cable Miscellany</em>.<br>[Cable George Washington Miscellany, W: 37]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "George Washington Cable",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case5-cable_portrait.jpg",
+       "caption": "Engraving. George Washington Cable, in <em>Titcomb Collection</em>.<br>[Titcomb Collection, E: 73, folder 1]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Chita: A Memory of Last Island, 1889",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case5-chita.jpg",
+       "caption": "Fiction. <em>Chita: a memory of Last Island</em>. Lafcadio Hearn. (New York, Harper & Brothers, 1889).<br>[Hill Louisiana Rare PS 1917 C5 c.2]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "The Grandissimes, 1880",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case5-grandissimes.jpg",
+       "caption": "Fiction. <em>The Grandissimes. A Story of Creole life</em>. George Washington Cable. (New York: C. Scribner’s Sons, 1880).<br>[Hill Louisiana PS 1244. G6 1880]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "A Creole man, from The Grandissimes",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case5-grandi.jpg",
+       "caption": "Engraving. Creole man. in <em>The Grandissimes, a story of Creole Life</em>. George Washington Cable. (New York, C. Scribner’s Sons,1880).<br>[Hill Louisiana PS 1244 G6 1899]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "The Octoroon at the Boston Museum, 1861",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case5-octoroon_broadsheet.jpg",
+       "caption": "Broadside. “Boston Museum Broadside” for a performance of <em>The Octoroon</em>. (Boston, 1861)<br>[E: Impr. #1558]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Old Creole Days, 1879",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case5-old_creole_days.jpg",
+       "caption": "Fiction. <em>Old Creole Days</em>. George Washington Cable. (New York: C. Scribner’s Sons, 1879).<br>[Hill Louisiana Rare PS 1244 O6 c.1]",
+       "layout": "side_start"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "The View From Inside",
+   "anchor": "view-from-inside",
+   "display": "wall",
+   "lead": "case6-creolehistory.jpg",
+   "lead_caption": "Speech. <em>The Creoles of History and The Creoles of Romance</em>. Charles Gayarré. (New Orleans: C.E. Hopkins, 1885)<br>[Edward Clifton Wharton Family Papers, Gayarré Collection. UU: 119, folder 10]",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "Materials for romance",
+     "summary": "While Cable presented a romanticized view of Creole New Orleans, many of the city’s Creole writers and musicians also represented their home as romantic and exotic.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>While Cable presented a romanticized view of Creole New Orleans, many of the city’s Creole writers and musicians also represented their home as romantic and exotic. In an 1885 lecture <em>The Creoles of History and the Creoles of Romance,</em> Charles Gayarré, a prominent judge and historian, disputed point by point Cable’s depiction of Creole New Orleans and emphatically refuted Cable’s questioning of the racial purity of the Creoles. Gayarré’s 1885 <em>History of Louisiana</em> offers an alternative to Cable that is equally romantic and exotic, as he here describes the early European exploration of Louisiana:</p>"
+      },
+      {
+       "type": "text",
+       "body": "<blockquote><p>What materials for romance! Here is chivalry, with all its glittering pomp, its soul-stirring aspirations, in full march, with its iron heels and gilded spurs, toward the unknown and hitherto unexplored soil of Louisiana.</p></blockquote>"
+      },
+      {
+       "type": "text",
+       "body": "<p>Adrien Rouquette’s <em>La Nouvelle Atala</em> was a response to Chateaubriand’s romantic story set in the New World. Adrien Rouquette’s brother Dominique idealized the simple life and natural state of Native Americans in his book of poems <em>Meschabéennes</em>. In his preface, Dominique Rouquette borrows a common romantic theme in writing of the rich Louisiana landscape as fertile ground for poetic inspiration.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<blockquote><p>Yes, our Louisiana is a land both of sadness and of poetry! Like old Caledonia, it is an austere and savage country—stern and wild; this nature, vast and untamed, shall be rich with poets.</p></blockquote>"
+      },
+      {
+       "type": "text",
+       "body": "<p>Louis Moreau Gottschalk, probably the most widely known New Orleanian of the Nineteenth Century, based several of his early compositions on slave songs that he heard in his youth. His popular “Creole Trilogy” included “La Savane, Ballade Créole” and other songs that capitalized on the exotic side of New Orleans. These creole writers and musicians sought their own romanticized formula for exporting their New Orleans to the rest of the world.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p class=\"exhibit-see\">See: Joseph G. Tregle, Jr. “Creoles and Americans,” in <em>Creole New Orleans: Race and Americanization</em>, ed. Arnold R. Hirsch and Joseph Logsdon (Baton Rouge: LSU Press, 1992).</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Bayou scene",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case6-bayou.jpg",
+       "caption": "Photograph. Bayou Scene. A. Lytle. <em>Fuqua, H. L. Jr. papers, Lytle Photograph Collection and Papers</em>.<br>[T: 13, folder 7, #36]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "The Creoles of History and the Creoles of Romance, 1885",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case6-creolehistory.jpg",
+       "caption": "Speech. <em>The Creoles of History and The Creoles of Romance</em>. Charles Gayarré. (New Orleans: C.E. Hopkins, 1885)<br>[Edward Clifton Wharton Family Papers, Gayarré Collection. UU: 119, folder 10]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Meschacébéennes, 1839",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case6-d_rouquette.jpg",
+       "caption": "Poetry. <em>Meschacébéennes, poésies</em>. Dominique Rouquette (Paris: Librairie de Sauvaugnat, 1839).<br>[Hill Louisiana Rare PQ 3939 R62 M4 1839]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "La Nouvelle Atala, 1879",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case6-n_atala.jpg",
+       "caption": "Fiction. <em>La Nouvelle Atala</em>. Chahta Ima [Adrien Rouquette]. (New Orleans, Imprimerie du Propagateur Catholique, 1879).<br>[Hill Louisiana Rare PQ 3939 R6 A65 c.1]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "La Savane, ballade créole",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case6-savane_gottschalk.jpg",
+       "caption": "Sheet Music.”La Savane. Ballade Créole.”in Gottschalk, “Miscellaneous selections for Piano.” (New York, Boston, 1853–1893).<br>[Hill Louisiana Flat M20. G687 M5 no.16]",
+       "layout": "side_start"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "The Free People of Color",
+   "anchor": "free-people-of-color",
+   "display": "wall",
+   "lead": "case7-desdunes.jpg",
+   "lead_caption": "History. <em>Nos Hommes et Notre Histoire</em>. Rodolphe Lucien Desdunes. (Montréal: Arbour & Dupont, 1911).<br>[Hill Louisiana Rare F380 C9 D47 C.2]",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "A tenuous middle status",
+     "summary": "Politicians, soldiers, poets, and playwrights, the free people of color defended their tenuous middle status between white and black.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Colonial New Orleans, like many other slave holding societies in the New World, had a three tiered racial system in which free people of color enjoyed a middle position between whites and black slaves. Its large population of gens de couleur libres or free people of color (20,000 in 1840) made New Orleans unique among American cities and became a source of conflict between the Francophone and the rapidly growing Anglophone sectors of the city. While many of these free people of color traced their heritage back to colonial Louisiana, the arrival of free black refugees from the revolution in Haiti served to reinforce their numbers in Louisiana. The achievements of many of the city’s free people of color were described in Rodolph Desdunes’s 1911 book <em>Nos Hommes et Notre Histoire</em> (<em>Our People and Our History</em>). Politicians, soldiers, poets, and playwrights, the free people of color defended their tenuous middle status between white and black. Important among the musicians and writers of this group were Armand Lanusse, Louis Charles Roudanez, and Basile Barès. Some free black New Orleanians left the city for successful careers in France. Victor Séjour wrote twenty-one plays during his career as a playwright, most of which, like <em>Richard III</em>, debuted in Paris. Edmond Dédé received his early musical education in New Orleans, but left Louisiana for further study at the Paris Conservatory and a career as conductor and composer in Bordeaux. Camille Thierry found success in Paris with his work <em>Les Vagabondes, Poésies Américaines</em> (<em>The Vagabonds, American Poetry</em>, 1874). Desdunes’s book celebrated the achievements of previous generations of free black New Orleanians at a time when his own generation was taking the lead in fighting against Jim Crow segregation in the South.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p class=\"exhibit-see\">See: Caryn Cossé Bell. <em>Revolution, Romanticism, and the Afro-Creole Protest Tradition in Louisiana, 1718–1868</em> (Baton Rouge: LSU Press, 1997). Joseph Logsdon and Caryn Cossé Bell. “The Americanization of Black New Orleans,” in <em>Creole New Orleans: Race and Americanization</em>, ed. Arnold R. Hirsch and Joseph Logsdon (Baton Rouge: LSU Press, 1992).</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Nos Hommes et Notre Histoire, 1911",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case7-desdunes.jpg",
+       "caption": "History. <em>Nos Hommes et Notre Histoire</em>. Rodolphe Lucien Desdunes. (Montréal: Arbour & Dupont, 1911).<br>[Hill Louisiana Rare F380 C9 D47 C.2]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Black troops of the French army",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case7-france_militaire.jpg",
+       "caption": "Engraving. “France Militaire. Troupes Negres.”<br>[ Picture collection, “West Indies” folder, E-67, Box 2]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Les Vagabondes, 1874",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "Poetry. <em>Les Vagabondes, poésies américaines</em>. Camille Thierry (Paris: E. Lemerre, éditeur; Bordeaux: De Laporte, éditeur, 1874.)<br>[Hill Louisiana Rare PS 3019 T5 V3 c.1]",
+       "figures": [
+        {
+         "image": "case7-vagabondes.jpg",
+         "caption": ""
+        },
+        {
+         "image": "case7-mulatresse.jpg",
+         "caption": ""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "The Octoroon, 1859",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case7-octoroon.jpg",
+       "caption": "Drama. <em>The Octoroon, or Life in Louisiana</em>. Dion Boucicault. (New York: Samuel French, 1859).<br>[Hill Louisiana Rare PR 4161 B2 O3 1859]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Proclamation de Soulouque aux Haïtiens, 1859",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "Sheet Music. <em>Proclamation de Soulouque aux Haïtiens</em>. Chanson épique. Henri Fourrier. (N.O., Wehrmann, 1859) in Musical composition of Henri Fourrier, 1855–1888.<br>[Hill Louisiana Rare M 3.1 F68]",
+       "figures": [
+        {
+         "image": "case7-p_rousou1.jpg",
+         "caption": ""
+        },
+        {
+         "image": "case7-p_rousou2.jpg",
+         "caption": ""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Richard III, by Victor Séjour, 1852",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case7-sejour.jpg",
+       "caption": "Drama. <em>Richard III, Drame en Cinq Actes, En Prose</em>. Victor Séjour. (Paris: D. Giraud et J Dagneau, 1852).<br>[Hill Louisiana Rare PQ 3939 S3 R5]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Emperor Faustin I (Soulouque)",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case7-souloque.jpg",
+       "caption": "Engraving. “L’Empereur Faustin 1er (Soulouque)” in Picture Collection.<br>[ Picture collection, “West Indies” folder, E-67, Box 2]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Toussaint Louverture",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case7-toussaint.jpg",
+       "caption": "Engraving. “Toussaint L’Ouverture” in Picture Collection.<br>[ Picture collection, “West Indies” folder, E-67, Box 2]",
+       "layout": "side_start"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "The Latin Race in Louisiana",
+   "anchor": "latin-race",
+   "display": "wall",
+   "lead": "case8-croissant.jpg",
+   "lead_caption": "Engraving. “Elle Fut Nommée La Ville Du Croissant.” in <em>Almanach de la Louisiane</em> (New Orleans, Francis Bouvain, 1865).<br>[Hill Louisiana AY 72 N4 A54]",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "A strict color line",
+     "summary": "These racial arguments posited and defended the purity of the white Creoles and drew a strict color line between white and black in Francophone New Orleans.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>During the Civil War, the French-educated Creole elite of New Orleans played an important part in efforts to persuade France to support the Confederacy. Charles Gayarré’s <em>La Race Latine en Louisiane</em> and Alfred Mercier’s <em>Du Panlatinisme: nécessité d’une alliance entre la France et la Confédération du Sud (Of Panlatinism: the Necessity of an Alliance between France and the Southern Confederacy)</em> both argue that France’s interests lie in defending the South and its “latin” race from the aggressions of the Anglo-Saxon North. These racial arguments posited and defended the purity of the white Creoles and drew a strict color line between white and black in Francophone New Orleans. During Reconstruction many of the city’s free people of color assumed leadership roles in Louisiana’s government. This led to open hostility between the Afro-Creole and white Creole segments of the city and spawned the racist rhetoric we see in “Elle Fut Nommée La Ville Du Croissant,” a contemporary cartoon. Louis Placide Canonge, a newspaper editor and stage director, translated most of H.R. Helper’s white supremacist tract <em>Nojoque: Une Grave Question Pour Un Continent.</em> Canonge preserves Helper’s violent hatred of African Americans, but omits in his translation attacks against Roman Catholics and the Pope that might have offended his Catholic readers. After the Civil War, many Francophone New Orleanians insisted on the absolute racial purity of their ancestors. Gayarré briefly flirted with the anti-immigrant Know-Nothing party before the Civil War and later insisted that the term “Creole” referred only to the pure white descendants of European settlers in Louisiana.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p class=\"exhibit-see\">See: Edward Larocque Tinker. <em>Les écrits de langue française en Louisiane au XIXe siècle. Essais biographiques et bibliographiques</em> (Paris: H. Champion, 1932).</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "“Elle fut nommée la Ville du Croissant,” 1865",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case8-croissant.jpg",
+       "caption": "Engraving. “Elle Fut Nommée La Ville Du Croissant.” in <em>Almanach de la Louisiane</em> (New Orleans, Francis Bouvain, 1865).<br>[Hill Louisiana AY 72 N4 A54]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Charles Gayarré",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case8-gaya.jpg",
+       "caption": "Photograph. Charles Gayarré. <em>The Crescent City Illustrated</em>, Prospectus. Jewell & Prescott.<br>[W: 51, p.81]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "La Marseillaise",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case8-marseillaise.jpg",
+       "caption": "Sheet Music “La Marseillaise” (New Orleans: W.H. Leeson, nd.) in Hart-Bonnecaze-Duncan Family Papers.<br>[OS:H folder 82]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Nojoque, 1867",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "Political Essay. <em>Nojoque. Une Grave Question Pour Un Continent.</em> H.R. Helper. Traduction française par L. Placide Canonge. (New Orleans: Impr. de la “Plume de bronze”, 1867).<br>[Hill Louisiana E 185. 61 H485 c.2]",
+       "figures": [
+        {
+         "image": "case8-nojoque_1.jpg",
+         "caption": ""
+        },
+        {
+         "image": "case8-nojoque_2.jpg",
+         "caption": ""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Du Panlatinisme",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case8-panlatinisme.jpg",
+       "caption": "Pamphlet. <em>Du Panlatinisme: nécessité d’une alliance entre la France et la Confédération du Sud</em>. Alfred Mercier. (Paris, Librairie Centrale, 186?).in <em>Pecquet du Bellet de Verton and Kariouk Family Papers</em>.<br>[49: 14, Box 2]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "La Race Latine en Louisiane",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case8-racel.jpg",
+       "caption": "Pamphlet. <em>La Race Latine en Louisiane</em>. Charles Gayarré. in <em>Edward Clifton Wharton Family Paper</em>s, Gayarré Collection.<br>[U: 30, Box 13]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Widows and daughters in full mourning, 1863",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case8-war_widows.jpg",
+       "caption": "Engraving. “Cemetery in New Orleans—Widows and Daughters in Full Mourning, Carrying Flowers and Wreaths to Adorn the Graves of their Relatives Killed in the War” in <em>Frank Leslie’s Illustrated Newspaper</em>, April 25th, 1863.<br>[Hill Rare Flat 051 L56]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Les Yankees, Fondateurs d’Esclavage, 1864",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case8-yank.jpg",
+       "caption": "Pamphlet. <em>Les Yankees, Fondateurs d’Esclavage Aux États-Unis</em>. Charles Deléry. (Paris: Librairie Centrale, 1864). in <em>Pecquet du Bellet de Verton and Kariouk Family Papers</em>.<br>[49: 14, Box 2]",
+       "layout": "side_start"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "The Doctor, the Priest and the Dandy",
+   "anchor": "mercier-rouquette-canonge",
+   "display": "wall",
+   "lead": "case9-mercier.jpg",
+   "lead_caption": "Photograph. “Alfred Mercier”. in <em>A History of Louisiana.Vol.3</em>. Alcée Fortier. (New York: Goupil & co. of Paris, Manzi, Joyant & co., successors, 1904).<br>[Hill Louisiana F369 F74 1904a v. 4. c.1]",
+   "blocks": [
+    {
+     "type": "text",
+     "body": "<p>Alfred Mercier, Adrien Rouquette and Placide Canonge</p>"
+    },
+    {
+     "type": "entry",
+     "title": "Side by side",
+     "summary": "Alfred Mercier, Adrien Rouquette and Placide Canonge stood side by side on the New Orleans cultural stage where they played founding roles in the establishment of Creole literature and music.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Alfred Mercier, Adrien Rouquette and Placide Canonge stood side by side on the New Orleans cultural stage where they played founding roles in the establishment of Creole literature and music. The variety of their interests typifies the vibrant cultural life of Nineteenth Century New Orleans in which people preferred dabbling in many artistic disciplines to specializing in just one. Mercier, a scholarly and kind-hearted physician, was as skillful in writing novels as he was in writing prescriptions. He was surrounded by an erudite group of Creole doctors, including Charles Deléry and Charles Testut, that shared his love of Francophone literature. While Adrien Rouquette dedicated his many talents to his work as a Catholic priest, he also diligently created poetic and musical compositions. Louis Placide Canonge was a jack-of-all-trades, working tirelessly on many journalistic, literary and theatrical projects. While these three men lived and worked primarily in Louisiana, they traveled often to France to oversee the publication of their work. Mercier, Rouquette and Canonge shared their considerable talents and recognized the importance of their colleagues’ literary efforts.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Alfred Mercier (1816–1894)",
+     "summary": "Mercier, a scholarly and kind-hearted physician, was as skillful in writing novels as he was in writing prescriptions.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Alfred Mercier was born in Louisiana in 1816. His family, immigrants to Louisiana from South-West France, sent him to Paris at a very young age for his education. While he attended the prestigious <em>Collège Louis le Grand</em> and then went on to law school, he felt a greater love for literature than for the law. After several years spent in Louisiana and Boston, Mercier left in 1842 for a grand tour of Europe. His five-month stay in Italy and Sicily provided him with the inspiration for a novel he would publish in 1873,<em> Le Fou de Palerme (The Fool of Palermo).</em> During the 1848 Revolution in France, he contributed articles to Louisiana newspapers about the events leading to the crowning of Napoleon III. He also married the daughter of the owner of his boarding house after a long and serious illness from which she helped him to recover. At 33, Mercier began his medical studies in Paris. After graduating, he moved his family back to New Orleans where he established his medical practice. During the Civil War Mercier returned to Paris and played an important part in efforts to convince France to support the Confederacy. Back in New Orleans again after the war, Mercier wrote reviews of performances given at the French Opera House for the <em>New Orleans Picayune.</em> A great lover of literature, Mercier spoke several languages and devoted himself to the preservation of the French language in Louisiana. He was a founding member of <em>L’Athénée louisianais,</em> and served as the organization’s secretary and treasurer until his death. In an article entitled “Progrès de la langue française” (“Progress of the French Language”), published in <em>Les Comptes-Rendus de l’Athénée louisianais</em> in September 1883, Mercier forecast the extinction of Francophone New Orleans in this nostalgic yet visionary prediction:</p><blockquote><p>The day when we will no longer speak French in Louisiana, if that day ever arrives – which we do not believe – there will not be any more Creoles; the original and powerful group they formed in the great national family of the United States will have vanished, just as wine poured into a running river loses its flavor and color.</p></blockquote><p>After publishing <em>La fille du prêtre</em> (<em>The Priest’s Daughter</em>) in 1877, a novel that tackled the issue of ecclesiastic celibacy, Mercier was accused of being a free thinker and was nearly ostracized from the literary community in Francophone New Orleans. In 1881 he published<em> L’Habitation Saint-Ybars (The Saint-Ybars Plantation).</em> Reviews of this “récit social” (social narrative) praised Mercier’s liberal-mindedness and the boldness that drove him to compose much of the novel’s dialogue in the Louisiana Creole language. Grateful for his devotion to the French cause, the French government elected him “officier de la Légion d’Honneur” (officer in the Légion of Honor) in 1885. Mercier died in 1894 at the age of seventy-eight.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p class=\"exhibit-see\">See: Edward Larocque Tinker. <em>Les écrits de langue française en Louisiane au XIXe siècle. Essais biographiques et bibliographiques</em> (Paris: H. Champion, 1932).</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Étrenne offerte aux abonnés de l’Athénée, 1888",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case9-etrenne.jpg",
+       "caption": "Pamphlet. “Etrenne offerte aux abonnés de l’Athénée”, Alfred Mercier, (1888) in <em>Pamphlets</em>, Alfred Mercier.<br>[Hill Louisiana Rare Oversize PQ 3939 M5 A6 no.5]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "La fièvre jaune, 1860",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case9-fievre.jpg",
+       "caption": "Pamphlet. “La fièvre jaune, sa manière d’être à l’égard des étrangers à la Nouvelle-Orléans et dans les campagnes”. Alfred Mercier. (Paris, Delahaye, 1860). in <em>Pamphlets</em>, Alfred Mercier.<br>[Hill Louisiana Rare PQ3939M5A6, no.1]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Alfred Mercier",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case9-mercier.jpg",
+       "caption": "Photograph. “Alfred Mercier”. in <em>A History of Louisiana.Vol.3</em>. Alcée Fortier. (New York: Goupil & co. of Paris, Manzi, Joyant & co., successors, 1904).<br>[Hill Louisiana F369 F74 1904a v. 4. c.1]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "A nurse mammy, 1886",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case9-nurse_mammy.jpg",
+       "caption": "Engraving. “A Nurse Mammy.” in Century Magazine, vol.31 no.6, April 1886.<br>[Hill Rare 051 C33]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Le vieux Salomon, 1872",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case9-salomon.jpg",
+       "caption": "Fiction.<em> Le vieux Salomon, ou une famille d’esclaves au XIXème siecle</em>. Charles Testut. (New Orleans, 1872).<br>[Hill Louisiana PQ 3939.T4 V5 1872]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "L’Habitation Saint-Ybars, 1881",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case9-ybars_saint.jpg",
+       "caption": "Fiction. <em>L’Habitation Saint-Ybars ou Maîtres et Esclaves en Louisiane. Récit Social</em>. Alfred Mercier (New Orleans: Imprimerie franco-américaine (E. Antoine), 1881).<br>[Hill Louisiana Rare PQ 3939 M5 H3 1881 c.3]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Adrien Rouquette (1813–1887)",
+     "summary": "While Adrien Rouquette dedicated his many talents to his work as a Catholic priest, he also diligently created poetic and musical compositions.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Adrien Rouquette was born in New Orleans in 1813. His father, a Frenchman from Bordeaux, established himself as a wine merchant in New Orleans in the early Nineteenth Century. He soon married a young Creole woman and had five children, two of whom would later become well-known Louisiana poets. Shortly after Adrien’s birth, the Rouquette family moved to the outskirts of New Orleans near the Native American settlements along Bayou Saint John. Adrien quickly learned the language of his neighbors and later in life found in these early experiences a great source of poetic inspiration. Rouquette was first educated in New Orleans at the <em>Collège d’Orléans</em> and later continued at schools in Kentucky and New Jersey. Because he had lost most of his skills in French, he planned to pursue his education in the <em>Collège Royal</em> in Paris, but the political turmoil in the French capital drove him to the West of France—first to Nantes then to Rennes. After traveling for a period in Europe, he returned to Louisiana in 1833 and settled in Bayou Lacombe, where he lived near another settlement of Native Americans. The following years were punctuated by comings and goings between France and Louisiana; many of Rouquette’s poems bear the mark of his time in Paris and his unhappy love affairs. In 1841 he published one of his best collections of poems, <em>Les Savanes</em>. The well-known French critic Sainte-Beuve offered the following praise of Rouquette’s first poetic effort:</p><blockquote><p>I took great pleasure in your Savanes at smelling many youthful and sincere fragrances. It seemed to me that I was in a country that was friendly but that had not lost the charm of the unexpected. It is a great accomplishment, dear sir, for you to have experienced this vast wilderness and to have captured it in your heart.</p></blockquote><p>Rouquette’s admiration for contemporary French poetry, and especially for Chateaubriand, is evident in the many poems that he dedicated to the famous French romantic poet. Writing under his pseudonym <em>Chahta-Ima</em>, which in Choctaw means “one of us”, Rouquette published a short novel in 1879 entitled <em>La nouvelle Atala ou fille de l’esprit (The New Atala, or Daughter of the Spirit)</em>—a direct response to Chateaubriand’s Atala. Back in Louisiana once again, he decided to devote the rest of his life to religion. In 1841 Rouquette entered the Plattenville seminary in Assumption Parish and was ordained a priest in 1845. He was posted to Saint Louis Cathedral in New Orleans and was eventually made vicar general. A highlight of his fourteen years in the priesthood was an inspiring speech he gave in New Orleans on January 8, 1846, commemorating the Battle of New Orleans. In 1860 he published <em>Les Préludes de l’Antoniade (Preludes to the Antoniade)</em>, in which his deep attachment to Louisiana was lavishly developed in poems such as “La Louisiane et la Nouvelle-Orléans” (Louisiana and New Orleans)—displayed here in both manuscript and published versions. Rouquette, choosing to spend his final years with his Choctaw friends, retreated to Bayou Lacombe and continued to perform his religious duties in a small Chapel. He met and made friends with the writer Lafcadio Hearn, temporarily back in Louisiana. Rouquette became insane in the later years of his life and died in 1887, at the age of seventy-four, while working on a dictionary of the Choctaw language.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p class=\"exhibit-see\">See: Dagmar Renshaw LeBreton. <em>Chahta-Ima: The Life of Adrien-Emmanuel Rouquette</em> (Baton Rouge: LSU Press, 1947).</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "“À la Louisiane,” in manuscript",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case10-alaloums.jpg",
+       "caption": "Manuscript Poem.”À la Louisiane.” Adrien Rouquette. in Rouquette (Adrien) Papers.<br>[Rouquette (Adrien) Papers, A-15, Box 1 folder 1]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Les Préludes de l’Antoniade, 1860",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "Poetry. <em>Préludes de L’Antoniade</em>. Adrien Rouquette. (New Orleans, L Marchand, 1860).<br>[Hill Louisiana Rare PQ 3939 R6 A66]",
+       "figures": [
+        {
+         "image": "case10-alalou.jpg",
+         "caption": ""
+        },
+        {
+         "image": "case10-antoniade_2.jpg",
+         "caption": ""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Choctaw women, from New Orleans Characters",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case10-choctaw.jpg",
+       "caption": "Engraving. “Choctaw Indian Squaws” in <em>New Orleans Characters</em>. Léon Joseph Frémaux. (New Orleans: Peychaud & Garcia, 1876).<br>[Hill Louisiana Rare Oversize N6435. N65 F75]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Bayou Lacombe",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case10-lacombe.jpg",
+       "caption": "Photograph. “Bayou Lacombe” in Titcomb Collection<br>[E-73, folder 1]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Les Savanes, 1841",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "Poetry. <em>Les Savanes, poésies américaines</em>. Adrien Rouquette. (Paris: J. Labitte; New Orleans: A. Moret, 1841).<br>[Hill Louisiana Rare PQ 3939 R6 A72]",
+       "figures": [
+        {
+         "image": "case10-rouquette_savanes.jpg",
+         "caption": ""
+        },
+        {
+         "image": "case10-regrets.jpg",
+         "caption": ""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "The chapel at Chinchuba",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case10-rouquette_chapel.jpg",
+       "caption": "Photograph. “Chapel at Chinchuba” in<em> Life of the Abbé Rouquette</em>. Susan B. Elder. (New Orleans: L. Graham co., 1913)<br>[Hill Louisiana PQ 3939. R6 E53 c.1]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Adrien Rouquette",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case10-rouquette_pic.jpg",
+       "caption": "Engraving. “Picture of A Rouquette” in <em>Life of the Abbé Rouquette</em>. Susan B. Elder. (New Orleans: L. Graham co., 1913).<br>[Hill Louisiana PQ 3939. R6 E53 c.1]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Zozo Mokeur, 1887",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case10-zozo.jpg",
+       "caption": "Sheet Music. “Zozo Mokeur.” W.T. Francis. Paroles de Chatah-Imah [Adrien Rouquette] (New Orleans: L.Grunewald, 1887).<br>[Chol (Emmanuel) papers, Box 2, folder 48]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Louis Placide Canonge (1822–1893)",
+     "summary": "Louis Placide Canonge was a jack-of-all-trades, working tirelessly on many journalistic, literary and theatrical projects.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Louis Placide Canonge was born in Louisiana in 1822. Canonge’s father, a distinguished New Orleans lawyer, was originally from Marseille but lived in the French colony of Saint-Domingue (Haiti) before coming to Louisiana. Louis Placide Canonge was sent to Paris for his education where he attended the <em>Lycée Louis le Grand.</em> Paris sharpened Canonge’s love for arts and literature, and he returned to Louisiana a sophisticated and elegant man, known for his sharp wit and for being always on the lookout for cultural novelties. Because of his worldly interests, refined opinions, and sophisticated tastes, New Orleans came to regard Canonge as the prototypical Frenchman. Canonge was involved in many literary and journalistic projects, most of them short-lived. A true gentleman, Canonge fought in several duels (for which New Orleans was famous) risking his life to defend his honor or the honor of one of his friends. As the editor of the <em>Courrier louisianais</em> during the Civil War, he was forced into exile for too loudly expressing his distaste for the Yankee occupiers of New Orleans. After the war he created his own newspaper, <em>L’Époque,</em> and, when this venture failed, took a job at <em>L’Abeille de la Nouvelle-Orléans</em> which he held from 1882 until his death. Canonge contributed music and theater reviews to <em>L’Abeille,</em> often signing his articles with his pen name: René. He also found time to teach French. But Canonge’s true love was the theater. He wrote several plays, including <em>Le comte de Carmagnola</em>, which debuted in New Orleans in 1852 and later had a run of one hundred performances in Paris. Canonge created two amateur theater clubs and served as the manager of the Orleans Theater in 1860 and of the French Opera House for two consecutive seasons between 1873 and 1875. Léona Queyrouze, with whom Canonge had a regular correspondence, dedicated the poem: “À l’Opéra,” to her friend. His life-long friendship and correspondence with Henri Vignaud, an old friend living in Paris, reveals the fragility and insecurity hidden beyond the confident veneer of this influential man. Canonge died in 1893 at the age of seventy-one.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p class=\"exhibit-see\">See: Edward Larocque Tinker. <em>Les écrits de langue française en Louisiane au XIXe siècle. Essais biographiques et bibliographiques</em> (Paris: H. Champion, 1932).</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Le Comte de Carmagnola, 1856",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case11-carmagnola.jpg",
+       "caption": "Drama.<em> Le Comte de Carmagnola</em>. Louis Placide Canonge. (New Orleans, Courier de la Louisiane, 1856).<br>[Hill Louisiana Rare PQ 2203 C47 C6]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Louis Placide Canonge",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case11-placide.jpg",
+       "caption": "Photograph. Louis Placide Canonge. in <em>The Crescent City Illustrated, Prospectus</em>. Jewell & Prescott.<br>[W: 51]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "“À l’Opéra,” by Léona Queyrouze",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case11-q_opera.jpg",
+       "caption": "“À l’Opéra”. Léona Queyrouze. in Queyrouze (Léona) Papers.<br>[UU: 71, Box 7A, folder 7: 56]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Canonge to Henri Vignaud, 1869",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case11-vignaud.jpg",
+       "caption": "Manuscript Letter. Louis Placide Canonge to Henri Vignaud, Feb, 12, 1869. in Vignaud papers.<br>[C: 66, folder 3]",
+       "layout": "side_start"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Armand Lanusse and Les Cenelles",
+   "anchor": "lanusse-les-cenelles",
+   "display": "wall",
+   "lead": "case12-lecene.jpg",
+   "lead_caption": "Photograph. “Melle. VICTORIA LECÈNE, l’une des lauréates de l’institution Bernard Couvent, couronnée publiquement par M. Lanusse (photographie prise en 1867).” in <em>Nos Hommes et Notre Histoire</em>. Rodolphe Lucien Desdunes. (Montréal: Arbour & Dupont, 1911).<br>[Hill La Rare F380 C9 D47 C.2]",
+   "blocks": [
+    {
+     "type": "text",
+     "body": "<p>The first collection of poems by African Americans published in the United States</p>"
+    },
+    {
+     "type": "entry",
+     "title": "Les Cenelles, 1845",
+     "summary": "In 1845, defying the ban on publishing works by people of color, Armand Lanusse gathered eighty-five poems by seventeen free black Louisiana poets as Les Cenelles.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>The free people of color in New Orleans occupied a precarious middle position between black and white, between their French education, language, and culture and their American citizenship, between relative financial independence and profound social oppression. The <em>Gens de Couleur Libres</em> of New Orleans were free, but they faced many restrictions in a city where they aroused both jealousy and suspicion. In 1845, defying the ban put on the publication of works by people of color, New Orleans educator and poet Armand Lanusse gathered eighty-five poems written by seventeen free black Louisiana poets and published them under the title <em>Les Cenelles</em>. While Lanusse remained in the increasingly hostile New Orleans to continue his activism in the defense of people of color, several of the other contributors to <em>Les Cenelles</em> left Louisiana. Pierre Dalcour, Camille Thierry and Victor Séjour preferred life in France, where they might encounter the luminaries of the French literary world, to the increasingly restrictive atmosphere of their Louisiana home.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Armand Lanusse (1812–1867)",
+     "summary": "Lanusse was convinced that education was the only way that people of color might hope to improve their situation in life.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Armand Lanusse was born in New Orleans in 1812. Historians disagree on the question of whether or not he was, like many young free men of color of his generation, sent to Paris to be educated in the finest institutions. Whatever the circumstances of his education, Lanusse was at an early age already distinguishing himself from his peers with his impassioned dedication to the cause of all people of African descent, whom he considered to be his own people, without drawing distinctions in skin shades. Lanusse’s poetry resembles that of the other contributors to <em>Les Cenelles</em> in its idolization of French romanticism in general and of Alphonse de Lamartine’s<em> Méditations Poétiques</em> in particular. Lanusse’s work comments on the plight of people of color in New Orleans. The poets who wrote for <em>Les Cenelles</em> tended to draw exclusively on commonplace romantic themes of melancholy and fantasy, individualism and the <em>mal du siècle</em>, while remaining silent about the political implications of their racial status. But in his poetry Lanusse alludes to highly charged issues like the institution of <em>plaçage</em> (see “Épigramme”)—the arranged extra-marital unions between young free women of color and wealthy white men. As he wrote in the introduction to <em>Les Cenelles</em>, Lanusse was convinced that education was the only way that people of color might hope to improve their situation in life:</p><blockquote><p>We are beginning to understand that no matter what situation fate has placed us in, a good education is a shield against the hostile, malicious arrows shot at us.</p></blockquote><p>Lanusse took part in the building of a catholic school for poor orphans of color, <em>l’Institution Bernard Couvent.</em> The school was completed in 1848 and Lanusse became its director in 1852, a position he was to occupy until his death. While Lanusse fought with the Confederate Army during the Civil War, his disgust at the treatment that black people received drove him to actively encourage many of them to leave the oppression in Louisiana for more hospitable racial climates. Lanusse’s dedication to the cause of black people is evident in his 1843 creation of <em>L’Album Littéraire, Journal des Jeunes Gens, Amateurs de la Littérature (The Literary Album, A Journal for Young People and Lovers of Literature)</em>, a literary newspaper in which Lanusse collaborated with other future contributors to <em>Les Cenelles.</em> This short-lived project defied the ban on published works by people of color in Louisiana and led directly to the publication of <em>Les Cenelles</em> in 1845. The title of this collection of poetry, <em>Les Cenelles, choix de poésies indigènes,</em> alludes to the time-consuming local custom of collecting mayhaw berries in the swamps of Louisiana. While Lanusse was the most important contributor, Les Cenelles also included poems by Pierre Dalcour, Victor Séjour and Camille Thierry. These three men, members of prosperous New Orleans Creole of color families, all chose to pursue their literary careers in France where, in keeping with the ideals of their romantic poetry, they might enjoy relative artistic and social freedom. Dalcour was known for his friendship with Victor Hugo; Séjour served as the private secretary of Napoleon III; and Thierry settled down in Bordeaux, where he published his poetic works. All three men died in France, while Lanusse passed away in New Orleans in 1867 at the age of 55.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p class=\"exhibit-see\">See: Régine Latortue and Gleason R. W. Adams. <em>Les Cenelles: A Collection of Poems by Creole Writers of the Early Nineteenth Century</em> (Boston: G. K. Hall, 1979).</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Victoria Lecène, 1867",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case12-lecene.jpg",
+       "caption": "Photograph. “Melle. VICTORIA LECÈNE, l’une des lauréates de l’institution Bernard Couvent, couronnée publiquement par M. Lanusse (photographie prise en 1867).” in <em>Nos Hommes et Notre Histoire</em>. Rodolphe Lucien Desdunes. (Montréal: Arbour & Dupont, 1911).<br>[Hill La Rare F380 C9 D47 C.2]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "The mayhaw",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case12-mayhaw.jpg",
+       "caption": "Engraving. “Crataegus aestivalis” (May Haw) in <em>The Silva of North America</em>. Charles Sprague Sargent. (Boston: Houghton, Mifflin and Co., 1892)<br>[Hill McIlhenny Collection QK 481 S24 v.4]",
+       "layout": "side_start"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Beyond the “Belle Créole”",
+   "anchor": "beyond-the-belle-creole",
+   "display": "wall",
+   "lead": "houssaye-home-postcard.jpg",
+   "lead_caption": "<em>Photograph. Sidonie de la Houssaye’s Home. in Emma T Stafford. Sidonie de la Houssaye Collection.</em><br><em>[U: 104, folder 1: 4]</em><br><a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p120701coll19:3892\">In the Louisiana Digital Library</a>",
+   "blocks": [
+    {
+     "type": "text",
+     "body": "<p>Léona Queyrouze and Sidonie de la Houssaye</p>"
+    },
+    {
+     "type": "entry",
+     "title": "In a man’s world",
+     "summary": "Both writers were progressive and emancipated women of letters writing in a man’s world.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Sidonie de la Houssaye and Léona Queyrouze both led lives that defied the traditional roles reserved for the mythic “belle créole”. More than simply beautiful women distracted by idle pastimes, dependent on their husbands in all respects, and blindly faithful to the established order, de la Houssaye and Queyrouze were both able to make their voices heard in the man’s world in which they lived. After the death of her husband, Sidonie de la Houssaye turned to teaching and writing to support her large family. Léona Queyrouze, who was raised in the elite and culturally rich world of wealthy New Orleans, boldly pursued her literary ambitions. She made several amorous conquests among men of letters in pursuit of her dream of being a well-known writer. Both writers were progressive and emancipated women of letters writing in a man’s world.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Léona Queyrouze (1861–1938)",
+     "summary": "At 23, Léona Queyrouze gave a lecture at the Athénée louisianais on “Indulgence,” the first public speech given by a young Creole woman in Louisiana.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Léona Queyrouze was born in New Orleans in 1861 to a wealthy Creole family. Her father was the son of a veteran of the Napoleonic wars who immigrated to New Orleans and sold wine and groceries imported from France. Her mother was a Creole from Saint Martinville. As she grew up Queyrouze’s parents held salons at their home that attracted the luminaries of the Creole intellectual world. Because she joined adult conversations at a very young age, the precocious Léona earned the nickname “little Mme de Staël,” a reference to the woman writer who then enjoyed enormous popularity in France and Europe. At 15 Queyrouze’s parents sent her to France to improve her skills in the French language. Soon after she returned to Louisiana, she befriended the locally famous writer Lafcadio Hearn, forming a partnership that would play a great role in her future literary career. Their relationship soon became the talk of the town. Hearn encouraged her to write and he read her first poems. Queyrouze soon published poems in <em>L’Abeille</em>, which she signed with her male pen-name: Constant Beauvais—the name of her grandfather, a former Louisiana governor. “Vision,” here displayed in manuscript and published versions, was one of her most well-known poems. From an early age, Léona Queyrouze was surrounded by older men who were at the same time her mentors, confidants or suitors. Her correspondence with Victor Cousin, a man forty years her elder, is typical of her relationships with the men in her life. When he first met her in 1881, Cousin recited the following lines to her:</p><blockquote><p>I would have liked to have saved up for your sweet face/ All the kisses of bygone days;/ They are now but an abuse to your youth/ And are but an outrage to springtime.</p></blockquote><p>In the pages of<em> L’Abeille</em> Queyrouze replied to her elderly suitor:</p><blockquote><p>Under your beautiful white forehead, eternal youth/ Throbs, together with spring and all its tenderness/ And art still glows warmly in you.</p></blockquote><p>This intense literary flirtation persisted for several years and Cousin’s letters to Queyrouze all begin by calling her “ma lionne” (my lioness) instead of Léona. In 1888, in one of the last letters he wrote to her, the aging Cousin lamented his young muse’s obvious indifference and he philosophically resigned himself to the capriciousness of the fair sex:</p><blockquote><p>Will then you, my lioness, embody the truth of the words written by François I on one of the windows of the Chambord castle: Woman is fickle:/ Whoever trusts her is a fool!</p></blockquote><p>In 1880 Léona Queyrouze published her “Étude sur Racine” (“Essay on Racine”) in <em>Les Comptes-Rendus de l’Athénée Louisianais.</em> At the age of 23, Queyrouze tested the limits of contemporary tastes by giving a lecture at the <em>Athénée Louisianais</em> on the subject of “Indulgence”, the first public speech given by a young Creole woman in Louisiana. Word of Léona Queyrouze’s literary abilities and bold personality soon reached France, where a Mr. Combes, president of the Academy of Sciences and Letters in Bordeaux, wrote a letter praising her talent. Combes’ letter was published in <em>L’Abeille</em> on March 1st 1885. A fervent admirer of the renowned French writer Émile Zola, Queyrouze wrote a letter to her idol that boldly included one of her poems. Zola took the time to send her a few lines in response. In 1886 Queyrouze spent a year in New York translating and adapting French dramas for the American stage. Back in New Orleans again, she gave a lecture on “Wagner and patriotism” which illustrated her wide ranging interests. The audience at this lecture included General Beauregard, Louis Placide Canonge, Alfred Mercier and Charles Gayarré, the patriarchs of the defense of the French language in Louisiana. But at 41, Léona Queyrouze once more defied the mores of Creole society by marrying quite late in life. She abandoned her literary ambitions for many years until, late in her life, she published an essay in English entitled <em>The Idyll: my Personal Reminiscences of Lafcadio Hearn</em> (1933). Queyrouze died in 1938 at the age of seventy-seven.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p class=\"exhibit-see\">See: Edward Larocque Tinker. <em>Les écrits de langue française en Louisiane au XIXe siècle. Essais biographiques et bibliographiques</em> (Paris: H. Champion, 1932).</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "A letter from Bordeaux, in L’Abeille, 1885",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case13-combes.jpg",
+       "caption": "Newspaper Clipping. Letter from Combes, president of the Academy of Sciences and Letters in Bordeaux. L’Abeille, March, 1st 1885. in Queyrouze Papers.<br>[UU: 71, Box 7A, folder 7: 52]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "De l’Indulgence, 1884",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case13-qind.jpg",
+       "caption": "<em>De l’Indulgence</em>. Léona Queyrouze (New Orleans: Imprimerie Franco-Américaine, 1884).<br>[Hill Louisiana PQ 3939. B27D4]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Five photographs of Léona Queyrouze",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "Five Photographs of Léona Queyrouze. in Queyrouze Papers.<br>[UU: 70, Box 5B, folder 5: 42]",
+       "figures": [
+        {
+         "image": "case13-q_baby.jpg",
+         "caption": ""
+        },
+        {
+         "image": "case13-q_nanny.jpg",
+         "caption": ""
+        },
+        {
+         "image": "case13-q_desk.jpg",
+         "caption": "<em>Five Photographs of Léona Queyrouze. in Queyrouze Papers.</em><br><em>[UU: 70, Box 5B, folder 5: 42]</em>"
+        },
+        {
+         "image": "case13-q_face1.jpg",
+         "caption": "<em>Five Photographs of Léona Queyrouze. in Queyrouze Papers.</em><br><em>[UU: 70, Box 5B, folder 5: 42]</em>"
+        },
+        {
+         "image": "case13-q_face2.jpg",
+         "caption": ""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Queyrouze to Émile Zola, and his reply",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "MS letters, Léona Queyrouze to Émile Zola and reply from Zola. in Queyrouze Papers.<br>[UU: 70, Box 5A, folder 5: 36]",
+       "figures": [
+        {
+         "image": "case13-q_zola1.jpg",
+         "caption": ""
+        },
+        {
+         "image": "case13-q_zola2.jpg",
+         "caption": ""
+        },
+        {
+         "image": "case13-q_zola3.jpg",
+         "caption": ""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "“Vision,” in manuscript and in print",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "Manuscript poem. “Vision”. in Queyrouze Papers.<br>[UU: 70, Box 6, folder 6: 45]",
+       "figures": [
+        {
+         "image": "case13-vision_ms.jpg",
+         "caption": ""
+        },
+        {
+         "image": "case13-vision.jpg",
+         "caption": "Newspaper Clipping. “Vision” in Queyrouze Papers.<br>[UU: 71, Box 7A, folder 7: 56]"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Sidonie de la Houssaye (1820–1894)",
+     "summary": "After her husband’s death, Sidonie de la Houssaye taught and wrote to support her family; some of her stories were so controversial she signed them Louise Raymond.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Sidonie de la Houssaye was born in 1820 to a rich Creole family of both French and German descent that had played an important role in colonial Louisiana. As a girl, she was tutored by a French governess who instilled in her a love for the French language and its literature. At fourteen she married Pelletier de la Houssaye and settled down in Saint Martinville, a town that was nicknamed “Louisiana’s little Paris”. Since the late Eighteenth Century, St. Martinville had served as a refuge for French noblemen seeking to escape from the guillotine. Sidonie de la Houssaye gave birth to fourteen children of whom only three survived. She and her family moved to Franklin, Louisiana in 1841 and soon faced serious financial problems. These difficulties became worse when in 1863 Raymond Pelletier de la Houssaye died and Sidonie de la Houssaye undertook the task of raising and educating her children by herself. She began to earn money for her struggling family by teaching her neighbors’ children along with her own. She opened a school for girls in 1849, reopened it after the Civil War in 1867, and opened another school, with the help of a Miss Wallis, in 1882. Her daughter, Lilia, died in 1875, leaving her eight small children in the care of their grandmother. It was during this period that Mme de la Houssaye began to publish serial stories and various other literary works in newspapers like <em>L’Abeille,</em> her main goal being to meet her family’s financial needs. Her texts were written in French and some of them were later translated into English by her grandchildren. She also wrote many stories for her grandchildren, most of which have never been published. Mme de la Houssaye found, in a diary written by her grandmother that she discovered in her attic, much of the material she used in writing her short fiction. The well-known writer George Washington Cable soon bought the rights to de la Houssaye’s work and borrowed from her grandmother’s diary in search of material for <em>Strange True Stories of Louisiana</em> (1889) and perhaps also for <em>Old Creole Days</em> (1879) and <em>The Grandissimes, A Story of Creole Life</em> (1880). In “How I got them,” the introduction to this book, Cable briefly alluded to Mme de la Houssaye. The manuscripts borrowed or bought by Cable from de la Houssaye were photographed for Cable’s text <em>Strange True Stories of Louisiana</em>. In 1878, Sidonie de la Houssaye began <em>Les Quarteronnes de la Nouvelle-Orléans,</em> seen here in both manuscript and published forms. These texts were published in the newspaper<em> Le Méschacébé,</em> but their subject matter was so controversial that the author signed them with her nom de plume, Louise Raymond. The stories were centered around the legendary beautiful women of mixed blood in New Orleans, known for arousing guilty passions in the men of high society. In 1890 <em>L’Athénée louisianais</em> awarded Mme de la Houssaye a gold medal for her active contribution to the promotion of the French language in Louisiana. She died in 1894, at seventy-four. Being in-step with the particular rhythm of Louisiana, punctuated as it was by upheavals and other historical troubles, Sidonie de la Houssaye was a privileged witness to the century. She saw creole life take shape on the plantation and in the Antebellum slave society, endure the Civil War and Reconstruction, and reemerge as the tenacious Creoles tried to preserve their unique culture.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p class=\"exhibit-see\">See: Edward Larocque Tinker. <em>Les écrits de langue française en Louisiane au XIXe siècle. Essais biographiques et bibliographiques</em> (Paris: H. Champion, 1932).</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Strange True Stories of Louisiana, 1889",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case14-gwcms.jpg",
+       "caption": "Essay Collection. <em>Strange True Stories of Louisiana</em>. George Washington Cable. (New York: C. Scribner’s Sons, 1889).<br>[Hill Louisiana PS 1244 S8 1889 c.3]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Sidonie de la Houssaye’s home",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "houssaye-home-postcard.jpg",
+       "caption": "<em>Photograph. Sidonie de la Houssaye’s Home. in Emma T Stafford. Sidonie de la Houssaye Collection.</em><br><em>[U: 104, folder 1: 4]</em><br><a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p120701coll19:3892\">In the Louisiana Digital Library</a>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "“Foremost among the French writers of Louisiana”",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case14-houssaye_portrait.jpg",
+       "caption": "Newspaper clipping. Portrait of Sidonie de la Houssaye. in Emma T Stafford, Sidonie de la Houssaye Collection.<br>[U: 104, folder 1: 3]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Les Quarteronnes de la Nouvelle-Orléans, in manuscript",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "Manuscript fiction. <em>Les Quarteronnes de la Nouvelle-Orléans</em>. Sidonie de la Houssaye. in Sidonie de la Houssaye Papers.<br>[E: 17, vol.6]<br><a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p120701coll19:3824\">Octavia la quarteronne in the Louisiana Digital Library</a>",
+       "figures": [
+        {
+         "image": "case14-quart1.jpg",
+         "caption": "Manuscript fiction. <em>Les Quarteronnes de la Nouvelle-Orléans</em>. Sidonie de la Houssaye. in Sidonie de la Houssaye Papers.<br>[E: 17, vol.6]"
+        },
+        {
+         "image": "houssaye-octavia-la-quarteronne-p209.jpg",
+         "caption": "Manuscript fiction. <em>Les Quarteronnes de la Nouvelle-Orléans</em>. Sidonie de la Houssaye. in Sidonie de la Houssaye Papers.<br>[E: 17, vol.6]<br><a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p120701coll19:3824\">In the Louisiana Digital Library</a>"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Les Quarteronnes de la Nouvelle-Orléans, 1894",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case14-quart.jpg",
+       "caption": "Fiction. <em>Les Quarteronnes de la Nouvelle-Orléans</em>. Sidonie de la Houssaye. (Bonnet Carré, La.: Imprimerie de Meschacébé, 1894).<br>[Hill Louisiana PQ 3939 D35Q3 1894, v.1]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "A school in Franklin, 1882",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "houssaye-school-announcement-1882.jpg",
+       "caption": "Advertising Card. Opening of a School in Franklin, LA by Mme de la Houssaye and Miss Wallis (1882). in Emma T Stafford, Sidonie de la Houssaye Collection.<br>[U: 104, folder 1: 5]<br><a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p120701coll19:3692\">In the Louisiana Digital Library</a>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Funeral notice, 1894",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "houssaye-funeral-notice-1894.jpg",
+       "caption": "Funeral Notice. Sidonie de la Houssaye. in Emma T Stafford, Sidonie de la Houssaye Collection.<br>[U: 104, folder 1: 5]<br><a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p120701coll19:4254\">In the Louisiana Digital Library</a>",
+       "layout": "side_start"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Crossing the Musical Color Line",
+   "anchor": "gottschalk-bares",
+   "display": "wall",
+   "lead": "case15-got_cdv.jpg",
+   "lead_caption": "Photograph. Carte de visite. L.M.Gottschalk. in Hill Louisiana Manuscripts.<br>[E: 70, Mss 2734]",
+   "blocks": [
+    {
+     "type": "text",
+     "body": "<p>Louis Moreau Gottschalk and Basile Barès</p>"
+    },
+    {
+     "type": "entry",
+     "title": "Two models of creolization",
+     "summary": "Gottschalk and Barès each borrowed clichéd images from the other’s culture, and the borrowing enriched and complicated nineteenth-century Creole music.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Louis Moreau Gottschalk was the most prominent figure in Creole New Orleans music of the Nineteenth Century. His contemporary, Basile Barès was perhaps the first man of color ever to have had his music published while still a slave. Their compositions can be construed as two different models of the creolization of music. In his early work, Gottschalk capitalized on the stereotypes of Black Creole music, giving to his works titles such as “Bamboula, a Negro Dance”, Barès was also inspired by Creole culture, notably the emblematic figure of the “Belle Créole”. However unlike Gottschalk, Barès did not explicitly refer to the African influences on Creole New Orleans culture. It is interesting to notice that each of these two composers borrowed cliched images and stereotypes from the other’s culture and how this borrowing enriched and complicated Nineteenth Century Creole music.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Louis Moreau Gottschalk (1829–1869)",
+     "summary": "Louis Moreau Gottschalk, the first American pianist and composer to achieve international fame, was born in New Orleans in 1829.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Louis Moreau Gottschalk, the first American pianist and composer to achieve international fame, was born in New Orleans in 1829. His Creole mother and British father raised him in an environment full of contrasts. In the first years of his musical education in New Orleans, Gottschalk was influenced by the diverse culture of New Orleans, as “Le Bananier” (“The Banana Tree”) and “Bamboula, Danse des Nègres” (“Bamboula, Negro Dance”), would later show. In 1842, at the age of 13, he went to Paris to pursue his studies and soon entered the elite circles of French culture, rubbing elbows with Victor Hugo, Alphonse de Lamartine, Frédéric Chopin, Jacques Offenbach and Hector Berlioz. During his first years in Paris, the young Gottschalk gave many public recitals. The novelty of his work, which displayed influences from the black and Creole cultures of New Orleans, earned Berlioz’s admiration. In 1846 and 1847 the two musicians performed together for a series of concerts at the <em>Théâtre des Italiens.</em> Before returning to America in 1853, Gottschalk performed hundreds of concerts in the major cities of Europe. While he had been praised in Paris as “the Louisiana pianist and composer,” Gottschalk realized upon disembarking in New York that his fame had arrived before he did. New York in turn brought him success and glory, but the death of his father brought Gottschalk new financial responsibilities, and he became the main bread winner for his large family. In 1854 Gottschalk traveled to Cuba to give a series of concerts. He went back to New York and became famous for his expensive piano lessons and adventurous love affairs. In 1857 he returned to the West Indies to begin a tour with Adelina Patti, the young singer who was later to perform with great success at the Theaters of New Orleans. Everywhere they traveled in Central and South America jubilant crowds greeted the pair. It was in the course of his five-year stay in the West Indies that Gottschalk started to keep a diary. His sister Clara later translated and published this diary under the title <em>Notes of a Pianist.</em> In Cuba, Gottschalk set up gigantic festivals and concerts during which he would perform such compositions as “La Fête champêtre cubaine” (“The Cuban Village Feast”), “La nuit des tropiques” (“The Tropical Night”), and “La Grande Marche” (“The Great March”). Adamantly opposed to slavery, Gottschalk renounced his loyalty to Louisiana and sided with the Northern cause before leaving Havana in 1862. During the Civil War, he toured frenetically around the United States, giving more than a thousand concerts between 1862 and 1865. While in California, Gottschalk was involved in a scandal with one of his students. The incident drove him back to Latin America in 1865 and he was never again to return to the country where he was born. Gottschalk’s life was characterized by intense travels, outstanding success wherever he performed and admission into the highest spheres of local societies. Gottschalk would often play concerts of his own music with immense orchestras of local musicians. He continued to compose new works throughout his lifetime and his published music sold well. Under the influence of Louis Fors, he became something of a local reformer, giving speeches in Buenos Aires or Montevideo about the advantages of the American public school system. In the spring of 1869 in Rio, he appeared weakened by an illness (probably yellow fever) that he had carried along with him most of his life. Gottschalk stopped his concert tour to rest. In November of the same year he collapsed over his piano in the middle of a concert. His doctor diagnosed an infection of the intestines and urged him to get some rest away from Rio’s heat. But on December 18, 1869, Gottschalk died at the age of forty. Rio gave him a majestic funeral but New York claimed his body the next year, and he was buried in Greenwood Cemetery in Brooklyn.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p class=\"exhibit-see\">See: William E. Korf. <em>The Orchestral Music of Louis Moreau Gottschalk</em> (Henryville: Institute of Mediaeval Music, 1983).</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Bamboula, danse des nègres",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case15-bamboula.jpg",
+       "caption": "Sheet Music. “Bamboula. Danse des Nègres.” in Gottschalk, “Miscellaneous selections for Piano.” (New York, Boston, 1853–1893).<br>[Hill Louisiana Flat M20. G687 M5 no.1]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "“The Bamboula,” 1886",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case15-bamb.jpg",
+       "caption": "<em>“The Bamboula” The Century Magazine. Feb 1886, vol. 31, no.4</em><br><em>[Hill Rare 051 C33, p524.]</em>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Le Bananier",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case15-bananier.jpg",
+       "caption": "Sheet Music. “Le Bananier.”in Gottschalk, “Miscellaneous selections for Piano.” (New York, Boston, 1853–1893).<br>[Hill Louisiana Flat M20. G687 M5 no.2]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Gottschalk’s Choicest Compositions",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case15-gottschalk.jpg",
+       "caption": "Sheet Music. “Gottschalk’s Choicest Compositions” in Gottschalk, “Miscellaneous selections for Piano.” (New York, Boston, 1853–1893).<br>[Hill La Flat M20.G687 no.14]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Gottschalk, a carte de visite",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case15-got_cdv.jpg",
+       "caption": "Photograph. Carte de visite. L.M.Gottschalk. in Hill Louisiana Manuscripts.<br>[E: 70, Mss 2734]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "A letter from Gottschalk",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case15-got_ms_let.jpg",
+       "caption": "Manuscript Letter. Louis Moreau Gottschalk. in Hill Louisiana Manuscripts.<br>[MS 1454]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Creole Songs from New Orleans, 1909",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case15-got_nd.jpg",
+       "caption": "Sheet Music. “Creole Songs from New Orleans in the Negro Dialect.” Clara Gottschalk Peterson. (New Orleans: L.Grunewald Co., 1909)<br>[OS: P]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Basile Barès (1845–1902)",
+     "summary": "Barès was probably born the slave of a New Orleans piano merchant; his 1860 “Grande Polka des Chasseurs à Pied de la Louisiane” was published while he was still a slave.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Gottschalk’s success on the world stage demonstrated the vitality of the Nineteenth Century New Orleans music scene. Several composers of color born in Louisiana had successful careers in Europe. Edmond Dédé, probably the most well-known of this group of artists, studied at the Paris conservatory and served as a conductor and composer in Bordeaux. Basile Barès was another prolific and popular composer of color from New Orleans. Although little is known about his early life, Barès was probably born the slave of a New Orleans piano merchant; his 1860 piano piece “Grande Polka des Chasseurs à Pied de la Louisiane,” (“The Great Polka of the Louisiana Infantry”) was published while he was still a slave. Barès studied with New Orleans musician and composer Eugène Prévost, also teacher to the young Dédé. Barès traveled several times to Europe, but unlike Dédé, chose to remain in New Orleans and to there pursue his musical career. He often performed with two other Creoles of Color, Samuel Snaër and Victor-Eugène Macarty, to whom Barès dedicated his piano piece, “La Belle Créole”. These musicians performed in a variety of settings including benefits for Creole of Color benevolent organizations and off-season concerts in the theaters of the city. Barès’s popularity grew even outside of the Creole sector of New Orleans. He published over twenty pieces of piano music, with both French and English titles, and led a popular string band that performed at carnival balls. As is evident in his published sheet music Barès frequently invoked the iconography of Creole New Orleans made popular by Gottschalk. Unlike Gottschalk, however, Barès’s “Creole Music for Piano” does not explicitly refer to the African influence on Creole culture. While Gottschalk incorporated the imagery of an exoticized black New Orleans into his music, Barès chose romanticized Creole images and titles for his own published compositions.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p class=\"exhibit-see\">See: Lester Sullivan. “Composers of Color of Nineteenth-Century New Orleans: The History Behind the Music,” in <em>Creole: The History and Legacy of Louisiana’s Free People of Color</em>, ed. Sybil Kein (Baton Rouge: LSU Press, 2000).</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "La Belle Créole",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case16-bares_belle.jpg",
+       "caption": "Sheet Music. “La Belle Créole” Basile Barès. (New Orleans: A. Elie., n.d.) in Music Collection of New Orleans Imprints.<br>[Hill Louisiana Rare Oversize M1. M86, Box 2 No.2]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "La Louisianaise, valse brillante, 1884",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case16-bares_louisianaise.jpg",
+       "caption": "<em>Sheet Music “La Louisianaise. Valse Brillante.” Basile Barès. (New Orleans: A.E. Blackmar, 1884).</em><br><em>[Hill Louisiana OS M32.B37 L68 c.2]</em>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Basile Barès",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case16-bares.jpg",
+       "caption": "Engraving. “Basile Barès”. in <em>Nos Hommes et Notre Histoire</em>. Rodolphe Lucien Desdunes. (Montréal: Arbour & Dupont, 1911).<br>[Hill Louisiana Rare F 380 C9 D47 c.2; facing p 164]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "La Coquette, 1866",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case16-bar_coquette.jpg",
+       "caption": "Sheet Music.”La Coquette.” Basile Barès. (New Orleans: A. Elie, 1866) in<em> Music Collection of New Orleans Imprints</em>.<br>[Hill Louisiana Rare Oversize M1. M86 Box 2, no. 2d]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "La Créole, souvenir de la Louisiane, 1869",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case16-bar_cre.jpg",
+       "caption": "Sheet Music. “La Créole. Souvenir de la Louisiane.” Basile Barès. (New Orleans, A.E. Blackmar, 1869) in Hart-Bonnecaze-Duncan Family papers.<br>[OS: H, folder 82]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "The Mystic Crew of Comus, 1858",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case16-comus.jpg",
+       "caption": "Engraving. “Mystic Crew of Comus”. <em>The Illustrated London News</em>. May 8, 1858 in <em>Southern Scenes Engravings</em>.<br>[OS: S]",
+       "layout": "side_start"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "L’Abeille and L’Athénée louisianais",
+   "anchor": "abeille-athenee",
+   "display": "wall",
+   "lead": "case17-abeille.jpg",
+   "lead_caption": "Newspaper. <em>L’Abeille</em>. 31 Jan 1912. Hill La Manuscripts.<br>[99: LSU Coll. (O, Pt. II)]",
+   "blocks": [
+    {
+     "type": "text",
+     "body": "<p>In defense of the French language</p>"
+    },
+    {
+     "type": "entry",
+     "title": "Swords and pens",
+     "summary": "As the French language declined after the Civil War, L’Athénée louisianais was founded in 1875 to defend and encourage the use of French in Louisiana.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Nineteenth Century New Orleans saw an explosion of short-lived newspapers. There were 139 newspapers published at least partly in French in Louisiana between 1790 and 1910. Among the papers that enjoyed some degree of success were, <em>Le Moniteur de la Louisiane</em>, the first newspaper ever published in Louisiana in 1794; the anti-slavery <em>La Tribune de la Nouvelle-Orléans</em> that was created during the Civil War in 1864 and <em>Le Carillon</em> which introduced itself in 1869 as being “hardly political, even less literary and not serious at all,” but soon became famous both for its irreverence and its vocal conservatism. Many New Orleans newspapers were founded by the “Foreign French,” refugees and intellectuals from the political turmoil of France. The New Orleans Francophone press took up the issues that had animated their political debates at home, and the city’s journalists became known for their work with their swords as well as with their pens. The history of French-speaking journalism in the city is indeed punctuated with famous duels. Founded in 1827, ns <em>L’Abeille de la Nouvelle-Orléa(The New Orleans Bee)</em> was about to celebrate its one-hundredth birthday when it released its last issue in 1925. First printed exclusively in French,<em> L’Abeille</em> soon began to include an English section in its columns, but this was abandoned in 1872 because of increased competition from the English-language newspapers. Between 1829 and 1830,<em> L’Abeille</em> also published a section in Spanish,<em> La Abeja</em>. First published three times a week, the paper quickly became a daily. Beside its columns devoted to the news, both local and from Europe—particularly from France—<em>L’Abeille</em> followed the lead of a number of papers in the 1840s by embracing a journalism of ideas centered upon the artistic and literary life of the city. Thus one could find in <em>L’Abeille</em> detailed information about musical and theatrical performances in New Orleans. For many years Louis Placide Canonge was in charge of the music and theater reviews. One could also read in <em>L’Abeille</em> the poems composed by the white Creole elite like Léona Queyrouze. But after the Civil War, the French language faced dramatic declines in New Orleans, gradually eliminating the readership for the French- language press. This decline accounted for the creation of <em>L’Athénée louisianais</em> in 1875 by a small group of well-known Creoles including General Pierre Soulé and General G.T. Beauregard. In the official declaration that established the goals of the organization, the members of <em>L’Athénée louisianais</em> pledged to defend and encourage the use of the French language in Louisiana. The group published a periodical entitled <em>Les Comptes-rendus de l’Athénée louisianais</em> (<em>The Records of l’Athénée louisianais</em>), the quality and intelligence of which were praised by the English-speaking writer Lafcadio Hearn. Alfred Mercier, Charles Gayarré and Léona Queyrouze were among the most regular contributors to <em>L’Athénée</em>. Octave Huard’s essay entitled “De l’utilité de la langue française aux États-Unis” (“On the Usefulness of the French Language in the United States”), reveals the importance this organization placed on the desperate defense of their language and culture which already seemed to be a holdover from a bygone era. It is in this defensive mood that Alfred Mercier concludes an article published by <em>Les Comptes-rendus de l’Athénée louisianais</em> in November 1880:</p><blockquote><p>But should the fact that we have worked hard to master the English Language be a reason to forget our French? To think that the knowledge of two languages is too much, as has been passionately claimed, is to follow the logic of the fool who, finding that he has too many arms, cuts one of them off.</p></blockquote>"
+      },
+      {
+       "type": "text",
+       "body": "<p class=\"exhibit-see\">See: Edward Larocque Tinker. <em>Bibliography of the French Newspapers and Periodicals of Louisiana</em> (Worcester, Mass.: American Antiquarian Society, 1933).</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "L’Abeille, January 31, 1912",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case17-abeille.jpg",
+       "caption": "Newspaper. <em>L’Abeille</em>. 31 Jan 1912. Hill La Manuscripts.<br>[99: LSU Coll. (O, Pt. II)]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "The founding declaration of L’Athénée",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "<em>Manuscript. Official Declaration of the Foundation of “L’Athénée” (1882).</em><br><em>[UU: 86, folder 1]</em>",
+       "figures": [
+        {
+         "image": "case17-ath_dec.jpg",
+         "caption": ""
+        },
+        {
+         "image": "case17-ath_sig.jpg",
+         "caption": "Manuscript. Official Declaration of the Foundation of “L’Athénée” (1882).<br>[UU: 86, folder 1]"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "P. G. T. Beauregard",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case17-beauregard.jpg",
+       "caption": "Photograph. P.G.T. Beauregard. (Ca. 1867) in Picture Collection.<br>[ E-67, Box “A-B”]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Comptes-rendus de l’Athénée louisianais, 1880",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case17-cral.jpg",
+       "caption": "Journal.<em> Comptes-Rendus de l’Athénée Louisianais</em>. 1880.<br>[Hill Louisiana AS 36L85, volumes 1-6, v.3, c.2]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "De l’utilité de la langue française aux États-Unis, 1882",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case17-huard.jpg",
+       "caption": "Pamphlet. <em>De l’utilité de la langue française aux Etats-Unis</em>. Octave Huard. (New Orleans: Imprimerie Franco-Américaine, 1882).<br>[Hill Louisiana PC 2073. H8]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Pierre Soulé",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case17-pierre_soule.jpg",
+       "caption": "Photograph. Pierre Soulé. in Picture Collection.<br>[Picture Collection.”S”]",
+       "layout": "side_start"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "The Free Black Press",
+   "anchor": "free-black-press",
+   "display": "wall",
+   "lead": "case18-union.jpg",
+   "lead_caption": "Newspaper. <em>L’Union</em> July, 30, 1863.<br>[Hill Louisiana Map case]",
+   "blocks": [
+    {
+     "type": "text",
+     "body": "<p>Freedom in French</p>"
+    },
+    {
+     "type": "entry",
+     "title": "L’Union and La Tribune",
+     "summary": "In 1864 Dr. Louis Charles Roudanez launched the bilingual La Tribune de la Nouvelle-Orléans, the first daily newspaper published by African Americans in the United States.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Before the Civil War, the large population of Free People of Color in Creole New Orleans developed a tradition of protest against the injustice they faced. Creoles of Color took up the romantic ideals and republican politics that had long been growing in the city in such institutions as Armand Lanusse’s literary society and the spiritualist religious movement. In the decade before the war, Joseph Barthet, a French emigre to New Orleans, published the newspaper<em> Le Spiritualiste</em> in which the communications between spirits of the dead and New Orleans mediums were printed. The messages revealed by these mediums, some of whom like Constant Reynes were Creoles of Color, were critical of the conservative catholic clergy of New Orleans and endorsed abolitionist publications. The fall of New Orleans to the Union army in April 1862 was quickly followed by the appearance in September of that year of <em>L’Union</em>, a French-language newspaper owned and edited by free people of color. <em>L’Union</em> and its editor Paul Trevigne took up the cause of the Republican abolitionists and argued for the liberty and equality of the black south. In the issue of <em>L’Union</em> displayed here, the funeral of André Caillou is described in detail. Caillou, a prominent Creole of Color and a hero of the Battle of Port Hudson, had been an officer in the “Native Guards,” a military unit made up of free men of color. Caillou’s body was accompanied to the cemetery by a grand parade of admirers and representatives of the many benevolent societies and brotherhoods of free-black New-Orleans. Shortly after <em>L’Union</em> folded in July 1864, Dr. Louis Charles Roudanez a Paris-trained doctor and prominent Creole of color, launched the bilingual paper <em>La Tribune de la Nouvelle Orleans</em>, the first daily newspaper published by African Americans in the United States.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p class=\"exhibit-see\">See: Caryn Cossé Bell. <em>Revolution, Romanticism, and the Afro-Creole Protest Tradition in Louisiana, 1718–1868</em> (Baton Rouge: LSU Press, 1997).</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Le Spiritualiste de la Nouvelle-Orléans, 1857–58",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "Newspaper. <em>Le Spiritualiste de la Nouvelle-Orléans</em>. (New Orleans: Jos. Barthet, 1857–58).<br>[Hill La Rare BF 1002 S6 Vol 11]",
+       "figures": [
+        {
+         "image": "case18-spiritualiste.jpg",
+         "caption": ""
+        },
+        {
+         "image": "case18-reynes.jpg",
+         "caption": ""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Dr. Louis Charles Roudanez",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case18-roudanez.jpg",
+       "caption": "Engraving. “Dr. L. Roudanez, patriote créole, fondateur et propriétaire de la Tribune de la Nouvelle-Orléans.” in <em>Nos Hommes et Notre Histoire</em>. Rodolphe Lucien Desdunes. (Montréal: Arbour & Dupont, 1911).<br>[Hill Louisiana Rare F380 C9 D47 C.2]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "La Tribune de la Nouvelle-Orléans, November 27, 1864",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case18-tribune.jpg",
+       "caption": "Newspaper. <em>La Tribune de la Nouvelle-Orléans</em>. November 27, 1864.<br>[Hill Louisiana 140-1]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "L’Union, July 30, 1863",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case18-union.jpg",
+       "caption": "Newspaper. <em>L’Union</em> July, 30, 1863.<br>[Hill Louisiana Map case]",
+       "layout": "side_start"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Opera in New Orleans",
+   "anchor": "opera",
+   "display": "wall",
+   "lead": "case20-frenchopera_hs.jpg",
+   "lead_caption": "Photograph. French Opera House. in Mugnier Collection.<br>[Mugnier U: 104, #6]",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "The first opera houses",
+     "summary": "In the early part of the century the New Orleans opera houses imported talented European musicians and singers and presented some of the finest opera in the United States.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>The rise and fall of French Opera in New Orleans frames the Nineteenth Century, from the first recorded performance of opera in the city in 1796 to the tragic burning of the French Opera House in 1919. In the early part of the century the New Orleans opera houses imported talented European musicians and singers and presented some of the finest opera in the United States. In 1796 Grétry’s “Silvain” was performed at the St. Peter Street Theater, the first recorded performance of opera in New Orleans. During the 1805–06 season the St. Peter Street Theater presented twenty-three performances of at least sixteen different operas to a city with a population of only twelve thousand people. Soon other companies were brought to the city and a rivalry developed between John Davis, a French-born refugee from St. Domingue who operated the Orleans Theater, and James Caldwell, an American who oversaw the Camp Street Theater. Competition between these theaters mirrored the tensions that existed between the Anglophone and Francophone sections of the city. Each group prided itself on the accomplishments of its opera troupe and boasted of the superiority of their artists. Giacomo Meyerbeer’s “Robert le Diable,” a perennial favorite, first premiered in New Orleans in 1835 at Caldwell’s Camp Street Theater, then opened six weeks later at Davis’s Orleans Street Theater. Critics from the French and English language press each claimed that their company’s performance of “Robert Le Diable” was far superior to the other’s. From 1827 to 1833 Davis traveled with a troupe of fifty performers to cities on the East Coast of the United States during the summer off-season in New Orleans. “Le Pré Aux Clercs” by Ferdinand Hérold was performed in New York by this “Compagnie Française de la Nouvelle Orleans.” Thus Creole New Orleans was, in this respect, an exporter of French culture to the rest of the United States.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p class=\"exhibit-see\">See: Henry A. Kmen. <em>Music in New Orleans: The Formative Years, 1791–1841</em> (Baton Rouge: LSU Press, 1966).</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Mlle de Biazi, première danseuse, 1896–97",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case19-biazi.jpg",
+       "caption": "Photograph. “Mlle de Biazi, Première Danseuse; French Opera Saison 1896–1897.” in De La Pouyade Collection.<br>[B: 63, folder 5]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Scenery model: a courtyard with a fountain and a banana plant",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case19-ftnbn.jpg",
+       "caption": "Model for Scenery. New Orleans Courtyard with Fountain and Banana Plant. in De La Pouyade Collection.<br>[B: 63, folder 9]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Le Pré aux Clercs",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case19-pre_aux_clerics.jpg",
+       "caption": "Libretto. <em>Le Pré Aux Clercs</em>. Ferdinand Hérold, paroles de M.E. Planard. (New York: F.G. Berteau, n.d.)<br>[Hill La Rare ML 50. H566 P73]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Robert le Diable, 1858",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case19-robert_lediable.jpg",
+       "caption": "Libretto. <em>Robert Le Diable</em>. Giacomo Meyerbeer (Napoleonville, LA: Impr. du pionnier de l’Assomption, 1858).<br>[Hill La Rare ML 50 M623 R62 1858]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Silvain, 1770",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case19-silvain.jpg",
+       "caption": "Libretto. <em>Silvain</em>. Jean François Marmontel, M. Grétry. (Paris, Merlin, 1770).<br>[Hill Rare 848 M345s]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Scenery model: a stone facade with three doors",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case19-stone.jpg",
+       "caption": "Model for Scenery. Stone building facade with three doors. in De La Pouyade Collection.<br>[B: 63, folder 9]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "The French Opera House",
+     "summary": "Designed by James Gallier Jr. and built in 1859, the French Opera House was the home of opera in New Orleans until it burned to the ground on December 4, 1919.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>While the Civil War interrupted the New Orleans Opera for several seasons, the New Orleans public soon enjoyed a grand new home for Opera. Designed by the great New Orleans architect James Gallier Jr., and built in 1859, the French Opera House was the home to opera for the second half of the Nineteenth Century. Traveling Italian and German companies were first to perform for the theater-starved public after the war. It was not until the 1867–68 season that a resident company was assembled in Europe and brought to New Orleans to perform at the French Opera House. But various managerial and financial problems plagued the company at the French Opera house, forcing the cancellation of the 1872–73 season. In 1873 Louis Placide Canonge, the New Orleans journalist and playwright, took control of the troubled French Opera House and directed the troupe there for two years until he was forced out by a group of disgruntled musicians. After a four year absence, the French Opera House opened again for the 1878–79 season and presented the New Orleans premiere of Bizet’s “Carmen”. In the last two decades of the century the French Opera House stabilized under the direction of Frédéric Mauge, and visits by such operatic luminaries as Adelina Patti in 1881 and 1885, and Sarah Bernhardt in 1892 were highlights of the opera season. In 1892 Léona Queyrouze published a poem dedicated to Bernhardt, “Le Sonnet Impromptu”, that praises the world-famous singer. The French Opera in New Orleans gradually declined during the first decades of the Twentieth Century. After a six-year period in which no resident company occupied the French Opera House, there was again in 1919 a French Company presenting grand opera in the city. Six weeks into the season, on December 4, 1919, the French Opera House burned to the ground.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<p class=\"exhibit-see\">See: Lewis Joseph Richard Jr. <em>The Development of Opera in New Orleans from the Civil War to the Burning of the French Opera House in 1919</em> (unpublished thesis, LSU, 1959).</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "French Opera programs, 1888–1890",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "French Opera Programs”La Juive” Halevy, 11/10/1888, “Les Huguenots” Meyerbeer, 3/2/1889. “L’Africaine” Meyerbeer, 12/30/1889. “Lucia di Lammermoor”, Donizetti, 11/29/90. “Le Prophete”, Meyerbeer, 3/3/1889. in John L. Peytavin Papers.<br>[C: 28, 1st and 2nd folders E: 57]",
+       "figures": [
+        {
+         "image": "case20-juive.jpg",
+         "caption": ""
+        },
+        {
+         "image": "case20-hugu.jpg",
+         "caption": ""
+        },
+        {
+         "image": "case20-prophete.jpg",
+         "caption": ""
+        },
+        {
+         "image": "case20-afric.jpg",
+         "caption": ""
+        },
+        {
+         "image": "case20-lucia.jpg",
+         "caption": ""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Creatore at the French Opera House",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case20-creatore.jpg",
+       "caption": "Photograph. “Creatore at French Opera House, Sun mat. and night” in Picture Collection.<br>[Picture Collection, E: 68, “C” Box]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "The French Opera House",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case20-frenchopera_hs.jpg",
+       "caption": "Photograph. French Opera House. in Mugnier Collection.<br>[Mugnier U: 104, #6]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "An invitation to the opera, 1889",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case20-invite_opera.jpg",
+       "caption": "Invitation for the Opera (1889) in Charles Clark Family Papers.<br>[UU: 254, Box 3, folder 31]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "“Le Sonnet Impromptu,” 1892",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case20-lq_sonnet.jpg",
+       "caption": "Newspaper Clipping. “Le Sonnet Impromptu.” Léona Queyrouze, 1892. in Léona Queyrouze Papers.<br>[UU: 71, Box 7A, folder 7: 53]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Carmen",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case20-oprn.jpg",
+       "caption": "Engraving. “Carmen” in <em>L’Opéra et Ses Hôtes sous la direction de G. de Beauplan</em>. Fernand Armant. (New Orleans, 18—).<br>[Hill Louisiana Rare ML 1171.8 N5 A75]",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Sarah Bernhardt",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "case20-sb_portrait.jpg",
+       "caption": "Engraving. Sarah Bernhardt in <em>Le voyage de Sarah Bernhardt en Amérique</em>. Marie Colombier (Paris: M. Dreyfous, 1881).<br>[Hill Louisiana Rare PN 2638 B5C7]",
+       "layout": "side_start"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "For Teachers",
+   "anchor": "for-teachers",
+   "display": "wall",
+   "lead": "houssaye-school-announcement-1882.jpg",
+   "lead_caption": "Advertising Card. Opening of a School in Franklin, LA by Mme de la Houssaye and Miss Wallis (1882). in Emma T Stafford, Sidonie de la Houssaye Collection.<br>[U: 104, folder 1: 5]<br><a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p120701coll19:3692\">In the Louisiana Digital Library</a>",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "Dear Educator",
+     "summary": "Classroom resources from 2001, for middle and high school students (grades 6–12): three lesson plans, and questions that guide students through the exhibition.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>The classroom resources assembled here were designed to help you use this web site and other material on the Internet in the teaching of Louisiana history and culture. French Language instructors will also find the texts and images of Résonances Créoles/Creole Echoes useful in their classrooms. The Questions for Comprehension section will guide student use of the exhibit. Multidisciplinary lesson plans offer students and teachers access to a variety of materials in different subject areas, including history, language arts, and fine arts. Links in the lesson plans connect both to relevant images and texts from the on-line exhibit as well as to outside material.</p><p>These materials are designed for middle and high school students (grades 6–12), although they may be modified for younger students. Each lesson plan provides overall objectives, brief background information, and links to complementary web sites. Many of the lessons could also be adapted for students to complete on their own.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Lesson 1: Who is a “Creole”?",
+     "summary": "Students learn how a word like “creole,” “white” or “American” can mean different things to different people, and look at their own identities.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<h3>Overview</h3><p>Students will be introduced to the contentious term “Creole.” The aim of the lesson is not to arrive at a stable definition of the word, but to gain an understanding of how a word like “creole,” or “white” or “American” can mean different things to different people. Students will examine their own racial, ethnic, and national identities with the goal of understanding how these identities have played constructive and destructive roles in history and in the world today. This lesson could either precede or follow the student’s introduction to the web exhibit. This lesson relies primarily on information from the first eight sections of the exhibit.</p><h3>Objectives</h3><ul><li>Students will learn to use the Internet as a research tool by performing an Internet search.</li><li>Students will discover the many ways that the word “creole” is used today. Through class discussion they will then discover the many varying ways that people identify themselves.</li><li>A directed reading of three sections of the exhibition will lead students to understand how the word “creole” was used in different times by different people.</li><li>Students will examine the many ways that they think about their own identity by creating identity cards.</li></ul><h3>Necessary Materials</h3><p>Internet access (computer lab or computer projector), basic art supplies (paper, scissors, markers, glue), or graphics software.</p><h3>Teaching Procedure</h3><p>Four activities integrate the web exhibit with a hands-on art project and discussions.</p><h4>Activity 1: A “Creole” Brainstorm</h4><p>Either on paper or using word processing software, have students create a dictionary entry for the word “Creole.” Briefly discuss some of the definitions that the students have created.</p><h4>Activity 2: An Internet Search</h4><p>Using Internet search engines, have students search for the term “creole” on the Internet (either individually in a computer lab or together as a class using a computer projector). Discuss the results of the search. What does the word “creole” mean in the different sites. What part of speech is the word “creole” in each example? (A brief grammar lesson—in French or English—about the difference between a noun and an adjective could follow from this point.) What is the difference between “creole” as a adjective and “creole” as a noun. What makes something “creole”? Where are “creole” things or people usually found? What is a “creole” language? Create a list with the students of the many ways that the word “creole” is used by people today.</p><h4>Activity 3: Examining the Exhibition.</h4><p>Using the text and images of Section 1 of Creole Echoes, The City of the Belle Creole, discuss how the term “creole” was also used to describe many different people and things in nineteenth-century New Orleans. Then contrast two other sections of the exhibit, The Free People of Color, and “The Latin Race in Louisiana”. Both of these sections use terms (“free people of color” and “Latin”) that people once used to describe themselves but that are no longer used in the same way today. Why did people call themselves “Latin,” or “hommes de couleur libre” (free people of color)? Why would Charles Gayarré claim that “the term Creole referred only to the pure white descendants of European settlers in Louisiana” ? How does Gayarré’s definition of the word “creole” differ from the way that the word is used in the “Slave Sale Notice”? Why did the free people of color in Louisiana call themselves “creole”?</p><h4>Activity 4. Creating a “real ID” card (as opposed to a “fake ID” card).</h4><p>Have the students create their own identity card. This activity could be done with computer graphics software or traditional art materials. Students draw or scan an image of themselves into the computer. They then create a card that reflects their own identities. A class discussion could produce a list of categories that might be used to create the identity card. Examples include: Where was the student born? What is his race? What is her ethnicity? Where does the student live? What is the student’s religious background? What language(s) does the student speak? Where are the student’s ancestor’s from? What is the student’s political affiliation? What is the student’s nationality? What is the student’s gender? What is the student’s favorite kind of music?<br>The goal of the exercise is to underscore both the importance and the instability of these categories of identity. A follow-up discussion could begin with the following questions: Which of the various identities that the student has put on his card is the most important to him? Which of her identities are not important? Can identities change? How can identities be helpful (for example, the civil rights movement)? How can they be dangerous (extreme nationalism, white supremacist movements, religious persecution)? Why did Charles Gayarré write The Creoles of History and the Creoles of Romance, a speech claiming that all “creoles” are white? Why did Rodolphe Desdunes write Nos Hommes et Notre Histoire (Our People and Our History), a book that highlights the achievements of Louisiana’s free people of color?</p><h3>Bibliography</h3><p>Gwendolyn Midlo Hall, Africans in Colonial Louisiana. (Baton Rouge: LSU Press, 1992).<br>Creole New Orleans: Race and Americanization. Ed. Arnold Hirsch and Joseph Logsdon. (Baton Rouge: LSU Press, 1992).</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Lesson 2: Battles of New Orleans",
+     "summary": "Two events that mattered to Creole New Orleans, the 1768 revolt against Spain and the 1815 Battle of New Orleans, and how such events mean different things to different people.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<h3>Overview</h3><p>In the exhibit Résonances Créoles/Creole Echoes, the section entitled Conflicting Myths and Loyalties presents two events that were important for the way Creole New Orleans thought about itself: the 1768 revolt by French colonists against Spanish rule, and the 1815 Battle of New Orleans. This lesson will both introduce students to these two important moments in Louisiana history and will encourage students to discover how such events mean different things for different people.</p><h3>Objectives</h3><ul><li>Students will use the Internet, encyclopedias, and other library resources to discover basic facts about the Battle of New Orleans and the 1768 revolt by French colonists in Spanish Louisiana.</li><li>Students will examine images and text from the exhibit to discover how writers use historical events for certain purposes.</li><li>Students will then critically examine two websites that give information on Andrew Jackson. They will learn to examine the source of information on the internet and in other media.</li><li>Students will write a poem, short story or essay from the point of view of a participant in the Battle of New Orleans. They will compare their writing and discover similarities and differences in these perspectives.</li></ul><h3>Necessary Materials</h3><p>Access to Internet and other reference materials. Art, musical or other materials according to the individual student’s creative project (Activity 4).</p><h3>Teaching Procedure</h3><h4>Activity 1: Research Questions</h4><p>Answer the following questions using information found on the Internet or in encyclopedias or other reference books:<br>The transfer of Louisiana from France to Spain:<br>a) When did Louisiana become a Spanish Colony?<br>b) What were the names of the first three Spanish governors of Louisiana?<br>c) Were the people of Louisiana happy about the change from French to Spanish rule?<br>d) Why did Governor O’Reilly execute the leaders of the revolt?</p><p>The Battle of New Orleans:<br>a) When was the Battle of New Orleans?<br>b) What was the name of the general who led the American forces in this battle?<br>c) What group of soldiers played the most important role in the American victory?<br>d) Was Andrew Jackson a hero to New Orleanians after the battle?<br>Questions “c” and “d” in each of these sets of questions will be answered differently by each student. Discuss the different results, asking what evidence students have to support their answer. Is there one right answer? Are there wrong answers? Which sources lead to certain conclusions? What kinds of sources did students use in finding answers to these questions?</p><h4>Activity 2: Examining Exhibit Items—a Discussion</h4><p>The section of the exhibit entitled Conflicting Myths and Loyalties presents several representations of the two important events that we are examining. After reading the section with the class, ask students to critically examine the images, plays and books. Questions for discussion: Why is Andrew Jackson painted in this way? What does the image of O’Reilly say about him, or about the person who made the image? Why would someone write a play in French in Louisiana called “Les Martyrs de la Louisiane?” What does the text say about why these events were important to Creoles in Louisiana? What is a “foundation myth”? Can you think of any foundation myths that we have today?</p><h4>Activity 3: Andrew Jackson on the Internet.</h4><p>The following two web sites present very different views of Andrew Jackson, the American general at the Battle of New Orleans:</p><p><a href=\"https://www.allthingscherokee.com/andrew-jackson-worst-president-cherokee-ever-met/\">All Things Cherokee</a></p><p><a href=\"https://thehermitage.com/\">The Hermitage</a></p><p>Encourage students to examine these two web sites. Questions for discussion: what does The Hermitage website say about Andrew Jackson? How is the All-Things Cherokee website different? Why did the people who made each of these websites write about Jackson in the way that they did? Do other web sites offer different opinions about Jackson? What do you think about Andrew Jackson?</p><h4>Activity 4: Making History</h4><p>Many different people fought in the battle of New Orleans: White and Black, Free and Slave, Native Americans, Creoles, Americans, and British. Each student will pick a personality from the list below and then creatively react to the events of the battle from this person’s perspective. They may choose to write a poem, play, or essay, paint or draw, write a song, or make a web site from the point of view of their personality (if there are not enough to go around either invent more personalities or allow more than one student to choose each personality):</p><p>Major Pierre Jugeant, a part-Choctaw scout for the Americans<br>Jean Laffite, Leader of the pirates from Barataria<br>Guillaume, one of Jean Laffite’s men<br>Paul, an American soldier from Kentucky<br>James, A young British soldier<br>Ann, James’ mother.<br>Andrew Jackson<br>Rachel Donelson, Andrew Jackson’s wife<br>Edmond, A young white Creole merchant from New Orleans and soldier for the Americans.<br>Edith, a slave on a plantation near the battlefield.<br>Armand, a free black soldier and carpenter from New Orleans<br>Sister Marie-Louise, a nun from New Orleans who nursed injured soldiers<br>Monsieur Emile DuParc, A wealthy slaveholder and soldier.<br>Sir Edward Pakenham, Major General of the British forces.<br>Major Gabriel Villeré, commander of the Louisiana Militia.<br>Madame Villeré, his wife.<br>Susan, a part-Cherokee student from Oklahoma researching her family’s heritage<br>Brad, a descendant of Andrew Jackson researching his family’s heritage.</p><p>Allow students to share their creative work and discuss the differences and similarities in their projects. Discussion questions: Was it difficult to react to the battle from the point of view of your character? If so why? How are the projects different? How are they similar? How would your project be different if you had chosen someone else?</p><h3>Related Web Sites</h3><ul><li><a href=\"https://www.nps.gov/jela/planyourvisit/chalmette-battlefield.htm\">Chalmette Battlefield and National Cemetery, Chalmette, Louisiana</a></li></ul>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Lesson 3: Creole Women Writers",
+     "summary": "Using the sections on Sidonie de la Houssaye and Léona Queyrouze, students learn what it meant to be a woman writer in nineteenth-century Louisiana.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<h3>Overview</h3><p>Using material from the Sidonie de la Houssaye and the Léona Queyrouze sections of the exhibit, students will gain an appreciation for what it meant to be a woman writer in Louisiana in the Nineteenth Century.</p><h3>Objectives</h3><ul><li>Students will begin to learn about the lives and work of these two women writers by examining why they both chose to write with pen names.</li><li>Students will use the Internet to write a letter or E-mail to an influential person in their life. This will teach them to communicate with the Internet and to make their opinions known</li><li>Students will work closely with exhibit material to construct a children’s story.</li></ul><h3>Necessary Materials</h3><p>Internet access, writing supplies, postage stamps and envelopes.</p><h3>Teaching Procedure</h3><h4>Activity 1: Nom de Plume</h4><p>Both Sidonie de la Houssaye and Léona Queyrouze wrote under a nom de plume, or pen name. Ask students to read the texts of both of these sections and answer the following questions: What was Léona Queyrouze’s nom de plume? Why did she choose this name? What was Sidonie de la Houssaye’s nom de plume? Why did she choose this name? Did Queyrouze and de la Houssaye have different reasons for signing their work with a nom de plume?<br>Then have students pick a nom de plume for themselves. If they were to choose another name to use, what would it be? Why?</p><h4>Activity 2: Write a letter or E-Mail message</h4><p>Léona Queyrouze wrote a letter to Émile Zola, a famous and important French writer who had greatly influenced her own work. She was very proud when he responded to her letter. Have each student pick a person who greatly influences them. Ask students to write a letter or E-mail message to this person. Have the students send the letters or E-mail messages. Researching addresses on the Internet will be part of the challenge of this project.</p><h4>Activity 3: Write a children’s story</h4><p>Sidonie de la Houssaye wrote many stories for her children and grandchildren. Have students write a children’s story using the photographs from both of these sections of the exhibit. Léona Queyrouze and Sidonie de la Houssaye may be characters in the story. Have the students sign their stories with their new pen-names.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Questions for Comprehension",
+     "summary": "Forty questions, two for each section of the exhibition, to guide students through it.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<h3>The City of the Belle Créole</h3><p>1) Someone who speaks French can be called ________.<br>2) Poché’s Speech “Les Creoles de la Louisiane” assumed that “creoles” were exclusively ________.</p><h3>Diverse Origins</h3><p>3) ________ was the first American Governor of Louisiana.<br>4) The three-caste racial order in Louisiana included ________.</p><h3>The Creole Family</h3><p>5) ________ wrote “La Famille Créole”.<br>6) St. Domingue is the former name of this country. ________.</p><h3>Conflicting Myths and Loyalties</h3><p>7) Spanish Governor ________ executed the leaders of the revolt by Louisiana colonists against Spain.<br>8) Mil huit cent quatorze is a book of poems about ________.</p><h3>The View From Outside</h3><p>9) George Washington Cable wrote in what language? ________.<br>10) ________ wrote A Critical Dialogue between Aboo and Caboo.</p><h3>The View From Inside</h3><p>11) ________ refuted Cable’s questioning of the Creole’s racial purity.<br>12) Dominique Rouquette’s collection of poetry ________ idealized the simple life and natural state of Native Americans.</p><h3>The Free People of Color</h3><p>13) Many free black refugees from ________ came to Louisiana.<br>14) ________ wrote Nos Hommes et Notre Histoire, a book that celebrated the achievements of free black New Orleanians.</p><h3>The Latin Race in Louisiana</h3><p>15) During ________ many of the city’s free people of color assumed leadership roles in Louisiana’s government.<br>16) After the Civil War, many Francophone New Orleanians insisted on the absolute ________ of their ancestors.</p><h3>Alfred Mercier</h3><p>17) Mercier received his medical education in ________.<br>18) Some of the dialogue in L’Habitation Saint-Ybars was written in what language? ________.</p><h3>Adrien Rouquette</h3><p>19) As a young man, Adrien Rouquette learned which Native American language? ________.<br>20) Rouquette’s first assignment as a priest was to ________ Cathedral.</p><h3>Louis Placide Canonge</h3><p>21) Canonge was the editor of ________ during the Civil War.<br>22) Canonge managed the French Opera house for ________ seasons?</p><h3>Armand Lanusse</h3><p>23) Lanusse was the director of this school for many years. ________.<br>24) ________ was a collection of poems by seventeen free men of color from New Orleans.</p><h3>Léona Queyrouze</h3><p>25) Queyrouze was friends with the writer ________.<br>26) The famous French writer ________ sent a response to Queyrouze’s letter.</p><h3>Sidonie de la Houssaye</h3><p>27) Only ________ of de la Houssaye’s fourteen children survived into adulthood.<br>28) ________ was de la Houssaye’s nom de plume (pen name).</p><h3>Louis Moreau Gottschalk</h3><p>29) Gottschalk went to Paris at the age of ________.<br>30) Name one of Gottschalk’s piano compositions that was inspired by life in New Orleans. ________.</p><h3>Basile Barès</h3><p>31) Barès’s piano composition “Grande Polka des Chasseurs à Pied de la Louisiane” was published while he was still a ________.<br>32) Barès’s music does not explicitly refer to ________.</p><h3>L’Abeille and L’Athénée louisianais</h3><p>33) Most New Orleans Newspapers were founded by ________.<br>34) L’Athénée Louisianais was founded to preserve ________.</p><h3>The Free Black Press: Freedom in French</h3><p>35) ________, a newspaper owned and edited by free people of color, was the first to appear after the fall of New Orleans to Union forces.<br>36) ________ launched La Tribune in 1864.</p><h3>Opera in New Orleans I</h3><p>37) A performance of Gretry’s ________ is the earliest known opera performance in New Orleans.<br>38) ________ brought New Orleans Opera companies to the East Coast for performances in the 1830s.</p><h3>Opera in New Orleans II</h3><p>39) Which two famous opera singers visited New Orleans in the 1880s and 1890s? ________.<br>40) In the year ________ the French Opera House was destroyed in a fire.</p>"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

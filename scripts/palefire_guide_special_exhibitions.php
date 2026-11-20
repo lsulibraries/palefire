@@ -161,6 +161,7 @@ $section('How the exhibitions were moved', [
 <li><strong>John James Audubon in Louisiana</strong> (2021) was at lib.lsu.edu/exhibitions/john-james-audubon. The Wayback Machine has its landing and section pages; the bird and manuscript pages come from the students’ copy at /audubon.</li>
 <li><strong>LSU Union Art Gallery</strong> was a six-page showcase on libstage, never on the public site.</li>
 <li><strong>Free People of Color in Louisiana</strong> (2015) was a set of static pages at /sites/all/files/sc/fpoc, later copied to Showcase pages under /fpoc. Its text comes from the static pages.</li>
+<li><strong>Creole Echoes</strong> (2001) was a set of Showcase pages under /creole, copied from the 2001 web exhibition, with a French version under /creole/fr. Its text comes from the English Showcase pages.</li>
 <li><strong>New from Old Natchez</strong> (2002) was a set of Showcase pages under /natchez, whose Image and Transcript links go to the 2002 files. Its text comes from the Showcase pages.</li>
 <li><strong>Made in America: Selected Imprints from 1776–1826</strong> (2026) had only an announcement at /260908/madeinamerica. Its text comes from the exhibition’s own panels.</li>
 <li><strong>From Red Stick to River Capital</strong> (1999) was a set of static pages at /sites/all/files/sc/exhibitions/e-exhibits/redstick, later copied to Showcase pages under /brhistory. Its text comes from the Showcase pages, checked against the static pages.</li>
@@ -867,6 +868,49 @@ $section('Sugar at LSU: A Chronology', [
 <h3>New wording to check</h3>
 <ul><li>The title split (“Sugar at LSU” / “A Chronology”), the credit line and the cover’s object label.
 </li><li>The gallery title changes, the plate titles and Summaries, the entry titles, the lead captions, the notes in brackets in the case lists, and the alt text for every picture.
+</li></ul>
+HTML),
+]);
+
+$section('Creole Echoes: The Francophone Music and Literature of Nineteenth-Century New Orleans', [
+  $text(NULL, <<<'HTML'
+<p>Built at <a href="/v2/special/exhibitions/creole">/v2/special/exhibitions/creole</a>, not published yet.</p>
+<p>Exhibition: Résonances créoles / Creole Echoes, Hill Memorial Library, August 20 – November 3, 2001, curated by Frédérique Spill and Jean-Marc Allard Duplantier, with an introduction by Salwa Nacouzi.<br>Old site: the Showcase pages under /creole (introduction, case1–case20, three biographies, the lesson plans, questions and credits). The French version under /creole/fr is not migrated.</p>
+<h3>Changed on the page</h3>
+<ul><li>Seventeen galleries, all walls with a lead picture: Introduction, the twenty cases (grouped where the old site split one subject over several pages: The Doctor, the Priest and the Dandy; Beyond the “Belle Créole”; Crossing the Musical Color Line; Opera in New Orleans) and For Teachers, which takes in the letter to educators, the three lesson plans and the Questions for Comprehension.
+</li><li>Each gallery opens with a text plate, a heading and a summary from the case’s own text; the long biographies are plates of their own. Quotations set apart in italics are block quotes, and “See:” lines are citations.
+</li><li>Pictures: 147. Eight are new masters from the Louisiana Digital Library: four George François Mugnier stereographs, shown as whole cards (No. 374 is the cover; Nos. 375 and 418 lead Introduction and The Creole Family), and four items from the Sidonie de la Houssaye Papers. The other 139 are the 2001 images at about 300px; there are no larger copies on the R: drive or in the LDL.
+</li><li>Leads: four galleries open on an LDL master of 720p or more and fill the screen (Beyond the “Belle Créole” now on the postcard of de la Houssaye’s home, The Creole Family on Mugnier’s No. 418). The other thirteen have only 2001 images, so their leads have “Show whole image” ticked: shown whole over a blurred wash, not enlarged. The cover is large enough, so it is not framed.
+</li><li>Free People of Color in Louisiana covers some of the same people (Barès, Desdunes, Lanusse, Roudanez); the two share no pictures.
+</li></ul>
+<h3>Corrected</h3>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>a perineal favorite</del></td><td><ins>a perennial favorite</ins></td></tr>
+<tr><td><del>Pierre Delcour</del></td><td><ins>Pierre Dalcour</ins></td></tr>
+<tr><td><del>Frédérique Chopin</del></td><td><ins>Frédéric Chopin</ins></td></tr>
+<tr><td><del>cause of back people</del></td><td><ins>cause of black people</ins></td></tr>
+<tr><td><del>Nantes then to Renne</del></td><td><ins>Nantes then to Rennes</ins></td></tr>
+<tr><td><del>(New Orleans, 1972)</del></td><td><ins>(New Orleans, 1872)</ins> <em>a caption</em></td></tr>
+<tr><td><del>Peychaus &amp; Garcia, 1976</del></td><td><ins>Peychaud &amp; Garcia, 1876</ins> <em>a caption</em></td></tr>
+<tr><td><del>Gwendolin Midlo Hall</del></td><td><ins>Gwendolyn Midlo Hall</ins> <em>Lesson 1</em></td></tr>
+</tbody>
+</table>
+<ul><li>About 40 more typos in the text, captions and lessons (Tabacco, Cemetary, L’Ouverature, Craegus, McIlheney and others), italics that started or stopped a letter off, and book and newspaper titles put in italics; the full list is in the theme’s docs/special-exhibition-corrections/creole.md.
+</li></ul>
+<h3>Links</h3>
+<ul><li>The lesson plans keep The Hermitage, the National Park Service’s Chalmette Battlefield and All Things Cherokee. Links that no longer work (the Louisiana State Museum’s and the Secretary of State’s old sites, HistoryNet, Hillsdale College, a GeoCities page) and the lessons’ links to other exhibition pages are gone.
+</li><li>The lessons and questions use the galleries’ new names.
+</li></ul>
+<h3>To verify</h3>
+<ul><li>“the 1764 transfer” of Louisiana to Spain (ceded 1762, completed 1769).
+</li><li>Sarah Bernhardt called a “singer” (she was an actress).
+</li><li>L’Athénée louisianais founded in 1875, while the declaration shown is dated 1882.
+</li><li>“beyond the confident veneer”, and Dear Educator’s mention of links in the lesson plans, some of which are gone.
+</li></ul>
+<h3>New wording to check</h3>
+<ul><li>Every plate title and summary, the picture titles, the alt text, the cover label, the caption for the five Mugnier stereographs and the summaries of the lessons.
 </li></ul>
 HTML),
 ]);

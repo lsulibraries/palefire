@@ -928,6 +928,14 @@ HTML),
 <li>Its 2024 press release turned up: the page now names the Hill Memorial Library exhibition it belonged to and the people who organized it, quotes them, and opens on the release’s photograph of Gladys Clark weaving in costume, with a second of an Acadian Handicraft display in New York.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Creole Echoes, the French-speaking city in seventeen galleries', <<<'HTML'
+<ul>
+<li>The 2001 exhibition Creole Echoes, on the French-language music and literature of nineteenth-century New Orleans, is rebuilt as a v2 exhibition, not published yet: seventeen galleries, each a wall that opens with a short text plate and hangs the case’s books, sheet music, newspapers and photographs beside it.</li>
+<li>The writers and composers (Alfred Mercier, Adrien Rouquette, Placide Canonge, Armand Lanusse, Léona Queyrouze, Sidonie de la Houssaye, Louis Moreau Gottschalk and Basile Barès) each have a plate of their own.</li>
+<li>Four George François Mugnier stereographs of French Quarter houses and four de la Houssaye papers are new, sharper copies from the Louisiana Digital Library; the stereographs now show the whole card.</li>
+<li>The lesson plans for teachers come along as their own gallery, with dead links taken out and the section names brought up to date.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: Free People of Color’s history chapters hang as walls', <<<'HTML'
 <ul>
 <li>Golden Age and Decline and Civil War are walls now: each chapter is cut into four text plates at the turns in Michael Taylor’s argument, with its documents hung between them. Open the first plate and press next to read the chapter in order, documents and all.</li>
