@@ -4909,6 +4909,24 @@ $pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last
   overflow-wrap: anywhere;
 }
 
+// A person's picture is from their own book (tile.book): "from" and the
+// title on a line of their own under the name, muted, two lines at most.
+.pf-exhibit-wall__book {
+  display: -webkit-box;
+  flex: 1 1 100%;
+  min-width: 0;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  color: var(--pf-exhibit-muted);
+  font-size: 0.8125rem;
+  line-height: 1.35;
+
+  cite {
+    font-style: italic;
+  }
+}
+
 // A life with no portrait (tile.person, exhibit-page.html.twig): the name
 // typeset on the surface, a 3:4 plate like a portrait's, Swiss fashion: the
 // name set large and tight at the top, a short accent rule, the life dates

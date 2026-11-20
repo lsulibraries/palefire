@@ -383,6 +383,18 @@ HTML),
         $figure('<p>A picture’s tile: the entry’s first image, its own shape.</p>', 'side_start'),
       ])),
     ]),
+    Paragraph::create([
+      'type' => 'exhibit_entry',
+      'field_block_title' => 'Josef Müller-Brockmann',
+      'field_section_anchor' => 'muller-brockmann',
+    ] + $dated('1914/1996') + array_filter([
+      'field_entry_role' => isset($bio_fields['field_entry_role']) ? 'Graphic designer' : NULL,
+    ]) + [
+      'field_entry_bio' => $html('<p>A person whose picture is a page or plate from their own book. The tile names the book under the person (“from <em>Grid Systems in Graphic Design</em>”), read from the caption’s italic title, so the picture is not taken for a portrait.</p>'),
+      'field_guide_blocks' => array_values(array_filter([
+        $figure('<p>A page from <em>Grid Systems in Graphic Design</em> (Niggli, 1981).</p>', 'side_start'),
+      ])),
+    ]),
   ]);
   $sections[array_key_last($sections)]->set('field_exhibit_display', 'wall');
 }

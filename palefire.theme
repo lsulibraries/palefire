@@ -5579,7 +5579,9 @@ function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
  * @return array{tiles: array, groups: array, sortable: bool, sheets: array}|null
  *   tiles: ['anchor', 'title', 'plate' (from "plate 40" in the caption, or
  *   NULL), 'tag' (the two figures' captions, "Drawing · Proof", or an
- *   audio clip's speaker, or "4 pages"), 'audio' (the entry has a clip),
+ *   audio clip's speaker, or "4 pages"), 'book' (a person's picture: the
+ *   book it comes from, _palefire_exhibit_book(), or ''), 'audio' (the
+ *   entry has a clip),
  *   'year' (the clip's year, from the end of its credit, or NULL),
  *   'pages' (a manuscript's page count, or 0), 'ratio',
  *   'images' (_palefire_exhibit_image() values; none for a reel),
@@ -5610,6 +5612,7 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
     // labels an oral history tile.
     $figures = [];
     $caption = '';
+    $caption_html = '';
     $speaker = NULL;
     $year = NULL;
     $pages = 0;
@@ -5625,6 +5628,7 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
       if ($block->bundle() === 'exhibit_figure' && !$block->get('field_figure_image')->isEmpty()) {
         $figures = [$block];
         $caption = $text($block->get('field_figure_caption'));
+        $caption_html = (string) $block->get('field_figure_caption')->value;
         break;
       }
       if ($block->bundle() === 'exhibit_gallery') {
@@ -5636,6 +5640,7 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
         $pages = count($figures) > 2 || (count($figures) === 2 && !$aligned) ? count($figures) : 0;
         $figures = array_slice($figures, 0, 2);
         $caption = $text($block->get('field_figure_caption')) ?: ($figures ? $text($figures[0]->get('field_figure_caption')) : '');
+        $caption_html = $text($block->get('field_figure_caption')) !== '' ? (string) $block->get('field_figure_caption')->value : ($figures ? (string) $figures[0]->get('field_figure_caption')->value : '');
         if ($figures) {
           break;
         }
@@ -5716,6 +5721,9 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
       'tag' => $pages ? (string) \Drupal::translation()->formatPlural($pages, '1 page', '@count pages') : (count($tags) === 2 ? implode(' · ', $tags) : (string) ($speaker ?? ($bio && !$person ? $bio['life'] : ''))),
       'audio' => $speaker !== NULL,
       'person' => $person,
+      // A person's picture is a plate or page from their own book: the
+      // label names the book, so the bird is not read as their portrait.
+      'book' => $bio && $images && $speaker === NULL ? _palefire_exhibit_book($caption_html) : '',
       'life' => $bio ? $bio['life'] : '',
       // The years a life spans, for a wall of lives' facts.
       'years' => $bio ? ($bio['life'] ?: trim((string) $entry->get('field_block_title')->value)) : '',
@@ -5876,6 +5884,41 @@ function _palefire_exhibit_bio_card(ParagraphInterface $paragraph, string $title
     'words' => $words,
     'minutes' => max(1, (int) round($words / 238)),
   ];
+}
+
+/**
+ * The book a picture comes from, read from its caption's italic titles.
+ *
+ * "Euphonia musica from <em>The Birds of Haiti</em>": the title after
+ * "from". Otherwise the first italic title that is not a species name
+ * ("<em>Capito auratus</em>") — a citation's ("<strong><em>Birds of Peru.
+ * </em> Princeton, 2007") or one in a sentence ("Sclater’s <em>A
+ * Monograph…</em>"). A subtitle after ". " is dropped ("Birds in Brazil.
+ * A Natural History" is "Birds in Brazil"). '' when the caption names none.
+ */
+function _palefire_exhibit_book(string $html): string {
+  $html = preg_replace('#<(/?)i\b[^>]*>#iu', '<$1em>', $html);
+  if (!preg_match_all('#<em\b[^>]*>(.*?)</em>#isu', (string) $html, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE)) {
+    return '';
+  }
+  $book = '';
+  foreach ($matches as $match) {
+    $title = trim((string) preg_replace('/\s+/u', ' ', Html::decodeEntities(strip_tags($match[1][0]))));
+    $title = rtrim($title, ' .,;:');
+    if ($title === '' || preg_match('/^[A-Z][a-z]+ [a-z]+$/u', $title)) {
+      continue;
+    }
+    if (preg_match('/\bfrom\s*$/iu', strip_tags(substr((string) $html, 0, $match[0][1])))) {
+      $book = $title;
+      break;
+    }
+    $book = $book ?: $title;
+  }
+  // An owner inside the italics ("Tschudi’s Untersuchungen…") is dropped.
+  // A subtitle: ". " after two words or more, not after an initial or
+  // "St" ("Edward E. Ayer", "St. Kitts" stay whole).
+  $book = (string) preg_replace('/^\p{Lu}\S*[’\']s\s+/u', '', $book);
+  return rtrim((string) preg_replace('/^(\S+(?:\s+\S+)+?)(?<!\s\p{Lu})(?<!\bSt)(?<!\bDr)\.\s.*$/su', '$1', $book), ' .,;:');
 }
 
 /**

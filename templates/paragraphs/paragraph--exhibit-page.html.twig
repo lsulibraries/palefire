@@ -298,6 +298,10 @@
                   {% elseif tile.plate %}
                     <span class="pf-exhibit-wall__tag"><abbr title="{{ 'Plate'|t }}">{{ 'Pl.'|t }}</abbr> {{ tile.plate }}</span>
                   {% endif %}
+                  {% if tile.book %}
+                    {# A person's picture comes from their book: said, so the bird is not read as their portrait. #}
+                    <span class="pf-exhibit-wall__book">{{ 'from'|t }} <cite>{{ tile.book }}</cite></span>
+                  {% endif %}
                 </span>
               </a>
             </li>
