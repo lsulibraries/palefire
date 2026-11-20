@@ -642,6 +642,7 @@ HTML),
 <li>The Grid / List switch now lines up with the last column of cards under it, on every page that has one.</li>
 <li>Double-click the Oral History tape deck to see it large across the page; Restore, Escape or another double-click puts it back.</li>
 <li>The tape deck’s double-click enlargement is now a true secret: no magnifier cursor hints at it.</li>
+<li>Double-clicked, the tape deck now fills the whole width of the section.</li>
 </ul>
 HTML),
   $text('Thu Nov 19: Scholarly Repository full text', <<<'HTML'

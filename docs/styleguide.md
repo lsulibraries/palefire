@@ -188,6 +188,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-20:** Series deck enlarged: `--deck-w: 100cqw` (was `min(100cqw, 60rem)`); `.pf-series__now` `width: min(100%, 48rem)`, at the left. Restore sits at the section's right edge.
 - **2026-11-20:** Series deck: `cursor: zoom-in`/`zoom-out` removed from `.pf-series__machine` (the double-click stays hidden); `user-select: none` kept.
 - **2026-11-20:** Series deck enlarged: `.pf-series.is-big` (js/series-deck.js, on double-click): side and body `grid-column: 1 / -1`, deck `--deck-w: min(100cqw, 60rem)`, `--over: 0`, not sticky, no fade; `.pf-series__restore` (mono label button, hairline border, absolute at the drawing's top right) and Escape undo it. `::view-transition-group(pf-series-deck)` .5s. The machine has `cursor: zoom-in` (`zoom-out` enlarged) and `user-select: none`.
 - **2026-11-20:** `.pf-showcase.pf-showcase--embed { --pf-showcase-col: 0px }`: an embedded showcase band adds no column padding of its own; its section’s `.pf-section__inner` already pads to the page column (`--pf-hero-col-pad`). The full showcase page keeps `--pf-showcase-col`.

@@ -1257,6 +1257,7 @@ and number. Add the issue to the page's list with its sent date:
 
 ## Changelog
 
+- **2026-11-20:** Tape deck: double-clicked, it now takes the whole width of the section (it was held to 60rem), so its detail shows larger still; the caption under it keeps a readable 48rem at the left.
 - **2026-11-20:** Tape deck: the double-click to enlarge is a secret again. The zoom cursor over the deck (and its zoom-out while enlarged) is gone, so nothing gives the easter egg away.
 - **2026-11-20:** Oral History tape deck: a second easter egg. Double-click the deck and it is drawn large, across both columns (centered, up to 60rem wide), with the series under it, so its detail shows. Restore at its top right, another double-click or Escape puts it back, the page where it was. The change morphs where the browser can and is instant with reduced motion. Pointer only, as the deck is decorative.
 - **2026-11-20:** Oral History’s Showcase band no longer collapses on wide screens. The embedded band (`.pf-showcase--embed`) took the page’s centered column a second time inside a section that already sets it, so its grid shrank as the window grew (138px columns at 1920, none from about 2400, sideways scroll at 4000). It now sits on its section’s column, 1280px at any width, lined up with the sections below it (it was 76px in at 1440). Why: the layout broke at very large resolutions.
