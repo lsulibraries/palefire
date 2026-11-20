@@ -433,12 +433,20 @@
 }
 
 // Kept as is: an equals sign, the same as before.
-.pf-nlr .pf-pn__status--kept::before {
-  height: .375rem;
-  background:
-    linear-gradient(currentColor, currentColor) top / 100% 1.5px no-repeat,
-    linear-gradient(currentColor, currentColor) bottom / 100% 1.5px no-repeat;
+// On the theme's slab (the secondary button's plate: a 9% tint of the text,
+// no ring), so a closed note reads apart from an open one.
+.pf-nlr .pf-pn__status--kept {
+  background: color-mix(in srgb, var(--bs-emphasis-color) 9%, transparent);
   box-shadow: none;
+  color: var(--bs-emphasis-color);
+
+  &::before {
+    height: .375rem;
+    background:
+      linear-gradient(currentColor, currentColor) top / 100% 1.5px no-repeat,
+      linear-gradient(currentColor, currentColor) bottom / 100% 1.5px no-repeat;
+    box-shadow: none;
+  }
 }
 
 .pf-nlr .pf-pn__reply {
