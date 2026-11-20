@@ -47,7 +47,10 @@
               <ul class="pf-exhibit-family__list" aria-labelledby="pf-exhibit-family-label">
                 {% for item in exhibit_family %}
                   <li>
-                    <a class="pf-exhibit-family__link" href="{{ item.url }}"{% if item.current %} aria-current="page"{% endif %}>{{ item.title }}</a>
+                    <a class="pf-exhibit-family__link" href="{{ item.url }}"{% if item.current %} aria-current="page"{% endif %}>
+                      {%- if item.year %}<span class="pf-exhibit-family__year">{{ item.year }}</span>{% endif -%}
+                      <span class="pf-exhibit-family__title">{{ item.title }}</span>
+                    </a>
                   </li>
                 {% endfor %}
               </ul>

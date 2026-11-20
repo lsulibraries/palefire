@@ -993,56 +993,86 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
 
 // The breadcrumb's exhibition title opens its family's list
 // (navigation/breadcrumb.html.twig): a native popover, set under the
-// button by js/exhibition.js. The page's own type, not the crumbs' mono
-// caps; the current exhibition marked with the highlight's rule.
+// button by js/exhibition.js. Drawn as the table of contents' panel
+// (_toc-rail.scss .pf-toc__panel): glass, a bold mono head over a
+// hairline, then 44px mono caps rows with the year where the TOC has its
+// number, no rules between them; the current exhibition bold in the
+// heading color on a 2px bar, the hovered row filled 10%.
 .pf-exhibit-family {
   position: fixed;
   inset: auto;
   top: var(--pf-family-top, 4rem);
   left: var(--pf-family-left, 1rem);
-  width: min(24rem, calc(100vw - 2rem));
+  width: min(34rem, calc(100vw - 2rem));
   max-height: min(70svh, calc(100svh - var(--pf-family-top, 4rem) - 1rem));
   margin: 0;
-  padding: 1rem 0 .5rem;
+  padding: 0;
   overflow: auto;
   overscroll-behavior: contain;
+  scrollbar-width: thin;
   border: 1px solid $pf-hairline;
-  background: var(--bs-body-bg);
-  color: var(--bs-body-color);
-  box-shadow: 0 1.25rem 3rem rgba(0, 0, 0, .14);
-  font: 400 1rem/1.4 var(--bs-body-font-family);
+  background-color: var(--pf-sidebar-bg, var(--bs-body-bg));
+  -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+  backdrop-filter: var(--pf-glass-filter, blur(26px));
+  color: var(--pf-toc-color, var(--bs-body-color));
+  box-shadow: 0 1.25rem 2.5rem rgba(0, 0, 0, .25);
+  font: 400 1rem/1.3 var(--pf-exhibit-mono);
   letter-spacing: normal;
   text-transform: none;
   white-space: normal;
 }
 
 .pf-exhibit-family__label {
-  @extend %pf-exhibit-kicker;
-  padding: 0 1.25rem .5rem;
+  margin: 0;
+  padding: 1rem 1.25rem .75rem;
+  border-bottom: 1px solid $pf-hairline;
+  font-size: var(--pf-mono-label);
+  font-weight: 700;
+  letter-spacing: .1667em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  color: var(--pf-toc-active, var(--bs-heading-color, var(--bs-body-color)));
 }
 
 .pf-exhibit-family__list {
   margin: 0;
-  padding: 0;
+  padding: .375rem 0;
   list-style: none;
 }
 
 .pf-exhibit-family__link {
-  display: block;
-  padding: .6rem 1.25rem;
-  border-top: 1px solid $pf-hairline;
-  font-size: .9375rem;
-  color: var(--bs-body-color);
+  position: relative;
+  display: grid;
+  grid-template-columns: 4.5em minmax(0, 1fr);
+  align-items: baseline;
+  min-height: 2.75rem;
+  padding: .75rem 1.25rem .75rem 1.375rem;
+  font-size: .8125rem;
+  letter-spacing: .06em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  color: inherit;
   text-decoration: none;
-  transition: color $pf-hover-out ease, background-color $pf-hover-out ease;
+  transition: background-color .15s ease, color .15s ease;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset-block: .625rem;
+    inset-inline-start: 0;
+    width: 2px;
+    background-color: transparent;
+    transition: background-color .15s ease;
+  }
 
   &:hover,
   &:focus-visible {
-    color: var(--pf-g-hover, var(--pf-exhibit-accent));
-    background-color: var(--pf-exhibit-surface);
-    text-decoration: underline;
-    text-underline-offset: .2em;
-    transition-duration: $pf-hover-in;
+    color: var(--pf-toc-active, var(--bs-heading-color, var(--bs-body-color)));
+    background-color: color-mix(in srgb, var(--pf-toc-active, var(--bs-body-color)) 10%, transparent);
+
+    &::before {
+      background-color: currentColor;
+    }
   }
 
   &:focus-visible {
@@ -1051,9 +1081,22 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   }
 
   &[aria-current="page"] {
-    font-weight: 600;
-    box-shadow: inset 3px 0 0 var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+    font-weight: 700;
+    color: var(--pf-g-title, var(--pf-toc-active, var(--bs-heading-color)));
+
+    &::before {
+      background-color: currentColor;
+    }
   }
+}
+
+.pf-exhibit-family__year {
+  color: var(--pf-g-highlight, var(--pf-ui-gold, #{$pf-gold}));
+  font-variant-numeric: tabular-nums;
+}
+
+.pf-exhibit-family__title {
+  grid-column: 2;
 }
 
 @include pf-exhibit-motion {

@@ -959,6 +959,7 @@ HTML),
 HTML),
   $text('Fri Nov 20: Graphic Design says what each clip is', <<<'HTML'
 <ul>
+<li>The list of exhibitions under an exhibition’s title in the breadcrumb now looks like the table of contents: small capitals in the typewriter face, each with its year in gold, the one you are on in bold.</li>
 <li>On History of Graphic Design in South Louisiana, every tile on the wall showed the speaker’s name twice. Each now reads like Mossville’s: what the clip is about (“Failing every subject except art”) over who is speaking (Kenny Harrison).</li>
 <li>Each clip opens with the short summary the old site had in its menu, and the wall opens with two sentences on who the ten speakers are, in place of a blown-up, mostly blank letterhead.</li>
 <li>The Biography button now carries the speaker’s name, and About the Project gets a picture: the cover of a 1968 brochure of New Orleans graphic artists, shown whole at its own size.</li>

@@ -67,6 +67,8 @@ function palefire_preprocess_breadcrumb(array &$variables) {
           'title' => $item['title'],
           'url' => $item['url'],
           'current' => $item['current'],
+          // Where the table of contents has its number.
+          'year' => $item['year'] ?: NULL,
         ], $family['items']);
         $variables['exhibit_family_label'] = $family['parent']['title'];
       }
