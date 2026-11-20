@@ -903,6 +903,7 @@ HTML),
 <ul>
 <li>The History gallery of A Lady in the South was one long essay with 21 photographs between its paragraphs. It is now a wall: six chapters, from Vocational education and the home to Living in the houses, each a text plate with a one-line summary, followed by its photographs.</li>
 <li>Open a chapter to read it, then step on through its photographs and into the next chapter, so the whole essay still reads in order. The photographs have short titles of their own, such as Pressure canning or Huey Long at Homecoming, 1933.</li>
+<li>About the Exhibition is a wall too: the two women interviewed, Dorothy Colvin Howell and A.B. Clark, as portraits that open their biographies, then In their words and Acknowledgments as text plates. It used to open on a small yearbook portrait blown up behind all of its text, which made the text hard to read.</li>
 </ul>
 HTML),
   $text('Fri Nov 20: More walls, and a picture for every gallery', <<<'HTML'
