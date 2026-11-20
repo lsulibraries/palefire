@@ -155,7 +155,7 @@ foreach ($labels as $alias => $label) {
     if ($current === '' || ($old !== NULL && $current === $old)) {
       if ($current !== $value) {
         $node->set($field, $value);
-        $changes[] = $current === '' ? "$key “$value”" : "$key “$current” → “$value”";
+        $changes[] = $current === '' ? "$key “{$value}”" : "$key “{$current}” → “{$value}”";
       }
     }
   }

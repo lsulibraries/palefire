@@ -63,7 +63,7 @@ $saved = 0;
 foreach ($shows as $nid => [$word, $from, $to, $where, $source]) {
   $post = $storage->load($nid);
   if (!$post instanceof NodeInterface || !str_contains($post->label(), $word)) {
-    $say("Skipped node/$nid: not found, or its title no longer contains “$word”.");
+    $say("Skipped node/$nid: not found, or its title no longer contains “{$word}”.");
     continue;
   }
   if (!$post->hasField('field_exhibit_on_view') || !$post->hasField('field_exhibit_where')) {
@@ -76,7 +76,7 @@ foreach ($shows as $nid => [$word, $from, $to, $where, $source]) {
   }
   if ($post->get('field_exhibit_where')->isEmpty()) {
     $post->set('field_exhibit_where', $where);
-    $changes[] = "Where “$where”";
+    $changes[] = "Where “{$where}”";
   }
   if (!$changes) {
     $say("node/$nid ($word): already set, left alone.");
