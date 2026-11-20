@@ -150,6 +150,12 @@ if (!$image) {
 // Entry dates (field_entry_date) and the Timeline display, when set up.
 $date = (bool) FieldConfig::loadByName('paragraph', 'exhibit_entry', 'field_entry_date');
 $dated = fn (string $value) => $date ? ['field_entry_date' => $value] : [];
+// A biography card's Summary and Role, when set up
+// (palefire_exhibit_bio_setup.php).
+$bio_fields = array_filter([
+  'field_entry_summary' => FieldConfig::loadByName('paragraph', 'exhibit_entry', 'field_entry_summary') ? 'A Leipzig typographer who wrote the handbook of modernist type, then turned back to the classical book. His work runs from the Bauhaus to Penguin Books.' : NULL,
+  'field_entry_role' => FieldConfig::loadByName('paragraph', 'exhibit_entry', 'field_entry_role') ? 'Typographer and book designer' : NULL,
+]);
 
 $sections = [];
 $gallery = function (string $gallery_title, string $anchor, array $blocks) use (&$sections): void {
@@ -303,6 +309,19 @@ HTML),
     'field_guide_blocks' => array_values(array_filter([
       $figure('<p>An example figure: the caption sits under the image, which opens full screen.</p>', 'side_start'),
     ])),
+  ]),
+  $note('<p><strong>Biography card</strong>: a biography of 150 words or more shows as a card. Life comes from the heading’s “(1902–1974)”, Role and Summary from the entry’s own fields (both optional). Read the biography opens the whole life in a panel beside the gallery, a sheet on a phone; Previous and Next move to the gallery’s other cards, and a citation shows its source under its paragraph. Without a Summary the card shows the biography’s first sentence in italics: write one for every card.</p>'),
+  Paragraph::create([
+    'type' => 'exhibit_entry',
+    'field_block_title' => 'Jan Tschichold (1902–1974)',
+    'field_section_anchor' => 'tschichold',
+  ] + $dated('1902/1974') + $bio_fields + [
+    'field_entry_bio' => $html(<<<'HTML'
+<p>Jan Tschichold was born in Leipzig, the son of a sign painter, and learned lettering in his father’s workshop before studying at the city’s academy of graphic arts and book trades. In 1923 he saw the first Bauhaus exhibition in Weimar, and it changed the direction of his work.</p>
+<p>His book <em>Die neue Typographie</em> (1928) argued for asymmetric layouts, sans serif type and the standard paper sizes, and against ornament and the centered title page. It became the handbook of modernist typography across Europe.</p>
+<p>In 1933 the new government arrested him as a “cultural Bolshevik”, and on his release he moved with his family to Basel. There he came to see the classical book as a discipline of its own, and he turned back to centered layouts and serif type.</p>
+<p>From 1947 to 1949 he worked for Penguin Books in London, where he redesigned the series and wrote the Penguin Composition Rules for its printers. Late in life he designed the typeface Sabon (1967). The Swiss designers who followed, among them Emil Ruder, took up the clarity of his early work (<a href="#src-ruder">Ruder 1967</a>).</p>
+HTML),
   ]),
   $note('<p><strong>Roster</strong>: two or more entries in a row with a biography and no images (a program’s fellows, grant recipients) sit side by side, two columns from 768px and three from 1200px, each row on one hairline. On a phone they stay one under another.</p>'),
   Paragraph::create([

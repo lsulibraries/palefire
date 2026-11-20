@@ -1,0 +1,263 @@
+// Palefire — biography cards in an exhibition (added 2026-11-20).
+//
+// - .pf-exhibit-card: a long biography's card under the entry's heading
+//   (paragraph--exhibit-entry.html.twig): Life and Role as the exhibitions
+//   band's facts (a mono label over a value), a summary, and "Read the
+//   biography" with the life's length beside it. Each fact a column on a
+//   wide screen, one under the other on a phone.
+// - .is-bio-ready (js/exhibit-bio.js): the button works, so the biography
+//   under the card hides. Without the script, or on a wall, it shows.
+// - .pf-viewer--bio: the life in the viewer's side panel. The facts in the
+//   label row, the summary as a lede, the biography in the reading type,
+//   a citation's source in a note under its paragraph, then Sources.
+// - In the object view's copy of an entry (a wall's), the biography shows
+//   in full and the button and stand-in summary go.
+
+.pf-exhibit-card {
+  display: grid;
+  gap: 1rem;
+  max-width: var(--pf-exhibit-prose);
+  padding-top: 1rem;
+  border-top: 1px solid $pf-hairline;
+}
+
+.pf-exhibit-card__facts {
+  display: grid;
+  gap: .75rem;
+  margin: 0;
+
+  @include media-breakpoint-up(sm) {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, max-content);
+    justify-content: start;
+    column-gap: 2.5rem;
+  }
+
+  dt {
+    @extend %pf-exhibit-kicker;
+    font-weight: 400;
+  }
+
+  dd {
+    margin: 0;
+    font-size: 1.0625rem;
+    font-weight: 500;
+    line-height: 1.35;
+    font-variant-numeric: tabular-nums;
+    color: var(--bs-heading-color, var(--bs-body-color));
+  }
+}
+
+.pf-exhibit-card__fact {
+  display: grid;
+  align-content: start;
+  gap: .375rem;
+  min-width: 0;
+}
+
+.pf-exhibit-card__summary {
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+
+  // The opening sentence, standing in for a summary not yet written.
+  &.is-opening {
+    font-style: italic;
+  }
+}
+
+.pf-exhibit-card__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .75rem 1.25rem;
+  margin: 0;
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.pf-exhibit-card__open {
+  display: inline-flex;
+  align-items: center;
+  gap: .75rem;
+  min-height: 2.75rem;
+  padding: .625rem 1rem .625rem 1.125rem;
+  font: var(--pf-mono-ui)/1.2 var(--pf-exhibit-mono);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--bs-body-color);
+  background: transparent;
+  border: 1px solid $pf-hairline;
+  transition:
+    color $pf-hover-out ease,
+    border-color $pf-hover-out ease,
+    background-color $pf-hover-out ease;
+
+  svg {
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+    transition: transform .5s $pf-exhibit-ease;
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: var(--pf-g-hover, var(--pf-exhibit-accent));
+    border-color: currentColor;
+    transition-duration: $pf-hover-in;
+
+    svg {
+      transform: translateX(.25rem);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+
+  // Open beside the page: filled, as a pressed key.
+  &[aria-expanded="true"] {
+    color: var(--bs-body-bg);
+    background: var(--bs-body-color);
+    border-color: var(--bs-body-color);
+  }
+}
+
+.pf-exhibit-card__time {
+  font: var(--pf-mono-label)/1.5 var(--pf-exhibit-mono);
+  letter-spacing: .08em;
+  font-variant-numeric: tabular-nums;
+  color: var(--pf-exhibit-muted);
+}
+
+.pf-exhibit-entry.is-bio-ready > [data-pf-bio-full] {
+  display: none;
+}
+
+// The panel ----------------------------------------------------------------
+
+.pf-viewer--bio {
+  .pf-viewer__label .pf-exhibit-card__facts {
+    font-size: 1rem;
+  }
+
+  // Previous and Next as one pair, sharing their middle line.
+  .pf-viewer__extra {
+    display: inline-flex;
+  }
+
+  .pf-viewer__extra .pf-viewer__next {
+    margin-left: -1px;
+  }
+
+  .pf-viewer__act:disabled {
+    opacity: .35;
+    cursor: default;
+    color: var(--bs-body-color);
+  }
+}
+
+.pf-exhibit-bio-panel {
+  display: grid;
+  gap: 1.5rem;
+  max-width: 36em;
+  animation: pf-bio-in .45s $pf-exhibit-ease;
+}
+
+@keyframes pf-bio-in {
+  from {
+    opacity: 0;
+    transform: translateY(.375rem);
+  }
+}
+
+.pf-exhibit-bio-panel__lede {
+  margin: 0;
+  font-size: 1.1875rem;
+  line-height: 1.5;
+  color: var(--bs-heading-color, var(--bs-body-color));
+}
+
+.pf-exhibit-bio-panel .pf-exhibit-bio__text {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+
+  :is(p, ul, ol, blockquote):not(:last-child) {
+    margin-bottom: 1.25em;
+  }
+
+  > :last-child,
+  .field > :last-child {
+    margin-bottom: 0;
+  }
+}
+
+.pf-exhibit-bio-panel__cite[aria-expanded="true"] {
+  color: var(--pf-exhibit-accent);
+  text-decoration-style: solid;
+}
+
+.pf-exhibit-bio-panel__note {
+  margin: -.5em 0 1.25em;
+  padding: .75rem 1rem;
+  font-size: .9375rem;
+  line-height: 1.5;
+  background: var(--pf-exhibit-surface, transparent);
+  border-left: 2px solid var(--pf-exhibit-accent);
+  animation: pf-bio-in .35s $pf-exhibit-ease;
+}
+
+.pf-exhibit-bio-panel__sources {
+  display: grid;
+  gap: .625rem;
+  padding-top: 1rem;
+  border-top: 1px solid $pf-hairline;
+
+  ul {
+    display: grid;
+    gap: .5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: .9375rem;
+    line-height: 1.5;
+  }
+}
+
+.pf-exhibit-bio-panel__label {
+  @extend %pf-exhibit-kicker;
+  font-weight: 400;
+}
+
+// The object view's copy of an entry: the life in full, no button.
+.pf-viewer__body {
+  .pf-exhibit-card__foot,
+  .pf-exhibit-card__summary.is-opening {
+    display: none;
+  }
+
+  [data-pf-bio-full] {
+    display: grid;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-exhibit-bio-panel,
+  .pf-exhibit-bio-panel__note {
+    animation: none;
+  }
+}
+
+html.pf-a11y-motion {
+  .pf-exhibit-bio-panel,
+  .pf-exhibit-bio-panel__note {
+    animation: none;
+  }
+
+  .pf-exhibit-card__open svg {
+    transition: none;
+  }
+}

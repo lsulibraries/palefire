@@ -750,3 +750,16 @@ ledger-photo:
   dependencies:
     - core/drupal
     - core/once
+
+# Biography cards in an exhibition (paragraph--exhibit-entry.html.twig,
+# a biography of 150 words or more): "Read the biography" opens the life
+# in the viewer's side panel. Attached by the entry's template only when
+# a card renders.
+exhibit-bio:
+  js:
+    js/exhibit-bio.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    - palefire/viewer
+    - palefire/exhibition

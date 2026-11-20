@@ -5794,6 +5794,57 @@ function palefire_preprocess_paragraph__exhibit_entry(array &$variables): void {
   $variables['title'] = trim((string) ($paragraph->get('field_block_title')->value ?? ''));
   $variables['anchor'] = _palefire_exhibit_entry_anchor($paragraph);
   $variables['date'] = $paragraph->hasField('field_entry_date') ? ExhibitTimeline::parse($paragraph->get('field_entry_date')->value) : NULL;
+  $variables['bio_card'] = _palefire_exhibit_bio_card($paragraph, $variables['title']);
+}
+
+/**
+ * A long biography's card (paragraph--exhibit-entry.html.twig), or NULL.
+ *
+ * Only for a biography of 150 words or more; a shorter one shows in full.
+ * - name: the heading without a trailing "(1901-1984)", which is life.
+ *   A pair ("Robert Schomburgk (1804-1865) & Richard Schomburgk (…)")
+ *   keeps its whole heading and has no Life.
+ * - life: "1901–1984", "b. 1925" or '' from that trailing pair.
+ * - role, summary: field_entry_role and field_entry_summary
+ *   (palefire_exhibit_bio_setup.php), '' when empty or not there yet.
+ * - opening: the biography's first sentence, which stands in for an empty
+ *   summary (in italics, so editors see the card still needs one).
+ * - words, minutes: the biography's length, read at 238 words a minute.
+ */
+function _palefire_exhibit_bio_card(ParagraphInterface $paragraph, string $title): ?array {
+  if (!$paragraph->hasField('field_entry_bio') || $paragraph->get('field_entry_bio')->isEmpty()) {
+    return NULL;
+  }
+  $text = trim(preg_replace('/\s+/u', ' ', html_entity_decode(strip_tags(str_replace('<', ' <', (string) $paragraph->get('field_entry_bio')->value)), ENT_QUOTES | ENT_HTML5, 'UTF-8')));
+  $words = $text === '' ? 0 : count(preg_split('/\s+/u', $text));
+  if ($words < 150) {
+    return NULL;
+  }
+  $name = $title;
+  $life = '';
+  if (preg_match('/^(.*\S)\s*\(\s*(?:b\.\s*)?(\d{3,4})\s*(?:[-–—]\s*(\d{3,4})?)?\s*\)$/u', $title, $m) && !str_contains($m[1], '(')) {
+    $name = $m[1];
+    $life = !empty($m[3]) ? $m[2] . '–' . $m[3] : 'b. ' . $m[2];
+  }
+  $value = fn (string $field) => $paragraph->hasField($field) ? trim((string) ($paragraph->get($field)->value ?? '')) : '';
+  // The first sentence: up to a full stop, ? or ! before a capital, past
+  // initials ("R. M."), titles ("Dr.") and the first 40 characters.
+  $opening = $text;
+  if (preg_match('/^(.{40,}?(?<!\b[A-Z])(?<!\bDr|\bMr|\bMrs|\bMs|\bSt|\bJr|\bSr)[.!?][”’"]?)\s+(?=[“"‘A-Z0-9])/u', $text, $m)) {
+    $opening = $m[1];
+  }
+  if (mb_strlen($opening) > 280) {
+    $opening = rtrim(mb_substr($opening, 0, mb_strrpos(mb_substr($opening, 0, 270), ' ') ?: 270), ' ,;:') . '…';
+  }
+  return [
+    'name' => $name,
+    'life' => $life,
+    'role' => $value('field_entry_role'),
+    'summary' => $value('field_entry_summary'),
+    'opening' => $opening,
+    'words' => $words,
+    'minutes' => max(1, (int) round($words / 238)),
+  ];
 }
 
 /**

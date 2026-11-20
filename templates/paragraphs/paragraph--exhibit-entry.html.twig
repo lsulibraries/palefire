@@ -7,10 +7,18 @@
  * - anchor: the <h3>'s id, the target of links from other galleries.
  * - date: field_entry_date (['label', 'iso']), shown under the heading;
  *   it also puts the entry on the exhibition's timeline.
- * - Biography (field_entry_bio): js/exhibition.js shows the opening lines
- *   of a long one with a "Read the full biography" button; without the
- *   script it is shown in full.
- * - Blocks: images, catalogue records, audio and text (field_guide_blocks).
+ * - Biography (field_entry_bio): a short one (under 150 words) shows in
+ *   place; js/exhibition.js folds it to its opening lines with a "Read the
+ *   full biography" button when it runs long.
+ * - bio_card (_palefire_exhibit_bio_card()): a long one shows as a card,
+ *   Life and Role as facts (label over value, as the exhibitions band's),
+ *   the summary (or the opening sentence in italics) and "Read the
+ *   biography", which opens the whole life in the viewer's side panel,
+ *   beside the gallery (js/exhibit-bio.js). The biography itself stays
+ *   here, for readers without the script and for the object view's copy;
+ *   the script hides it once the button works. The heading drops its
+ *   "(1901-1984)", shown as Life, which also stands in for the date line.
+ * - Blocks: images, catalog records, audio and text (field_guide_blocks).
  *   An entry without any is text only (pf-exhibit-entry--text): two or more
  *   in a row sit side by side in columns from md (_exhibition.scss).
  */
@@ -20,16 +28,44 @@
   set classes = [
     'pf-exhibit-entry',
     not blocks ? 'pf-exhibit-entry--text',
+    bio_card ? 'pf-exhibit-entry--bio',
     not paragraph.isPublished() ? 'paragraph--unpublished',
   ]
 %}
 <article{{ attributes.addClass(classes).setAttribute('aria-labelledby', anchor) }}>
-  <h3 id="{{ anchor }}" class="pf-exhibit-entry__title">{{ title }}</h3>
-  {% if date %}
+  <h3 id="{{ anchor }}" class="pf-exhibit-entry__title">{{ bio_card ? bio_card.name : title }}</h3>
+  {% if date and not (bio_card and bio_card.life) %}
     <p class="pf-exhibit-entry__date"><time datetime="{{ date.iso }}">{{ date.label }}</time></p>
   {% endif %}
+  {% if bio_card %}
+    {{ attach_library('palefire/exhibit-bio') }}
+    <div class="pf-exhibit-card" data-pf-bio-card>
+      {% if bio_card.life or bio_card.role %}
+        <dl class="pf-exhibit-card__facts">
+          {% if bio_card.life %}
+            <div class="pf-exhibit-card__fact"><dt>{{ 'Life'|t }}</dt><dd>{{ bio_card.life }}</dd></div>
+          {% endif %}
+          {% if bio_card.role %}
+            <div class="pf-exhibit-card__fact"><dt>{{ 'Role'|t }}</dt><dd>{{ bio_card.role }}</dd></div>
+          {% endif %}
+        </dl>
+      {% endif %}
+      {% if bio_card.summary %}
+        <p class="pf-exhibit-card__summary">{{ bio_card.summary }}</p>
+      {% else %}
+        <p class="pf-exhibit-card__summary is-opening">{{ bio_card.opening }}</p>
+      {% endif %}
+      <p class="pf-exhibit-card__foot" hidden>
+        <button type="button" class="pf-exhibit-card__open" aria-expanded="false">
+          {{- 'Read the biography'|t }}<span class="visually-hidden">: {{ bio_card.name }}</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M3 12h17.5M14 5.5l6.5 6.5-6.5 6.5"/></svg>
+        </button>
+        <span class="pf-exhibit-card__time">{{ '@words words · @minutes min'|t({'@words': bio_card.words|number_format, '@minutes': bio_card.minutes}) }}</span>
+      </p>
+    </div>
+  {% endif %}
   {% if content.field_entry_bio|render|trim %}
-    <div class="pf-exhibit-bio" data-pf-exhibit-bio>
+    <div class="pf-exhibit-bio"{{ bio_card ? ' data-pf-bio-full' : ' data-pf-exhibit-bio' }}>
       <p class="pf-exhibit-bio__label">{{ 'Biography'|t }}</p>
       <div class="pf-exhibit-bio__text pf-guide-prose" id="{{ anchor }}-bio">
         {{ content.field_entry_bio }}

@@ -913,6 +913,13 @@ HTML),
 <li>The Hide image button is gone from the clips, since Keep listening already lets you put the picture away and go on through the exhibition.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Biographies open beside the gallery', <<<'HTML'
+<ul>
+<li>In exhibitions, a long biography is now a short card: when the person lived, their role, two sentences on who they were, and a Read the biography button that says how long it is. Their books and plates now sit right under the card instead of below a long page of text.</li>
+<li>Read the biography opens the whole life in a panel beside the gallery (a sheet from the bottom on phones), so the exhibition stays in view. Previous and Next move through the gallery’s people, and a citation shows its source right there under the paragraph.</li>
+<li>Each entry has two new optional fields, Summary and Role. Until a summary is written, the card shows the biography’s first sentence in italics, which marks the cards that still need one.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------
