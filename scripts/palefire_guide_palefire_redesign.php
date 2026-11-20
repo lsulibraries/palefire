@@ -879,6 +879,12 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: A Lady in the South’s history, in six chapters', <<<'HTML'
+<ul>
+<li>The History gallery of A Lady in the South was one long essay with 21 photographs between its paragraphs. It is now a wall: six chapters, from Vocational education and the home to Living in the houses, each a text plate with a one-line summary, followed by its photographs.</li>
+<li>Open a chapter to read it, then step on through its photographs and into the next chapter, so the whole essay still reads in order. The photographs have short titles of their own, such as Pressure canning or Huey Long at Homecoming, 1933.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: More walls, and a picture for every gallery', <<<'HTML'
 <ul>
 <li>Every exhibition gallery now opens on a picture. Where none was chosen, the first picture inside the gallery opens it; the eight galleries with no picture of their own, such as AVES’s Sources and Occult’s Index, were given one from their exhibition.</li>

@@ -6011,10 +6011,11 @@ function _palefire_exhibit_loose(ParagraphInterface $page): array {
     && $block->isPublished()
     && !$block->get('field_figure_image')->isEmpty()
     && !($block->hasField('field_figure_link') && !$block->get('field_figure_link')->isEmpty()));
-  // Up to the first full stop, ? or ! after 12 characters, without it.
+  // Up to the first full stop, ? or ! after 12 characters, without it,
+  // past abbreviations and initials ("ca. 1939–43", "vol. 31", "A. B.").
   $sentence = function (string $html): string {
     $text = _palefire_plain_excerpt($html, 2000);
-    $text = preg_match('/^(.{12,}?)[.!?](?:\s|$)/u', $text, $m) ? $m[1] : rtrim($text, '.');
+    $text = preg_match('/^(.{12,}?)(?<!\bca)(?<!\bc)(?<!\bvol)(?<!\bno)(?<!\bpp)(?<!\bp)(?<!\bSt)(?<!\bDr)(?<!\bMr)(?<!\bMrs)(?<!\bMs)(?<!\bJr)(?<!\bSr)(?<!\be\.g)(?<!\bi\.e)(?<!\b\p{Lu})[.!?](?:\s|$)/u', $text, $m) ? $m[1] : rtrim($text, '.');
     return mb_strlen($text) > 90 ? rtrim(mb_substr($text, 0, mb_strrpos(mb_substr($text, 0, 88), ' ') ?: 88), ' ,;:') . '…' : $text;
   };
   $captions = [];
