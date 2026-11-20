@@ -3077,6 +3077,122 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
   }
 }
 
+// A clip's captions (js/exhibition.js), as on the podcast's bar: CC
+// joins Close once the cues load (on the player's row on phones, so the
+// title keeps its room), and the band sits on the bar sharing its
+// hairline: the phrase heard, the one before it muted above. Off: the CC
+// mark struck through, muted; the band goes.
+.pf-listen--clip {
+  .pf-listen__caption,
+  .pf-listen__inner {
+    max-width: 50rem;
+  }
+
+  &.has-captions .pf-listen__inner {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: "expand close" "player cc";
+
+    @include media-breakpoint-up(md) {
+      grid-template-columns: minmax(0, 15rem) minmax(0, 1fr) auto auto;
+      grid-template-areas: "expand player cc close";
+      column-gap: 1rem;
+    }
+  }
+
+  .pf-listen__cc {
+    grid-area: cc;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    color: inherit;
+    background: none;
+    border: 1px solid $pf-hairline;
+    transition: color $pf-hover-out ease;
+
+    &[hidden] {
+      display: none;
+    }
+
+    &:hover,
+    &:focus-visible {
+      color: var(--pf-g-hover, var(--pf-exhibit-accent));
+      transition-duration: $pf-hover-in;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--bs-body-color);
+      outline-offset: 2px;
+    }
+
+    &[aria-pressed="false"] {
+      color: var(--pf-exhibit-muted);
+
+      .pf-listen__cc-mark {
+        text-decoration: line-through;
+        text-decoration-thickness: 1px;
+      }
+    }
+  }
+
+  .pf-listen__cc-mark {
+    font: 700 .6875rem/1 var(--pf-exhibit-mono);
+    letter-spacing: .06em;
+  }
+
+  .pf-listen__caption {
+    display: none;
+    gap: .25rem;
+    margin: 0 auto;
+    padding: .75rem 1rem .625rem;
+    color: var(--bs-body-color);
+    background: var(--bs-body-bg);
+    border: 1px solid $pf-hairline;
+    border-bottom: 0;
+  }
+
+  &.has-captions:not(.is-cc-off) .pf-listen__caption.is-shown {
+    display: grid;
+  }
+
+  .pf-listen__caption-prev,
+  .pf-listen__caption-text {
+    max-width: 48rem;
+    margin: 0;
+  }
+
+  // The line before: smaller, muted, two lines at most.
+  .pf-listen__caption-prev {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    font-size: .875rem;
+    line-height: 1.45;
+    color: var(--pf-exhibit-muted);
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  .pf-listen__caption-text {
+    font-size: clamp(1rem, .95rem + .25vw, 1.125rem);
+    line-height: 1.4;
+    text-wrap: pretty;
+
+    @include pf-exhibit-motion {
+      transition: color .4s ease;
+    }
+  }
+
+  // A pause: the words stay, muted, till the next phrase.
+  .pf-listen__caption.is-idle .pf-listen__caption-text {
+    color: var(--pf-exhibit-muted);
+  }
+}
+
 .pf-exhibit-audio__summary {
   min-height: 2.75rem;
   padding: 0.65rem 0;

@@ -907,6 +907,12 @@ HTML),
 <li>Books shown with two pictures, such as a title page and a plate, now turn like pages instead of being laid over each other, and each page keeps its own caption.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Captions on the minimized player', <<<'HTML'
+<ul>
+<li>When an oral history clip is minimized with Keep listening, the player at the foot of the screen now shows captions, as the podcast player does: the words being heard, with the line before them above. A CC button beside Close turns them off and on, and the choice is remembered for the podcast too.</li>
+<li>The Hide image button is gone from the clips, since Keep listening already lets you put the picture away and go on through the exhibition.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------

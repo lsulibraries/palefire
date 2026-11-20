@@ -1132,9 +1132,26 @@
    * entry again and puts the same player and transcript back, so it plays
    * on without a gap and the read-along stays where it was. Another clip
    * starting anywhere ends the bar: one clip at a time.
+   *
+   * A clip with a timed transcript (data-pf-timings) has captions on the
+   * bar, as the podcast's bar has (js/podcast.js): a band over it with the
+   * phrase heard and the one before it muted above, and CC to turn the
+   * band off and on, remembered in this browser (the podcast's own
+   * setting, so one choice serves both). The band is the eyes' copy of
+   * the voice, so screen readers skip it; Expand brings back the
+   * transcript.
    * ------------------------------------------------------------------ */
 
-  const listen = { bar: null, wrap: null, saved: null };
+  const listen = { bar: null, wrap: null, saved: null, cues: [], shown: null, index: -1, frame: 0, stop: null };
+  const CC_KEY = 'pf-podcast-captions';
+  const ccOn = () => {
+    try {
+      return window.localStorage.getItem(CC_KEY) !== 'off';
+    }
+    catch (e) {
+      return true;
+    }
+  };
 
   // The view's player for this entry into the bar; the view closes.
   function minimize(wrap) {
@@ -1157,6 +1174,7 @@
     listen.bar = bar;
     listen.wrap = wrap;
     document.body.append(bar);
+    barCaptions(bar, wrap);
     closeObject(false, true);
     const page = galleryOf(listen.saved.tile);
     if (page) {
@@ -1170,9 +1188,13 @@
 
   function buildBar(title, credit) {
     const bar = document.createElement('section');
-    bar.className = 'pf-listen';
+    bar.className = 'pf-listen pf-listen--clip';
     bar.setAttribute('aria-label', Drupal.t('Now playing'));
-    bar.innerHTML = '<div class="pf-listen__inner">'
+    bar.innerHTML = '<div class="pf-listen__caption" aria-hidden="true">'
+      + '<p class="pf-listen__caption-prev"></p>'
+      + '<p class="pf-listen__caption-text"></p>'
+      + '</div>'
+      + '<div class="pf-listen__inner">'
       + '<button type="button" class="pf-listen__expand">'
       + '<span class="pf-listen__kicker">' + Drupal.t('Now playing') + '</span>'
       + '<span class="pf-listen__title"></span>'
@@ -1180,6 +1202,10 @@
       + '<svg class="pf-listen__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M9.5 2.5h4v4M13.5 2.5 8.5 7.5M6.5 13.5h-4v-4M2.5 13.5l5-5"/></svg>'
       + '</button>'
       + '<div class="pf-listen__player"></div>'
+      + '<button type="button" class="pf-listen__cc" aria-pressed="true" hidden>'
+      + '<span class="pf-listen__cc-mark" aria-hidden="true">CC</span>'
+      + '<span class="visually-hidden">' + Drupal.t('Captions') + '</span>'
+      + '</button>'
       + '<button type="button" class="pf-listen__close">'
       + '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M3.5 3.5l9 9m0-9-9 9"/></svg>'
       + '<span class="visually-hidden">' + Drupal.t('Stop and close the player') + '</span>'
@@ -1187,6 +1213,20 @@
       + '</div>';
     bar.querySelector('.pf-listen__title').textContent = credit ? title + ' · ' + credit : title;
     bar.querySelector('.pf-listen__expand').addEventListener('click', expandBar);
+    const cc = bar.querySelector('.pf-listen__cc');
+    cc.setAttribute('aria-pressed', ccOn() ? 'true' : 'false');
+    bar.classList.toggle('is-cc-off', !ccOn());
+    cc.addEventListener('click', () => {
+      const on = cc.getAttribute('aria-pressed') !== 'true';
+      try {
+        window.localStorage.setItem(CC_KEY, on ? 'on' : 'off');
+      }
+      catch (e) {
+        // Private windows: for this page only.
+      }
+      cc.setAttribute('aria-pressed', on ? 'true' : 'false');
+      bar.classList.toggle('is-cc-off', !on);
+    });
     bar.querySelector('.pf-listen__close').addEventListener('click', () => {
       const tile = listen.saved && listen.saved.tile;
       dismissBar();
@@ -1218,6 +1258,7 @@
       return;
     }
     const bar = listen.bar;
+    stopCaptions();
     listen.bar = null;
     listen.wrap = null;
     listen.saved = null;
@@ -1241,10 +1282,105 @@
     if (audio) {
       audio.pause();
     }
+    stopCaptions();
     listen.bar.remove();
     listen.bar = null;
     listen.wrap = null;
     listen.saved = null;
+  }
+
+  // The clip's cues (the read-along's, already fetched if its transcript
+  // showed) on the bar's band; CC shows once they've loaded.
+  function barCaptions(bar, wrap) {
+    const url = wrap.dataset.pfTimings;
+    const audio = wrap.querySelector('audio');
+    if (!url || !audio) {
+      return;
+    }
+    const stop = new AbortController();
+    listen.stop = stop;
+    loadTimings(url).then((cues) => {
+      if (stop.signal.aborted || !cues.length) {
+        return;
+      }
+      listen.cues = cues;
+      listen.shown = null;
+      listen.index = -2;
+      bar.classList.add('has-captions');
+      bar.querySelector('.pf-listen__cc').hidden = false;
+      // Per frame while playing, as the read-along (timeupdate is late).
+      const tick = () => {
+        syncCaption(audio);
+        listen.frame = audio.paused ? 0 : window.requestAnimationFrame(tick);
+      };
+      ['timeupdate', 'seeked', 'pause', 'ended'].forEach((type) => audio.addEventListener(type, () => syncCaption(audio), { signal: stop.signal }));
+      audio.addEventListener('play', () => {
+        if (!listen.frame) {
+          tick();
+        }
+      }, { signal: stop.signal });
+      if (audio.paused) {
+        syncCaption(audio);
+      }
+      else {
+        tick();
+      }
+    });
+  }
+
+  function stopCaptions() {
+    if (listen.stop) {
+      listen.stop.abort();
+    }
+    window.cancelAnimationFrame(listen.frame);
+    Object.assign(listen, { cues: [], shown: null, index: -1, frame: 0, stop: null });
+  }
+
+  // The cue heard (-1 in a pause or before the first).
+  function cueIndex(time) {
+    const cues = listen.cues;
+    let lo = 0;
+    let hi = cues.length - 1;
+    let found = -1;
+    while (lo <= hi) {
+      const mid = (lo + hi) >> 1;
+      if (cues[mid].start <= time) {
+        found = mid;
+        lo = mid + 1;
+      }
+      else {
+        hi = mid - 1;
+      }
+    }
+    return found >= 0 && time < cues[found].end ? found : -1;
+  }
+
+  // Rolling, as broadcast captions: the phrase heard, the one just before
+  // it muted above (so a phrase cut at a comma still reads). In a pause
+  // the words stay, dimmed; a new line rises in unless motion is reduced.
+  function syncCaption(audio) {
+    const band = listen.bar && listen.bar.querySelector('.pf-listen__caption');
+    const index = band ? cueIndex(audio.currentTime) : -1;
+    if (!band || index === listen.index) {
+      return;
+    }
+    listen.index = index;
+    band.classList.toggle('is-idle', index < 0);
+    const cue = index < 0 ? null : listen.cues[index];
+    if (!cue || cue === listen.shown) {
+      return;
+    }
+    const before = listen.cues[index - 1];
+    const prev = band.querySelector('.pf-listen__caption-prev');
+    const now = band.querySelector('.pf-listen__caption-text');
+    // The line before only if it was just shown (not after a seek).
+    prev.textContent = before && before === listen.shown ? before.words : '';
+    now.textContent = cue.words;
+    listen.shown = cue;
+    band.classList.add('is-shown');
+    if (!reduceMotion() && now.animate) {
+      now.animate([{ opacity: 0, transform: 'translateY(.35rem)' }, { opacity: 1, transform: 'none' }], { duration: 260, easing: 'cubic-bezier(.2, .7, .2, 1)' });
+    }
   }
 
   // One clip at a time: another starting ends the bar.
@@ -1622,10 +1758,10 @@
 
     view.count.textContent = Drupal.t('@n of @total', { '@n': wallState.index + 1, '@total': n });
     fillScale(tile);
-    // A clip: the reader may hide the picture, or minimize the clip, and go
-    // on through the exhibition while it plays.
+    // A clip: the reader may minimize it (Keep listening) and go on through
+    // the exhibition while it plays.
     const clip = !!view.body.querySelector('[data-pf-audio] audio');
-    viewer.sync({ steps: n, hide: clip, extra: clip ? [keepButton(view)] : [] });
+    viewer.sync({ steps: n, extra: clip ? [keepButton(view)] : [] });
     view.phoneSteps.querySelectorAll('button').forEach((b) => {
       b.hidden = n < 2;
     });
