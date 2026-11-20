@@ -788,6 +788,44 @@ $section('The Baton Rouge Bus Boycott', [
 HTML),
 ]);
 
+$section('Louisiana for Bibliophiles: A History of Reading in the Bayou State', [
+  $text(NULL, <<<'HTML'
+<p>Built at <a href="/v2/special/exhibitions/louisiana-for-bibliophiles">/v2/special/exhibitions/louisiana-for-bibliophiles</a>, not published yet.</p>
+<p>Exhibition: Louisiana for Bibliophiles, Hill Memorial Library, June–September 2011, opened for the RBMS conference in Baton Rouge; curated by Tara Zachary Laver and Michael Taylor, the online version designed by Rachel Miller.<br>Old site: ten pages under /louisianaforbibliophile (node/113705–113714), with some characters mis-encoded.</p>
+<h3>Changed on the page</h3>
+<ul><li>The Introduction is the page’s intro. Eight galleries, all walls with a lead picture: Early Days, Creole Authors, African Americans, Women’s Reading and Novels, Practical Reading, Newspapers, Louisiana Libraries, and About the Exhibition (the curators, and the old Index as a plate whose “See …” lines link to the galleries).
+</li><li>The text between pictures is 45 text plates, each with a new heading and summary, hung before the pictures it describes; the longest sections are split where the subject turns. Books shown in several pages are one tile that pages through them.
+</li><li>Pictures: 58 of the 74 are new copies from the exhibition’s 2011 TIFF scans on the R: drive, cropped as the old pages had them, up to 2,560px (the old pages’ were 1,000px). Huey Long’s Bible is shown whole, the map beside his notes. Sixteen have no scan; the Louisiana Digital Library has none of them either.
+</li><li>Cover: the Hill reading room, 1903–1904, with its object label.
+</li></ul>
+<h3>Corrected</h3>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>“Read—and share with your neighbors”</del></td><td><ins>“Read, and lend to your Neighbors”</ins> (as printed on Fisher’s pamphlet)</td></tr>
+<tr><td><del>Pouponne et Balthazaar</del></td><td><ins>Pouponne et Balthazar</ins></td></tr>
+<tr><td><del>appendre le français</del></td><td><ins>apprendre le français</ins> (Cherbonnier)</td></tr>
+<tr><td><del>Fenelon’s</del></td><td><ins>Fénelon’s</ins></td></tr>
+<tr><td><del>Pointe a la Hache</del></td><td><ins>Pointe à la Hache</ins></td></tr>
+<tr><td><del>LLLMVC</del></td><td><ins>LLMVC</ins></td></tr>
+<tr><td><del>LOUISiana Digital Library</del></td><td><ins>Louisiana Digital Library</ins></td></tr>
+</tbody>
+</table>
+<ul><li>Three paragraphs that were printed twice (Esther Wright; Sherman’s library, two) appear once.
+</li><li>Curly quotes, dashes, accents and titles in italics.
+</li><li>The full list is in the theme’s docs/special-exhibition-corrections/louisiana-for-bibliophiles.md, with the source of every picture.
+</li></ul>
+<h3>To verify</h3>
+<ul><li>Henrietta Brock’s source: the caption says the Thirty-Seventh Annual Session (1916); the scan’s folder says thirty-sixth (1915–1916).
+</li><li>The Laussat bookplate is signed “Ph. Favrot”; the lead caption names him.
+</li><li>The curators’ and helpers’ titles are as of 2011.
+</li></ul>
+<h3>New wording to check</h3>
+<ul><li>The 45 plate headings and summaries, the tiles’ short titles, the cover label and the 74 alt texts.
+</li></ul>
+HTML),
+]);
+
 $section('Biographies', [
   $text(NULL, <<<'HTML'
 <p><strong>Status: proposed, not decided.</strong> AVES is the only Special Collections exhibition with biographies so far: 43 of them, 118 to 1,293 words (about 400 on average), three of them for two people (Godman and Salvin, the Schomburgks, the Phelpses). Together they are most of the exhibition’s 48,000 words. Today each one sits in its entry under a “Biography” label, folded after about ten lines with a “Read the full biography” button, and the Biographies gallery is a hand-written list of links.</p>

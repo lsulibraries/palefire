@@ -1113,6 +1113,13 @@ HTML),
 <li>The pictures are new: the exhibition’s 2012 scans of the books, far sharper than the old pages’ small photographs.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Louisiana for Bibliophiles comes to v2', <<<'HTML'
+<ul>
+<li>Louisiana for Bibliophiles, the 2011 Hill Memorial Library exhibition on the history of reading in Louisiana, is rebuilt as a v2 exhibition, not published yet: seven galleries from early libraries to Camp Claiborne, and About the Exhibition with its index, every one a wall with a picture to open it.</li>
+<li>The essays are cut into short text plates hung before the books, letters and photographs they describe; books shown in several pages page through in one tile, and the index links to the galleries.</li>
+<li>Most pictures are new copies from the exhibition’s 2011 scans, two and a half times the old pages’ size. The corrections and each picture’s source are in the Special Collections Exhibitions guide.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------

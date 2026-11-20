@@ -1,0 +1,1507 @@
+{
+  "title": "Louisiana for Bibliophiles",
+  "subtitle": "A History of Reading in the Bayou State",
+  "credit": "<p>An exhibition drawn primarily from the Louisiana and Lower Mississippi Valley, Rare Book and University Archives collections of LSU Libraries Special Collections. Curated by Tara Zachary Laver and Michael Taylor; online exhibition designed by Rachel Miller.</p>",
+  "intro": "<p>Though Louisiana is better known for its politics and <em>laissez les bons temps rouler</em> approach to life, the state also has a long and colorful literary history. The exhibition <em>Louisiana for Bibliophiles</em> explores little-known aspects of the history of reading in this corner of the South from the eighteenth century to the 1940s. Featured items include books from the colonial and antebellum periods; materials on women’s reading, libraries, and scientific knowledge; and newspapers, perhaps the most common and accessible reading material. Four Louisiana Creole authors are profiled in the context of America’s “forgotten literature,” i.e., American literature written in languages other than English.</p>",
+  "cover": "hill-reading-room-1903.jpg",
+  "cover_label": {
+    "title": "Reading Room, Hill Memorial Library",
+    "date": "1903–1904",
+    "medium": "Photograph. LSU Photograph Collection, RG A5000"
+  },
+  "year": 2011,
+  "physical_note": "Shown in Hill Memorial Library from June to September 2011, opening for the conference of the Rare Books and Manuscripts Section of the Association of College and Research Libraries in Baton Rouge, June 21–24.",
+  "source": "https://lib.lsu.edu/louisianaforbibliophile/introduction and its nine sibling pages (nodes 113705–113714), from the 2012 site",
+  "pages": [
+    {
+      "title": "Early Days",
+      "anchor": "early-days",
+      "display": "wall",
+      "whole": true,
+      "lead": "laussat-bookplate-mirabeau-1792.jpg",
+      "focus": "center",
+      "lead_caption": "<p><strong>Bookplate of Pierre-Clément de Laussat, with the signature of Philogène Favrot, in <em>Collection complète des travaux de M. Mirabeau l’aîné, à l’Assemblée Nationale</em>. Paris: Devaux, 1792.</strong><br>Rare DC146 .M7 A15</p>",
+      "blocks": [
+        {
+          "type": "entry",
+          "title": "A book from British West Florida",
+          "anchor": "british-west-florida",
+          "summary": "A volume of Hume that a Scottish settler bought in West Florida in 1775 shows that books were owned and exchanged in English-speaking Louisiana from its earliest days.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>For the wealthy Turnbull family of St. Francisville, Louisiana, books were treasured belongings. They probably owned several hundred volumes when they built Rosedown Plantation in the 1830s on what was then still the southwest frontier. A few books in the Rosedown library were acquired by Daniel Turnbull, the family patriarch, and his wife Martha during their student days in Philadelphia. However, most appear to have been purchased during summer sojourns in the North and Europe or on visits to nearby New Orleans.</p>\n<p>One book from the collection, displayed here, shows that books played a role in the life of the Turnbull family almost from the moment of their arrival in the New World. Daniel inherited this volume from his uncle, Walter Turnbull, who immigrated from Scotland around 1770 to West Florida, a short-lived British colony that extended along the Gulf Coast from Baton Rouge to Pensacola. Although we are not sure what Walter Turnbull’s standard of living was at that time, we know from this book that he had at least some time to devote to reading.</p>\n<p>A faded inscription on the title page indicates that he purchased the book in 1775 from Alexander McIntosh, one of the earliest settlers of what are now called the Florida Parishes of Louisiana. McIntosh himself, according to the inscription, acquired the book from Francis Poussett, another British planter and speaker of the Assembly of West Florida during its first session in 1766–67. This inscription reveals that books were owned and exchanged in English-speaking Louisiana—initially one of the British Empire’s most distant outposts—from the very earliest period of settlement.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Hume’s History of England, 1763",
+          "anchor": "hume-history-of-england",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "hume-history-of-england-1763.jpg",
+              "caption": "<p><strong>David Hume, <em>The History of England</em>. London: A. Millar, 1763.</strong><br>LLMVC DA30 .H9 1763 Rosedown</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Philosophy on the southern frontier",
+          "anchor": "philosophy-southern-frontier",
+          "summary": "Gabriel Benoist brought the finest products of the French Enlightenment to Natchez in 1788; a few of his books made their way to Rosedown Plantation.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Shown here is another book that belonged to one of the earliest European settlers of the lower Mississippi Valley. Gabriel Benoist (d. 1798) was described in the <em>Journal of Andrew Ellicott</em> as “a French gentleman” who from “an ardent passion for liberty… left his own country and espoused the cause of the United States.” In 1788, he settled at Natchez, a former French and Spanish trading post in what is now Mississippi. According to a descendant, in addition to household furnishings and “an exceedingly handsome” piano (surely one of the first ever seen in the Old Southwest), he brought many books with him from France. This is confirmed by a few surviving volumes with Benoist’s name inscribed in them.</p>\n<p>The books were some of the finest products of the French Enlightenment and included fourteen finely bound volumes of the Comte de Buffon’s <em>Histoire naturelle</em>, works on minerals, navigation and mathematics, and writings of French philosophers like Helvétius and Marmontel. Benoist’s son Robert (1795–1819), who graduated with a master’s degree from Princeton in 1816, may have used them in his studies. After Robert’s untimely death, they made their way to Rosedown Plantation in St. Francisville, Louisiana, where his widow Rosina lived for a time with her cousin Martha Turnbull.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Helvétius, De l’homme, 1774",
+          "anchor": "helvetius-de-l-homme",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "helvetius-de-l-homme-1774.jpg",
+              "caption": "<p><strong>Claude Adrien Helvétius, <em>De l’homme</em>. London: Chez la Société Typographique, 1774.</strong><br>LLMVC B2043 .D33 1774 Rosedown</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "A French colonial library",
+          "anchor": "french-colonial-library",
+          "summary": "Pierre-Clément de Laussat, Louisiana’s last French governor, brought perhaps five hundred books with him in 1803, and complained that the summer covered them in mildew.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Born in 1756 in the Pyrenees region of southern France, Pierre-Clément de Laussat was appointed governor of Louisiana in 1802. His hopes for a distinguished administrative career were dashed, however, when, not long after his departure for his new post in January 1803, Napoleon Bonaparte sold the vast colony to the United States to fund his wars in Europe. Laussat spent just over a year in Louisiana, overseeing its official transfer to the Americans. He later wrote about his experiences in this rare memoir privately published for his family shortly before his death.</p>\n<p>Throughout his life, Laussat was an avid reader. As a student, his Jesuit teachers forbade the reading of all modern authors except Boileau, Rousseau, and expurgated versions of Fénelon’s <em>Télémaque</em>. In the Basque country of Spain, where Laussat lived for a while with one of his grandfathers, he discovered Cervantes and Feijóo. Later, in Paris, he was an “enthusiastic observer” of Jean-Jacques Rousseau, who lived across the street from one of Laussat’s cousins. He tells us that he would often sneak into the great philosopher’s apartment to watch him read or play the piano. To learn English during the “Anglomania” of the 1780s, he “tortured” himself reading Hume, Gibbon, Blackstone, and others.</p>\n<p>Over time, Laussat assembled a large library worth ten thousand francs, “a collection including copies of the finest authors in every genre.” He brought many books (possibly more than 500) with him to Louisiana to keep his mind occupied and pass the time. He complained, though, that the extreme heat and humidity of the Louisiana summer (“July especially moved along as if escorted by Sirius with his flaming breath”) quickly caused his books to become covered with a permanent mildew.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Laussat’s Mémoires, 1831",
+          "anchor": "laussat-memoires",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "laussat-memoires-1831.jpg",
+              "caption": "<p><strong>Pierre-Clément de Laussat, <em>Mémoires sur ma vie</em>. Pau: E. Vignancourt, 1831.</strong><br>Vault 020</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "A dear and faithful companion",
+          "anchor": "dear-and-faithful-companion",
+          "summary": "Leaving for Martinique in wartime, Laussat had to sell or give away his library: “I would never see them again.” Some of his books are still read in Louisiana.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>After handing over Louisiana to the United States, Laussat embarked for Martinique. It being wartime, he had to make one of the hardest decisions of his life—the decision to leave his library behind. He says that he gave “a good number” of books away, “mostly the classics and some current works.” Others were advertised for sale in the newspaper <em>Le Moniteur de la Louisiane</em>. In his <em>Mémoires</em>, Laussat wrote a moving paragraph about the loss of his library:</p>\n<blockquote><p>One after another, I sold several of the dearest and most faithful companions of my life; it broke my heart to part with them. One lot deserted me on March 31: Montaigne—the very copy I purchased when I was nineteen and have read and reread since; J.-J. Rousseau [Laussat’s favorite author]—a small eighteen-volume set, which accompanied me on my promenades and in my travels; Montesquieu—eight volumes of twelve…; my Corneille and my Racine, which were daily reading; and so on, and so on. They had been the witnesses and the confidants of my early studies… There was no memory, no joy, no sorrow in my life in which they had not played some part. They had followed my fate, and one of its strange aspects was that I had come to the banks of the Mississippi to separate from them. It was done! I would never see them again.</p></blockquote>\n<p>Hopefully he would be pleased that some of his books have survived and are still being used by students and scholars in Louisiana more than two hundred years later. Laussat’s bookplate bears a Basque inscription, “He Plaa Diu Tayudi” (“Do well, God will help you”), followed by a quote from Boileau, “Le vrai seul est aimable” (“Truth alone is lovely”).</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Laussat’s bookplate",
+          "anchor": "laussat-bookplate",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "laussat-bookplate-mirabeau-1792.jpg",
+              "caption": "<p><strong>Bookplate of Pierre-Clément de Laussat, in <em>Collection complète des travaux de M. Mirabeau l’aîné, à l’Assemblée Nationale</em>. Paris: Devaux, 1792.</strong><br>Rare DC146 .M7 A15</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "The Favrot family library",
+          "anchor": "favrot-family-library",
+          "summary": "Pierre-Joseph de Favrot, a commandant under Louisiana’s Spanish governors, built a small library for his family; his son Philogène read in camp during the War of 1812.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Pierre-Joseph de Favrot (also known as Don Pedro de Favrot) was born in Louisiana in 1749. He served under the colony’s Spanish governors as commandant of the fort at Baton Rouge during the American Revolution and then of Fort St. Philip near the mouth of the Mississippi River south of New Orleans. The book displayed here was inscribed by Favrot and was part of a small library that he assembled for the use of his family. The library contained contemporary works on politics, philosophy, and natural history (including 28 volumes of Buffon’s ever-popular <em>Histoire naturelle</em>) as well as children’s books.</p>\n<p>Favrot’s son Philogène shared his father’s love of literature. Stationed at Fort St. Philip during the War of 1812, he kept himself occupied by reading. Later in the war, he traveled with the U.S. Army as far north as Michigan and read books in camp, as revealed by letters to his family. Although Favrot struggled to learn English after Louisiana became part of the United States in 1803, he persisted and bought a copy of <em>Don Quixote</em> in English to learn “ordinary expressions in English conversation.” At some point before his death in a duel in 1822, he acquired Governor Laussat’s copy of Mirabeau’s writings, shown with Laussat’s bookplate.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Du Gour’s defense of Louis XVI, 1793",
+          "anchor": "du-gour-collection",
+          "blocks": [
+            {
+              "type": "gallery",
+              "caption": "<p><strong>Antoine Jeudy Du Gour, <em>Collection des meilleurs ouvrages qui ont été publiés pour la défense de Louis XVI, roi des Français</em>. Paris: F. Dufart, 1793.</strong><br>Rare DC136 .A2 D44</p>",
+              "figures": [
+                {
+                  "image": "du-gour-collection-1793-frontispiece.jpg",
+                  "caption": "<p>Frontispiece</p>"
+                },
+                {
+                  "image": "du-gour-collection-1793-title.jpg",
+                  "caption": "<p>Title page, inscribed by Favrot</p>"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Starving booksellers",
+          "anchor": "starving-booksellers",
+          "summary": "“All the people in New Orleans love to read,” Laussat wrote. Other visitors saw no interest in books at all, except books on doubling one’s capital.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>During his short stay in Louisiana in 1803–04, Governor Pierre-Clément de Laussat noted that “All the people in New Orleans love to read. There are no book shops or libraries, but books are ordered from France.” Laussat’s observation is somewhat surprising.</p>\n<p>It was far more common for visitors to remark on what they perceived as the city’s total lack of interest in anything having to do with books—with one exception, that is: books about commerce.</p>\n<p>In 1802, for example, the author of the book displayed here dryly remarked that a bookseller in New Orleans “would starve in the midst of his books, unless he could teach his readers the art of doubling [their] capital at the end of the year.”</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Berquin-Duvallon’s Vue de la colonie, 1803",
+          "anchor": "berquin-duvallon-vue",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "berquin-duvallon-vue-1803.jpg",
+              "caption": "<p><strong>Pierre-Louis Berquin-Duvallon, <em>Vue de la colonie espagnole du Mississipi, ou des provinces de Louisiane et Floride Occidentale</em>. Paris: Imprimerie Expeditive, 1803.</strong><br>LARA F373 .B53</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "A subscription library",
+          "anchor": "subscription-library",
+          "summary": "In 1816, forty-five planters, lawyers and businessmen of West Feliciana Parish chartered a library company in St. Francisville, its shares sold at $25 each.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>The New Orleans Library Company, incorporated in 1805 and reorganized in 1816, was probably the largest subscription library west of the Appalachians, holding 7,200 volumes in English and French in 1824. In the same year that this library was reorganized, forty-five prominent businessmen, lawyers, and planters in rural West Feliciana Parish, about forty miles north of Baton Rouge, submitted an act to the infant Louisiana state legislature for the incorporation of a “library company” of their own. It was to be located in the parish seat, St. Francisville. Shares in the enterprise would be sold for $25 each. Additionally, subscribers would pay four dollars annually on each share, “to be appropriated as the other funds of the company.” Elected officers would include a president, clerk, treasurer, and librarian, as well as five directors, who were authorized to raise $2,000 every year for ten years by lottery, the funds to be used for the benefit of the library.</p>\n<p>Little evidence remains as to the size and scope of this collection. The numbered bookplate shown here indicates that the volume containing it was number 76 in the library’s collection. Holdings of just a few hundred titles would not have been unusual for a library in a town of St. Francisville’s size. By comparison, in 1814 a subscription library in Cincinnati contained 300 volumes, and although slightly different in nature, a circulating library that opened in 1821 in nearby Baton Rouge—which was then only slightly larger than St. Francisville—offered access to 153 titles (226 volumes) for a small fee. Even in New England, small-town libraries of this sort sometimes owned 100 or fewer books.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "The St. Francisville Library Company’s bookplate",
+          "anchor": "st-francisville-bookplate",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "st-francisville-library-bookplate.jpg",
+              "caption": "<p><strong>Bookplate of the St. Francisville Library Co., in David Ramsay, <em>The History of South-Carolina</em>. Charleston: David Longworth, 1809.</strong><br>Rare F269 .R17</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "The library company’s members",
+          "anchor": "library-company-members",
+          "summary": "The St. Francisville Library Company’s members were planters, a newspaper editor and a future benefactor of Cincinnati; its first librarian had published the Lewis and Clark journal of Patrick Gass.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>We know more about the St. Francisville Library Company’s members than about the size and content of its collection. Its charter openly states that members were “free white persons” at least twenty-one years of age, and although it does not explicitly bar women from purchasing stock, all the incorporating members were men. Most were planters, including James Pirrie and Hercules O’Connor (friends of John James Audubon during his stay in St. Francisville in 1821) and Sebastian Hiriart, a Spaniard who, in 1817, chaired a committee charged with evaluating the College of Orleans, Louisiana’s first institute of higher education. James M. Bradford—editor and publisher of a local newspaper and son of John Bradford, the “pioneer printer” of Kentucky—was a shareholder, as was Charles McMicken, a cotton merchant who left Louisiana for Ohio in 1837 and later became the chief benefactor of the University of Cincinnati.</p>\n<p>The library company’s first librarian was David McKeehan, best remembered today as the publisher of the journal of Patrick Gass, a member of the Lewis and Clark Expedition. A schoolteacher and lawyer by training, McKeehan lost his hearing in 1801 and opened a book and stationery store in Pittsburgh, where he met Gass, transformed his journal into flowery prose, and published it. Meriwether Lewis was furious, believing it would detract attention from his own soon-to-be-published account. In the end, sales of Gass’s work were disappointing. Facing mounting debts, McKeehan moved to Natchez and then to New Orleans, publishing newspapers in both cities. By 1816 he was in St. Francisville working as a scrivener in a law office and as librarian of the town’s new subscription library.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "A membership receipt, 1815",
+          "anchor": "st-francisville-receipt",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "st-francisville-library-receipt-1815.jpg",
+              "caption": "<p><strong>St. Francisville Library Company membership receipt, signed by David McKeehan, librarian, 1815.</strong><br>James Pirrie Papers, Mss. 1382</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Books by mail",
+          "anchor": "books-by-mail",
+          "summary": "New Orleans booksellers in the 1840s ordered books from the North and Europe; Gabriel Lavie’s catalog of French imports also lists more than 150 Spanish titles.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>In the 1840s, New Orleans’s publishing industry was in its infancy, but the city was home to numerous booksellers. If a book could not be purchased in a bookseller’s shop, it could be ordered from Philadelphia, New York, Boston, or even London and Paris through catalogs such as this.</p>\n<p>Gabriel Lavie specialized in importing books from France. His catalog lists works alphabetically and by size (quarto, octavo, etc.). The list of standard works is followed by deluxe and gift books, children’s literature, religious books, and works on medicine. There are also more than 150 Spanish-language titles, including translations from French and English. New Orleans at that time was a gateway to Latin America, somewhat like Miami and Houston today. People from Spain and Mexico also settled in the countryside around New Orleans as well as in places farther afield such as New Iberia and Natchitoches.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Gabriel Lavie’s catalog, 1842",
+          "anchor": "lavie-catalogue",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "lavie-catalogue-1842.jpg",
+              "caption": "<p><strong><em>Catalogue de la librairie de Gabriel Lavie</em>. New Orleans: Félix Locquin, 1842.</strong><br>LARA AEU0459</p>",
+              "layout": "side_start"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Creole Authors",
+      "anchor": "creole-authors",
+      "display": "wall",
+      "whole": true,
+      "lead": "rouquette-nouvelle-atala-1879-spread.jpg",
+      "focus": "center",
+      "lead_caption": "<p><strong>Adrien Rouquette, <em>La Nouvelle Atala</em>: the frontispiece, Marie-Atala, and the title page. New Orleans: Propagateur Catholique, 1879.</strong><br>LLMVC Rare PQ3939 .R6 A65</p>",
+      "blocks": [
+        {
+          "type": "entry",
+          "title": "America’s forgotten literature",
+          "anchor": "forgotten-literature",
+          "summary": "Since 2003 Centenary College’s Heritage Language Project has republished America’s lost literature in languages other than English, much of it by Louisiana’s French Creoles.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>In 2003, the Heritage Language Project at Centenary College of Louisiana began publishing two new imprints, <em>Les Éditions Tintamarre</em> and <em>Les Cahiers du Tintamarre</em>, to help scholars rediscover America’s lost literature—literature written in languages other than English. To date, the project has focused on works by nineteenth-century Louisiana French Creoles, many of whom were considered major authors in their day but have since been almost completely forgotten.</p>\n<p>Among the works that have been republished are <em>Les Cenelles</em> (<em>The Mayhaw Berries</em>), a volume of elegiac poetry by seventeen free black Louisiana poets. Even more melancholy is <em>Les Éphémères</em> by Alexandre Latil (1816–51). Born in New Orleans to a wealthy family, Latil contracted leprosy as a teenager and was moved to a leper colony on Bayou St. John, where he sought refuge and relief in poetry.</p>\n<p>Centenary College has also published works that reflect Louisiana’s little-known German heritage. The most provocative is <em>Die Geheimnisse von New-Orleans</em> (<em>The Secrets of New Orleans</em>), by the immigrant Ludwig von Reizenstein. A Gothic fantasy set amidst the racial tension and decadence of antebellum New Orleans, its “plot imagines the coming of a bloody, retributive justice at the hands of Hiram the Freemason—a nightmarish, 200-year-old, proto-Nietzschean superman—for the sin of slavery. Heralded by the birth of a black messiah, the son of a mulatto prostitute and a decadent German aristocrat, this coming revolution is depicted in frankly apocalyptic terms.” The novel also contains “the first profound and sensitive depiction of lesbian love in American literature.”</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Alfred Mercier (1816–1894)",
+          "anchor": "alfred-mercier",
+          "summary": "A doctor educated in Paris, Mercier fought to keep French alive in Louisiana, and wrote much of L’Habitation Saint-Ybars, his novel of masters and slaves, in Louisiana dialect.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Born in Louisiana, Alfred Mercier was sent to Paris at a young age for his education. After a brief return to Louisiana and a visit to Boston to learn English, Mercier left in 1842 for a grand tour of Europe. His five-month stay provided him with inspiration for a novel he would publish in 1873, <em>Le Fou de Palerme</em> (<em>The Fool of Palermo</em>). During the 1848 Revolution in France he contributed articles to Louisiana newspapers about the events leading to the crowning of Napoleon III. At 33, he began medical studies in Paris then moved back to New Orleans where he established himself as a doctor. During the Civil War, he returned to Paris and played a part in efforts to convince France to support the Confederacy.</p>\n<p>Mercier devoted himself to the preservation of French in Louisiana. In an article entitled “Progrès de la langue Française” (“Progress of the French Language”), he expressed his fears about the future extinction of Francophone New Orleans, lamenting that the language of the French Creoles “will have vanished, just as wine poured into a running river loses its flavor and color.”</p>\n<p>After publishing <em>La Fille du Prêtre</em> (<em>The Priest’s Daughter</em>) in 1877, a novel that tackled the issue of ecclesiastic celibacy, Mercier was accused of being a freethinker and was ostracized by New Orleans’s literary community. In 1881, he published <em>L’Habitation Saint-Ybars, ou maîtres et esclaves en Louisiane</em> (<em>The Saint-Ybars Plantation, or Masters and Slaves in Louisiana</em>). Reviews of this “récit social” (social narrative) praised Mercier’s liberal-mindedness and the boldness that drove him to compose much of the novel’s dialogue in Louisiana dialect. The work was popular enough to be republished in newspapers, such as the Pointe à la Hache <em>Lower Coast Gazette</em>, an English-language paper which serialized the story, in the original French, in 1913.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Alfred Mercier",
+          "anchor": "mercier-portrait",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "mercier-portrait-1904.jpg",
+              "caption": "<p><strong>Photograph of Alfred Mercier, in Alcée Fortier, <em>A History of Louisiana</em>. New York: Goupil &amp; Co., 1904.</strong><br>LLMVC F369 .F74 1904a</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "L’Habitation Saint-Ybars, 1881",
+          "anchor": "habitation-saint-ybars",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "mercier-habitation-saint-ybars-1881.jpg",
+              "caption": "<p><strong>Alfred Mercier, <em>L’Habitation Saint-Ybars, ou maîtres et esclaves en Louisiane</em>. New Orleans: Imprimerie Franco-Américaine, 1881.</strong><br>PQ3939 .M5 H3 1881</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Adrien Rouquette (1813–1887)",
+          "anchor": "adrien-rouquette",
+          "summary": "Rouquette learned the language of his Choctaw neighbors as a boy, wrote poetry in Paris and Louisiana, and spent his last 29 years as a missionary on Bayou Lacombe.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Adrien Rouquette grew up on the outskirts of New Orleans near the Native American settlements along Bayou Saint John. He developed a fascination with his Choctaw neighbors and learned their language. Later in life he found in these early experiences a source of poetic inspiration.</p>\n<p>After being educated in Kentucky and New Jersey and then traveling in Europe, Rouquette returned to Louisiana in 1833 and settled on Bayou Lacombe in St. Tammany Parish near another Indian settlement. The following years were divided between Louisiana and France, and many of Rouquette’s poems bear the mark of his time in Paris. In 1841, he published an important collection of poems, <em>Les Savanes</em>. His admiration for contemporary French poetry, and especially for Chateaubriand, is evident. Much later in his life, writing under the pseudonym Chahta-Ima (Choctaw for “one of us”), Rouquette would publish a short novel entitled <em>La Nouvelle Atala, ou fille de l’esprit</em> (<em>The New Atala, or Daughter of the Spirit</em>), a direct response to Chateaubriand’s <em>Atala</em>.</p>\n<p>Rouquette served as a priest at New Orleans’s St. Louis Cathedral and briefly as editor of the newspaper <em>Le Propagateur Catholique</em>. In 1860, he published <em>L’Antoniade</em>, a volume of poetry which shows his deep attachment to Louisiana. He spent the last 29 years of his life as a missionary with his Choctaw friends on Bayou Lacombe.</p>\n<p>Rouquette’s papers are held in the LSU Libraries’ Special Collections.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Adrien Rouquette",
+          "anchor": "rouquette-portrait",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "rouquette-portrait-1913.jpg",
+              "caption": "<p><strong>Adrien Rouquette, in Susan B. Elder, <em>Life of the Abbé Rouquette</em>. New Orleans: L. Graham Co., 1913.</strong><br>LLMVC PQ3939 .R6 E53</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "La Nouvelle Atala, 1879",
+          "anchor": "nouvelle-atala",
+          "blocks": [
+            {
+              "type": "gallery",
+              "caption": "<p><strong>Adrien Rouquette, <em>La Nouvelle Atala</em>. New Orleans: Propagateur Catholique, 1879.</strong><br>LLMVC Rare PQ3939 .R6 A65</p>",
+              "figures": [
+                {
+                  "image": "rouquette-nouvelle-atala-1879-portrait.jpg",
+                  "caption": "<p>Frontispiece, Marie-Atala</p>"
+                },
+                {
+                  "image": "rouquette-nouvelle-atala-1879-title.jpg",
+                  "caption": "<p>Title page</p>"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Léona Queyrouze (1861–1938)",
+          "anchor": "leona-queyrouze",
+          "summary": "Called “little Madame de Staël” as a child, Queyrouze published poems under a male pen name, lectured in public, and wrote to Zola, who wrote back.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>The salons that Léona Queyrouze’s parents held at their home in New Orleans attracted many of the brightest minds of the Creole intellectual world. Joining in the adult conversation, the precocious child earned the nickname “little Madame de Staël.” At fifteen, she was sent to France to improve her language skills. On her return to Louisiana, she was befriended by the writer Lafcadio Hearn, one of the giants of New Orleans’s literary scene about whom she later wrote a volume of reminiscences. Hearn encouraged her to write, and she soon published poems in the newspaper <em>L’Abeille</em> under a male pen-name, Constant Beauvais, a tribute to her grandfather Armand Beauvais, a Louisiana governor and state senator.</p>\n<p>In 1880, the nineteen-year-old Queyrouze published an “Étude sur Racine” (“Study on Racine”) in <em>Les Comptes-Rendus de l’Athénée Louisianais</em>, the publication of an organization founded to perpetuate and encourage the use of French in Louisiana. Four years later, she tested the bounds of contemporary propriety by giving a lecture on the subject of “Indulgence,” thought to be the first public speech given by a young Creole woman in Louisiana. Word of her literary abilities and bold personality reached as far as France, where the president of the Academy of Sciences and Letters in Bordeaux praised her talent. An admirer of Émile Zola, Queyrouze wrote a letter to her idol and boldly included one of her poems. Zola took the time to send her a few lines in response.</p>\n<p>Sadly, Queyrouze abandoned her literary activities at the age of 41, when she married. Her papers are now held in the LSU Libraries’ Special Collections.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Léona Queyrouze",
+          "anchor": "queyrouze-photograph",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "queyrouze-photograph.jpg",
+              "caption": "<p><strong>Photograph of Léona Queyrouze</strong><br>Léona Queyrouze Barel Papers, Mss. 1204, 1222, 1278, 1314, 1323, 1335</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "“Vision,” a poem in manuscript",
+          "anchor": "queyrouze-vision",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "queyrouze-vision-manuscript.jpg",
+              "caption": "<p><strong>Manuscript of Léona Queyrouze’s poem “Vision”</strong><br>Léona Queyrouze Barel Papers, Mss. 1204, 1222, 1278, 1314, 1323, 1335</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Sidonie de la Houssaye (1820–1894)",
+          "anchor": "sidonie-de-la-houssaye",
+          "summary": "Widowed with a family to support, de la Houssaye taught, ran Franklin’s post office, and wrote stories of plantation life in the dialects of St. Mary and St. Martin Parishes.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Sidonie de la Houssaye was born Hélène Perret and raised on Bellevue Plantation near Franklin, Louisiana. She was primarily self-educated with only a few months of formal schooling at a nearby convent. At fourteen, she married Pelletier de la Houssaye and eventually became the mother of fourteen children, of whom only three survived. After her husband died in 1863, Sidonie earned money for her struggling family by teaching and working as postmistress of Franklin.</p>\n<p>Her daughter Lilia died in 1875, leaving Sidonie to care for Lilia’s eight children. It was during this period that she began to publish short stories and novelettes in newspapers. Her works are set primarily in St. Mary and St. Martin Parishes and are about plantation life, manners of the Creoles, and their attitudes toward Acadians and Americans. The stories are of interest for their rendition of Louisiana French dialects. The plots are simple, designed to appeal to plantation women and convent-educated girls.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Sidonie de la Houssaye",
+          "anchor": "de-la-houssaye-portrait",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "de-la-houssaye-portrait.jpg",
+              "caption": "<p><strong>Portrait of Sidonie de la Houssaye</strong><br>Sidonie de la Houssaye Collection, Mss. 105. Her papers are also in the <a href=\"https://louisianadigitallibrary.org/islandora/search/%22Sidonie%20de%20la%20Houssaye%22?type=dismax\">Louisiana Digital Library</a>.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "A grandmother’s diary",
+          "anchor": "grandmothers-diary",
+          "summary": "De la Houssaye sold stories drawn from her grandmother’s diary to George Washington Cable, and signed her controversial Quarteronnes de la Nouvelle-Orléans with a pen name.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>De la Houssaye also wrote morality tales for her eight grandchildren. Much of the material came from the diary of her own grandmother, which she discovered in her attic. She sold at least three of the stories that the diary inspired to the popular author and New Orleans native George Washington Cable for his book <em>Strange True Stories of Louisiana</em> (1889). A photograph of the diary appears in the introduction to his work.</p>\n<p>In 1878, de la Houssaye began writing <em>Les Quarteronnes de la Nouvelle-Orléans</em> (<em>The Quadroons of New Orleans</em>). Originally published in serial form in the newspaper <em>Le Méschacébé</em> and then in book form in 1894, each story has as a title the name of one of the legendarily beautiful Creole women of mixed blood in New Orleans. The stories’ subject matter was so controversial that the author signed them with a nom de plume, Louise Raymond. Her other published works include three novels, <em>Pouponne et Balthazar</em>, <em>Charles et Ella</em>, and <em>Amis et Fortune</em>, described in its modern reprint edition as “a comical parody of the romances of the period in which women eternally depend upon men for their validation.”</p>\n<p>In 1890, L’Athénée Louisianais, an organization founded to preserve the French language in Louisiana, awarded de la Houssaye a gold medal of honor. Her papers are now held by the LSU Libraries’ Special Collections, and many of her unpublished works are available in the Louisiana Digital Library.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "The manuscripts of Strange True Stories",
+          "anchor": "cable-manuscripts",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "cable-strange-true-stories-manuscripts.jpg",
+              "caption": "<p><strong>Manuscript sources of George Washington Cable’s <em>Strange True Stories of Louisiana</em>. New York: C. Scribner’s Sons, 1889.</strong><br>LLMVC PS1244 .S8 1889</p>",
+              "layout": "side_start"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "African Americans",
+      "anchor": "african-americans",
+      "display": "wall",
+      "whole": true,
+      "lead": "colored-teachers-journal-1939-1.jpg",
+      "focus": "center",
+      "lead_caption": "<p><strong><em>The Louisiana Colored Teachers’ Journal</em>, vol. 12, no. 3 (Feb.–Mar. 1939).</strong><br>LLMVC L13 .L78</p>",
+      "blocks": [
+        {
+          "type": "entry",
+          "title": "The roots of illiteracy",
+          "anchor": "roots-of-illiteracy",
+          "summary": "The French and Spanish let enslaved people learn to read; after 1803 Louisiana forbade it, and in 1830 made teaching them a crime punished by up to a year in prison.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Although harsh, the French Code Noir (“Black Code”), first instituted in Saint Domingue in 1685 and then revised for Louisiana in 1724, did not prohibit slaves from learning how to read. Louisiana’s Spanish government likewise had no serious objections to people of African descent being able to read, as long as they obeyed the law and did not incite rebellion. After 1803, however, with the coming of Anglo-Americans to Louisiana, the education of slaves was increasingly frowned upon, for it was feared they would read antislavery literature and rebel against their masters. The state legislature passed a law in 1830 stipulating that anyone caught teaching slaves to read or write could be imprisoned for up to a year. The law was reprinted in parish police codes, such as the one shown here.</p>\n<p>In the late eighteenth and early nineteenth centuries, Louisiana had a large population of free people of color (often the children of mixed-race relationships). Although many were highly educated, thousands left Louisiana between about 1830 and 1860 to seek a better life in the North, Europe, Latin America, and the Caribbean. Sadly, this deprived African Americans who remained of talented leaders and educators. Its effects on black life in Louisiana, including literacy, can arguably still be felt today.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Police Code of West Feliciana, 1851",
+          "anchor": "police-code",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "police-code-west-feliciana-1851.jpg",
+              "caption": "<p><strong><em>Police Code of the Parish of West Feliciana</em>. Bayou Sara: Marks &amp; Turner, 1851.</strong><br>LLMVC KFL599 .W5 A35 1851 LARA</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "A moral dilemma",
+          "anchor": "moral-dilemma",
+          "summary": "Daniel Turnbull’s library held books on every side of the slavery question; one pamphlet mailed to him in 1860 urged compromise to prevent civil war.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Today, we see slavery as inherently evil, but in the mid nineteenth century, its morality was hotly debated. Many Southern planters viewed their relationship with their slaves as a fatherly one. Some thought that abolishing slavery would not only wreck the Southern economy, but also force former slaves into Northern cities and factories, where racism and working conditions were as bad or worse than on Southern plantations. In Louisiana, the planter Daniel Turnbull weighed slavery’s pros and cons. His library contained the full range of books on the issue, from proslavery works such as the rare Missouri periodical <em>The African</em> (1843) to speeches and essays by leading abolitionists. As a vice president of the American Colonization Society, Turnbull received its monthly publication, <em>The African Repository</em>. Founded in 1816 to advocate for the return of free blacks to Africa, the ACS was not as altruistic as it may sound. Some abolitionists criticized it as a racist organization that sought to perpetuate slavery in the United States by getting educated blacks out of the country.</p>\n<p>One pamphlet in Daniel Turnbull’s library calls for compromise. Joshua Francis Fisher, a native Philadelphian who married into a family of South Carolina slaveholders, suggested restricting abolitionist propaganda in order to appease the South and prevent civil war, but also argued for the repeal of the Fugitive Slave Law, an action that would no longer require runaway slaves to be returned to their masters. Mailed to Turnbull from Washington, D.C., the pamphlet carries a printed instruction: “Read, and lend to your Neighbors.”</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Concessions and Compromises, 1860",
+          "anchor": "fisher-concessions",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "fisher-concessions-and-compromises-1860.jpg",
+              "caption": "<p><strong>Joshua Francis Fisher, <em>Concessions and Compromises</em>. Philadelphia: C. Sherman &amp; Son, [1860].</strong><br>LLMVC E440.5 .F53 Rosedown Oversize</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "A Southern Uncle Tom’s Cabin",
+          "anchor": "southern-uncle-toms-cabin",
+          "summary": "Charles Testut wrote Le vieux Salomon, a story of slave life, in 1858, but feared he would be lynched if he published it before the Civil War. It appeared in 1872.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Charles Testut emigrated from France to New Orleans in 1839. His novel <em>Le vieux Salomon</em> is a story of slave life and might be said to be the Southern equivalent of Harriet Beecher Stowe’s <em>Uncle Tom’s Cabin</em>.</p>\n<p>Stowe’s novel, however, was so hated in the South when Testut wrote <em>Le vieux Salomon</em> in 1858 that he feared he would be lynched if he published the book. It was not until 1872, seven years after the Civil War ended, that the novel was finally published.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Le vieux Salomon, 1872",
+          "anchor": "testut-vieux-salomon",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "testut-vieux-salomon-1872.jpg",
+              "caption": "<p><strong>Charles Testut, <em>Le vieux Salomon; ou, Une famille d’esclaves au XIXe siècle</em>. New Orleans: [s.n.], 1872.</strong><br>LLMVC PQ3939 .T4 V5 1872</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "The crusade against black illiteracy",
+          "anchor": "crusade-against-illiteracy",
+          "summary": "In 1870 one Louisianan in three could not read. The Louisiana Colored Teachers’ Association and, in the 1930s, the WPA helped cut black illiteracy sharply.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Louisiana has always had one of the highest illiteracy rates in the U.S. In 1870, the census reported that one in three Louisianans could not read. Illiteracy was especially bad among African Americans and can be said to be one of the many legacies of slavery. During the Great Depression in the 1930s, the Adult Education Project of the Works Progress Administration taught many black adults how to read and write. The 1920s had also seen a significant reduction in black illiteracy. Due in part to the Louisiana Colored Teachers’ Association, the percentage of African Americans in Louisiana who were unable to read fell from about 39 percent in 1920 to 23 percent at the end of the decade.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "The Louisiana Colored Teachers’ Journal, 1939",
+          "anchor": "colored-teachers-journal",
+          "blocks": [
+            {
+              "type": "gallery",
+              "caption": "<p><strong><em>The Louisiana Colored Teachers’ Journal</em>, vol. 12, no. 3 (Feb.–Mar. 1939).</strong><br>LLMVC L13 .L78</p>",
+              "figures": [
+                {
+                  "image": "colored-teachers-journal-1939-1.jpg",
+                  "caption": ""
+                },
+                {
+                  "image": "colored-teachers-journal-1939-2.jpg",
+                  "caption": ""
+                },
+                {
+                  "image": "colored-teachers-journal-1939-3.jpg",
+                  "caption": ""
+                },
+                {
+                  "image": "colored-teachers-journal-1939-4.jpg",
+                  "caption": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Black libraries and librarians",
+          "anchor": "black-libraries",
+          "summary": "Under Jim Crow, African Americans were barred from Louisiana’s public libraries, and the Louisiana Library Association admitted its first black members only in 1965.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>In the Jim Crow era, African Americans in Louisiana were not allowed to use public libraries or libraries at white universities. Libraries that served blacks included those at historically black colleges, such as Southern, Dillard, and Xavier Universities, and the Dryades Street Branch of the New Orleans Public Library, opened in 1917 with a grant from Andrew Carnegie. Overall, African Americans’ access to public libraries was low. In 1939, for example, only 22% of Louisiana’s black population was served by libraries, compared to 50% of the white population. Barely two percent of the rural black population had library access; urban blacks fared better, with about 61% having access.</p>\n<p>When the Louisiana Library Association was organized in 1925, it had no African-American members. Its constitution did not explicitly bar blacks from becoming members and some white members had no objections to their participation, but Louisiana’s segregation laws would have made it hard for them to attend LLA conferences, which often took place in hotels. In 1962, the influential American Library Association declared that membership in all of its chapters be open to everyone, regardless of race. The LLA Executive Board claimed it was unable to comply and withdrew the chapter from ALA. Its membership was reinstated in 1965, when it admitted its first black members.</p>\n<p>Even though it was entirely white prior to 1965, LLA was not inattentive to issues related to African Americans. In the 1930s and 1940s, for example, it carried articles about black libraries in its quarterly bulletin and had a special section on “Negro Libraries,” edited by Nathaniel Stewart of the Dillard University library in New Orleans. Excluded from LLA, many of Louisiana’s black librarians became members of the Louisiana Colored Teachers’ Association, founded in 1901 and known after 1947 as the Louisiana Education Association. Its journal carried news of libraries at African-American schools as well as articles on topics such as “Promoting National Defense Through the School Libraries” (April 1941).</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "“The Negro Librarian in Louisiana,” 1940",
+          "anchor": "negro-librarian",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "negro-librarian-in-louisiana-1940.jpg",
+              "caption": "<p><strong>“The Negro Librarian in Louisiana,” in <em>The Bulletin of the Louisiana Library Association</em>, vol. 3, no. 3 (Mar. 1940).</strong><br>LLMVC Z673 .L872</p>",
+              "layout": "side_start"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Women’s Reading and Novels",
+      "anchor": "womens-reading",
+      "display": "wall",
+      "whole": true,
+      "lead": "newcomb-young-ladys-guide-1853-spread.jpg",
+      "focus": "center",
+      "lead_caption": "<p><strong>“Novel Reading,” in Harvey Newcomb, <em>The Young Lady’s Guide to the Harmonious Development of Christian Character</em>. New York: M. W. Dodd, 1853, pp. 196–197.</strong><br>Rare 241 N43YX</p>",
+      "blocks": [
+        {
+          "type": "entry",
+          "title": "“Trash”",
+          "anchor": "trash",
+          "summary": "Someone at Rosedown wrote “Trash” in a romance of 1833, yet the devout Turnbulls read Scott, Cooper, Fielding, Smollett and Thackeray, and the Romantic poets.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>The Turnbull family of Rosedown Plantation in St. Francisville, Louisiana, was deeply religious. Yet for all their interest in spiritual matters, they did have a worldly side. Even though someone in the family—probably the father, Daniel—boldly wrote the word “Trash” on the first page of Andrew Picken’s 1833 romance <em>Waltham</em>, the family had a healthy appetite for fiction. Evangelical Protestants in the early nineteenth century often objected to novel reading on the grounds that it was a waste of time that could be spent more profitably reading educational and religious works. Many novelists, however, came to be considered respectable, including Sir Walter Scott and James Fenimore Cooper, both of whom the Turnbulls enjoyed. Daniel Turnbull purchased Scott’s <em>Lives of the Novelists</em> hot off the press in 1825, and despite having many religious novels in his library, he owned the rollicking adventures of Fielding, Smollett, and Thackeray, as well as the Romantic poetry of Wordsworth, Southey, and Byron.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Picken’s Waltham, 1833",
+          "anchor": "picken-waltham",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "picken-waltham-1833.jpg",
+              "caption": "<p><strong>Andrew Picken, <em>Waltham</em>. Philadelphia: Carey, Lea and Blanchard, 1833.</strong><br>LLMVC PR5178 .P38 W3 1833 Rosedown</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "What not to read",
+          "anchor": "what-not-to-read",
+          "summary": "A guide owned by a governess at Oakland Plantation gives seven reasons young women should not read novels, religious novels included.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>The author of this book lists and discusses seven reasons why young women (and young men, too) should avoid reading novels:</p>\n<ol><li><em>Novel reading produces an undue development of the imagination.</em></li><li><em>Novel reading produces a morbid appetite for excitement.</em></li><li><em>Novel reading produces a sickly sensibility.</em></li><li><em>Novel reading gives erroneous views of life.</em></li><li><em>Novel reading strengthens the passions, weakens the virtues, and diminishes the power of self-control.</em></li><li><em>Novel reading is a great waste of time.</em></li><li><em>Novel reading is a great hindrance to serious piety.</em></li></ol>\n<p>Even religious novels were questionable, for although “they profess to recommend religion,” they still caused their readers to develop a wild imagination, experience “morbid excitement,” and adopt “false views of religion” (the hero of one religious novel, for example, fought in a duel).</p>\n<p>This copy of <em>The Young Lady’s Guide</em> belonged to Marian Darcy. Born in New York, reared in New Orleans, and educated in Indiana, Darcy worked as a governess at Oakland Plantation in West Feliciana Parish, Louisiana, in the 1850s.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "The Young Lady’s Guide, 1853",
+          "anchor": "young-ladys-guide",
+          "blocks": [
+            {
+              "type": "gallery",
+              "caption": "<p><strong>Harvey Newcomb, <em>The Young Lady’s Guide to the Harmonious Development of Christian Character</em>. New York: M. W. Dodd, 1853.</strong><br>Rare 241 N43YX</p>",
+              "figures": [
+                {
+                  "image": "newcomb-young-ladys-guide-1853-title.jpg",
+                  "caption": "<p>Engraved title page</p>"
+                },
+                {
+                  "image": "newcomb-young-ladys-guide-1853-p196.jpg",
+                  "caption": "<p>Page 196</p>"
+                },
+                {
+                  "image": "newcomb-young-ladys-guide-1853-p197.jpg",
+                  "caption": "<p>Page 197</p>"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Reading and repentance",
+          "anchor": "reading-and-repentance",
+          "summary": "Warned by her mother against novels, thirteen-year-old Esther Wright wrote home from school in 1857: “I am very sorry I ever touched a novel.”",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>As female literacy increased in the mid nineteenth century and books became more widely available, the question of what was appropriate for women, particularly young women, to read became a topic of sermons, conduct of life manuals, and mothers’ ministrations. Proper young ladies read works that contributed to their moral character, spiritual growth, or development in the domestic sphere; novels were often condemned as corrupting influences.</p>\n<p>Sarah Wright wrote her daughters Esther and Mary, in school at the Female Institute in Mansfield, Louisiana, and cautioned them against reading novels. Her admonitions prompted Esther to write in response:</p>\n<blockquote><p>I am very sorry I ever touched a novel. I begin to feel the effects of it. I have promised not to read any more while I am going to school, and hope I’ll not wish to read any afterward. When I get to reading any beautiful poetry, or other things, I sometimes think, I could not read a novel.</p></blockquote>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Esther Wright to her mother, 1857",
+          "anchor": "esther-wright-letter",
+          "blocks": [
+            {
+              "type": "gallery",
+              "caption": "<p><strong>Esther Wright to her mother, Sarah Wright, 19 April 1857</strong><br>Wright-Boyd Family Papers, Mss. 3362</p>",
+              "figures": [
+                {
+                  "image": "esther-wright-letter-1857-1.jpg",
+                  "caption": ""
+                },
+                {
+                  "image": "esther-wright-letter-1857-2.jpg",
+                  "caption": ""
+                },
+                {
+                  "image": "esther-wright-letter-1857-3.jpg",
+                  "caption": ""
+                },
+                {
+                  "image": "esther-wright-letter-1857-4.jpg",
+                  "caption": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Books read and finished",
+          "anchor": "books-read-and-finished",
+          "summary": "Mary Cornelia Wright kept a list of the books she read and finished in 1864 and 1865: history, religion and some poetry, and only two novels.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Indeed, reading was a type of discipline of the mind, as Mary Cornelia’s list illustrates. She did not just read the books; she read and finished them. Further, the list indicates the value she placed on reading and that she took the instructions her mother gave her as a young girl to heart. Her reading encompassed history, religion, and some poetry. The only novels listed are Sir Walter Scott’s <em>Heart of Midlothian</em>, which she read for the third time, and Augusta J. Evans’s <em>Macaria; or, Altars of Sacrifice</em>, which embraced a romantic view of the Confederacy and equated woman’s work for the southern cause with selfless Christian duty.</p>\n<p>Esther (age 13 when she wrote her letter) and Mary (25 years old in 1864) were the daughters of Dr. Jesse and Sarah Wright, plantation owners of Rapides Parish, Louisiana. The family apparently valued education. A graduate of Yale, Dr. Wright was instrumental in establishing Spring Creek Academy in Pineville, Louisiana, and at least four of the couple’s six surviving children attended schools in Connecticut, Kentucky, and Louisiana.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Mary Cornelia Wright’s list, 1864–1865",
+          "anchor": "mary-cornelia-wright-list",
+          "blocks": [
+            {
+              "type": "gallery",
+              "caption": "<p><strong>“Books Read and Finished from November 1864 [to August 10, 1865],” from the Mary Cornelia Wright Journal</strong><br>Wright-Boyd Family Papers, Mss. 3362</p>",
+              "figures": [
+                {
+                  "image": "mary-cornelia-wright-books-read-1.jpg",
+                  "caption": ""
+                },
+                {
+                  "image": "mary-cornelia-wright-books-read-2.jpg",
+                  "caption": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Ladies join the club",
+          "anchor": "ladies-join-the-club",
+          "summary": "The Pan Gnostics admitted “a few lady members” in 1885, among them Grace King, whose essay “Heroines in Novels” won the club’s applause as her career began.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>New Orleans author and historian Grace King (1852–1932) is best known for her works on French Louisiana and Creole culture. Through her friendships and associations, she was heavily involved with and influential in the literary life of late nineteenth-century New Orleans. A frequent contributor to <em>Harper’s</em> and <em>Century</em> magazines, she also published over ten works of fiction and history between 1888 and 1924. She was an active member of several literary and historical groups, including the Pan Gnostics, which was “reformed” in March 1885 to admit “a few lady members.” King and her friend Julia Ward Howe, suffragist and author of “The Battle Hymn of the Republic,” were among those admitted. King became associated with the club just as her literary career was beginning.</p>\n<p>The minute book displayed records the overwhelmingly positive reception Grace King received after reading her essay “Heroines in Novels,” which contrasted national standards of feminine heroes in German, French, English, and American literatures. The secretary recorded that her essay elicited appreciative applause, “which the earnestness of its research, the richness of its vocabulary and the vigor of its style entirely deserved.”</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "The Pan Gnostics’ minute book, 1885–1886",
+          "anchor": "pan-gnostics-minute-book",
+          "blocks": [
+            {
+              "type": "gallery",
+              "caption": "<p><strong>Minute Book of the Pan Gnostics Club, 1885–1886</strong><br>Grace King Papers, Mss. 1282</p>",
+              "figures": [
+                {
+                  "image": "pan-gnostics-minute-book-1885-1.jpg",
+                  "caption": ""
+                },
+                {
+                  "image": "pan-gnostics-minute-book-1885-2.jpg",
+                  "caption": ""
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Practical Reading",
+      "anchor": "practical-reading",
+      "display": "wall",
+      "lead": "huey-long-bible-endpapers.jpg",
+      "focus": "center",
+      "lead_caption": "<p><strong>Huey P. Long’s notes on the endpapers of <em>The Precious Promise Holy Bible</em>. Philadelphia: John C. Winston Co., 1915.</strong><br>Don Devol Papers, Mss. 3653</p>",
+      "blocks": [
+        {
+          "type": "entry",
+          "title": "Thomas Affleck, scientific farmer",
+          "anchor": "thomas-affleck",
+          "summary": "Trained in agriculture at Edinburgh, Thomas Affleck married into a Mississippi plantation and founded Southern Nurseries, one of the earliest commercial nurseries in the South.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Thomas Affleck was born in Dumfries, Scotland, in 1812. He studied agriculture at the University of Edinburgh before coming to the United States in 1832, where he worked as a clerk, merchant, and in small nurseries in New York, Pennsylvania, Indiana, and Ohio. In 1840, he moved to Cincinnati and became junior editor of the <em>Western Farmer and Gardener</em>; in 1841, he took over as sole editor. During a tour of Mississippi and Louisiana in 1842, Affleck met and married the widow Anna Dunbar Smith of Washington, Mississippi, near Natchez. She had inherited Ingleside Plantation and held interests in additional cotton plantations. Affleck saw the chance to put his ideas about agriculture to work. However, debts from the estate of Anna’s first husband required the selling of all lands but Ingleside, where the couple resided. Affleck turned to the nursery business and established Southern Nurseries, one of the earliest commercial nurseries in the South.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Affleck’s list of agricultural papers, about 1867",
+          "anchor": "affleck-list",
+          "blocks": [
+            {
+              "type": "gallery",
+              "caption": "<p><strong>“List of Unbound Agric. + Papers,” ca. 1867</strong><br>Thomas Affleck Papers, Mss. 3, 4, 1263, 1264</p>",
+              "figures": [
+                {
+                  "image": "affleck-list-of-papers-1.jpg",
+                  "caption": ""
+                },
+                {
+                  "image": "affleck-list-of-papers-2.jpg",
+                  "caption": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "The Southern Rural Almanac",
+          "anchor": "southern-rural-almanac",
+          "summary": "Affleck’s illustrated almanac, begun in 1851, gave planting dates for Natchez and New Orleans and was “kept & referred to thro’ the year” across the South.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>It is clear from Affleck’s correspondence that he considered his work a science. He sought to spread his gospel of crop diversification and scientific agriculture through his many writings and publications. A frequent contributor to and editor of agricultural journals and columns, he is most noted for the <em>Southern Rural Almanac and Plantation and Garden Calendar</em>, which began publication in 1851. The illustrated almanac detailed planting instructions for the plantation cash crops, the fodder crops, the kitchen garden, and ornamental gardens, and included planting dates for both Natchez and New Orleans. It enjoyed a wide circulation through 1861. In an 1854 letter to a correspondent in South Carolina, Affleck boasted “The <em>S.R.A.</em> [<em>Southern Rural Almanac</em>] is now wanted by planters &amp; farmers &amp; their wives, all thro’ the South, &amp; is kept &amp; referred to thro’ the year.”</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Affleck’s Southern Rural Almanac, 1851",
+          "anchor": "affleck-almanac",
+          "blocks": [
+            {
+              "type": "gallery",
+              "caption": "<p><strong>Thomas Affleck, <em>Affleck’s Southern Rural Almanac, and Plantation and Garden Calendar</em>. Washington, Miss.: Thomas Affleck, 1851.</strong><br>LLMVC AY81 .F3 A23 1851</p>",
+              "figures": [
+                {
+                  "image": "affleck-almanac-1851-cover.jpg",
+                  "caption": "<p>Cover</p>"
+                },
+                {
+                  "image": "affleck-almanac-1851-raspberries.jpg",
+                  "caption": "<p>Raspberries</p>"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Agriculture and Southern nationalism",
+          "anchor": "southern-nationalism",
+          "summary": "Affleck wrote for DeBow’s Review, the New Orleans monthly that defended slavery and promoted southern nationalism: “we [the South] must have a monthly journal of agriculture.”",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Affleck kept his finger on the pulse of developments in agriculture across the country with his library of agricultural journals, a list of which is shown here. In addition to editing the agriculture column for the New Orleans <em>Times-Picayune</em>, he frequently contributed pieces to several periodicals, including this one from the widely read and influential <em>DeBow’s Review</em>.</p>\n<p>Edited by economist and statistician James D. B. DeBow and published in the antebellum era in New Orleans, the <em>Review</em> offered statistics and articles on agriculture, economics, literature, and politics, including works that defended slavery and promoted southern nationalism. DeBow sought to fill the need he and other advocates of the South saw for southern-produced and southern-oriented publications and literature. Affleck shared that focus, writing DeBow in 1851, “The fact is, we [the South] must have a monthly journal of agriculture.”</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "“Horticulture for the South,” 1856",
+          "anchor": "affleck-debows-review",
+          "blocks": [
+            {
+              "type": "gallery",
+              "caption": "<p><strong>Thomas Affleck, “Horticulture for the South,” <em>DeBow’s Review</em> 19:4 (February 1856), 717–719.</strong><br>LLMVC HF1 .D2</p>",
+              "figures": [
+                {
+                  "image": "affleck-debows-review-1856-p717.jpg",
+                  "caption": "<p>Page 717</p>"
+                },
+                {
+                  "image": "affleck-debows-review-1856-p718.jpg",
+                  "caption": "<p>Page 718</p>"
+                },
+                {
+                  "image": "affleck-debows-review-1856-p719.jpg",
+                  "caption": "<p>Page 719</p>"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Every man his own doctor",
+          "anchor": "every-man-his-own-doctor",
+          "summary": "Martha Turnbull’s copy of a Southern medical guide is full of her notes on remedies, showing that her famous garden at Rosedown was also a medicine chest.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Ewell, a Savannah doctor, felt that European medical books were of little use to Americans because they did not take into account the American climate. His book was specifically designed for Southerners and provided herbal remedies for common diseases and conditions ranging from fever, rheumatism, pleurisy, and toothache to dysentery, rashes, mosquito bites, whooping cough, and “wind.” It also gives advice on women’s conditions.</p>\n<p>This copy of Ewell’s guide was owned by Martha Turnbull of St. Francisville, Louisiana, and contains many handwritten notes about remedies she employed. Well known as a gardener—<em>The Garden Diary of Martha Turnbull, Mistress of Rosedown Plantation</em> was published by the LSU Press in 2012—these annotations reveal that her garden was valued not just for aesthetic enjoyment and food, but also for medicinal purposes. Some of the notes may refer to treatment given to the Turnbulls’ more than 400 slaves.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Ewell’s Medical Companion, 1807",
+          "anchor": "ewell-medical-companion",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "ewell-medical-companion-1807.jpg",
+              "caption": "<p><strong>James Ewell, <em>The Planter’s and Mariner’s Medical Companion</em>. Philadelphia: John Bioren, 1807.</strong><br>LLMVC RC81 .E916 1807 Rosedown</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Popular science for ladies",
+          "anchor": "popular-science-for-ladies",
+          "summary": "Sarah Turnbull read her father’s Latin classics and owned much of the family’s math, science and philosophy, including her mother’s Conversations on Chemistry.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>As historian Scott Casper has pointed out, “it is inaccurate to assume that women [in the antebellum period] read predominantly for moral lessons or that women’s reading served primarily to confine them in new, domestic roles.” Indeed, some of the editions of the Latin classics owned by planter Daniel Turnbull of St. Francisville, Louisiana, were used by his daughter Sarah. An inscription in his copy of the works of Vergil, for example, indicates that the fourteen-year-old Sarah used it in 1845. Similarly, many of the math, science, and philosophy books in the Turnbulls’ library belonged to Sarah rather than the male members of her family, and at some point prior to her marriage, she signed her name in (and presumably used) her mother’s copy of Jane Marcet’s <em>Conversations on Chemistry</em>, a book of instructive dialogues between a woman and two young girls.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Marcet’s Conversations on Chemistry, 1824",
+          "anchor": "marcet-conversations-on-chemistry",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "marcet-conversations-on-chemistry-1824.jpg",
+              "caption": "<p><strong>Jane Marcet, <em>Conversations on Chemistry</em>. Hartford: Oliver D. Cooke and Sons, 1824.</strong><br>LLMVC QD28 .M37 1824 Rosedown</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "A land of many tongues",
+          "anchor": "land-of-many-tongues",
+          "summary": "Louisianans of every language had to understand one another; grammars printed in New Orleans taught Spanish, French and Latin.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>The ability to speak more than one language was a useful and, for some, essential skill in Louisiana in the early nineteenth century. Although some French and Spanish Creoles resisted learning English after the Louisiana Purchase in 1803, Louisianans of all linguistic backgrounds needed to be able to communicate with each other, either for business or personal reasons.</p>\n<p>Newspapers from this period frequently contained advertisements for language tutors. Students also would have owned dictionaries and grammars, such as those shown here. The French-Spanish grammar was originally designed for use at the College of Orleans, Louisiana’s first institution of higher learning, which opened in 1811. Cherbonnier’s French grammar could be used by children or adults. It begins with a lesson on the alphabet and pronunciation of letters, contains a section on how to keep account books and write business letters, and ends with samples of French poetry. Early Louisiana libraries were often well stocked with the Greek and Latin classics; the state’s many Catholic schools also created a market for Latin grammars like the one shown here, printed in New Orleans in 1833.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "A Spanish grammar for French speakers, 1812",
+          "anchor": "abrege-grammaire-espagnole",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "abrege-grammaire-espagnole-1812.jpg",
+              "caption": "<p><strong><em>Abrégé de la grammaire espagnole</em>. New Orleans: L. Fourcand, 1812.</strong><br>LLMVC PC4105 .A37 LARA</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Cherbonnier’s Alphabet, 1829",
+          "anchor": "cherbonnier-alphabet",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "cherbonnier-alphabet-1829.jpg",
+              "caption": "<p><strong>Pierre Cherbonnier, <em>Alphabet; ou, Méthode simple &amp; facile de montrer promptement à lire aux enfans ainsi qu’aux étrangers qui veulent apprendre le français</em>. New Orleans: Buisson et Boimare, 1829.</strong><br>LLMVC PC2109 .C43 LARA</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Granet’s Latin grammar, 1833",
+          "anchor": "granet-latin-grammar",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "granet-latin-grammar-1833.jpg",
+              "caption": "<p><strong>B. Granet, <em>Elements of the Latin Grammar</em>. New Orleans: Gaux and L. Sollée, 1833.</strong><br>LLMVC PA2087 .G73 1833 LARA</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Wartime education",
+          "anchor": "wartime-education",
+          "summary": "Cut off from Northern publishers, Confederate Louisiana printed its own schoolbooks on scarce paper: a grammar in Shreveport and a speller in Mount Lebanon.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Even though Louisiana was partially occupied by Union troops for most of the Civil War, areas of the state that remained in the Confederacy tried to get on with life as best as they could. The war interrupted the flow of books from the North, where all the major publishing houses were, leaving many Louisiana children without textbooks. Despite shortages of paper, Governor Henry W. Allen authorized the printing of the <em>Louisiana English Grammar</em> in Shreveport, the last Confederate capital of Louisiana, in 1865. Edited by Allen’s secretary, Edmund Halsey, a former newspaper publisher, the work was adapted from Roswell C. Smith’s popular <em>New English Grammar</em>. The paper may have been imported from Mexico.</p>\n<p>A similar work is <em>The Confederate Speller</em>, published in nearby Mount Lebanon. Commenced by William W. Womack, a professor of English at the short-lived Mt. Lebanon University, the work was based on Noah Webster’s <em>Elementary Spelling Book</em>. Like the <em>Louisiana English Grammar</em>, it is largely free of Confederate themes but was intended as the first in a series of books “by which it is proposed to supplant an unwholesome supply from alien and inimical sources.” Two penciled notes record that it was used by members of the Upton family in Homer and Arcadia, Louisiana, in 1864–65.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "The Confederate Speller, 1864",
+          "anchor": "confederate-speller",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "confederate-speller-1864.jpg",
+              "caption": "<p><strong><em>The Confederate Speller</em>. Mount Lebanon, La.: W. F. Wells, 1864.</strong><br>LLMVC PE1145 .W65 1864 LARA</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Louisiana English Grammar, 1865",
+          "anchor": "louisiana-english-grammar",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "louisiana-english-grammar-1865.jpg",
+              "caption": "<p><strong><em>Louisiana English Grammar</em>. Shreveport: Office of the South-Western, 1865.</strong><br>LLMVC PE1111 .S545 1865 LARA</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Huey P. Long’s Bible",
+          "anchor": "huey-long-bible",
+          "summary": "Huey Long quoted scripture to win rural voters, and covered the endpapers of his Bible with the verses he meant to use, gluttony and drunkenness among them.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>In a part of the country known for its religious fervor, the Bible has often been used for political purposes. In the 1920s and ’30s, Louisiana’s most famous politician, Governor Huey P. Long, filled his speeches with quotes from scripture to make it seem as if he were a “Bible thumper,” knowing this would increase his appeal to voters, especially in rural areas. Together with his folksy style of speaking, the Bible helped him connect to the people of the state, black as well as white, and became the foundation of his argument for the redistribution of wealth (“Every Man a King”). Almost every inch of the front and rear endpapers of his copy of the Bible is covered with notes and references to verses that he wanted to quote.</p>\n<p>As is often the case, practicing what you preach can prove difficult. Although raised a Baptist, Long was not a regular churchgoer as an adult, and in his personal life, he often strayed from the Bible’s teachings. A number of the passages that he quotes refer to gluttony and drunkenness—ironic, since Long once boasted to a friend, “I’ve been under the influence of liquor more nights of my adult life than I’ve been sober, and out of this have come some of the most brilliant ideas of my career.”</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Huey P. Long’s Bible",
+          "anchor": "huey-long-bible-endpapers",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "huey-long-bible-endpapers.jpg",
+              "caption": "<p><strong><em>The Precious Promise Holy Bible</em>. Philadelphia: John C. Winston Co., 1915. The map of Palestine and Huey P. Long’s notes on the endpapers.</strong><br>Don Devol Papers, Mss. 3653</p>",
+              "layout": "side_start"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Newspapers",
+      "anchor": "newspapers",
+      "display": "wall",
+      "lead": "student-journalists-1932.jpg",
+      "focus": "center",
+      "lead_caption": "<p><strong>“Student Journalists on the Job,” LSU, 1932</strong><br>Marvin G. Osborn Scrapbooks, Mss. 1730</p>",
+      "blocks": [
+        {
+          "type": "entry",
+          "title": "Libraries for the masses",
+          "anchor": "libraries-for-the-masses",
+          "summary": "“A well edited public newspaper is the best political library that the great mass of the citizens can possess,” The Louisiana Journal declared in 1825.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Although few households in early Louisiana had many books, newspapers were readily available, supplying a steady stream of not just news, but also essays, poetry, sermons, selections from novels, medical advice, and even the occasional recipe. In an age when most people had little time for reading, newspapers frequently satisfied their needs, as one contributor to <em>The Louisiana Journal</em> pointed out, with some exaggeration, on October 1, 1825: “Such a variety of ideas may not be found in a hundred volumes of books… as may frequently be found in one newspaper. Those who have ample means… to gain a subsistence, may go the whole rounds of literature, but he who has daily to gain it, had better take a short cut, through the newspapers.” There was no more gratifying a sight, the contributor believed, than to enter a stranger’s house in the country and find children reading a stack of newspapers to their parents. “A well edited public newspaper is the best political library that the great mass of the citizens can possess.”</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Women in journalism in Louisiana",
+          "anchor": "women-in-journalism",
+          "summary": "Newspapers were among the few careers open to women. Eliza Nicholson ran the Picayune, and Mattie McGrath founded the Woman’s Enterprise in 1921.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Newspaper work was one of the few professional careers women in the nineteenth and early twentieth century could pursue. Louisiana boasted many women journalists. Some, such as Mary Edwards Bryan of the <em>Natchitoches Times</em>, contributed fiction, poetry, domestic advice, and stories on women’s topics to newspapers run by men. A few managed and edited newspapers entirely on their own. The most well known was Eliza Jane Poitevent Nicholson (“Pearl Rivers”). Her husband owned the influential New Orleans <em>Picayune</em>. When he died bankrupt in 1886, Eliza took charge of the paper, introducing many innovations that made the <em>Picayune</em> one of the leading journals in the South.</p>\n<p>In 1892, May Edna Leake and her husband William Walter Leake founded the <em>Bayou Sara True Democrat</em> to “make war” on the Louisiana Lottery, a private corporation that provided revenue for Louisiana but was seen as a corrupting influence on state government. Mrs. Leake managed the paper on her own after her husband’s death in 1901. In 1906, she married her pressman, Elrie Robinson, who later gained some recognition as an expert on the reproduction of old typefaces. The <em>True Democrat</em>, which Leake edited until her death in 1925, came to be recognized as one of the South’s finest “country journals.”</p>\n<p>When she was widowed in 1885, Marie Louise Garner of the East Carroll <em>Banner</em> turned to journalism to support herself and her young son. She used the editor’s pen to advance the causes of education and temperance in rural northeast Louisiana. Another crusader for better schools was Henrietta McClendon Brock, editor of the Franklinton <em>Era Leader</em> from 1912 to 1937. Brock also served as the first woman president of the Louisiana Press Association.</p>\n<p>In July 1921, less than a year after the passing of the Nineteenth Amendment to the U.S. Constitution, which guaranteed women the right to vote, the <em>Woman’s Enterprise</em> was founded in Baton Rouge. Devoted to women’s interests, it was published and edited by Mattie B. McGrath. She encouraged women to register to vote, reported on women’s volunteer work and education, and published sketches of local professionals to help young women choose a career.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Eliza Nicholson (1849–1896)",
+          "anchor": "eliza-nicholson",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "nicholson-pearl-rivers.jpg",
+              "caption": "<p><strong>Eliza Nicholson (1849–1896). From James Henry Harrison, <em>Pearl Rivers, Publisher of the Picayune</em>. New Orleans: Tulane University, 1932.</strong><br>LLMVC PS2464 .N2 Z66 1932</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Henrietta McClendon Brock (1873–1948)",
+          "anchor": "henrietta-brock",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "brock-press-association-1916.jpg",
+              "caption": "<p><strong>Henrietta McClendon Brock (1873–1948). From <em>Proceedings of the Thirty-Seventh Annual Session of the Louisiana Press Association</em>. [n.p.: n.p., 1916].</strong><br>LLMVC PN4844 .L6 L6 1915–16</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Mattie McGrath (about 1867–1926)",
+          "anchor": "mattie-mcgrath",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "mcgrath-udc-scrapbook.jpg",
+              "caption": "<p><strong>Mattie McGrath (ca. 1867–1926)</strong><br>United Daughters of the Confederacy, Louisiana Division Collection, 1922–1928, Mss. 428</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "The beginnings of black journalism",
+          "anchor": "black-journalism",
+          "summary": "The South’s first black newspaper, L’Union, appeared in New Orleans in 1862; the Concordia Eagle was probably the first black-owned paper in north Louisiana.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>During the Civil War, the first African-American newspaper in Louisiana appeared. It was, in fact, the first black newspaper in the South. Louis Roudanez, son of a French Haitian refugee and a free black woman, published <em>L’Union</em> in French from 1862 to 1864, followed by the <em>New Orleans Tribune</em> in French and English from 1864 to 1870. Another black man, P. B. S. Pinchback, whose career in Louisiana politics included terms as lieutenant governor and interim governor, began publishing the weekly <em>Louisianian</em> in 1870 and called the first national meeting of African-American newspaper publishers in 1875. The Vidalia <em>Concordia Eagle</em>, probably the first black-owned newspaper in north Louisiana, was founded by state legislator and former slave David Young. The paper was next edited by James Presley Ball, Jr., who went on to gain some distinction as a newspaperman in the Pacific Northwest.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "The Concordia Eagle",
+          "anchor": "concordia-eagle",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "concordia-eagle.jpg",
+              "caption": "<p><strong><em>The Concordia Eagle</em>. Vidalia, Louisiana, 1873–1890.</strong><br>LLMVC 143-5:2 and Mf 986. Also in Chronicling America, the Library of Congress’s newspaper collection.</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "LSU students fight censorship",
+          "anchor": "students-fight-censorship",
+          "summary": "When Huey Long stopped the Reveille from printing a student’s letter in 1934, its editors resigned and journalism students went on strike.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Louisiana’s controversial governor Huey P. Long made several attempts to censor the state press during his time in office. One involved LSU’s school newspaper, the <em>Reveille</em>.</p>\n<p>In November 1934, Long attended a football game at his beloved LSU and announced that he had chosen one of the team’s star players to be a state senator at an upcoming special legislative session. A student at the university saw it as favoritism and wrote an angry letter of protest to the <em>Reveille</em>. When Long found out that the paper’s editor, Jesse Cutrer, planned to publish the letter, he forcibly prevented it from going to press. “I’ll fire any student that dares to say a word against Huey Long,” the governor declared. “I’ll fire a thousand. We’ve got ten thousand to take their places. That’s my university, I built it, and I’m not going to stand for any students criticizing Huey Long.”</p>\n<p>In protest, Cutrer and five other members of the <em>Reveille</em> staff resigned, and students at the school of journalism went on strike. To Long’s dismay, the incident attracted national attention. One newspaper compared Long to the Nazi regime then coming to power in Germany, while <em>The Nation</em> magazine defended the student editors, adding them to its honor roll for 1934.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Student journalists on the job, 1932",
+          "anchor": "student-journalists",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "student-journalists-1932.jpg",
+              "caption": "<p><strong>“Student Journalists on the Job,” 1932</strong><br>Marvin G. Osborn Scrapbooks, Mss. 1730</p>",
+              "layout": "side_start"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Louisiana Libraries",
+      "anchor": "louisiana-libraries",
+      "display": "wall",
+      "lead": "camp-claiborne-library-1941.jpg",
+      "focus": "center",
+      "lead_caption": "<p><strong>Soldiers from the 34th Infantry Division in the Camp Claiborne Library, ca. 1941</strong><br>Beth Skoog Root Papers, Mss. 5007</p>",
+      "blocks": [
+        {
+          "type": "entry",
+          "title": "LSU’s unlikely librarian: William Tecumseh Sherman",
+          "anchor": "sherman-librarian",
+          "summary": "In 1860 the Seminary’s superintendent, William Tecumseh Sherman, bought about 400 volumes, mostly history, in New York for its new library.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>The Seminary of Learning of the State of Louisiana opened January 2, 1860, near the central Louisiana town of Pineville, with five professors and 19 cadets under Superintendent William Tecumseh Sherman. Sherman arrived in Louisiana in 1859 and began making preparations for the school’s opening, including acquiring books for the library. During the summer break in 1860, he visited New York and purchased about 400 volumes—mostly history—from bookseller D. Van Nostrand. He paid $500 on the account and instructed that about half of the volumes be rebound, half-sheep, and backed.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Sherman’s list of books, 1860",
+          "anchor": "sherman-books-list",
+          "blocks": [
+            {
+              "type": "gallery",
+              "caption": "<p><strong>“List of Books bot [bought] for Prof. Boyd by W.T. Sherman of D. Van Nostrand, New York Aug. 20. 60—to be Shipped about Sept. 25.”</strong><br>Office of the President’s Records, RG A001</p>",
+              "figures": [
+                {
+                  "image": "sherman-books-list-1860-1.jpg",
+                  "caption": ""
+                },
+                {
+                  "image": "sherman-books-list-1860-2.jpg",
+                  "caption": ""
+                },
+                {
+                  "image": "sherman-books-list-1860-3.jpg",
+                  "caption": ""
+                },
+                {
+                  "image": "sherman-books-list-1860-4.jpg",
+                  "caption": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "A library lost twice",
+          "anchor": "library-lost-twice",
+          "summary": "The Seminary’s library was stripped in the Civil War and burned with the school in 1869. Both times Sherman, now a Union general, helped to fill its shelves again.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>When Louisiana seceded in January 1861, Sherman left the Seminary and enlisted in the Union Army, but the school remained in his thoughts during and after the war. He ordered that it be spared during General Nathaniel Banks’s operations in the area in 1863. Nevertheless, between local jayhawkers, Confederates using the facilities for a hospital, Federals temporarily occupying the grounds, and both armies’ activities in the area during the Red River Campaign of 1864, the buildings, including the library, were stripped of their contents by the end of the war. When the school reopened in 1865, Sherman used his considerable influence to recover some of the books and equipment lost while the building was in Union hands, and the state legislature authorized the transfer of duplicates from the State Library. By 1869, the library boasted 7,000 volumes.</p>\n<p>That collection proved short-lived, however. The entire Seminary was destroyed by fire on October 15, 1869. Again, Sherman helped to replenish the library, donating books and maps from his personal collection and looking for additional sources of books in Washington, though he was not always a discriminating selector. In the 1873 letter shown here, he writes Superintendent David Boyd, “I have a bag of books sent from the Congress, which I have not even opened—and I have ordered it sent to you. If of little value they will help to fill your shelves.”</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Sherman to David F. Boyd, 1873",
+          "anchor": "sherman-letter",
+          "blocks": [
+            {
+              "type": "gallery",
+              "caption": "<p><strong>William T. Sherman to David F. Boyd, 20 May 1873</strong><br>David F. Boyd Family Papers, William T. Sherman Letters, Mss. 40m</p>",
+              "figures": [
+                {
+                  "image": "sherman-letter-1873-1.jpg",
+                  "caption": ""
+                },
+                {
+                  "image": "sherman-letter-1873-2.jpg",
+                  "caption": ""
+                },
+                {
+                  "image": "sherman-letter-1873-3.jpg",
+                  "caption": ""
+                },
+                {
+                  "image": "sherman-letter-1873-4.jpg",
+                  "caption": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "The history of Hill Memorial Library",
+          "anchor": "hill-memorial-library",
+          "summary": "Built about 1902 with John Hill’s gift on the old downtown campus, Hill Memorial Library gave its name to the new campus library in 1926; since 1985 it has housed Special Collections.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Fifteen days after the 1869 fire, the school, now called Louisiana State University, reopened in part of the State Institution for the Deaf, Dumb, and Blind in Baton Rouge. With Sherman’s help, in 1886 the university received title to the abandoned U.S. Army Arsenal, and operations moved to that complex, which included the Pentagon Barracks and several other buildings located where the current state capitol stands.</p>\n<p>The campus physical plant grew steadily. One of the most significant new buildings was the Hill Memorial Library. Around 1900, the Scottish-born sugar planter, industrialist, and Board of Supervisors member John Hill donated the funds for a building in memory of his son, John Hill, Jr., who had graduated from LSU in 1873 and also served on the board from graduation until his death in 1893.</p>\n<p>When the current campus opened in 1926, the name “Hill Memorial Library” was retained. Hill served the campus until Middleton Library opened in 1959. Between then and the mid-1980s, the building housed various academic and administrative departments. After extensive renovations, it reopened in 1985 as the home of Special Collections, bringing together the Libraries’ published and manuscript holdings on Louisiana and the Lower Mississippi Valley, university records, and rare book collections that, until then, had been physically and administratively separate.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Hill Memorial Library, about 1902",
+          "anchor": "hill-memorial-library-1902",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "hill-memorial-library-1902.jpg",
+              "caption": "<p><strong>Hill Memorial Library, Louisiana State University (Downtown Campus), about 1902</strong><br>LSU Photograph Collection, RG A5000</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "The reading room, 1903–1904",
+          "anchor": "hill-reading-room",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "hill-reading-room-1903.jpg",
+              "caption": "<p><strong>Interior of the Reading Room, Hill Memorial Library, 1903–1904</strong><br>LSU Photograph Collection, RG A5000</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "The long path to public libraries",
+          "anchor": "path-to-public-libraries",
+          "summary": "New Orleans’s early “public” libraries were subscription societies, often short of money; by 1857 the Public School Library and Lyceum Society had 10,000 volumes.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Interest in some form of public libraries in Louisiana dates to the state’s colonial period when the Spanish planned to open schools, which would contain libraries of books furnished by the government. Those facilities did not come to fruition, but soon after the Louisiana Purchase, Governor William C. C. Claiborne enacted legislation that similarly linked establishing libraries in schools. He also signed an act to incorporate the New Orleans Library Society. The Society soon opened a subscription library, but it lost its collection after a fire in 1810. As the early nineteenth century progressed, state funding for these efforts to establish “public” libraries proved unreliable, and in 1830 the holdings of the New Orleans Library Society were sold to pay its creditors.</p>\n<p>Leading citizens believed, however, that a city of New Orleans’s cultural and economic significance required that it have a public library. By 1846, New Orleans boasted four libraries that were accessible to the public, though not necessarily funded from the public purse. These included the private library of historian B. F. French, the relatively new State Library (which Secretary of State and State Librarian Charles Gayarré hoped to make a great library to rival those in the East), the Young Men’s Free Library Association, and the Public School Library and Lyceum Society of Municipality No. 2, a notice for which is displayed here. Founded in December 1844, the Library and Lyceum Society was headquartered in the Second Municipal Hall on St. Charles St., in the “American” part of the city. Subscribers paid $5 per year, and $9 bought a life membership for public school students. Their teachers could use the library at no charge. By 1857, it boasted 10,000 volumes.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "A Library and Lyceum Society notice",
+          "anchor": "lyceum-society-notice",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "library-and-lyceum-society-notice.jpg",
+              "caption": "<p><strong>Public School Library and Lyceum Society notice, between 1846 and 1852</strong><br>Louisiana and Lower Mississippi Valley Ephemera Collection, Mss. 1148</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Carnegie’s libraries",
+          "anchor": "carnegie-libraries",
+          "summary": "Only in the twentieth century did a true public library system reach rural Louisiana, led by Essae Culver with $50,000 from the Carnegie Corporation.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Publicly accessible or publicly funded libraries of the antebellum era were primarily centered in New Orleans or found at colleges and academies. The material damage and financial constraints brought about by the Civil War and Reconstruction stymied library efforts, and it wasn’t until the early twentieth century that a true public library system came to Louisiana, particularly in the state’s rural areas. Essae Culver, a librarian and educator from California, spearheaded the movement, opening demonstration libraries around the state through a grant of $50,000 from the Carnegie Corporation.</p>\n<p>The Alexandria Public Library, shown on the postcard here, provides an excellent example of this sequence of events. Funded by a $10,000 Carnegie grant, the facility opened in 1907, replacing the library burned in 1864 by U.S. troops during the Red River Campaign.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Alexandria’s library on a postcard, 1910",
+          "anchor": "alexandria-postcard",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "alexandria-library-postcard-1910.jpg",
+              "caption": "<p><strong>Postcard of Alexandria Belles &amp; Public Library, 1910</strong><br>Louisiana Postcard Collection</p>",
+              "layout": "side_start"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Books for “our boys”",
+          "anchor": "books-for-our-boys",
+          "summary": "More than 500,000 troops trained at Camp Claiborne between 1939 and 1946; the camp’s library was headed by librarian Beth Skoog.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Between 1939 and 1946, over 500,000 troops received basic and artillery training at Camp Claiborne in Rapides Parish, La. Originally created in 1930 and expanded 1939–1940 in anticipation of the U.S. entering World War II, Camp Claiborne was activated in 1940 and played a major role in the Louisiana Maneuvers of 1940 and 1941, the largest mass training operations undertaken by the U.S. Army to that date. Among the soldiers to receive their training there was the 34th Infantry Division, the first American unit sent to the European theater.</p>\n<p>The complex at Camp Claiborne included a gym, theater, hospital, and library, the latter headed by librarian Beth Skoog.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "The Camp Claiborne Library, about 1941",
+          "anchor": "camp-claiborne-library",
+          "blocks": [
+            {
+              "type": "figure",
+              "image": "camp-claiborne-library-1941.jpg",
+              "caption": "<p><strong>Soldiers from the 34th Infantry Division, Camp Claiborne Library, ca. 1941</strong><br>Beth Skoog Root Papers, Mss. 5007</p>",
+              "layout": "side_start"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "About the Exhibition",
+      "anchor": "about",
+      "display": "wall",
+      "lead": "hill-memorial-library-1902.jpg",
+      "focus": "center",
+      "lead_caption": "<p><strong>Hill Memorial Library, Louisiana State University (Downtown Campus), about 1902</strong><br>LSU Photograph Collection, RG A5000</p>",
+      "blocks": [
+        {
+          "type": "text",
+          "body": "<p>The materials in this online exhibition were originally displayed in the LSU Libraries’ Division of Special Collections (Hill Memorial Library) in conjunction with the annual conference of the Rare Books and Manuscripts Section of the Association of College and Research Libraries, which was held in Baton Rouge June 21–24, 2011. It remained on display through September 2011. Drawn primarily from the Louisiana and Lower Mississippi Valley, Rare Book, and University Archives Collections, the items reflect the library’s strong holdings in Louisiana history and literature.</p>"
+        },
+        {
+          "type": "entry",
+          "title": "Curators and thanks",
+          "anchor": "credits",
+          "summary": "Curated by Tara Zachary Laver and Michael Taylor, with the online exhibition designed by Rachel Miller and made with the help of LSU Libraries staff and students.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<p><strong>Exhibition curators</strong><br>Tara Zachary Laver, Interim Head of Special Collections<br>Michael Taylor, Assistant Curator of Books</p>\n<p><strong>Online exhibition designer</strong><br>Rachel Miller, Student Librarian, Exhibitions</p>\n<p><strong>Special thanks to the following for their assistance with the online exhibition</strong><br>Gina Costello, Digital Services Librarian<br>William R. “Robbie” Gore, Computer Analyst<br>Stephanie Harper, Student Assistant, Exhibitions<br>Gabe Harrell, Digital Services<br>Leah Wood Jewett, Exhibitions Coordinator<br>Sigrid Kelsey, Electronic Reference Services Librarian<br>Danielle Olivier, Student Assistant, Exhibitions</p>\n<p>Titles are as of 2011.</p>"
+            }
+          ]
+        },
+        {
+          "type": "entry",
+          "title": "Index of items",
+          "anchor": "index",
+          "summary": "Every book, manuscript and photograph in the exhibition, from Abrégé de la grammaire espagnole to Mary Cornelia Wright’s journal, with the gallery each hangs in.",
+          "blocks": [
+            {
+              "type": "text",
+              "body": "<ul><li><em>Abrégé de la grammaire espagnole</em>. New Orleans: L. Fourcand, 1812. See <a href=\"#practical-reading\">Practical Reading</a>.</li><li>Adrien Rouquette, in Susan B. Elder, <em>Life of the Abbé Rouquette</em>. New Orleans: L. Graham Co., 1913. See <a href=\"#creole-authors\">Creole Authors</a>.</li><li>Affleck, Thomas. <em>Affleck’s Southern Rural Almanac, and Plantation and Garden Calendar</em>. Washington, Miss.: Thomas Affleck, 1851. See <a href=\"#practical-reading\">Practical Reading</a>.</li><li>Affleck, Thomas. “Horticulture for the South,” <em>DeBow’s Review</em> 19:4 (February 1856), 717–719. See <a href=\"#practical-reading\">Practical Reading</a>.</li><li>Affleck, Thomas. “List of Unbound Agric. + Papers,” ca. 1867. See <a href=\"#practical-reading\">Practical Reading</a>.</li><li>Berquin-Duvallon, Pierre-Louis. <em>Vue de la colonie espagnole du Mississipi, ou des provinces de Louisiane et Floride Occidentale</em>. Paris: Imprimerie Expeditive, 1803. See <a href=\"#early-days\">Early Days</a>.</li><li>Bookplate of Pierre-Clément de Laussat, in <em>Collection complète des travaux de M. Mirabeau l’aîné, à l’Assemblée Nationale</em>. Paris: Devaux, 1792. See <a href=\"#early-days\">Early Days</a>.</li><li>Bookplate of St. Francisville Library Co., in David Ramsay, <em>The History of South-Carolina</em>. Charleston: David Longworth, 1809. See <a href=\"#early-days\">Early Days</a>.</li><li>Cable, George Washington. <em>Strange True Stories of Louisiana</em>. New York: C. Scribner’s Sons, 1889. See <a href=\"#creole-authors\">Creole Authors</a>.</li><li>Cherbonnier, Pierre. <em>Alphabet; ou, Méthode simple &amp; facile de montrer promptement à lire aux enfans ainsi qu’aux étrangers qui veulent apprendre le français</em>. New Orleans: Buisson et Boimare, 1829. See <a href=\"#practical-reading\">Practical Reading</a>.</li><li><em>The Concordia Eagle</em>. Vidalia, Louisiana, 1873–1890. See <a href=\"#newspapers\">Newspapers</a>.</li><li><em>The Confederate Speller</em>. Mount Lebanon, La.: W. F. Wells, 1864. See <a href=\"#practical-reading\">Practical Reading</a>.</li><li>de Laussat, Pierre-Clément. <em>Mémoires sur ma vie</em>. Pau: E. Vignancourt, 1831. See <a href=\"#early-days\">Early Days</a>.</li><li>Du Gour, Antoine Jeudy. <em>Collection des meilleurs ouvrages qui ont été publiés pour la défense de Louis XVI, roi des Français</em>. Paris: F. Dufart, 1793. See <a href=\"#early-days\">Early Days</a>.</li><li>Eliza Nicholson (1849–1896). From James Henry Harrison, <em>Pearl Rivers, Publisher of the Picayune</em>. New Orleans: Tulane University, 1932. See <a href=\"#newspapers\">Newspapers</a>.</li><li>Ewell, James. <em>The Planter’s and Mariner’s Medical Companion</em>. Philadelphia: John Bioren, 1807. See <a href=\"#practical-reading\">Practical Reading</a>.</li><li>Fisher, Joshua Francis. <em>Concessions and Compromises</em>. Philadelphia: C. Sherman &amp; Son, [1860]. See <a href=\"#african-americans\">African Americans</a>.</li><li>Granet, B. <em>Elements of the Latin Grammar</em>. New Orleans: Gaux and L. Sollée, 1833. See <a href=\"#practical-reading\">Practical Reading</a>.</li><li>Helvétius, Claude Adrien. <em>De l’homme</em>. London: Chez la Société Typographique, 1774. See <a href=\"#early-days\">Early Days</a>.</li><li>Henrietta McClendon Brock (1873–1948). From <em>Proceedings of the Thirty-Seventh Annual Session of the Louisiana Press Association</em>. [n.p.: n.p., 1916]. See <a href=\"#newspapers\">Newspapers</a>.</li><li>Hill Memorial Library, Louisiana State University (Downtown Campus), about 1902. See <a href=\"#louisiana-libraries\">Louisiana Libraries</a>.</li><li>Hume, David. <em>The History of England</em>. London: A. Millar, 1763. See <a href=\"#early-days\">Early Days</a>.</li><li>Interior of the Reading Room, Hill Memorial Library, 1903–1904. See <a href=\"#louisiana-libraries\">Louisiana Libraries</a>.</li><li>King, Grace. Minute Book of the Pan Gnostics Club, 1885–1886. See <a href=\"#womens-reading\">Women’s Reading and Novels</a>.</li><li>Lavie, Gabriel. <em>Catalogue de la librairie de Gabriel Lavie</em>. New Orleans: Félix Locquin, 1842. See <a href=\"#early-days\">Early Days</a>.</li><li>Librarian Beth Skoog and soldiers from the 34th Infantry Division, Camp Claiborne Library, ca. 1941. See <a href=\"#louisiana-libraries\">Louisiana Libraries</a>.</li><li><em>The Louisiana Colored Teachers’ Journal</em>, vol. 12, no. 3 (Feb.–Mar. 1939). See <a href=\"#african-americans\">African Americans</a>.</li><li><em>Louisiana English Grammar</em>. Shreveport: Office of the South-Western, 1865. See <a href=\"#practical-reading\">Practical Reading</a>.</li><li>Marcet, Jane. <em>Conversations on Chemistry</em>. Hartford: Oliver D. Cooke and Sons, 1824. See <a href=\"#practical-reading\">Practical Reading</a>.</li><li>Mattie McGrath (ca. 1867–1926). See <a href=\"#newspapers\">Newspapers</a>.</li><li>Mercier, Alfred. <em>L’Habitation Saint-Ybars, ou maîtres et esclaves en Louisiane</em>. New Orleans: Imprimerie Franco-Américaine, 1881. See <a href=\"#creole-authors\">Creole Authors</a>.</li><li>“The Negro Librarian in Louisiana,” in <em>The Bulletin of the Louisiana Library Association</em>, vol. 3, no. 3 (Mar. 1940). See <a href=\"#african-americans\">African Americans</a>.</li><li>Newcomb, Harvey. <em>The Young Lady’s Guide to the Harmonious Development of Christian Character</em>. New York: M. W. Dodd, 1853. See <a href=\"#womens-reading\">Women’s Reading and Novels</a>.</li><li>Photograph of Alfred Mercier, in Alcée Fortier, <em>A History of Louisiana</em>. New York: Goupil &amp; Co., 1904. See <a href=\"#creole-authors\">Creole Authors</a>.</li><li>Photograph of Léona Queyrouze. See <a href=\"#creole-authors\">Creole Authors</a>.</li><li>Picken, Andrew. <em>Waltham</em>. Philadelphia: Carey, Lea and Blanchard, 1833. See <a href=\"#womens-reading\">Women’s Reading and Novels</a>.</li><li><em>Police Code of the Parish of West Feliciana</em>. Bayou Sara: Marks &amp; Turner, 1851. See <a href=\"#african-americans\">African Americans</a>.</li><li>Portrait of Sidonie de la Houssaye. See <a href=\"#creole-authors\">Creole Authors</a>.</li><li>Postcard of Alexandria Belles &amp; Public Library, 1910. See <a href=\"#louisiana-libraries\">Louisiana Libraries</a>.</li><li><em>The Precious Promise Holy Bible</em>. Philadelphia: John C. Winston Co., 1915. See <a href=\"#practical-reading\">Practical Reading</a>.</li><li>Public School Library and Lyceum Society notice, between 1846 and 1852. See <a href=\"#louisiana-libraries\">Louisiana Libraries</a>.</li><li>Queyrouze, Léona. Manuscript of the poem “Vision.” See <a href=\"#creole-authors\">Creole Authors</a>.</li><li>Rouquette, Adrien. <em>La Nouvelle Atala</em>. New Orleans: Propagateur Catholique, 1879. See <a href=\"#creole-authors\">Creole Authors</a>.</li><li>St. Francisville Library Company membership receipt, 1815. See <a href=\"#early-days\">Early Days</a>.</li><li>Sherman, William T. “List of Books bot [bought] for Prof. Boyd by W.T. Sherman of D. Van Nostrand, New York Aug. 20. 60—to be Shipped about Sept. 25.” See <a href=\"#louisiana-libraries\">Louisiana Libraries</a>.</li><li>Sherman, William T. William T. Sherman to David F. Boyd, 20 May 1873. See <a href=\"#louisiana-libraries\">Louisiana Libraries</a>.</li><li>“Student Journalists on the Job,” 1932. See <a href=\"#newspapers\">Newspapers</a>.</li><li>Testut, Charles. <em>Le vieux Salomon; ou, Une famille d’esclaves au XIXe siècle</em>. New Orleans: [s.n.], 1872. See <a href=\"#african-americans\">African Americans</a>.</li><li>Wright, Esther. Esther Wright to her mother, Sarah Wright, 19 April 1857. See <a href=\"#womens-reading\">Women’s Reading and Novels</a>.</li><li>Wright, Mary Cornelia. “Books Read and Finished from November 1864 [to August 10, 1865],” from the Mary Cornelia Wright Journal. See <a href=\"#womens-reading\">Women’s Reading and Novels</a>.</li></ul>"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "alt": {
+    "hume-history-of-england-1763.jpg": "A water-stained title page, The History of England by David Hume, volume VIII, London 1763, with faded ink inscriptions across the top.",
+    "helvetius-de-l-homme-1774.jpg": "The title page of De l’homme by Helvétius, tome premier, Londres 1774, with a printer’s ornament and an ink signature beside it.",
+    "laussat-memoires-1831.jpg": "The title page of Laussat’s Mémoires sur ma vie, à mon fils, printed in a ruled border, Pau, 1831.",
+    "laussat-bookplate-mirabeau-1792.jpg": "An engraved bookplate of a monogram on a pedestal among books, a globe and laurel, with “Ph. Favrot” written above and on a paper label below.",
+    "du-gour-collection-1793-frontispiece.jpg": "An engraving of Louis XVI on the scaffold among soldiers and mounted officers.",
+    "du-gour-collection-1793-title.jpg": "The title page of Collection des meilleurs ouvrages pour la défense de Louis XVI, tome second, Paris 1793, signed in ink at the foot and stamped by Hill Memorial Library.",
+    "berquin-duvallon-vue-1803.jpg": "The title page of Vue de la colonie espagnole du Mississipi, Paris, 1803.",
+    "st-francisville-library-bookplate.jpg": "A printed bookplate in a decorative border: St. Francisville Library Company, No. 76, the number written in red ink.",
+    "st-francisville-library-receipt-1815.jpg": "A handwritten receipt of James Pirrie’s payment to the St. Francisville Library Company, signed David McKeehan, Librarian.",
+    "lavie-catalogue-1842.jpg": "The first page of Gabriel Lavie’s bookseller’s catalog, rue de Chartres, New Orleans, listing titles and prices in columns.",
+    "mercier-portrait-1904.jpg": "An oval photograph of Alfred Mercier, an elderly man with white hair and a full white beard, in a dark suit.",
+    "mercier-habitation-saint-ybars-1881.jpg": "The yellow paper cover of L’Habitation Saint-Ybars, printed in red and green with palm trees, New Orleans, 1881.",
+    "rouquette-portrait-1913.jpg": "A lithograph portrait of Adrien Rouquette as a young man with dark wavy hair, a high collar and a dark coat.",
+    "rouquette-nouvelle-atala-1879-portrait.jpg": "An oval engraved portrait of Marie-Atala, a young woman with long dark hair and a fur-trimmed wrap.",
+    "rouquette-nouvelle-atala-1879-title.jpg": "The title page of La Nouvelle Atala, ou la fille de l’esprit, légende indienne, par Chahta-Ima, Nouvelle-Orléans, 1879, with ink inscriptions.",
+    "rouquette-nouvelle-atala-1879-spread.jpg": "La Nouvelle Atala open to its frontispiece portrait of Marie-Atala and its title page.",
+    "queyrouze-photograph.jpg": "A tinted photograph of Léona Queyrouze seated at a table by a window, reading, in a long dress.",
+    "queyrouze-vision-manuscript.jpg": "A handwritten page of verse in French headed “Vision.”",
+    "de-la-houssaye-portrait.jpg": "A portrait of Sidonie de la Houssaye, a woman with dark hair parted in the middle and a white lace collar.",
+    "cable-strange-true-stories-manuscripts.jpg": "A photograph of old manuscripts, letters, a bound diary and a rolled document heaped on a table, captioned “Some of the manuscripts.”",
+    "police-code-west-feliciana-1851.jpg": "The worn, stained title page of the Police Code of the Parish of West Feliciana, prepared by L. D. Brewer, Bayou Sara, 1851.",
+    "fisher-concessions-and-compromises-1860.jpg": "The pamphlet’s mailing panel, addressed by hand to Daniel Turnbull, Esq., Bayou Sara, with a one-cent Franklin stamp; printed below: “Read, and lend to your Neighbors.”",
+    "testut-vieux-salomon-1872.jpg": "The title page of Le vieux Salomon by Charles Testut, New Orleans, 1872.",
+    "colored-teachers-journal-1939-1.jpg": "The cover of The Louisiana Colored Teachers’ Journal, February–March 1939: a photograph of Fred Dillard, 73, taught to read in an adult class, under the heading “Louisiana’s Crusade Against Illiteracy.”",
+    "colored-teachers-journal-1939-2.jpg": "A photograph from the journal of a 76-year-old woman reading, the oldest student in a class of midwives.",
+    "colored-teachers-journal-1939-3.jpg": "A photograph from the journal of three women at a table in St. Joseph, Louisiana, learning to write their names.",
+    "colored-teachers-journal-1939-4.jpg": "A photograph from the journal of a WPA evening class of adults held in a potato house on a Lafayette Parish plantation.",
+    "negro-librarian-in-louisiana-1940.jpg": "A page of the Bulletin of the Louisiana Library Association, March 1940, with the article “The Negro Librarian in Louisiana.”",
+    "picken-waltham-1833.jpg": "The first page of chapter one of Waltham, with the word “Trash” written in ink across the top.",
+    "newcomb-young-ladys-guide-1853-title.jpg": "The engraved title page of The Young Lady’s Guide, a vignette of a young woman reading at a table, with an ink signature below.",
+    "newcomb-young-ladys-guide-1853-p196.jpg": "Page 196 of The Young Lady’s Guide, headed “Novel Reading.”",
+    "newcomb-young-ladys-guide-1853-p197.jpg": "Page 197 of The Young Lady’s Guide, headed “Novel Reading.”",
+    "newcomb-young-ladys-guide-1853-spread.jpg": "The Young Lady’s Guide open to pages 196 and 197, its chapter on novel reading.",
+    "esther-wright-letter-1857-1.jpg": "The first page of a handwritten letter dated April 19th, 1857, beginning “Dearest Mamma.”",
+    "esther-wright-letter-1857-2.jpg": "A page of Esther Wright’s handwritten letter to her mother.",
+    "esther-wright-letter-1857-3.jpg": "A page of Esther Wright’s handwritten letter to her mother.",
+    "esther-wright-letter-1857-4.jpg": "The last page of Esther Wright’s handwritten letter to her mother.",
+    "mary-cornelia-wright-books-read-1.jpg": "A journal page of handwritten numbered entries, Mary Cornelia Wright’s list of books read and finished.",
+    "mary-cornelia-wright-books-read-2.jpg": "The facing journal page, continuing the list in a faint hand.",
+    "pan-gnostics-minute-book-1885-1.jpg": "A handwritten page of the Pan Gnostics Club minute book, listing members present and absent.",
+    "pan-gnostics-minute-book-1885-2.jpg": "A handwritten page of the Pan Gnostics Club minute book recording Grace King’s essay “Heroines in Novels.”",
+    "affleck-list-of-papers-1.jpg": "A handwritten list of agricultural papers and journals in columns, with crossings-out.",
+    "affleck-list-of-papers-2.jpg": "The other side of Affleck’s handwritten list of papers, in columns.",
+    "affleck-almanac-1851-cover.jpg": "The paper cover of Affleck’s Southern Rural Almanac and Plantation and Garden Calendar for 1851, stamped Library, Louisiana State University.",
+    "affleck-almanac-1851-raspberries.jpg": "A page of Affleck’s almanac with a large engraving of raspberry canes heavy with fruit.",
+    "affleck-debows-review-1856-p717.jpg": "Page 717 of DeBow’s Review, with the article “Horticulture for the South” by Thomas Affleck.",
+    "affleck-debows-review-1856-p718.jpg": "Page 718 of DeBow’s Review, continuing “Horticulture for the South.”",
+    "affleck-debows-review-1856-p719.jpg": "Page 719 of DeBow’s Review, ending Affleck’s article.",
+    "ewell-medical-companion-1807.jpg": "The Planter’s and Mariner’s Medical Companion open to its preface, with handwritten notes on remedies on slips pasted over the facing page.",
+    "marcet-conversations-on-chemistry-1824.jpg": "Conversations on Chemistry open to an engraved frontispiece of a lamp and other apparatus, facing the title page.",
+    "abrege-grammaire-espagnole-1812.jpg": "The title page of Abrégé de la grammaire espagnole, New Orleans, 1812.",
+    "cherbonnier-alphabet-1829.jpg": "A page of Cherbonnier’s Alphabet: the capital letters in large type, with notes on their sounds.",
+    "granet-latin-grammar-1833.jpg": "The title page of Elements of the Latin Grammar, New Orleans, 1833.",
+    "confederate-speller-1864.jpg": "The title page of The Confederate Speller, Mount Lebanon, Louisiana, 1864.",
+    "louisiana-english-grammar-1865.jpg": "The title page of the Louisiana English Grammar, Shreveport, 1865.",
+    "huey-long-bible-endpapers.jpg": "A worn Bible open to a colored map of Palestine on the left and, on the right, an endpaper covered in Huey P. Long’s handwritten verse references and notes.",
+    "nicholson-pearl-rivers.jpg": "A photograph of Eliza Nicholson seated, in a dark dress with puffed sleeves and a lace jabot.",
+    "brock-press-association-1916.jpg": "A photograph of Henrietta McClendon Brock, a young woman with dark hair, looking down, in an embroidered blouse.",
+    "mcgrath-udc-scrapbook.jpg": "A photocopied photograph of Mattie McGrath, a woman with her hair piled up, in a dark high-collared dress.",
+    "concordia-eagle.jpg": "The front page of the Concordia Eagle, Vidalia, Louisiana, in close-set columns, signed in ink at the top.",
+    "student-journalists-1932.jpg": "A photograph of students at typewriters and long desks in a newsroom, a man standing at the back.",
+    "sherman-books-list-1860-1.jpg": "The first page of a handwritten invoice listing books by title, with prices in columns.",
+    "sherman-books-list-1860-2.jpg": "A page of the handwritten list of books bought for the Seminary, with prices.",
+    "sherman-books-list-1860-3.jpg": "A page of the handwritten list of books bought for the Seminary, with prices.",
+    "sherman-books-list-1860-4.jpg": "The last page of the list, with totals and a note on binding.",
+    "sherman-letter-1873-1.jpg": "A handwritten letter on letterhead of the Headquarters Army of the United States, Washington, May 20, 1873, beginning “Dear Boyd.”",
+    "sherman-letter-1873-2.jpg": "A page of Sherman’s handwritten letter to David Boyd.",
+    "sherman-letter-1873-3.jpg": "A page of Sherman’s handwritten letter to David Boyd.",
+    "sherman-letter-1873-4.jpg": "The last page of Sherman’s letter, signed W. T. Sherman.",
+    "hill-memorial-library-1902.jpg": "A photograph of Hill Memorial Library on the old downtown campus, a classical stone building with a columned portico, seen across a lawn.",
+    "hill-reading-room-1903.jpg": "A photograph of the Hill Memorial Library reading room, with long tables, readers, tall shuttered windows and a hanging light.",
+    "library-and-lyceum-society-notice.jpg": "A printed notice on green paper: Public School Library and Lyceum Society, Municipality No. 2, No. 340, with the library’s rules.",
+    "alexandria-library-postcard-1910.jpg": "A colored postcard of the brick Alexandria Public Library among portraits of young women in bell shapes and roses: “Pretty girls everywhere, but Alexandria belles are claimed most fair.”",
+    "camp-claiborne-library-1941.jpg": "A photograph of soldiers in uniform reading at long tables and standing among the shelves of the Camp Claiborne library."
+  }
+}
