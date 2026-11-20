@@ -3214,9 +3214,9 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
 
 // A clip's speaker and biography in the object view (js/exhibition.js).
 // The speaker heads the Listen block, their name (1.125rem, 500) over the
-// rest of the credit, close under it; Biography + sits at the row's end, a
-// mono label like the panel's other controls with an accent + that turns
-// to × while the biography is open (it opens a panel, not a page). Its
+// rest of the credit, close under it. With a biography the name is the
+// button: an accent + after it that turns to × while the biography is open
+// (it opens a panel, not a page), the name underlined on hover. Its
 // 2.75rem target overhangs the row, so the row keeps the name's height.
 // The second panel: from lg it slides in from the view panel's edge over
 // the stage, as wide as the view panel (at most the stage), so the
@@ -3231,7 +3231,8 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
   margin-bottom: -.5rem;
 }
 
-.pf-exhibit-speaker__name {
+.pf-exhibit-speaker__name,
+.pf-exhibit-bio-open {
   min-width: 0;
   margin: 0;
   font-size: 1.125rem;
@@ -3242,17 +3243,12 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
 
 .pf-exhibit-bio-open {
   display: inline-flex;
-  flex: none;
   align-items: center;
   gap: .5rem;
   min-height: 2.75rem;
   margin-block: -.625rem;
-  margin-inline-start: auto;
-  padding: 0 0 0 .5rem;
-  font: var(--pf-mono-label)/1.5 var(--pf-exhibit-mono);
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--pf-exhibit-muted);
+  padding: 0;
+  text-align: start;
   background: none;
   border: 0;
   transition: color $pf-hover-out ease;
@@ -3264,18 +3260,20 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
     transition: rotate .4s $pf-exhibit-ease;
   }
 
-  &[aria-expanded="true"] {
-    color: var(--bs-body-color);
-
-    svg {
-      rotate: 45deg;
-    }
+  &[aria-expanded="true"] svg {
+    rotate: 45deg;
   }
 
   &:hover,
   &:focus-visible {
     color: var(--pf-g-hover, var(--pf-exhibit-accent));
     transition-duration: $pf-hover-in;
+
+    .pf-exhibit-bio-open__name {
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: .2em;
+    }
   }
 
   &:focus-visible {

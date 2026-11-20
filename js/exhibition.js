@@ -1415,8 +1415,9 @@
    * In the object view a clip's biography would push its player and
    * transcript far down the panel. Instead the speaker heads the clip's
    * Listen block, their name over the rest of the credit ("Jessica Tilson"
-   * over "Interviewed by Thailandria Daniels, 2017"), and Biography + sits
-   * at the end of that row (its length said to screen readers). It opens a
+   * over "Interviewed by Thailandria Daniels, 2017"); with a biography the
+   * name itself is the button, a + after it (", biography, 203 words,
+   * 1 min" said to screen readers). It opens a
    * second panel (.pf-viewer__bio, _exhibition.scss) with the name, Life
    * and Role and the summary when the entry has a biography card
    * (js/exhibit-bio.js), and the biography; the + turns to ×. From lg it
@@ -1562,7 +1563,7 @@
     }
     const row = document.createElement('div');
     row.className = 'pf-exhibit-speaker';
-    if (name) {
+    if (name && !text) {
       const who = document.createElement('p');
       who.className = 'pf-exhibit-speaker__name';
       who.textContent = name;
@@ -1594,10 +1595,10 @@
     button.className = 'pf-exhibit-bio-open';
     button.setAttribute('aria-expanded', 'false');
     button.setAttribute('aria-controls', 'pf-viewer-bio');
-    button.innerHTML = Drupal.t('Biography')
-      + '<span class="visually-hidden"></span>'
+    button.innerHTML = '<span class="pf-exhibit-bio-open__name"></span>'
+      + '<span class="visually-hidden">' + Drupal.t(', biography, @words words, @minutes min', { '@words': words, '@minutes': Math.max(1, Math.round(words / 238)) }) + '</span>'
       + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M12 4.5v15M4.5 12h15"/></svg>';
-    button.querySelector('.visually-hidden').textContent = (name ? ': ' + name : '') + Drupal.t(', @words words, @minutes min', { '@words': words, '@minutes': Math.max(1, Math.round(words / 238)) });
+    button.querySelector('.pf-exhibit-bio-open__name').textContent = name || Drupal.t('Biography');
     button.addEventListener('click', () => {
       if (bio.opener === button) {
         closeBio(true);
