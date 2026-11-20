@@ -1077,6 +1077,13 @@ HTML),
 <li>All 28 pictures are the Digitization Lab’s new scans made for the exhibition, from Darby’s 1816 map of Louisiana to Wilson’s blue jay and Franklin’s chart of the Gulf Stream.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: From Red Stick to River Capital comes to v2', <<<'HTML'
+<ul>
+<li>The 1999 Hill Memorial Library exhibition on three centuries of Baton Rouge history has a v2 page at /v2/special/exhibitions/brhistory, not published yet: fourteen galleries, each a wall that opens on a full-screen photograph.</li>
+<li>The long texts are cut into short plates between the pictures, and each case ends with a plate listing everything that was in it in 1999.</li>
+<li>Most pictures are now the Louisiana Digital Library’s full-size scans (Andrew D. Lytle’s photographs, postcards, University Archives) in place of the old 300-pixel images. The corrections and each picture’s source are in the Special Collections Exhibitions guide.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------

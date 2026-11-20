@@ -162,6 +162,7 @@ $section('How the exhibitions were moved', [
 <li><strong>LSU Union Art Gallery</strong> was a six-page showcase on libstage, never on the public site.</li>
 <li><strong>Free People of Color in Louisiana</strong> (2015) was a set of static pages at /sites/all/files/sc/fpoc, later copied to Showcase pages under /fpoc. Its text comes from the static pages.</li>
 <li><strong>Made in America: Selected Imprints from 1776–1826</strong> (2026) had only an announcement at /260908/madeinamerica. Its text comes from the exhibition’s own panels.</li>
+<li><strong>From Red Stick to River Capital</strong> (1999) was a set of static pages at /sites/all/files/sc/exhibitions/e-exhibits/redstick, later copied to Showcase pages under /brhistory. Its text comes from the Showcase pages, checked against the static pages.</li>
 </ul>
 <p>Each now lives at /v2/special/exhibitions/&lt;name&gt;, as one page of galleries. Each is built by a script from a data file in the theme (scripts/data/&lt;name&gt;.json), so it can be rebuilt, and every correction is made in the data file as well as on the page.</p>
 <h3>Text</h3>
@@ -483,6 +484,135 @@ $section('Made in America: Selected Imprints from 1776–1826', [
 </li></ul>
 <h3>New wording to check</h3>
 <ul><li>The gallery titles Louisiana and Natural History and Science, every plate title and summary, every object caption except the Bigelow and Darby labels, the four lead captions, the cover label and the alt text.
+</li></ul>
+HTML),
+]);
+
+$section('From Red Stick to River Capital: Three Centuries of Baton Rouge History', [
+  $text(NULL, <<<'HTML'
+<p>Built at <a href="/v2/special/exhibitions/brhistory">/v2/special/exhibitions/brhistory</a>, not published yet.</p>
+<p>Exhibition: From Red Stick to River Capital: Three Centuries of Baton Rouge History, shown in Hill Memorial Library, March 8 – July 2, 1999, curated by V. Faye Phillips, with materials from the Louisiana and Lower Mississippi Valley Collections and University Archives.<br>Old site: the 1999 static pages at /sites/all/files/sc/exhibitions/e-exhibits/redstick, copied to fourteen Showcase pages under /brhistory. The text is taken from the Showcase pages and checked against the 1999 pages.</p>
+<h3>Changed on the page</h3>
+<ul><li>Fourteen galleries, one per old page: Introduction, the twelve cases (Native Americans and Colonial Origins through City Politics) and Other Photographs.
+</li><li>Every gallery is a wall with a lead picture. The long text is divided into text plates between the pictures; the text is unchanged except for the corrections below, and the plate titles and summaries are new.
+</li><li>Each case ends with an “In the case” plate listing everything shown in 1999, pictured here or not. Other Photographs ends with “Not pictured”.
+</li><li>Pictures: the old pages had about 40 small images (250–700px). Where the Louisiana Digital Library holds the same item, or the same view, the new page uses the LDL master instead (rendered to 2,560px at most); the rest are the 1999 site’s own files, which are larger than the Showcase copies. Six pictures are new, each tied to something on the page: the Lytle view of Baton Rouge after the 1862 attack, the Lafayette Street streetcar, Hill Memorial Library in 1905, the Tunnard carriage factory, Lora Hinton (in place of his letterman plaque), and the Standard Oil postcard and 1904 Capitol postcard the case lists named but didn’t picture.
+</li><li>Lead pictures: every gallery opens on an LDL master, mostly from Andrew D. Lytle’s Baton Rouge photographs. Thirteen are 720p or larger (1,500 × 1,221px for the Pintado plan, 2,560px wide for the rest) and fill the screen. Histories of Baton Rouge opens on Lytle’s 1861 Front Street panorama, which exists only at 1,000 × 382px; nothing larger shows the old riverfront, so it is the best lead there is, and “Show whole image” is ticked: it is shown whole over a blurred copy of itself instead of enlarged.
+</li><li>The cover is Lytle’s State Capitol (lsu-sc-p15140coll12:267), 1,827 × 2,560px, so “Frame the cover” is left off. The script frames any cover, and shows whole any lead, under 720p (long side under 1,280px or short side under 720px).
+</li><li>Credits move to the end of the Introduction, with the Louisiana Endowment for the Humanities.
+</li></ul>
+<h3>Where the pictures came from</h3>
+<p>Searched for rescans:</p>
+<ul><li><code>R:\SpecialCollections\Exhibitions\Completed Exhibitions</code>: EXHIB_Portrait_of_a_River_City_GANDY and “EXHIB_Portraits of a River City _ Gandy 2011” are Natchez material (the Gandy photographs), not Baton Rouge; EXHIB_Andrew_D_Lytle_Baton_Rouge_2008 holds that exhibition’s graphics and labels only, no scans; “EXHIB_We Built This City” has none of the 1999 items. Nothing there was used.
+</li><li>The Louisiana Digital Library: Andrew D. Lytle’s Baton Rouge Photograph Collection, the LSU Libraries Postcard Collections, the University Archives Photographs Collection, the Pintado Papers, Fonville Winans’s aerial views, the William Waller Survey Collection and Historic Images of Baton Rouge. Matched by title and by comparing the pictures. A postcard’s or a photograph’s record is the compound object; the front is the child named below.
+</li></ul>
+<table>
+<thead><tr><th scope="col">Picture</th><th scope="col">Source</th></tr></thead>
+<tbody>
+<tr><td>lytle-state-capitol.jpg (cover)</td><td>LDL lsu-sc-p15140coll12:267</td></tr>
+<tr><td>lytle-main-street-high-water.jpg</td><td>LDL lsu-sc-p15140coll12:689</td></tr>
+<tr><td>pintado-beauregard-1799.jpg</td><td>LDL lsu-sc-pintado:1455</td></tr>
+<tr><td>gayoso-land-grant-1797.jpg</td><td>1999 site, case01a.jpg (960px); no LDL copy found</td></tr>
+<tr><td>lytle-j-m-white.jpg</td><td>LDL lsu-sc-p15140coll12:461</td></tr>
+<tr><td>lytle-convict-levee.jpg</td><td>LDL lsu-sc-p15140coll12:108 (1,000px)</td></tr>
+<tr><td>lytle-federal-encampment.jpg</td><td>LDL lsu-sc-p15140coll12:647, same view as the old armycamp.jpg</td></tr>
+<tr><td>lytle-after-attack-1862.jpg</td><td>LDL lsu-sc-p15140coll12:40 (1,000px); added</td></tr>
+<tr><td>baton-rouge-dollar-1.jpg</td><td>1999 site, case04a.jpg (498px)</td></tr>
+<tr><td>baton-rouge-dollar-2.jpg</td><td>1999 site, case04b.jpg (501px); on the 1999 page, left off the Showcase page</td></tr>
+<tr><td>lytle-officers-in-camp.jpg</td><td>LDL lsu-sc-p15140coll12:651, same print as the old soldiers.jpg</td></tr>
+<tr><td>lytle-firemens-parade.jpg</td><td>LDL lsu-sc-p15140coll12:718</td></tr>
+<tr><td>postcard-st-josephs-convent.jpg</td><td>LDL lsu-sc-p16313coll10:1432 (front :1433), same card as the old case03a.jpg</td></tr>
+<tr><td>postcard-high-school.jpg</td><td>LDL lsu-sc-p16313coll10:628 (front :629), same card as the old case05b.jpg</td></tr>
+<tr><td>dance-card-front.jpg</td><td>1999 site, case03df.jpg (376px)</td></tr>
+<tr><td>dance-card-back.jpg</td><td>1999 site, case03db.jpg (378px)</td></tr>
+<tr><td>postcard-masonic-temple.jpg</td><td>LDL lsu-sc-p16313coll10:886 (front :887), same card as the old case03b.jpg</td></tr>
+<tr><td>fire-company-notice.jpg</td><td>1999 site, case03e.jpg (383px)</td></tr>
+<tr><td>playbill-academy-hall-1864.jpg</td><td>1999 site, case03c.jpg (409px)</td></tr>
+<tr><td>lytle-texas-pacific-office.jpg</td><td>LDL lsu-sc-p15140coll12:573</td></tr>
+<tr><td>postcard-standard-oil.jpg</td><td>LDL lsu-sc-p16313coll10:1747 (front :1748); listed in the case, not pictured in 1999</td></tr>
+<tr><td>fresh-water-harbors.jpg</td><td>1999 site, case05c.jpg (458px)</td></tr>
+<tr><td>railroad-stock-certificate-1867.jpg</td><td>1999 site, case05e.jpg (587px)</td></tr>
+<tr><td>lytle-streetcar-lafayette.jpg</td><td>LDL lsu-sc-p15140coll12:140 (1,000px); added</td></tr>
+<tr><td>aviation-meeting-1911.jpg</td><td>1999 site, case05d.jpg (693px)</td></tr>
+<tr><td>ua-style-show-1956.jpg</td><td>LDL lsu-ua-uap:1632 (front :1630)</td></tr>
+<tr><td>female-institute-1837.jpg</td><td>1999 site, case06b.jpg (617px)</td></tr>
+<tr><td>comus-edic.jpg</td><td>1999 site, case06a.jpg (696px)</td></tr>
+<tr><td>winans-aerial-1947.jpg</td><td>LDL lsu-sc-p15140coll46:23</td></tr>
+<tr><td>latour-plano-1806.jpg</td><td>LDL lsu-sc-p16313coll57:130</td></tr>
+<tr><td>postcard-southern-university.jpg</td><td>LDL lsu-sc-p16313coll10:988 (front :989)</td></tr>
+<tr><td>bill-of-sale-1844.jpg</td><td>1999 site, case08c.jpg (566px)</td></tr>
+<tr><td>longwood-plantation-ad.jpg</td><td>1999 site, case08b.jpg (585px)</td></tr>
+<tr><td>ua-lora-hinton.jpg</td><td>LDL lsu-ua-uap:2159; the case had his letterman plaque</td></tr>
+<tr><td>lytle-reymond-store.jpg</td><td>LDL lsu-sc-p15140coll12:468</td></tr>
+<tr><td>tunnard-carriage-factory.jpg</td><td>LDL lsu-sc-brt:13; added (W. H. Tunnard of Case 3 was of this family)</td></tr>
+<tr><td>lytle-sugar-refinery.jpg</td><td>LDL lsu-sc-p15140coll12:39 (1,000px)</td></tr>
+<tr><td>lytle-front-street-1861.jpg</td><td>LDL lsu-sc-p15140coll12:690 (1,000px), shown whole</td></tr>
+<tr><td>lytle-cadets-pentagon.jpg</td><td>LDL lsu-sc-p15140coll12:232</td></tr>
+<tr><td>ua-boyd-dedication-1926.jpg</td><td>LDL lsu-ua-uap:1344 (front :1342)</td></tr>
+<tr><td>lsu-dedication-program-1926.jpg</td><td>1999 site, case11b.jpg (404px)</td></tr>
+<tr><td>ua-stadium-postcard.jpg</td><td>LDL lsu-ua-uap:1362 (front :1360), same card as the old case11a.jpg</td></tr>
+<tr><td>lytle-hill-memorial-1905.jpg</td><td>LDL lsu-sc-p15140coll12:194 (1,000px); added</td></tr>
+<tr><td>lsu-calendar-1913.jpg</td><td>1999 site, case11c.jpg (601px)</td></tr>
+<tr><td>lytle-capitol-after-fire-1863.jpg</td><td>LDL lsu-sc-p15140coll12:265</td></tr>
+<tr><td>ua-huey-long-funeral.jpg</td><td>LDL lsu-ua-uap:1674 (front :1672); the case had a photograph of the funeral flowers</td></tr>
+<tr><td>earl-long.jpg</td><td>1999 site, case12a.jpg (699px)</td></tr>
+<tr><td>postcard-state-capitol-1904.jpg</td><td>LDL lsu-sc-p16313coll10:1495 (front :1496); listed in the case</td></tr>
+<tr><td>lytle-national-cemetery-rows.jpg</td><td>LDL lsu-sc-p15140coll12:37</td></tr>
+<tr><td>lytle-national-cemetery.jpg</td><td>LDL lsu-sc-p15140coll12:754, same print as the old cemetery.jpg</td></tr>
+<tr><td>gas-powered-tractor.jpg</td><td>1999 site, tractor.jpg (696px)</td></tr>
+<tr><td>cars-on-capitol-steps.jpg</td><td>1999 site, cars.jpg (683px)</td></tr>
+<tr><td>webb-moss-gin.jpg</td><td>1999 site, mossgin.jpg (686px)</td></tr>
+<tr><td>bus-boycott-1953.jpg</td><td>1999 site, boycott.jpg (368px)</td></tr>
+<tr><td>orene-muse-billboard.jpg</td><td>1999 site, register.jpg (486px)</td></tr>
+<tr><td>peace-rally-1970.jpg</td><td>1999 site, protest.jpg (658px)</td></tr>
+<tr><td>steele-burden-1993.jpg</td><td>1999 site, steele.jpg (554px)</td></tr>
+<tr><td>rural-life-museum-1995.jpg</td><td>1999 site, statue.jpg (704px)</td></tr>
+</tbody>
+</table>
+<h3>Corrected</h3>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>Americans residents</del></td><td><ins>American residents</ins></td></tr>
+<tr><td><del>“red stick” baton rouge</del></td><td><ins>“red stick”—<em>baton rouge</em>—</ins></td></tr>
+<tr><td><del>as shown by a the</del></td><td><ins>as shown by the</ins></td></tr>
+<tr><td><del>whose log book is shown at left</del></td><td><ins>was in the exhibition</ins></td></tr>
+<tr><td><del>and forming the Washington Fire Company</del></td><td><ins>forming the Washington Fire Company</ins></td></tr>
+<tr><td><del>In 1997 by the … cited</del></td><td><ins>In 1997 the … cited</ins></td></tr>
+<tr><td><del>Advocate,could</del></td><td><ins>Advocate, could</ins></td></tr>
+<tr><td><del>Blakeman &amp; law</del></td><td><ins>Blakeman &amp; Law</ins></td></tr>
+<tr><td><del>Provost Marshall’s</del></td><td><ins>Provost Marshal’s</ins></td></tr>
+<tr><td><del>Lyndon Bains Johnson</del></td><td><ins>Lyndon Baines Johnson</ins></td></tr>
+<tr><td><del>Curated</del></td><td><ins>curated</ins> <em>mid-sentence</em></td></tr>
+<tr><td><del>National Register of Historic Buildings</del></td><td><ins>National Register of Historic Places</ins></td></tr>
+</tbody>
+</table>
+<ul><li>“In 1706 the Terrebonne and Lafourche Parishes.” (garbled in 1999 too) → “In 1706 the Houmas moved south, and their descendants live today in Terrebonne and Lafourche Parishes.” This is a reconstruction; see To verify.
+</li><li>Em dashes restored: “war—civilian hardships”, “nineties—a city”, “Standard Oil—a stance”
+</li><li>“Freed- Persons” → “Freed-Persons”; “African- American” → “African-American”; “African-Americans students” → “African-American students”
+</li><li>“recession-proof, ” quote spacing
+</li><li>In captions: “Musuem” → “Museum”; “the original the landscaping” → “the original landscaping”
+</li><li>Histories of Baton Rouge: a paragraph printed twice is printed once.
+</li><li>Links to the 1999 image files inside the text are taken out (the pictures are on the wall).
+</li><li>The dead Louisiana Endowment for the Humanities link now goes to https://www.leh.org/.
+</li><li>Curly quotes and apostrophes, en dashes in year ranges, ellipses.
+</li><li>“Items listed below…” and the “Interpretive Text:” labels are dropped; the plates do their work.
+</li></ul>
+<h3>To verify</h3>
+<p>Left as written:</p>
+<ul><li>The Houmas sentence above: what the 1999 text meant to say.
+</li><li>David F. Boyd “served from 1870 to 1880”, then Thomas Boyd “1896 to 1927”: a gap, and the dates of both presidencies.
+</li><li>The quotation from the Favrot pageant has no closing quotation mark in 1999; where it ends isn’t clear.
+</li><li>“LSU, founded in 1859” (the Seminary opened in 1860).
+</li><li>Hill Memorial Library “originally constructed in 1925”, beside Lytle’s photograph of the 1905 Hill on the old downtown campus.
+</li><li>Figures as of 1999: the population of 231,000, Southern’s 16,000 students, the “139-year history”.
+</li><li>Pintado’s Zayalo de Lemos plan, named in Case 1, is not pictured (no LDL copy found).
+</li></ul>
+<h3>New wording to check</h3>
+<ul><li>The credit line.
+</li><li>The plate titles and summaries.
+</li><li>The captions and alt text, written from each item’s LDL record or the 1999 label.
+</li><li>The lead choices, and the added pictures (Hinton, the Tunnard factory, the streetcar, Hill 1905, the 1862 view).
 </li></ul>
 HTML),
 ]);

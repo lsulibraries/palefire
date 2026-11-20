@@ -1,0 +1,1732 @@
+{
+ "title": "From Red Stick to River Capital",
+ "subtitle": "Three Centuries of Baton Rouge History",
+ "credit": "<p>An online exhibition from LSU Libraries Special Collections, from the exhibition shown in Hill Memorial Library, March 8 – July 2, 1999, curated by V. Faye Phillips, Associate Dean for Special Collections, with materials from the Louisiana and Lower Mississippi Valley Collections and University Archives. Made possible in part by a grant from the Louisiana Endowment for the Humanities.</p>",
+ "cover": "lytle-state-capitol.jpg",
+ "year": "1999",
+ "source": "https://lib.lsu.edu/brhistory/introduction and its 13 sibling Showcase pages (nodes 289, 328–340); the 1999 static pages at /sites/all/files/sc/exhibitions/e-exhibits/redstick",
+ "pages": [
+  {
+   "title": "Introduction",
+   "anchor": "introduction",
+   "lead": "lytle-main-street-high-water.jpg",
+   "focus": "center",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "Three centuries",
+     "anchor": "three-centuries",
+     "summary": "Native American, French, Spanish, English, African and American peoples shaped early Baton Rouge; their descendants and later immigrants carried it on.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>From Red Stick To River Capital: Three Centuries of Baton Rouge History explores how Baton Rouge’s history has shaped the present-day city. Native Americans, French, Spanish, English, African and American cultures and heritages shaped the early history of the region. Descendants of these peoples and many later immigrants have all played a part in the growth, vitality, economy, and culture of Baton Rouge through the past three centuries.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "The red stick, 1699",
+     "anchor": "the-red-stick-1699",
+     "summary": "Iberville saw the red stick in 1699; then Britain and Spain held the fort that guarded the river.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>1999 is celebrated as the tricentennial of Baton Rouge’s “discovery” because on March 17, 1699, French explorer Pierre Le Moyne, Sieur d’Iberville, first viewed the Native Americans’ ceremonial “red stick” boundary marker near the present location of Baton Rouge. France ceded its holdings in eastern Louisiana to Great Britain at the close of the French and Indian War in 1763. The Treaty of Fontainebleau (1762) gave Spain New Orleans and western Louisiana. With British territory separated from the Spanish territory only by the Mississippi River and Bayou Manchac, Baton Rouge was strategically important as the southwestern outpost of British North America. The British quickly built and occupied Fort New Richmond near the present site of the Pentagon Barracks next to the state capitol.</p><p>Members of Hernando de Soto’s expedition in 1542 were the first Europeans to visit the area, but the Spanish did not influence life here until 1779. Spanish territorial governor Don Bernardo de Galvez took Fort New Richmond in September 1779, renaming it Fort San Carlos. When Napoleon sold “Louisiana” to the United States in 1803, the fort remained in the possession of Spain. It became the only post on the Mississippi River that did not belong to the United States.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "The West Florida Republic",
+     "anchor": "the-west-florida-republic",
+     "summary": "In 1810 Americans at Fort San Carlos rose against Spain, and within weeks Baton Rouge was part of the United States.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>American residents of Fort San Carlos, with the backing of the United States, rose against Spanish rule in September 1810, took over the fort, and raised the flag of the “West Florida Republic.” The commandant of the militia, Philemon Thomas, led the assault, and a former American diplomat, Fulwar Skipwith, was named president of the West Florida Republic. In October 1810 President James Madison authorized the governor of the U.S. Territory of Orleans, William C. C. Claiborne, to take over the West Florida Republic. Fort San Carlos’ citizens changed the town’s name back to Baton Rouge. For the next 51 years Baton Rouge, which became Louisiana’s capital in 1847, was a moderately prosperous, growing town in the United States of America.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "War and recovery",
+     "anchor": "war-and-recovery",
+     "summary": "Federal troops held the city through the Civil War; the capital’s return in 1882, then Standard Oil in 1909, remade its economy.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Before Louisiana seceded from the United States of America in January 1861, Louisiana militia units loyal to the Confederacy took over the U.S. garrison at Baton Rouge. Sixteen months later Federal troops retook Baton Rouge. They occupied the city for the duration of the war and moved the state capital to New Orleans, where it remained until 1882.</p><p>The return of the state capital to Baton Rouge brought with it economic revival. Baton Rouge entered the 20th century on a prosperous note. In 1909 the arrival of Standard Oil Company changed the Baton Rouge economy from one based on river commerce and agriculture to one based on the oil industry. Through seven decades, Baton Rouge’s business was oil. The industry’s economic downturns of the 1980s brought diversification to the city’s economy. Today the metropolitan area has grown to 231,000 citizens representing almost every nationality in the world living within 75 square miles, with a diversified economy that includes government, higher education, tourism, services, river commerce, and trade.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "In memoriam",
+     "anchor": "in-memoriam",
+     "summary": "The exhibition honors Mark T. Carleton and Marshall Stone Miller, Jr., whose River Capital it is built on.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>The exhibition is dedicated to the memory of Mark Thomas Carleton (1935–1995) and Marshall Stone Miller, Jr. (1938–1991). Dr. Carleton was the author of River Capital: An Illustrated History of Baton Rouge; Mr. Miller was responsible for the pictorial research. Both Dr. Carleton and Mr. Miller were associated for many years with the LSU History Department and the LSU Libraries Special Collections. This celebration of three centuries of Baton Rouge history, based on their book, is a tribute to their work and lives.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "About the exhibition",
+     "anchor": "about-the-exhibition",
+     "summary": "Shown in Hill Memorial Library from March 8 to July 2, 1999, and curated by V. Faye Phillips.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>This electronic exhibition is based upon a physical exhibition in Hill Memorial Library, Louisiana State University, March 8 - July 2, 1999. Only a portion of the physical exhibition is presented for online viewing. A list of all items displayed in Hill Memorial Library is available as part of this electronic exhibition.</p><p>This exhibition was curated by V. Faye Phillips, Associate Dean for Special Collections, LSU Libraries. It features materials from LSU Libraries’ <a href=\"https://lib.lsu.edu/special#louisianaandlowermississippivalleycollections\" rel=\"nofollow\">Louisiana and Lower Mississippi Valley Collections</a>.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Credits",
+     "anchor": "credits",
+     "summary": "Made possible in part by a grant from the Louisiana Endowment for the Humanities.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p><em>From Red Stick To River Capital: Three Centuries of Baton Rouge History</em> was made possible in part by a grant from the <a href=\"https://www.leh.org/\" rel=\"nofollow\">Louisiana Endowment for the Humanities</a>, a state affiliate of the National Endowment for the Humanities. The exhibition was curated by V. Faye Phillips, Associate Dean for Special Collections, LSU Libraries.</p><p>Several staff of Hill Memorial Library assisted in the selection and evaluation of materials for the exhibition, including: Elaine Smyth, Curator of Rare Books and the E. A. McIlhenny Natural History Collection; Jo Jackson, University Archivist; Frances Huber, Exhibitions Coordinator, LSU Special Collections; Charles Thomas, Interim Curator of the Louisiana and Lower Mississippi Valley Collections; Emily Robison, Political Papers Curator; Renate Zietz, Unit Head, Image Resources; and Merle Suhayda, Electronic Imaging Laboratory Manager.</p><p>The physical exhibition was coordinated and arranged by Frances Huber, Exhibitions Coordinator, LSU Special Collections.</p><p>The electronic version of this exhibition was authored by Charles Thomas (revised version by M. Mullenix). Image scanning was conducted by Merle R. Suhayda and Mark Martin.</p>"
+      }
+     ]
+    }
+   ],
+   "display": "wall",
+   "lead_caption": "<p><strong>Baton Rouge looking northwest down Main Street at high water, with a moored ship, 1863–1865.</strong><br>Andrew D. Lytle, photographer. Andrew D. Lytle Album Photograph Collection, Louisiana and Lower Mississippi Valley Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p15140coll12:689\">Louisiana Digital Library</a></p>"
+  },
+  {
+   "title": "Native Americans and Colonial Origins",
+   "anchor": "native-americans",
+   "lead": "pintado-beauregard-1799.jpg",
+   "focus": "center",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "The mounds",
+     "anchor": "the-mounds",
+     "summary": "Native Americans raised the two mounds on LSU’s campus, and came to the red stick some 5,000 years ago.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>On the northwest corner of the Louisiana State University campus stand two ancient mounds. The mounds, created by Native Americans, functioned as ceremonial centers, base camps for hunting and gathering, and symbols of group identity. Radiocarbon dating shows that mound builders came to the “red stick” area about 5,000 years ago to live on the bounty provided by the Mississippi River.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "The red stick",
+     "anchor": "the-red-stick",
+     "summary": "French visitors of 1699 named the bluff for a blood-stained pole marking a boundary between the Houma and the Bayogoula.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>In 1699 French visitors called the spot “red stick”—<em>baton rouge</em>—because of a boundary marker pole, stained with animal blood, standing on the river bluff. Members of the Houma tribe lived to the north of the red stick and Bayogoulas to the south. In 1706 the Houmas moved south, and their descendants live today in Terrebonne and Lafourche Parishes. The Tunica-Biloxi Indian Tribe of Louisiana is centered in Marksville, LA.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "A British outpost",
+     "anchor": "a-british-outpost",
+     "summary": "France left almost nothing; Baton Rouge’s continuous history begins with the British Fort New Richmond of 1763.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>No French settlement existed until 1718, when records show that two whites and 25 blacks resided on land granted to Bernard Diron Dartaguette, 95 leagues from the mouth of the Mississippi. By 1727 they were gone. Historian Mark T. Carleton explains that “‘French’ Baton Rouge…is of little historical importance. The origins of Baton Rouge as a continuously settled… community do not, in fact, date from the French period at all, but rather from the establishment there in 1763 of a British military outpost.”</p><p>After the French and Indian War of 1756–1763, France ceded western Louisiana and New Orleans to Spain and lost Canada and eastern Louisiana to the British. Thus Baton Rouge became the strategically important southwestern corner of British North America. On the site of the earlier French settlement, the English established Fort New Richmond and named naval Captain George Johnstone the first governor of the “West Florida” colony. Many present-day Baton Rouge citizens can trace their ancestry back to those who received land grants from Johnstone.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Fort San Carlos",
+     "anchor": "fort-san-carlos",
+     "summary": "Spain took the fort in 1779 and granted the district’s two largest tracts to Gayoso de Lemos and Elias Beauregard.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Although Spanish explorers passed the Baton Rouge area on the Mississippi River in 1542, Spanish influence is not evident until 1779, when Spain captured Fort New Richmond and renamed it Fort San Carlos. With the removal of British restrictions on settlement, the Mississippi Valley fell open to invasion by thousands of pioneers from the new United States. Louisiana governor Manuel Gayoso de Lemos received one of the two largest land grants in the Baton Rouge District during this period. The other went to Elias Beauregard.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Gayoso’s land grant, 1797",
+     "anchor": "gayosos-land-grant-1797",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "gayoso-land-grant-1797.jpg",
+       "caption": "<p><em>1797 Gayoso Land Grant.</em> LLMVC, Survey Collection.</p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "The West Florida Republic",
+     "anchor": "the-west-florida-republic-2",
+     "summary": "Residents rose against Spain in 1810, and the settlement took back the name Baton Rouge.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>In September 1810 American residents of Fort San Carlos, with the backing of the United States, rose against Spanish rule, took over the fort, and raised the flag of the “West Florida Republic.” In October 1810 President Madison authorized William C. C. Claiborne, governor of the neighboring Territory of Orleans, to take over the West Florida Republic. Citizens changed the settlement’s name back to Baton Rouge.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "In the case",
+     "anchor": "in-the-case",
+     "summary": "Everything shown in this case in 1999, pictured here or not.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<ul><li><em>LSU Museum of Natural Science.</em> <em>The LSU Campus Mounds: A National Treasure</em>. Baton Rouge: The Museum, 1998. Courtesy of the Museum.</li><li><em>B. F. French,</em> <em>Historical Collections of Louisiana</em>…. New York: Lamport, Blakeman &amp; Law, 1853. LLMVC Rare F366 F87, v. 5, c 4.</li></ul>"
+      }
+     ]
+    }
+   ],
+   "display": "wall",
+   "lead_caption": "<p><strong>Survey of Elias Beauregard’s land, Baton Rouge, 1799.</strong><br>Pintado Papers, Louisiana and Lower Mississippi Valley Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-pintado:1455\">Louisiana Digital Library</a></p>"
+  },
+  {
+   "title": "River Port",
+   "anchor": "river-port",
+   "lead": "lytle-j-m-white.jpg",
+   "focus": "center",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "Floods",
+     "anchor": "floods",
+     "summary": "The floods that made the land rich could also ruin it, from the broken levees of 1793 to the June flood of 1989.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>The Mississippi River’s annual floods created fertile lands that were the basis for great agricultural plantations. The same floods could also be deadly. Writing in 1793, Daniel Hickey related the damage caused to Baton Rouge when the river levees broke. Alvin Rabenhorst photographed the flood of 1897 and convicts repairing the levee. The floods in 1897 and 1912 spared Baton Rouge for the most part, but were severe in the rest of the state. In 1912 the city suffered under the burden of thousands of refugees fleeing the inundated countryside. The great 1927 flood produced a lasting impact because it changed flood control strategies used by the U.S. Army Corps of Engineers. Debate over flood control began when the French settled New Orleans and continues today, as shown by the East Baton Rouge Parish’s comprehensive study of the June 1989 flood.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Convicts building a levee",
+     "anchor": "convicts-building-a-levee",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "lytle-convict-levee.jpg",
+       "caption": "<p><strong>Convict laborers building a levee, about 1895–1905.</strong><br>Andrew D. Lytle, photographer. Andrew D. Lytle Collection, Louisiana and Lower Mississippi Valley Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p15140coll12:108\">Louisiana Digital Library</a></p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Steamboat town",
+     "anchor": "steamboat-town",
+     "summary": "From the New Orleans in 1812, steamboats brought trade, and with it schools, churches, hotels and newspapers.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>The river brought prosperity even when people failed to control its floods. The first steamboat that came to Baton Rouge was the New Orleans in January 1812. In 1822, 83 steamboats, 174 barges, and 441 flatboats visited the river port. Increased river traffic brought prosperity to Baton Rouge, and with it new schools, churches, hotels, newspapers, and public services for the citizens. Mark Twain wrote of his visit to the city “clothed in flowers, like a bride” in Life on the Mississippi, first published in 1883. As late as 1917, the steamer City of Baton Rouge, whose log book was in the exhibition, was an important part of river transportation.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "The J. M. White",
+     "anchor": "the-j-m-white",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "lytle-j-m-white.jpg",
+       "caption": "<p><strong>The river steamer J. M. White loaded with cotton, off Baton Rouge, about 1895–1905.</strong><br>Andrew D. Lytle, photographer. Andrew D. Lytle Album Photograph Collection, Louisiana and Lower Mississippi Valley Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p15140coll12:461\">Louisiana Digital Library</a></p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "A deep-water port",
+     "anchor": "a-deep-water-port",
+     "summary": "Rising levees called for real docks: the Municipal Dock of 1926, then the nation’s farthest inland deep-water port.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>As the height of the levees was raised year after year, steamboats found it harder and harder to dock at the rudimentary public docks. The city needed a deep-water docking facility. Construction of the Baton Rouge Municipal Dock in 1926 enabled ocean-going vessels to land and unload. The Greater Baton Rouge Port Commission, created in 1952, oversaw the construction of the nation’s farthest inland deep-water port, which currently ranks fourth in the nation in total tonnage. The Port of Greater Baton Rouge contributes tremendously to the economy of Baton Rouge and continues to grow.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "In the case",
+     "anchor": "in-the-case-2",
+     "summary": "Everything shown in this case in 1999, pictured here or not.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<ul><li><em>Daniel Hickey Letter</em>, 1793. <em>LLMVC, Miscellaneous Collection.</em></li><li><em>Alvin E. Rabenhorst, Photographs “Flood of 1897” (1897) and “Convicts repairing Baton Rouge levee,” (1897?).</em> <em>LLMVC, Alvin E. Rabenhorst Photograph Collection.</em></li><li><em>A Comprehensive Study of the June 1989 Flood</em>. Baton Rouge, LA: City of Baton Rouge and Parish of East Baton Rouge, Department of Public Works, Engineering Division, 1990. <em>LLMVC GB 1399.4 L8 E37 1990.</em></li><li><em>Baton Rouge Transportation Records, Log of the Steamer City of Baton Rouge, 1917.</em> <em>LLMVC, Miscellaneous Collection.</em></li><li><em>Mark Twain.</em> <em>Life on the Mississippi</em>. London: Chatto &amp; Windus, 1883. <em>LLMVC Rare F353 C634.</em></li><li><em>China cup from the steamboat J. M. White</em>. <em>LLMVC, Sophie Cooley Pearson Collection.</em></li></ul>"
+      }
+     ]
+    }
+   ],
+   "display": "wall",
+   "lead_caption": "<p><strong>The river steamer J. M. White loaded with cotton, off Baton Rouge, about 1895–1905.</strong><br>Andrew D. Lytle, photographer. Andrew D. Lytle Album Photograph Collection, Louisiana and Lower Mississippi Valley Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p15140coll12:461\">Louisiana Digital Library</a></p>"
+  },
+  {
+   "title": "Civil War and Aftermath",
+   "anchor": "civil-war",
+   "lead": "lytle-federal-encampment.jpg",
+   "focus": "center",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "Occupation",
+     "anchor": "occupation",
+     "summary": "Federal troops took Baton Rouge in May 1862; a Confederate attempt to retake it that August devastated the city.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>By May 1862 the Pentagon barracks and arsenal had changed hands again without resistance. Commander James S. Palmer of the Federal gunboat Iroquois raised the U.S. flag over the city. Six Federal infantry regiments, two artillery batteries, and a cavalry troop occupied Baton Rouge. An attempt by Confederates to retake Baton Rouge in August 1862 led to devastation in the city. Gunfire from both sides caused inhabitants (such as young Sarah Morgan’s family) to flee. While Union soldiers raided the city houses, fleeing citizens raided their neighbors in the countryside. The Federals withdrew, only to return in December. They would stay in Baton Rouge until the end of Reconstruction in April 1877. As they did elsewhere in the South, the Civil War and Reconstruction left Baton Rouge with a legacy of social, economic, and moral impoverishment.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Baton Rouge dollar bill",
+     "anchor": "baton-rouge-dollar-bill",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "baton-rouge-dollar-1.jpg",
+       "caption": "<p>Baton Rouge One Dollar Bills, 1861 and 1862. LLMVC, Currency Collection.</p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Another Baton Rouge dollar",
+     "anchor": "another-baton-rouge-dollar",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "baton-rouge-dollar-2.jpg",
+       "caption": "<p>Baton Rouge One Dollar Bills, 1861 and 1862. LLMVC, Currency Collection.</p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "After the attack, 1862",
+     "anchor": "after-the-attack-1862",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "lytle-after-attack-1862.jpg",
+       "caption": "<p><strong>Baton Rouge after the Confederate attack of August 1862.</strong><br>Andrew D. Lytle, photographer. Andrew D. Lytle Collection, Louisiana and Lower Mississippi Valley Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p15140coll12:40\">Louisiana Digital Library</a></p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Letters home",
+     "anchor": "letters-home",
+     "summary": "Union soldiers tried to explain a “foreign land” to their families in the North.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Union troops stationed in the city wrote letters to loved ones outside Louisiana, attempting to explain the rather “foreign land” they found themselves in. Writing in April, one anonymous Yankee commented that it was “one of these pretty cool July dayes when you see hens going round with thare toungs out[,] that is I mean in Maine[,] but there is a cool breeze.”</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "William H. Tunnard",
+     "anchor": "william-h-tunnard",
+     "summary": "A Confederate sergeant, captured at Vicksburg and again in 1864, who came home to Baton Rouge.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>William H. Tunnard enrolled at New Orleans on May 17, 1861 where he joined the 2nd Louisiana Infantry, Company K. He rose to the rank of sergeant. On July 4, 1863, he was captured at Vicksburg and paroled there four days later. He reappears on the rolls of Allen’s Brigade Headquarters at Shreveport on March 29, 1864. We assume that he was once again captured because in April 1864 his name appears on a roll of prisoners for exchange at Natchitoches, and he is listed as paroled on June 7, 1865. Tunnard thereafter resided in Baton Rouge. These artifacts may have been made for him by a girlfriend, sister, or mother to carry with him in battle.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Lytle’s camera",
+     "anchor": "lytles-camera",
+     "summary": "Andrew Lytle photographed both sides of the war, perhaps as an agent of the Confederate Secret Service.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Andrew Lytle photographed both sides of the conflict. Some assert that he served as an agent for the Confederate Secret Service. Certainly he recorded practically every aspect of the war—civilian hardships, troops and officers, military camps and installations, and gunboats on the Mississippi. The photographs by Lytle show Federal encampments. The officer in the rocking chair may be General Christopher C. Auger; the officer next to him may be Colonel Nathan Dudley. The second photograph, taken in 1862, is of the camp of the 7th Vermont and the 21st Indiana. The building to the right is the Presbyterian Church. Lytle took this picture from the top of the Heroman Building, located at the corner of Florida and Church Streets. The riding crop shown here belonged to Lytle.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Officers in camp",
+     "anchor": "officers-in-camp",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "lytle-officers-in-camp.jpg",
+       "caption": "<p><strong>United States Army officers in camp at Baton Rouge, 1861–1865.</strong><br>Andrew D. Lytle, photographer. Andrew D. Lytle Collection, Louisiana and Lower Mississippi Valley Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p15140coll12:651\">Louisiana Digital Library</a></p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Federal encampment, 1862",
+     "anchor": "federal-encampment-1862",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "lytle-federal-encampment.jpg",
+       "caption": "<p><strong>United States Army encampment, Baton Rouge, 1862.</strong><br>Andrew D. Lytle, photographer. Andrew D. Lytle Collection, Louisiana and Lower Mississippi Valley Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p15140coll12:647\">Louisiana Digital Library</a></p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "In the case",
+     "anchor": "in-the-case-3",
+     "summary": "Everything shown in this case in 1999, pictured here or not.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<ul><li><em>Sarah Morgan Dawson.</em> <em>The Civil War Diary of Sarah Morgan </em>. Edited by Charles East. Athens, GA: University of Georgia Press, c1991. <em>LLMVC E605 D28 1991.</em></li><li><em>Anonymous Civil War Letter,</em> Baton Rouge, April 1863. <em>LLMVC, Miscellaneous Collection.</em></li><li>Artifacts shown courtesy of the Louisiana State University Rural Life Museum, Baton Rouge, Louisiana: <em>Embroidered cloth notebook cover, once belonging to W. H. Tunnard.</em></li><li><em>W. H. Tunnard’s “housewife,” presented to him by S. “Lou” Dyer, Woodville, Mississippi.</em></li><li><em>Andrew Lytle’s riding crop.</em></li><li><em>Civil War-era belt buckles,</em> “US” <em>and</em> “CSA.”</li><li><em>Civil War-era cannon ball, cut in half.</em></li></ul>"
+      }
+     ]
+    }
+   ],
+   "display": "wall",
+   "lead_caption": "<p><strong>United States Army encampment, Baton Rouge, 1862.</strong><br>Andrew D. Lytle, photographer. Andrew D. Lytle Collection, Louisiana and Lower Mississippi Valley Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p15140coll12:647\">Louisiana Digital Library</a></p>"
+  },
+  {
+   "title": "Social History",
+   "anchor": "social-history",
+   "lead": "lytle-firemens-parade.jpg",
+   "focus": "center",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "Churches",
+     "anchor": "churches",
+     "summary": "Churches were the center of early social life, and new congregations followed each new people to the city.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Churches were the center of social activities in early Baton Rouge. The first churches were St. Joseph’s Catholic Church, dating from the 1790s, St. James Episcopal Church, 1820, the Presbyterian Church, 1827, the First Methodist Church, 1834, and the Baptist Church of Baton Rouge, 1874. The Congregation B’Nai Israel was first organized in 1859.</p><p>Newly established religious congregations mirrored the settlement of new groups of people in Baton Rouge. Prior to 1831 all sermons at St. Joseph’s Catholic Church were delivered in French. Today various congregations in Baton Rouge hold services in English, Spanish, Chinese, and Vietnamese. Baton Rouge also has Hindu and Buddhist temples.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Schools",
+     "anchor": "schools",
+     "summary": "Public schools began in 1848, but none for African-American children until after 1905.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>The development of schools paralleled the establishment of churches. Early Catholic and private schools were available to upper-class white children. Public education did not begin until 1848, when two boys’ schools and one girls’ school were established. They were poorly supported and sparsely attended. Privately run schools such as the Collegiate Institute educated the city’s prominent citizens.</p><p>Public schooling for African-American children was not provided until after 1905. Federal desegregation suits to create equal education for all children, regardless of race, were common from the late 1950s until 1996, when a court settlement ended fifteen years of forced busing and, in large part, returned students to a system of neighborhood schools.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "St. Joseph’s Convent",
+     "anchor": "st-josephs-convent",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "postcard-st-josephs-convent.jpg",
+       "caption": "<p><strong>St. Joseph’s Convent, Baton Rouge, about 1909.</strong><br>Postcard. Louisiana Postcard Collection, Louisiana and Lower Mississippi Valley Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p16313coll10:1432\">Louisiana Digital Library</a></p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "The High School",
+     "anchor": "the-high-school",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "postcard-high-school.jpg",
+       "caption": "<p><strong>High School, Baton Rouge, about 1908.</strong><br>Postcard. Louisiana Postcard Collection, Louisiana and Lower Mississippi Valley Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p16313coll10:628\">Louisiana Digital Library</a></p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Societies and lodges",
+     "anchor": "societies-and-lodges",
+     "summary": "The German Benevolent Association and the Masons’ St. James Lodge looked after their members.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>In the eighteenth and nineteenth centuries, ethnic groups often formed social organizations to aid their members. A noteworthy example is the German Benevolent Association founded in the 1840s.</p><p>Other social groups included the St. James Lodge (Masonic Lodge), one of the oldest men’s organizations in continuous operation in Baton Rouge, established in 1844.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Dance card, 1884",
+     "anchor": "dance-card-1884",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "dance-card-front.jpg",
+       "caption": "<p>Front view of “German Benevolent Society Anniversary Ball Dance Card, 1884.” LLMVC, Miscellaneous Collection.</p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Dance card, the back",
+     "anchor": "dance-card-the-back",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "dance-card-back.jpg",
+       "caption": "<p>Verso view of “German Benevolent Society Anniversary Ball Dance Card, 1884.” LLMVC, Miscellaneous Collection.</p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Masonic Temple",
+     "anchor": "masonic-temple",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "postcard-masonic-temple.jpg",
+       "caption": "<p><strong>Masonic Temple, Baton Rouge, about 1910.</strong><br>Postcard. Louisiana Postcard Collection, Louisiana and Lower Mississippi Valley Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p16313coll10:886\">Louisiana Digital Library</a></p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Firemen",
+     "anchor": "firemen",
+     "summary": "After the fire of 1849 the town formed fire companies, and their February parade outshone Mardi Gras.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>In November 1849 a devastating fire swept through Baton Rouge, destroying 20% of the town. Citizens organized to fight fires more effectively. They bought two small hand engines, forming the Washington Fire Company No. 1 and the Independence Fire Company No. 2. From the 1870s to 1900 the annual Fireman’s Parade held on February 22 was the grandest holiday in Baton Rouge, celebrated even more lavishly than Mardi Gras. Wives and daughters made decorations for the floats representing the fire companies. Various social and fraternal organizations joined the parade.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Fire company notice, 1843",
+     "anchor": "fire-company-notice-1843",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "fire-company-notice.jpg",
+       "caption": "<p>“Washington Fire Company No. 1, Notice of Washing of Fire Truck, 1843,” A. S. Herron Letter. LLMVC, Miscellaneous Collection. Andrew D. Lytle, Photograph “Early Firemen.” LLMVC, Andrew D. Lytle Photograph Collection.</p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Playbill, 1864",
+     "anchor": "playbill-1864",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "playbill-academy-hall-1864.jpg",
+       "caption": "<p>“Playbill, Academy Hall, May 19, 1864.” LLMVC, Eugene M. Violette Collection.</p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "In the case",
+     "anchor": "in-the-case-4",
+     "summary": "Everything shown in this case in 1999, pictured here or not.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<ul><li><em>Frank Marion Uter.</em> <em>A History of the Catholic Church in Baton Rouge, 1792–1992</em>. Baton Rouge: St. Joseph Cathedral, 1992. <em>LLMVC BX1418 B28 U83 1992.</em></li><li><em>“Programme of the Annual Closing Exercises of the Collegiate Institute, 1887”</em> <em>LLMVC, William S. Hamilton Papers.</em></li><li><em>“German Benevolent Society Constitution and Bylaws, 1851.”</em> <em>LLMVC, Gertrude Saucier and Family Papers</em></li></ul>"
+      }
+     ]
+    }
+   ],
+   "display": "wall",
+   "lead_caption": "<p><strong>Washington Fire Company No. 1 in the Firemen’s Parade, 1890s.</strong><br>Andrew D. Lytle, photographer. Andrew D. Lytle Collection, Louisiana and Lower Mississippi Valley Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p15140coll12:718\">Louisiana Digital Library</a></p>"
+  },
+  {
+   "title": "Transportation and Progress",
+   "anchor": "transportation",
+   "lead": "lytle-texas-pacific-office.jpg",
+   "focus": "center",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "Oil on the river",
+     "anchor": "oil-on-the-river",
+     "summary": "Standard Oil’s refinery of 1909 shaped the city as much as the river had.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Baton Rouge has been a port city since its beginning. Author Charles East states that the Baton Rouge story goes from an “Indian site on the banks of the river to the booming commercial and industrial city of the [eighteen-] nineties—a city shaped by innumerable twists and turns of history, but perhaps by none more crucial than Standard Oil’s decision to build a refinery here in the early 1900s.” The petrochemical industry has dominated the banks of the Mississippi River since 1909, when the Standard Oil Company opened its refinery in Baton Rouge.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Standard Oil’s plant",
+     "anchor": "standard-oils-plant",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "postcard-standard-oil.jpg",
+       "caption": "<p><strong>View of Standard Oil Co.’s plant, Baton Rouge, 1907–1929.</strong><br>Postcard. Louisiana Postcard Collection, Louisiana and Lower Mississippi Valley Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p16313coll10:1747\">Louisiana Digital Library</a></p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Fresh water harbor",
+     "anchor": "fresh-water-harbor",
+     "summary": "The “greatest of fresh water harbors” got its Municipal Dock in 1926.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>In the 1920s, the city was known as the “greatest of fresh water harbors.” Ships docked at the foot of Third Street until 1926, when the Baton Rouge Municipal Dock was completed at a cost of $550,000. The dock was located where the Mississippi River Bridge meets the eastern shore.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Greatest of fresh water harbors",
+     "anchor": "greatest-of-fresh-water-harbors",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "fresh-water-harbors.jpg",
+       "caption": "<p>Baton Rouge Chamber of Commerce. <em>Baton Rouge, Louisiana: The Greatest of Fresh Water Harbors</em>. Baton Rouge: Ramires-Jones Printing Co., 1920s. LLMVC F379 B33 B36.</p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Railroads",
+     "anchor": "railroads",
+     "summary": "A railroad of 1857 died with the war; the line to New Orleans in 1883 brought prosperity back.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Limited rail transport came close to Baton Rouge in 1857. Private subscriptions and a $50,000 bonus from the city of Baton Rouge paid for the construction of the Baton Rouge, Grosse Tete, and Opelousas Railroad to serve the large sugar plantations west of the river. The rails ran only from Port Allen to Grosse Tete. Despite the issuance of stock certificates in 1867, the railroad did not survive the Civil War. Southern Pacific purchased its rails and rolling stock and took them away for use elsewhere.</p><p>In 1883 prosperity returned to Baton Rouge with the establishment of the New Orleans &amp; Mississippi Valley Railroad, which connected the city to New Orleans. By 1940 Baton Rouge was connected by rail to all parts of the country.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Railroad stock, 1867",
+     "anchor": "railroad-stock-1867",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "railroad-stock-certificate-1867.jpg",
+       "caption": "<p>The Baton Rouge, Grosse Tete and Opelousas Railroad Stock Certificate, 1867. LLMVC, James O. Fuqua Papers Collection.</p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Electric streetcar, 1898",
+     "anchor": "electric-streetcar-1898",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "lytle-streetcar-lafayette.jpg",
+       "caption": "<p><strong>Electric streetcar on Lafayette Street between Third and Convention Streets, 1898.</strong><br>Andrew D. Lytle, photographer. Andrew D. Lytle Collection, Louisiana and Lower Mississippi Valley Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p15140coll12:140\">Louisiana Digital Library</a></p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Bridge and highway",
+     "anchor": "bridge-and-highway",
+     "summary": "The Mississippi River bridge of 1940 and Interstate 10 turned the city toward the road.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Although Baton Rouge is still a railroad town, highways have gradually replaced the railroad as carriers of people and freight. Not until 1940, however, was a bridge built across the Mississippi River at Baton Rouge. The combined highway and railroad bridge, started in 1937, cost $10 million and is 2.5 miles long. It was only the second bridge in the state to cross the Mississippi; the first was in New Orleans. In the 1960s construction began on a “new” Mississippi River bridge to connect Interstate Highways 10 and 110. Now one of the busiest interstate highways in the nation, I-10 dominates transit in the city.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Taking to the air",
+     "anchor": "taking-to-the-air",
+     "summary": "From the Grand Aviation Meeting of 1911 to Harding Field and the Metropolitan Airport.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>An invitation to the Grand Aviation Meeting in 1911 sponsored by the Baton Rouge Board of Trade shows a group determined to bring the latest technology to Baton Rouge. From 1911 to 1941 only private planes flew in or out of the city. World War II brought the construction of Harding Field, a fighter-training base north of town. When the war ended, the city took possession of the airbase, which became a commercial facility renamed Ryan Airport. Today it is known as the Baton Rouge Metropolitan Airport and is serviced by four carriers.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Aviation meeting, 1911",
+     "anchor": "aviation-meeting-1911",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "aviation-meeting-1911.jpg",
+       "caption": "<p>Baton Rouge Board of Trade, Aviation Meeting, 1911. LLMVC, Imprints Collection.</p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "In the case",
+     "anchor": "in-the-case-5",
+     "summary": "Everything shown in this case in 1999, pictured here or not.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<ul><li><em>Standard Oil Postcard.</em> <em>LLMVC, Baton Rouge Postcards Picture Collection</em></li><li><em>Esso Standard Oil Company.</em> <em>The Story of the Baton Rouge Refinery </em>. Baton Rouge, LA: The Company, [1948?] <em>LLMVC HD9569 E7 E78.</em></li><li><em>Jasper Ewing, Photograph “Third Street,” (1940s?).</em> <em>LLMVC, Jasper Ewing Photographs.</em></li></ul>"
+      }
+     ]
+    }
+   ],
+   "display": "wall",
+   "lead_caption": "<p><strong>Texas &amp; Pacific Railroad ticket office, 411 Third Street, 1890s.</strong><br>Andrew D. Lytle, photographer. Andrew D. Lytle Collection, Louisiana and Lower Mississippi Valley Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p15140coll12:573\">Louisiana Digital Library</a></p>"
+  },
+  {
+   "title": "Baton Rouge Women",
+   "anchor": "women",
+   "lead": "ua-style-show-1956.jpg",
+   "focus": "center",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "The first women",
+     "anchor": "the-first-women",
+     "summary": "A Spanish census of 1782 counts 75 women in the district; by 1825 Madame Legendre kept the town’s largest inn.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Native American women who inhabited the Baton Rouge area before Europeans invaded were food gatherers for their tribes. We know little else about their lives. Nor do we know if women, either white or African-Americans, were part of the Dartaguette settlement established in 1718. A document entitled “General Status of the Whites, Freed-Persons, and Slaves in the District of Baton Rouge for the Year 1782,” in the <em>Papeles Procedentes de Cuba </em>, lists 30 white females, 44 black female slaves, and one free female of color as residents of Baton Rouge. The first marriage recorded in Baton Rouge occurred January 15, 1793, when Genevieve Dulat wed a Spaniard. Early Baton Rouge businesswomen included Madame Legendre, who in 1825 owned the town’s largest inn. Many white Baton Rouge women owned slaves before the Civil War.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Schooling",
+     "anchor": "schooling",
+     "summary": "Convents and female institutes taught the well-to-do; segregation kept African-American women out until the 1960s.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>In early Baton Rouge, education for women was only for the few. Convent schools and private female institutes for the well-to-do were established in the antebellum period, but formal education was not readily available to young women of modest means. From 1890 to 1910, the sisters of St. Joseph ran an orphanage, an academy, and a commercial laundry to support them. When three public schools were established in Baton Rouge in 1848, one was for girls. None of these schools admitted African-Americans, who until the 1960s all faced the barrier of segregation in obtaining an education.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Female Institute, 1837",
+     "anchor": "female-institute-1837",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "female-institute-1837.jpg",
+       "caption": "<p>Advertisement for Baton Rouge Female Institute, 1837. LLMVC, John Laycock and Family Papers.</p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Women at LSU",
+     "anchor": "women-at-lsu",
+     "summary": "LSU admitted women in 1906, and the Comus Edic, its first musical group for women, began in 1915.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>LSU, founded in 1859 and located in Baton Rouge since 1869, did not admit women until 1906, when seventeen female graduates of Baton Rouge High School were enrolled. When the campus moved to its present location in 1926, the women’s classes continued to be held separately, at the old campus downtown. Nevertheless, women managed to become a part of campus life. The first musical organization for women students at LSU was the “Comus Edic,” established in 1915.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Comus Edic",
+     "anchor": "comus-edic",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "comus-edic.jpg",
+       "caption": "<p>“LSU Comus Edic,” photograph, 1916–1917. LLMVC, Henry Wallace Stopher Papers.</p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Voices and pens",
+     "anchor": "voices-and-pens",
+     "summary": "Orene Muse Huckabay on the radio, The Register’s hats, and Louisiana’s first poet laureate.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>The first woman radio personality in Baton Rouge was Orene Muse Huckabay in the 1940s who later worked in local television. She and her husband started the social newspaper <em>The Register </em>, which continues to chronicle social events in the city today under the name <em>InRegister </em>. The paper also features articles about prominent women, such as internationally known nutritionist Dr. Ruth Patrick. The trademark of the publication’s editors, large hats, was begun by Mrs. Huckabay’s “Mad Hatter’s Brunch,” which raised funds for charity.</p><p>Women writers have made their mark as well. Poet and educator Dr. Pinkie Gordon Lane was the first Louisiana Poet Laureate; novelist Joyce Elaine Hooper Corrington, author of A Project Named Desire, called Baton Rouge home for a number of years.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "In the case",
+     "anchor": "in-the-case-6",
+     "summary": "Everything shown in this case in 1999, pictured here or not.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<ul><li><em>William Octave Hart. Rights of Women in Louisiana. New Orleans: Andree &amp; Elliott, 1910. LLMVC Rare PS664 L8 L68.</em></li><li><em>Dorothy H. Brown and Barbara C. Ewell, eds. Louisiana Women Writers: New Essays and a Comprehensive Bibliography. Baton Rouge: LSU Press, 1992. LLMVC PS266 L8 L68 1992.</em></li><li><em>InRegister:Baton Rouge’s city/social publication. Baton Rouge, LA: Horn Media Consultants. Vol. 10, No. 1, July 1998. Photograph ca. 1996 by Mike LeBlanc</em></li></ul>"
+      }
+     ]
+    }
+   ],
+   "display": "wall",
+   "lead_caption": "<p><strong>Style show for the 50th anniversary of women on campus, 1956.</strong><br>LSU Photograph Collection, University Archives. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-ua-uap:1632\">Louisiana Digital Library</a></p>"
+  },
+  {
+   "title": "The Changing Face of Baton Rouge",
+   "anchor": "changing-face",
+   "lead": "winans-aerial-1947.jpg",
+   "focus": "center",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "A town of 682",
+     "anchor": "a-town-of-682",
+     "summary": "Spanish Town and Beauregard Town were laid out by 1805, but early Baton Rouge was built in a hurry.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>By 1788 Baton Rouge had a population of 682. By 1805 the city’s two oldest subdivisions, “Spanish Town” and “Beauregard Town,” had been laid out. By 1811 the population was 1,463, but the unpaved and unlighted streets only had scattered, shabbily constructed buildings. The population had grown little by 1840, when a census listed only 2,269 residents. According to historian Frederick Allen, “The growth of Baton Rouge, previous to its selection as the site for state institutions, had been of the mushroom type, ill-planned, hurriedly erected, makeshift as to use, and rapidly deteriorated; there was no thought of the possibility of future usefulness.”</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Plan of Beauregard Town, 1806",
+     "anchor": "plan-of-beauregard-town-1806",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "latour-plano-1806.jpg",
+       "caption": "<p><strong>Arsène Lacarrière Latour, Plano de la Villa de Baton Rouge, laid out on Elias Beauregard’s land in November 1806; copy certified 1809.</strong><br>William Waller Survey Collection, Louisiana and Lower Mississippi Valley Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p16313coll57:130\">Louisiana Digital Library</a></p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Capital city",
+     "anchor": "capital-city",
+     "summary": "Becoming the capital in 1847 brought growth; the war brought decline, and the railroad of 1883 revival.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>In 1847, when the state legislature named Baton Rouge the state capital, the city sought to improve its image. The legislature, then controlled by fundamentalist Protestants, wanted to move the government out of sin city (New Orleans). The new “industry” of government brought new residents to Baton Rouge, so by 1850 the population was 3,905.</p><p>Devastated by the Civil War, Baton Rouge went into decline. In 1880 the population was only 7,197. The main area of the city was still situated between the Mississippi River, Capitol Lake, South Boulevard, and Fifth Street, with little physical expansion evident. Streets were unpaved. Finally in 1883, renewed prosperity rolled into town with the establishment of the New Orleans &amp; Mississippi Valley Railroad, which connected the city to New Orleans.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Paving the town",
+     "anchor": "paving-the-town",
+     "summary": "Streetcars came in 1893, and Mayor Robert A. Hart’s bonds paved streets and built schools.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>In 1893 a municipal streetcar line circled the town. Wealthy property owner and real-estate developer Robert A. Hart, elected mayor in 1898, is credited with encouraging positive growth and civic improvements. Local property owners were persuaded to approve bond issues for a new city hall, a school, and the paving of Third and Main streets. Bond issues in 1905, 1912, and 1914 paid for more paving, the construction of a white high school and a black public school, the purchase of the old state penitentiary buildings, plus sewage and drainage works.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "The energetic decades",
+     "anchor": "the-energetic-decades",
+     "summary": "Oil jobs from 1917 and wartime booms made Baton Rouge believe it was “recession-proof.”",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>World War I had little effect on Baton Rouge, but an economic upturn for the city followed the war. The oil industry provided 3,000 jobs in 1917. The economy continued to grow in a positive way well into the national depression of the 1930s. Baton Rougeans came to believe that their economy was “recession-proof.” World War II and its aftermath were boom times, with continued growth in the local petrochemical industry and the Port of Baton Rouge. Indeed, historian Mark Carleton named the 1940s through the 1970s “The Energetic Decades.” But while Baton Rouge’s communities were growing, downtown was losing its businesses to suburban malls.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Bust and plans",
+     "anchor": "bust-and-plans",
+     "summary": "The oil bust of the 1980s tested the city; plan after plan has tried to revive downtown.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>City leaders remained optimistic. A 1972 comprehensive plan for Baton Rouge projected a future community for 425,000 people. In 1980 the population was around 219,000. No one predicted the devastating events that would hit the so-called “recession-proof” petrochemical industry during the decade. As the oil patch dried up a large building boom in the city faltered. Voters defeated proposals for capital improvement tax elections in 1982; in 1986 the unemployment rate soared to 10.7%. Although it was not as severely affected as the rest of the state, Baton Rouge’s population declined, banks closed, and fewer building permits were issued. The current population is still only 231,000.</p><p>Beginning in 1987–88 the Baton Rouge economy improved and diversified. A new downtown development plan was presented, called “Baton Rouge 2000.” Later the “Horizon Plan” was developed for the Baton Rouge area. The most recent planning effort, “PLAN Baton Rouge,” focuses on revitalizing downtown. Many of the same dreams and plans to resurrect the downtown area recycle through all these programs, past and present.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "In the case",
+     "anchor": "in-the-case-7",
+     "summary": "Everything shown in this case in 1999, pictured here or not.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<ul><li><em>Charles East. A Walking Tour of Historic Baton Rouge. Baton Rouge: Committee for the Preservation of the Port Hudson Battlefield, c1963. LLMVC F379 B33 E3.</em></li><li><em>Baton Rouge City-Parish Planning Commission. Comprehensive Plan for Baton Rouge: A Future Community for 425,000 Persons. Baton Rouge, 1972. LLMVC HT168 B33 E218.</em></li><li><em>Baton Rouge Office of the Mayor-President. Baton Rouge 2000 Update: A Development Program for the Downtown Development District. Baton Rouge, 1987. LLMVC HT168 B33 B36 1987.</em></li><li><em>Wilbur Smith and Associates. Horizon Plan Summary Comprehensive Land Use and Development Plan: City of Baton Rouge. Houston: Wilbur Smith Associates, 1991–1992. HT168 B33 W54 1991b.</em></li><li><em>Web pages from PLAN Baton Rouge and the Advocate.</em></li></ul>"
+      }
+     ]
+    }
+   ],
+   "display": "wall",
+   "lead_caption": "<p><strong>Baton Rouge looking south from North Third Street near Choctaw Drive, March 14, 1947.</strong><br>Fonville Winans, photographer. Fonville Winans Aerial Views of Baton Rouge, Louisiana and Lower Mississippi Valley Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p15140coll46:23\">Louisiana Digital Library</a></p>"
+  },
+  {
+   "title": "African-Americans in Baton Rouge",
+   "anchor": "african-americans",
+   "lead": "postcard-southern-university.jpg",
+   "focus": "center",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "Slavery and segregation",
+     "anchor": "slavery-and-segregation",
+     "summary": "Enslaved people were part of Baton Rouge from 1718; freedom after the war brought little equality.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Twenty-five African slaves and two whites resided at the first settlement in Baton Rouge, founded in 1718. By 1860 the white population of Baton Rouge was 5,429, with a slave population of 1,247. As the hand-written bill of sale shows, slaves were bought and sold among the white citizens. During the Civil War, slaves brought within Union territory were known as contrabands. A broadside notes rules for them. After the Civil War, the number of African-Americans increased in Baton Rouge (52% in 1865 and 59% by 1880), but their lives barely improved. Rigid segregation was enforced throughout the century. Even blacks serving in the state legislature were banned from local business establishments. Stereotypical images of African-Americans, such as the Longwood Plantation advertisement, were common. No public education was available for black children until 1905. Only federal desegregation suits in the last half of the 20th century forced equal public education for African-Americans in Baton Rouge.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Bill of sale, 1844",
+     "anchor": "bill-of-sale-1844",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "bill-of-sale-1844.jpg",
+       "caption": "<p>“Bill of Sale, 1844.” LLMVC, French-Edwards Family Papers.</p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Longwood Plantation advertisement",
+     "anchor": "longwood-plantation-advertisement",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "longwood-plantation-ad.jpg",
+       "caption": "<p>“Longwood Plantation Advertisement,” undated. LLMVC, Sabin Gianelloni, Sr. Papers.</p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Southern University",
+     "anchor": "southern-university",
+     "summary": "Southern moved to Baton Rouge in 1914, onto Scott’s Bluff, where the red stick was said to stand.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Southern University was authorized by the state constitution in 1879 but did not begin to prosper until 1914, when it moved from New Orleans to Baton Rouge. Its first president was Dr. Joseph S. Clark, who served from 1914 to 1938. Southern’s campus includes Scott’s Bluff where the “red stick” was said to have been seen by the French explorer Iberville. Today Southern enrolls 16,000 students and is the nation’s largest predominately African-American institution.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Integrating LSU",
+     "anchor": "integrating-lsu",
+     "summary": "A. P. Tureaud, Jr. enrolled by court order in 1953; full integration came in 1964, then a run of firsts.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Although some African-American students tried to enroll in LSU in 1946, the university did not admit African-Americans until the 1950s. In 1953 A. P. Tureaud, Jr. enrolled under court order, but his enrollment was cancelled when a higher court overturned the ruling. His case was ultimately decided by the U.S. Supreme Court. Tureaud returned to LSU in 1956. A classroom building on the LSU campus is named for his father, the late A. P. Tureaud, Sr., a noted Civil Rights leader.</p><p>The federal courts mandated full integration for LSU in 1964. The first African-American graduate of the LSU Law School was former New Orleans mayor, the late Ernest N. “Dutch” Morial. Kerry Pourciau was the first African-American to serve as Student Government President (1972–73); Lora O. Hinton, Jr. became the first African-American varsity football letterman in 1973–74; and in 1998–99, Herb Tyler was LSU’s first African-American football quarterback. The first black woman to attend LSU was Freya Anderson Rivers, in 1964. The first to earn a Ph.D. from LSU was poet and educator Pinkie Gordon Lane.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Lora Hinton",
+     "anchor": "lora-hinton",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "ua-lora-hinton.jpg",
+       "caption": "<p><strong>LSU running back Lora Hinton (number 24), 1972–1975.</strong><br>LSU Photograph Collection, University Archives. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-ua-uap:2159\">Louisiana Digital Library</a></p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Leaders and voices",
+     "anchor": "leaders-and-voices",
+     "summary": "Representative Sharon Weston, publisher Willis V. Reed and the singer Johnny Adams.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Sharon Weston is the first African-American woman elected to the Louisiana State Legislature for East and West Baton Rouge parishes. She represents House District 29. First elected in 1991, Weston chairs the Municipal, Parochial, and Cultural Affairs Committee in the House, is a member of the Commerce and Executive committees, and chairs the East Baton Rouge Parish Legislative Delegation. In 1997 the Baton Rouge Business Report cited her as one of the “Top 25 Most Influential Women for 1997 - Leading the Way in the Capital City.”</p><p>Current publisher of the <em>Baton Rouge Post </em>, Willis V. Reed, first worked as a reporter for the paper in 1936. In 1983 Reed decided to revive the paper, which had been dormant for a number of years. In Reed’s opinion “no other local paper adequately covers the activities and concerns of African-Americans in Baton Rouge.” His paper is known for its balanced commentaries and criticisms, regardless of color, political position, or influence in the community.</p><p>African-American music and musicians play a strong part in Baton Rouge’s cultural life. Johnny Adams, honored posthumously, was among the twelve recipients of the Rhythm &amp; Blues Foundation’s 1999 Pioneer Awards. Known as one of the last of the great blues and ballad singers, he was widely regarded as one of the finest singers associated with New Orleans R&amp;B and jazz.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "In the case",
+     "anchor": "in-the-case-8",
+     "summary": "Everything shown in this case in 1999, pictured here or not.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<ul><li><em>Broadside “No Contrabands,” Provost Marshal’s Office, 1863. LLMVC, Baton Rouge Civil War Broadsides.</em></li><li><em>Lora O. Hinton, Jr. Varsity Letterman Plaque, 1973–1975. University Archives.</em></li><li><em>Pinkie Gordon Lane. Girl at the Window. Baton Rouge: LSU Press, 1991. LLMVC PS3562 A4845 G5 1991.</em></li><li><em>Baton Rouge Post. Courtesy of Willis V. Reed.</em></li><li><em>Johnny Adams. CD. Courtesy of Jo Jackson.</em></li><li><em>Photograph of Sharon Weston. Courtesy of Sharon Weston.</em></li></ul>"
+      }
+     ]
+    }
+   ],
+   "display": "wall",
+   "lead_caption": "<p><strong>New Dining Hall, Southern University, Baton Rouge, 1914–1946.</strong><br>Postcard. Louisiana Postcard Collection, Louisiana and Lower Mississippi Valley Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p16313coll10:988\">Louisiana Digital Library</a></p>"
+  },
+  {
+   "title": "The Businesses of Baton Rouge",
+   "anchor": "businesses",
+   "lead": "lytle-reymond-store.jpg",
+   "focus": "center",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "Madame Legendre’s inn",
+     "anchor": "madame-legendres-inn",
+     "summary": "Lafayette’s visit of 1825 left his name on a street and on one of the city’s oldest buildings.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>When the Marquis de Lafayette visited Baton Rouge in 1825, the only place large enough to hold a reception for him was Madame Legendre’s two-story inn on the corner of Florida and Fourth Streets. After his visit, Second Street was renamed Lafayette Street and one of the oldest remaining buildings, the former law office of Judge Charles Tessier (served 1815–1845), was named the Lafayette Building. It was placed on the National Register of Historic Places in 1978.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Merchants and lawmakers",
+     "anchor": "merchants-and-lawmakers",
+     "summary": "Stores, banks, the penitentiary and the City Market grew up around the town and its legislators.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>In the 1830s Baton Rouge boasted ten mercantile establishments in addition to several branches of New Orleans’ banks and four hotels. A state penitentiary was established in town. The warden’s house on the corner of Seventh and Laurel Streets is one of the few antebellum buildings still remaining in Baton Rouge. The Harney House was built in the 1840s on Lafayette Street to accommodate the legislators. Then, as now, Baton Rouge had an abundance of attorneys.</p><p>The City Market was constructed in 1859 between St. Louis and St. Ferdinand Streets, where the original building stood until 1954. In 1869 the Louisiana State Seminary of Learning came to Baton Rouge. Although not large then, LSU is now one of Baton Rouge’s largest enterprises.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Tunnard’s carriage factory",
+     "anchor": "tunnards-carriage-factory",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "tunnard-carriage-factory.jpg",
+       "caption": "<p><strong>William F. Tunnard carriage and harness factory, Main and Church Streets, about 1855.</strong><br>Ambrotype. William F. Tunnard Carriage and Harness Factory Ambrotype, Louisiana and Lower Mississippi Valley Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-brt:13\">Louisiana Digital Library</a></p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Third Street",
+     "anchor": "third-street",
+     "summary": "In the 1890s Third, Main and Lafayette Streets were the center of business.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>In the 1890s Third Street, Main Street, and Lafayette Street were the center of business. The Verandah Hotel and Saloon, the Reymond Store, Wong Bing’s Chinese Laundry, the White Elephant Saloon, and the offices of the local newspaper, the <em>Advocate</em>,could be found in that area. In 1900 forty-four cane growers and sugar manufacturers gave their mailing address as Baton Rouge.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Sugar refinery, 1901",
+     "anchor": "sugar-refinery-1901",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "lytle-sugar-refinery.jpg",
+       "caption": "<p><strong>Baton Rouge Sugar Refinery, 1901.</strong><br>Andrew D. Lytle, photographer. Andrew D. Lytle Collection, Louisiana and Lower Mississippi Valley Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p15140coll12:39\">Louisiana Digital Library</a></p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Standard Oil",
+     "anchor": "standard-oil",
+     "summary": "The refinery turned a farming town industrial; the oil bust of the 1980s showed it wasn’t recession-proof.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>The Standard Oil Refinery came to Baton Rouge in 1909 when Standard Oil Company wanted an “economical outlet” for their crude production. The company changed Baton Rouge’s economic basis from agriculture to industry, and the town prospered. In 1910 Standard employed 700 people. Seventy-two years later it employed 3,000. Although Baton Rougeans believed the oil industry to be “recession-proof,” the 1980s saw a drop in the value of oil that caused much economic suffering.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "A wider economy",
+     "anchor": "a-wider-economy",
+     "summary": "Since the 1980s, services, hospitals, government and corporate headquarters.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Since the 1980s Baton Rouge’s economy has diversified significantly, adding hundreds of service industries (including two casinos) and businesses. The federal government has established a postal processing center here. Health-related complexes, including the Baton Rouge General Medical Center, Our Lady of the Lake Regional Medical Center, and Woman’s Hospital, have grown to employ hundreds of workers. While some businesses, such as the United Companies, have suffered recent setbacks, Baton Rouge is still the home of numerous corporate headquarters.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "In the case",
+     "anchor": "in-the-case-9",
+     "summary": "Everything shown in this case in 1999, pictured here or not.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<ul><li><em>Tessier Building Papers.</em> <em>LLMVC, Imprint Collection.</em></li><li><em>Fraenkel’s Baton Rouge Directory, 1890.</em> <em>Baton Rouge, 1890. LLMVC F379 B33 A18 1890.</em></li><li><em>Baton Rouge, the Future Manufacturing Metropolis of the Awakened South.</em> <em>Baton Rouge: The Chronicle, 1915. LLMVC Flat F379 B33 C53.</em></li><li><em>Bliven, Bruce.</em> <em>Baton Rouge, a Great Refinery Produces for War.</em> <em>Illustrations in color by Adolph Dehn. [n.p. : Standard Oil Co. of La., 1944?] LLMVC HD 9569 S82 B55 1944.</em></li><li><em>David King Gleason.</em> <em>Baton Rouge.</em> <em>Baton Rouge: LSU Press, 1991.</em> <em>LLMVC Oversize F379 B33 G57 1991.</em></li></ul>"
+      }
+     ]
+    }
+   ],
+   "display": "wall",
+   "lead_caption": "<p><strong>S. I. Reymond Store at the corner of Main and Third Streets, about 1900.</strong><br>Andrew D. Lytle, photographer. Andrew D. Lytle Collection, Louisiana and Lower Mississippi Valley Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p15140coll12:468\">Louisiana Digital Library</a></p>"
+  },
+  {
+   "title": "Histories of Baton Rouge",
+   "anchor": "histories",
+   "whole": true,
+   "lead": "lytle-front-street-1861.jpg",
+   "focus": "center",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "River Capital",
+     "anchor": "river-capital",
+     "summary": "The exhibition rests on Mark Carleton and Marshall Miller’s illustrated history of 1981.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>The exhibition “From Red Stick to River Capital: Three Centuries of Baton Rouge History” is based on the city’s most famous history, <em>River Capital: An Illustrated History of Baton Rouge </em>, by Mark Thomas Carleton (1935–1995) and Marshall Stone Miller, Jr. (1938–1991). Dr. Carleton authored the text of the book, and Mr. Miller was responsible for the pictorial research.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Visitors",
+     "anchor": "visitors",
+     "summary": "Fortescue Cuming in 1810 found a “dirty little town,” and gumbo too slimy to eat.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Visitors have been writing about Baton Rouge since its earliest days. An early description in English was offered by Fortescue Cuming in 1810. He reported “a half dozen tolerably good frame (or wooden) houses scattered on an extensive plain surrounded on three sides by woods… while a dirty little town of 60 cabins crouded [sic] together in a narrow street on the river bank.” He found the gumbo served him by Madame Legendre to be a “most awkward dish for a stranger,” because the “ocroc” (okra) makes it “so ropy and slimy as to make it difficult with either knife, spoon or fork, to carry it to the mouth, without the plate and mouth being connected by a long string.”</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Boosters",
+     "anchor": "boosters",
+     "summary": "A pageant of 1923 put the city’s progress on parade, baby judging and all.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Boosterism has also colored some local histories. Joseph St. Clair Favrot (1872–1943) composed a “Patriotic Pageant and Homecoming Celebration” in 1923, when a “high degree of civic spirit [made] Louisiana’s capital city a name to conjure with in all that stands for progress and substantial advancement.” The pageant included a “Procession of Emblematic Floats” and “elaborate scenic productions, with music provided by the Stanocola (Standard Oil Company of Louisiana) and Louisiana State University bands. Act III, “The Golden Future” included a baby judging contest.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Historians",
+     "anchor": "historians",
+     "summary": "Prichard, Meyers and Gleason each wrote the city down; a critical history is still needed.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Walter Prichard wrote what may be considered the first historical analysis of Baton Rouge. His <em>History of Baton Rouge and Its People </em>was published by the States Historical Publishing Company in 1933. Rose Meyers wrote the first thorough study of the early life of the town, published in honor of the bicentennial of the United States. David King Gleason’s Baton Rouge offers a different kind of documentation with stunning color photography of life in the city in the last decades of the 20th century. Although his life was tragically cut short by a plane crash in 1992, Gleason’s photographic archive is preserved in the LSU Libraries’ Special Collections.</p><p>Other studies of Baton Rouge can be found in articles in the publications of the Louisiana Historical Association and in books about Louisiana. Numerous studies of various facets of Baton Rouge history have been published, including histories of local churches, Harding Field, the educational system and universities, Magnolia Mound, and social organizations. A critical history of Baton Rouge, however, is still needed to bridge the gap between Meyers and Carleton.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "In the case",
+     "anchor": "in-the-case-10",
+     "summary": "Everything shown in this case in 1999, pictured here or not.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<ul><li><em>Fortescue Cuming. Sketches of a Tour to the Western Country,… Commenced… in…1807, and con-cluded in 1809…. Together with a Notice of an Expedition Through Louisiana. Pittsburgh: Cramer, Spear &amp; Eichbaum, 1810. LLMVC Rare F518 C97.</em></li><li><em>Joseph St. Clair Favrot….7th Port Pageant. Homecoming Celebration. April 15-21, Baton Rouge. Baton Rouge: Ramires-Jones Printing Co., 1923. LLMVC F379 B33 F28.</em></li><li><em>Rose Meyers. A History of Baton Rouge, 1699–1812. Baton Rouge: LSU Press, 1999.</em></li><li><em>Mark T. Carleton. River Capital: An Illustrated History of Baton Rouge. Woodland Hills, CA: Windsor Publications, 1981. LLMVC F379 B33 C35.</em></li><li><em>David King Gleason. Baton Rouge. Baton Rouge: LSU Press, 1991. LLMVC Oversize F379 B33 G57 1991.</em></li></ul>"
+      }
+     ]
+    }
+   ],
+   "display": "wall",
+   "lead_caption": "<p><strong>Front Street from the Mississippi River, with the Capitol at the right, about 1861.</strong><br>Andrew D. Lytle, photographer. Andrew D. Lytle Collection, Louisiana and Lower Mississippi Valley Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p15140coll12:690\">Louisiana Digital Library</a></p>"
+  },
+  {
+   "title": "LSU in Baton Rouge",
+   "anchor": "lsu",
+   "lead": "lytle-cadets-pentagon.jpg",
+   "focus": "center",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "From Pineville to Baton Rouge",
+     "anchor": "from-pineville-to-baton-rouge",
+     "summary": "After its building burned in 1869 the seminary moved to Baton Rouge and became LSU; the Boyd brothers saw it through.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>After the building that housed the Louisiana State Seminary of Learning at Pineville burned in 1869, Baton Rouge became the institution’s new home. By 1870 the legislature had changed the name of the school to the Louisiana State University. In 1877 it became the Louisiana State University and Agricultural and Mechanical College. David French Boyd, a member of the first faculty in 1860 and a former Confederate officer, was the first president of LSU in Baton Rouge. He served from 1870 to 1880 and was succeeded by his brother, Thomas Duckett Boyd, who served from 1896 to 1927. The Boyds’ leadership helped LSU survive and grow. From 1924 through 1927 Thomas Boyd oversaw the planning and building of the new campus where LSU resides today.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Dedicating the new campus",
+     "anchor": "dedicating-the-new-campus",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "ua-boyd-dedication-1926.jpg",
+       "caption": "<p><strong>President Thomas D. Boyd speaking at the dedication of the new campus, April 30, 1926.</strong><br>Jasper G. Ewing, photographer. LSU Photograph Collection, University Archives. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-ua-uap:1344\">Louisiana Digital Library</a></p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Dedication program, 1926",
+     "anchor": "dedication-program-1926",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "lsu-dedication-program-1926.jpg",
+       "caption": "<p>Program, 1926, LSU New Campus Dedication. University Archives.</p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Flagship",
+     "anchor": "flagship",
+     "summary": "Research, land-grant and sea-grant status, and half a billion dollars a year for the local economy.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>The flagship institution of the state, LSU is designated by the Carnegie Foundation as a Research University I, placing it in the top 2% of the nation’s colleges and universities. The distinction is shared by only 45 public and 25 private institutions. It is one of only 25 universities nationwide to hold both land-grant and sea-grant status. Faculty research is supported by its nationally known library, the largest in the state, and by a supercomputer that places LSU among the top 20 universities in the country in terms of computer capacity.</p><p>Throughout its 139-year history, LSU has served the people of Louisiana, the region, the nation, and the world through extensive, multipurpose programs encompassing instruction, research, and public service. Today LSU is a cosmopolitan community of more than 35,000 faculty, staff, and students from every state and more than 100 countries. LSU annually injects more than a half-billion dollars into the Baton Rouge economy.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Tigers",
+     "anchor": "tigers",
+     "summary": "Twelve of LSU’s 20 teams ranked in the nation’s top 25 in 1997–98.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>LSU’s athletic program has traditionally been strong in all its varsity sports. Of LSU’s 20 athletic teams, 12 ranked in the nation’s top 25 during the 1997–98 athletic year; 5 finished the season in the nation’s top 5 for their respective sports. LSU’s Athletic Department generated over $21 million in revenue in 1997–98.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "The new stadium",
+     "anchor": "the-new-stadium",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "ua-stadium-postcard.jpg",
+       "caption": "<p><strong>Louisiana State University Stadium, postcard, 1925–1936.</strong><br>LSU Photograph Collection, University Archives. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-ua-uap:1362\">Louisiana Digital Library</a></p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Faculty writers",
+     "anchor": "faculty-writers",
+     "summary": "LSU’s faculty write for scholars and, now and then, a mystery set on campus.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>LSU faculty members publish their research and writing with the LSU Press and with numerous other presses. Not all their writings are in the serious, scholarly vein. Faculty member M. K. Shuman set his entertaining and popular mystery novel <em>The Meriwether Murder </em>on the LSU campus.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Hill Memorial Library",
+     "anchor": "hill-memorial-library",
+     "summary": "Today’s Hill, built in 1925, holds Special Collections, the most comprehensive collection on Louisiana.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>The LSU Libraries holds over 2.8 million volumes. Hill Memorial Library, which houses Special Collections, was originally constructed in 1925 as the main library for the campus. It was renovated from 1983 to 1985 to house Special Collections that comprise more than 200,000 volumes, over 10 million manuscript items, and hundreds of thousands of photographic images. These holdings are the most comprehensive collection in existence relating to Louisiana, past and present.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Hill Memorial Library, 1905",
+     "anchor": "hill-memorial-library-1905",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "lytle-hill-memorial-1905.jpg",
+       "caption": "<p><strong>Hill Memorial Library on the old LSU campus, 1905.</strong><br>Andrew D. Lytle, photographer. Andrew D. Lytle Collection, Louisiana and Lower Mississippi Valley Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p15140coll12:194\">Louisiana Digital Library</a></p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "LSU calendar, 1913",
+     "anchor": "lsu-calendar-1913",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "lsu-calendar-1913.jpg",
+       "caption": "<p>LSU Calendar, 1913. Cover photo Hill Memorial Library. University Archives.</p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "In the case",
+     "anchor": "in-the-case-11",
+     "summary": "Everything shown in this case in 1999, pictured here or not.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<ul><li><em>LSU Press. Publicity Poster. “The All-Girl Football Team,” 1986. University Archives. LSU Press.</em></li><li><em>Lewis Nordan. The All-Girl Football Team. Vintage Contemporaries Ed., 1989. University Archives.</em></li><li><em>Programs: 1986, LSU Baseball; 1992–1993 Lady Tigers Basketball. University Archives.</em></li><li><em>Original building brick, ca. 1860s. Louisiana State Seminary of Learning, Pineville, LA. University Archives.</em></li><li><em>Prather Warren. Photograph “Aerial View of LSU Campus, 1997.” Courtesy of Jim Zietz.</em></li><li><em>G. D. Bently, 1904 LSU Ring. LLMVC, Nita Sims Breazeale Collection.</em></li><li><em>LSU Commencement Hop Dance Card, 1872. University Archives.</em></li><li><em>Thomas D. Boyd’s Tiger statue. c. 1920? University Archives, Presidents’ Records.</em></li><li><em>M. K. Shuman. Meriwether Murder. Courtesy of Fran Huber.</em></li><li><em>LSU Pom-pom. University Archives.</em></li></ul>"
+      }
+     ]
+    }
+   ],
+   "display": "wall",
+   "lead_caption": "<p><strong>LSU cadets in front of the Pentagon Barracks, about 1895.</strong><br>Andrew D. Lytle, photographer. Andrew D. Lytle Collection, Louisiana and Lower Mississippi Valley Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p15140coll12:232\">Louisiana Digital Library</a></p>"
+  },
+  {
+   "title": "City Politics",
+   "anchor": "politics",
+   "lead": "lytle-capitol-after-fire-1863.jpg",
+   "focus": "center",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "Town and capital",
+     "anchor": "town-and-capital",
+     "summary": "Baton Rouge was incorporated in 1817; from 1847, state politics overshadowed the city’s own.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>The four-year-old Louisiana State Legislature passed an act of incorporation for the town of Baton Rouge on January 16, 1817. The town elected its first town magistrate, William Williams, in 1818. Over the years, the city adopted various forms of government. Today Baton Rouge has a mayor-president and city council, with a consolidated city-parish government.</p><p>In 1847 state government moved to Baton Rouge. Since then, Louisiana’s colorful state politics have often overshadowed city politics. During the Civil War the state capital moved to New Orleans. Louisiana had a biracial Radical Republican government during Reconstruction, but by 1882 the state was controlled by Democrats, who were white, middle-class, male veterans of the Confederacy. Called “Bourbons” after the French royal family, these Democrats were, like their namesakes, “reactionaries, unable to forget the past or learn from it” (River Capital, p. 120).</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "The Bourbons",
+     "anchor": "the-bourbons",
+     "summary": "Democrats of the 1890s held power by shutting African Americans and poor whites out of the vote.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>During the 1890s the state was wracked by bad government and suffered from a severe national depression. Louisiana ranked last among the states in quality of public schools, services, and infrastructure. With popular dissatisfaction mounting, the Bourbon Democrats moved to assure their control of state government in 1898 by writing property-ownership and literacy requirements for voter registration, which for many years effectively prevented African-Americans and poor whites from voting. Mark Carleton wrote of this era: “In Baton Rouge, state politics assumed a quiet, businesslike, and dignified tone. Baton Rougeans liked the change because it put their own business and civic leaders in tune with each other. Baton Rouge, in fact, had become a corporate town, its values that of the emerging urban-industrial middle-class.” <em>(River Capital</em>, p. 126)</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Huey Long",
+     "anchor": "huey-long",
+     "summary": "Long took on Standard Oil and the old order, and built roads, schools and hospitals before his assassination in 1935.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Huey P. Long soon changed all that. In 1918 he was 25 years old and newly elected as north Louisiana’s representative on the State Railroad Commission. He challenged the status quo, working for the rural masses and against Standard Oil—a stance tantamount to being against Baton Rouge. Elected governor in 1928, he was impeached and tried by the state legislature in 1929, elected United States senator in 1932, and assassinated in 1935. Long brought reforms to Louisiana: paved roads, free school textbooks, better public education, and better state hospitals. His “Share the Wealth” program would have provided a free college education for all qualified students. In 1998 Louisiana instituted the TOPS program which does just that.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Huey Long’s funeral, 1935",
+     "anchor": "huey-longs-funeral-1935",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "ua-huey-long-funeral.jpg",
+       "caption": "<p><strong>Louisiana State Capitol and grounds for the funeral of Huey P. Long, September 12, 1935.</strong><br>Jasper G. Ewing, photographer. LSU Photograph Collection, University Archives. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-ua-uap:1674\">Louisiana Digital Library</a></p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Earl and Russell Long",
+     "anchor": "earl-and-russell-long",
+     "summary": "Huey’s brother Earl was twice governor; his son Russell became one of Washington’s most powerful senators.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Earl Long followed in the steps of his older brother. He was elected governor in 1948 and 1956. Huey’s son Russell B. Long was elected United States Senator in 1948 at age 29 and became one of the most powerful men in Washington during the 1960s and 1970s.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Earl K. Long",
+     "anchor": "earl-k-long",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "earl-long.jpg",
+       "caption": "<p>Photograph of Earl Long, undated, in office at State Capitol. LLMVC, Earl Long Papers.</p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "The capitols",
+     "anchor": "the-capitols",
+     "summary": "James Dakin’s Gothic statehouse, burned in 1862 and rebuilt in 1880, and Huey Long’s tower of 1932.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Baton Rouge citizens donated land for the first statehouse, designed by New York architect James Dakin. Dakin’s diary recounts difficulties encountered in the creation of this “medieval castle” in the Neo-Gothic style. Gutted by fire in 1862, the Capitol was not rebuilt until 1880. New Orleans’ architect William Freret added cast-iron turrets and changed the color of the building’s exterior. When Huey Long came to power in 1928, he wanted a state capitol taller than any other in the nation. Built by Weiss, Dreyfous and Seiferth of New Orleans and dedicated on May 16, 1932, the building punctuated the end of Beaux-Arts architectural tradition in the United States. In 1935, its grounds were overwhelmed with flowers following Huey Long’s assassination.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "The Capitol, 1904",
+     "anchor": "the-capitol-1904",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "postcard-state-capitol-1904.jpg",
+       "caption": "<p><strong>State Capitol, Baton Rouge, postcard, 1904.</strong><br>Postcard. Louisiana Postcard Collection, Louisiana and Lower Mississippi Valley Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p16313coll10:1495\">Louisiana Digital Library</a></p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "In the case",
+     "anchor": "in-the-case-12",
+     "summary": "Everything shown in this case in 1999, pictured here or not.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<ul><li><em>Postcard, Louisiana State Capitol. C. 1904. LLMVC, Baton Rouge Postcards, Picture Collection.</em></li><li><em>James Dakin Diary, 1848. LLMVC.</em></li><li><em>Philip Gould. Louisiana’s Capitols: The Power and the Beauty. Lafayette: Galerie Press, 1995. LLMVC. NA4413 B36 G68.</em></li><li><em>Bust of Huey Long. LLMVC, Huey Long Collection.</em></li><li><em>Photograph of President Lyndon Baines Johnson and Senator Russell B. Long, 196?. LLMVC, Russell B. Long Papers.</em></li><li><em>Robert Penn Warren. All The King’s Men. San Diego: Harcourt Brace, 1996. LLMVC PS3545 A748 A7 1996.</em></li><li><em>Photograph of Huey Long Funeral Flowers at State Capitol, 1935. LLMVC, Huey Long Collection.</em></li></ul>"
+      }
+     ]
+    }
+   ],
+   "display": "wall",
+   "lead_caption": "<p><strong>Louisiana State Capitol after the fire of January 1863.</strong><br>Andrew D. Lytle, photographer. Andrew D. Lytle Album Photograph Collection, Louisiana and Lower Mississippi Valley Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p15140coll12:265\">Louisiana Digital Library</a></p>"
+  },
+  {
+   "title": "Other Photographs",
+   "anchor": "other-photographs",
+   "lead": "lytle-national-cemetery-rows.jpg",
+   "focus": "center",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "National Cemetery",
+     "anchor": "national-cemetery",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "lytle-national-cemetery.jpg",
+       "caption": "<p>Andrew Lytle, “Baton Rouge National Cemetery,” n.d. The cemetery opened in 1867. Evergreens such as holly, wild peach, and bay lined its shell-covered walks. LLMVC, Andrew Lytle Photograph Collection. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p15140coll12:754\">Louisiana Digital Library</a></p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Gas-powered tractor",
+     "anchor": "gas-powered-tractor",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "gas-powered-tractor.jpg",
+       "caption": "<p>A. M. Robinson, “Gas-powered Tractor,” circa 1920s. The introduction of gas-powered tractors improved agricultural work and made it more financially successful. LLMVC, Sabin J. Gianelloni, Sr., Papers.</p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Cars on the Capitol steps",
+     "anchor": "cars-on-the-capitol-steps",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "cars-on-capitol-steps.jpg",
+       "caption": "<p>Jasper Ewing, “Cars on the Steps of the State Capitol,” circa 1939. The steps of the “new” state capitol building have always been a popular place for photographs, political demonstrations, and relaxation, but few photographs are as comical as these “new” autos on show. LLMVC, Jasper Ewing Photographs.</p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Webb Moss Gin",
+     "anchor": "webb-moss-gin",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "webb-moss-gin.jpg",
+       "caption": "<p>Jasper Ewing, “Webb Moss Gin,” circa 1930s. This rare photograph shows employees working at Sidney B. Webb’s moss factory located in a black residential section of the city near the railroad. Louisiana was the leading producer of Spanish moss used for construction, mattress stuffing, and other products. LLMVC, Jasper Ewing Photographs.</p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Bus boycott, 1953",
+     "anchor": "bus-boycott-1953",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "bus-boycott-1953.jpg",
+       "caption": "<p>A. E. Woolley, “Baton Rouge Bus Boycott,” 1953. Woolley was one of a few photographers determined to record this historic event. In 1953 Baton Rouge was the site of the first successful bus boycott. This boycott was the model for the more publicized boycott in Montgomery, Alabama, in 1955, and set the stage for desegregation in the Deep South. LLMVC, A. E. Woolley Photographs and Papers.</p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Orene Muse billboard",
+     "anchor": "orene-muse-billboard",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "orene-muse-billboard.jpg",
+       "caption": "<p>The Register Records, “Orene Muse Morning Treat Billboard,” circa 1950. Orene Muse Huckabay and her husband, Elton J. Huckabay, began publishing The Register, a society newspaper, in 1949. Mrs. Huckabay was a famous local personality who added familiarity to the billboard. LLMVC, The Register Records.</p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Peace rally, 1970",
+     "anchor": "peace-rally-1970",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "peace-rally-1970.jpg",
+       "caption": "<p>LSU Public Relations, “Peace Rally,” 1970. LSU student Luana Henderson participated in a peaceful protest against the Vietnam War held in 1970 on the LSU campus. The poster behind her refers to the killing of four students by National Guardsmen during a protest that turned violent at Kent State University in Ohio. University Archives, LSU Public Relations.</p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Steele Burden",
+     "anchor": "steele-burden",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "steele-burden-1993.jpg",
+       "caption": "<p>Jim Zietz for LSU Public Relations, “Steele Burden,” 1993. Steele Burden is credited with much of the original landscaping of the current LSU campus. The Burden family donated the land on which the LSU Rural Life Museum is located. University Archives, LSU Public Relations.</p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Rural Life Museum",
+     "anchor": "rural-life-museum",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "rural-life-museum-1995.jpg",
+       "caption": "<p>Jim Zietz for LSU Public Relations, “Rural Life Museum,” 1995. The Rural Life Museum operates on self-generated funds and draws over 100,000 visitors a year. University Archives, LSU Public Relations.</p>",
+       "layout": "side_start"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Not pictured",
+     "anchor": "not-pictured",
+     "summary": "Eight more photographs hung in the exhibition: a ferry landing, LSU in snow, a creek baptism, the Exxon fire and more.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<ul><li>Fonville Winans, “Ferry Landing,” circa 1938. Before the river bridge was completed in 1940, cars and people traveled from one side of the river to the other on ferries. LLMVC, Fonville Winans Collection.</li><li>Fonville Winans, “LSU in Snow,” circa 1930s? Even in Baton Rouge it sometimes snows. Fonville Winans took this rare aerial photograph. He piloted the plane and shot photographs at the same time. LLMVC, Fonville Winans Collection.</li><li>Elemore M. Morgan, Sr. “Baptism at Dawson Creek,” circa 1950s. In Baton Rouge, baptisms took place in creeks, bayous, and lakes well into the 1970s. LLMVC, Francis A. de Caro Collection.</li><li>Elemore M. Morgan, Sr., “Ruins of The Cottage,” circa 1961. Constructed in 1825 for Frances Duncan Conrad, this plantation house stood through the Civil War and was used briefly as a hospital for Union soldiers. In 1960 it was struck by lightning and burned. LLMVC, Elemore M. Morgan, Sr., Collection.</li><li>Elemore M. Morgan, Sr., “Paramount Theater,” circa 1960. The Paramount Theater was one of the first theaters constructed in Baton Rouge to show “moving pictures.” LLMVC, Elemore M. Morgan, Sr., Collection.</li><li>A. J. Meek, “Exxon Fire and Explosion, Christmas Eve, Baton Rouge, Louisiana,” 1989. On Christmas Eve, 1989, a massive explosion ripped through Baton Rouge’s Exxon refinery, killing two men. Photographer A. J. Meek captured this shot with a panorama camera. LLMVC, A. J. Meek Photograph Collection.</li><li>A. J. Meek, “High Water, Mississippi River, Baton Rouge, Louisiana,” 1990. In January 1990 flooding along the Amite and Comite rivers damaged more than 800 homes and brought the Mississippi River to one of its highest recorded levels. “High Water” and “Exxon Fire” are recent additions to the Louisiana and Lower Mississippi Valley Collections. LLMVC, A. J. Meek Photograph Collection.</li><li>David King Gleason, “Southern University,” circa 1990. Gleason took this photograph for his book <em>Baton Rouge</em>, published by LSU Press in 1991. LLMVC, David King Gleason Collection.</li></ul>"
+      }
+     ]
+    }
+   ],
+   "display": "wall",
+   "lead_caption": "<p><strong>Baton Rouge National Cemetery, 1899.</strong><br>Andrew D. Lytle, photographer. Andrew D. Lytle Collection, Louisiana and Lower Mississippi Valley Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p15140coll12:37\">Louisiana Digital Library</a></p>"
+  }
+ ],
+ "alt": {
+  "lytle-main-street-high-water.jpg": "Brick buildings at the foot of Main Street, a ship’s masts at the flooded river beyond",
+  "pintado-beauregard-1799.jpg": "A hand-drawn survey plat of long narrow lots, one marked Elias Beauregard 1000",
+  "gayoso-land-grant-1797.jpg": "A handwritten Spanish survey certificate with a sketch of land lots along the Mississippi",
+  "lytle-j-m-white.jpg": "A large paddle steamboat stacked high with cotton bales at the riverbank",
+  "lytle-convict-levee.jpg": "Rows of men with wheelbarrows and mules work on a levee among tall bare trees",
+  "lytle-federal-encampment.jpg": "Rows of white army tents fill the town beyond rooftops, seen from above",
+  "baton-rouge-dollar-1.jpg": "A one-dollar note issued in Baton Rouge",
+  "baton-rouge-dollar-2.jpg": "A second one-dollar note issued in Baton Rouge",
+  "lytle-after-attack-1862.jpg": "Chimneys and broken walls stand over the rubble of burned buildings along a street",
+  "lytle-officers-in-camp.jpg": "Union officers sit in chairs among tents and young trees, one standing in front",
+  "lytle-firemens-parade.jpg": "Firemen in white uniforms and helmets pose beside a float decorated with flowers",
+  "postcard-st-josephs-convent.jpg": "A tall gabled brick convent with a corner tower, on a hand-colored postcard",
+  "postcard-high-school.jpg": "A two-story brick school with a domed cupola, on a hand-colored postcard",
+  "dance-card-front.jpg": "The front of a printed dance card for an anniversary ball",
+  "dance-card-back.jpg": "The back of the same dance card, with its list of dances",
+  "postcard-masonic-temple.jpg": "A three-story corner building with arched windows, on a hand-colored postcard",
+  "fire-company-notice.jpg": "A handwritten notice beside a photograph of early firemen",
+  "playbill-academy-hall-1864.jpg": "A tall printed playbill for an evening at Academy Hall",
+  "lytle-texas-pacific-office.jpg": "Townspeople, children and a cart under the arcade of the Texas and Pacific Railway ticket office",
+  "postcard-standard-oil.jpg": "Rail yards and refinery tanks under a blue sky, on a hand-colored postcard",
+  "fresh-water-harbors.jpg": "The cover of a 1920s Chamber of Commerce booklet",
+  "railroad-stock-certificate-1867.jpg": "An engraved stock certificate with a locomotive vignette",
+  "lytle-streetcar-lafayette.jpg": "An electric streetcar on a tree-lined street, the Old State Capitol behind",
+  "aviation-meeting-1911.jpg": "A printed invitation to the Grand Aviation Meeting",
+  "ua-style-show-1956.jpg": "Two young women in long early-1900s dresses, one with a parasol, talk on campus",
+  "female-institute-1837.jpg": "A printed newspaper advertisement for the Baton Rouge Female Institute",
+  "comus-edic.jpg": "A group photograph of young women in white",
+  "winans-aerial-1947.jpg": "An aerial view of the city stretching south, the Capitol tower in the middle distance",
+  "latour-plano-1806.jpg": "A hand-colored town plan with gardens, a coliseum and a grid of squares",
+  "postcard-southern-university.jpg": "A long two-story building behind a lawn and a straight walk, on a postcard",
+  "bill-of-sale-1844.jpg": "A handwritten bill of sale",
+  "longwood-plantation-ad.jpg": "A printed advertisement for Longwood Plantation",
+  "ua-lora-hinton.jpg": "An LSU running back, number 24, carries the ball through a crowd of players",
+  "lytle-reymond-store.jpg": "A three-story corner store with REYMOND painted across its awning",
+  "tunnard-carriage-factory.jpg": "A three-story brick building with iron galleries and a CARRIAGES AND HARNESS sign",
+  "lytle-sugar-refinery.jpg": "A sugar refinery with smoking stacks beyond a field",
+  "lytle-front-street-1861.jpg": "A row of buildings along the riverbank seen across the water",
+  "lytle-cadets-pentagon.jpg": "Rows of cadets in dark uniforms pose in front of a columned building",
+  "ua-boyd-dedication-1926.jpg": "Thomas D. Boyd speaks at a lectern while dignitaries sit behind him",
+  "lsu-dedication-program-1926.jpg": "The cover of the printed program for the new campus dedication",
+  "ua-stadium-postcard.jpg": "A concrete stadium beside a green field, on a hand-colored postcard",
+  "lytle-hill-memorial-1905.jpg": "A domed classical library building with columns at its entrance",
+  "lsu-calendar-1913.jpg": "A university calendar with a photograph of Hill Memorial Library on its cover",
+  "lytle-capitol-after-fire-1863.jpg": "The Gothic Revival capitol with its towers, the street in front",
+  "ua-huey-long-funeral.jpg": "The new Capitol tower above its gardens, crowded for a funeral, seen from the air",
+  "earl-long.jpg": "Earl Long seated at a desk in his office",
+  "postcard-state-capitol-1904.jpg": "A small photograph of the Gothic capitol on a postcard, with a handwritten note",
+  "lytle-national-cemetery-rows.jpg": "Rows of white headstones under spreading oaks",
+  "lytle-national-cemetery.jpg": "A man pushes a mower between rows of white headstones under tall trees",
+  "gas-powered-tractor.jpg": "A man drives an early gasoline tractor across a field",
+  "cars-on-capitol-steps.jpg": "New automobiles parked up the wide front steps of the State Capitol",
+  "webb-moss-gin.jpg": "Workers among heaps of Spanish moss at a moss gin",
+  "bus-boycott-1953.jpg": "People gathered during the Baton Rouge bus boycott",
+  "orene-muse-billboard.jpg": "A roadside billboard for Morning Treat coffee featuring Orene Muse",
+  "peace-rally-1970.jpg": "A student sits before a protest poster at a campus rally",
+  "steele-burden-1993.jpg": "Steele Burden, an older man, outdoors among plants",
+  "rural-life-museum-1995.jpg": "A statue on the grounds of the LSU Rural Life Museum",
+  "lytle-state-capitol.jpg": "The Gothic Revival Old State Capitol with its crenellated towers, above dark trees"
+ },
+ "sources": {
+  "lytle-main-street-high-water.jpg": "LDL lsu-sc-p15140coll12:689 (JP2 master, 4161px)",
+  "pintado-beauregard-1799.jpg": "LDL lsu-sc-pintado:1455 (JP2 master)",
+  "gayoso-land-grant-1797.jpg": "Old exhibition (/sites/all/files/sc/exhibitions/e-exhibits/redstick/case01a.jpg, 960px); no LDL copy found",
+  "lytle-j-m-white.jpg": "LDL lsu-sc-p15140coll12:461",
+  "lytle-convict-levee.jpg": "LDL lsu-sc-p15140coll12:108 (JP2 master, 1000px)",
+  "lytle-federal-encampment.jpg": "LDL lsu-sc-p15140coll12:647, same view as the old armycamp.jpg (673px)",
+  "baton-rouge-dollar-1.jpg": "Old exhibition (case04a.jpg, 498px)",
+  "baton-rouge-dollar-2.jpg": "Old exhibition (case04b.jpg, 501px; on the 1999 page, left off the Showcase page)",
+  "lytle-after-attack-1862.jpg": "LDL lsu-sc-p15140coll12:40 (JP2 master, 1000px); added",
+  "lytle-officers-in-camp.jpg": "LDL lsu-sc-p15140coll12:651, same print as the old soldiers.jpg (414px)",
+  "lytle-firemens-parade.jpg": "LDL lsu-sc-p15140coll12:718 (JP2 master, 6122px)",
+  "postcard-st-josephs-convent.jpg": "LDL lsu-sc-p16313coll10:1432 (front, :1433), same card as the old case03a.jpg (390px)",
+  "postcard-high-school.jpg": "LDL lsu-sc-p16313coll10:628 (front, :629), same card as the old case05b.jpg (402px)",
+  "dance-card-front.jpg": "Old exhibition (case03df.jpg, 376px)",
+  "dance-card-back.jpg": "Old exhibition (case03db.jpg, 378px)",
+  "postcard-masonic-temple.jpg": "LDL lsu-sc-p16313coll10:886 (front, :887), same card as the old case03b.jpg (399px)",
+  "fire-company-notice.jpg": "Old exhibition (case03e.jpg, 383px)",
+  "playbill-academy-hall-1864.jpg": "Old exhibition (case03c.jpg, 409px)",
+  "lytle-texas-pacific-office.jpg": "LDL lsu-sc-p15140coll12:573 (JP2 master, 4205px)",
+  "postcard-standard-oil.jpg": "LDL lsu-sc-p16313coll10:1747 (front, :1748); the case’s “Standard Oil Postcard”, not pictured in 1999",
+  "fresh-water-harbors.jpg": "Old exhibition (case05c.jpg, 458px)",
+  "railroad-stock-certificate-1867.jpg": "Old exhibition (case05e.jpg, 587px)",
+  "lytle-streetcar-lafayette.jpg": "LDL lsu-sc-p15140coll12:140 (JP2 master, 1000px); added",
+  "aviation-meeting-1911.jpg": "Old exhibition (case05d.jpg, 693px)",
+  "ua-style-show-1956.jpg": "LDL lsu-ua-uap:1632 (front, :1630; JP2 master, 4350px)",
+  "female-institute-1837.jpg": "Old exhibition (case06b.jpg, 617px)",
+  "comus-edic.jpg": "Old exhibition (case06a.jpg, 696px)",
+  "winans-aerial-1947.jpg": "LDL lsu-sc-p15140coll46:23 (JP2 master, 7832px)",
+  "latour-plano-1806.jpg": "LDL lsu-sc-p16313coll57:130 (JP2 master)",
+  "postcard-southern-university.jpg": "LDL lsu-sc-p16313coll10:988 (front, :989; JP2 master, 3520px)",
+  "bill-of-sale-1844.jpg": "Old exhibition (case08c.jpg, 566px)",
+  "longwood-plantation-ad.jpg": "Old exhibition (case08b.jpg, 585px)",
+  "ua-lora-hinton.jpg": "LDL lsu-ua-uap:2159 (JP2 master, 5979px); the case had his letterman plaque",
+  "lytle-reymond-store.jpg": "LDL lsu-sc-p15140coll12:468 (JP2 master, 6040px)",
+  "tunnard-carriage-factory.jpg": "LDL lsu-sc-brt:13 (JP2 master, 5136px); W. H. Tunnard of Case 3 was of this family",
+  "lytle-sugar-refinery.jpg": "LDL lsu-sc-p15140coll12:39 (JP2 master, 1000px)",
+  "lytle-front-street-1861.jpg": "LDL lsu-sc-p15140coll12:690 (JP2 master, 1000px)",
+  "lytle-cadets-pentagon.jpg": "LDL lsu-sc-p15140coll12:232 (JP2 master, 5969px)",
+  "ua-boyd-dedication-1926.jpg": "LDL lsu-ua-uap:1344 (front, :1342; JP2 master, 6141px)",
+  "lsu-dedication-program-1926.jpg": "Old exhibition (case11b.jpg, 404px)",
+  "ua-stadium-postcard.jpg": "LDL lsu-ua-uap:1362 (front, :1360), same card as the old case11a.jpg (400px)",
+  "lytle-hill-memorial-1905.jpg": "LDL lsu-sc-p15140coll12:194 (JP2 master, 1000px); added",
+  "lsu-calendar-1913.jpg": "Old exhibition (case11c.jpg, 601px)",
+  "lytle-capitol-after-fire-1863.jpg": "LDL lsu-sc-p15140coll12:265 (JP2 master, 4185px)",
+  "ua-huey-long-funeral.jpg": "LDL lsu-ua-uap:1674 (front, :1672; JP2 master, 6124px); the case had a photograph of the funeral flowers",
+  "earl-long.jpg": "Old exhibition (case12a.jpg, 699px)",
+  "postcard-state-capitol-1904.jpg": "LDL lsu-sc-p16313coll10:1495 (front, :1496); the case’s “Postcard, Louisiana State Capitol, c. 1904”",
+  "lytle-national-cemetery-rows.jpg": "LDL lsu-sc-p15140coll12:37 (JP2 master, 4200px)",
+  "lytle-national-cemetery.jpg": "LDL lsu-sc-p15140coll12:754",
+  "gas-powered-tractor.jpg": "Old exhibition (tractor.jpg, 696px)",
+  "cars-on-capitol-steps.jpg": "Old exhibition (cars.jpg, 683px)",
+  "webb-moss-gin.jpg": "Old exhibition (mossgin.jpg, 686px)",
+  "bus-boycott-1953.jpg": "Old exhibition (boycott.jpg, 368px)",
+  "orene-muse-billboard.jpg": "Old exhibition (register.jpg, 486px)",
+  "peace-rally-1970.jpg": "Old exhibition (protest.jpg, 658px)",
+  "steele-burden-1993.jpg": "Old exhibition (steele.jpg, 554px)",
+  "rural-life-museum-1995.jpg": "Old exhibition (statue.jpg, 704px)",
+  "lytle-state-capitol.jpg": "LDL lsu-sc-p15140coll12:267 (JP2 master, 2990 × 4190px)"
+ }
+}
