@@ -3177,9 +3177,18 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
     }
   }
 
+  // The line before that: large screens only, where the band has room.
+  .pf-listen__caption-older {
+    @include media-breakpoint-down(lg) {
+      display: none;
+    }
+  }
+
+  // The phrase heard in the accent, as the read-along lights it.
   .pf-listen__caption-text {
     font-size: clamp(1rem, .95rem + .25vw, 1.125rem);
     line-height: 1.4;
+    color: var(--pf-exhibit-accent);
     text-wrap: pretty;
 
     @include pf-exhibit-motion {

@@ -1191,6 +1191,7 @@
     bar.className = 'pf-listen pf-listen--clip';
     bar.setAttribute('aria-label', Drupal.t('Now playing'));
     bar.innerHTML = '<div class="pf-listen__caption" aria-hidden="true">'
+      + '<p class="pf-listen__caption-prev pf-listen__caption-older"></p>'
       + '<p class="pf-listen__caption-prev"></p>'
       + '<p class="pf-listen__caption-text"></p>'
       + '</div>'
@@ -1356,8 +1357,9 @@
   }
 
   // Rolling, as broadcast captions: the phrase heard, the one just before
-  // it muted above (so a phrase cut at a comma still reads). In a pause
-  // the words stay, dimmed; a new line rises in unless motion is reduced.
+  // it muted above (so a phrase cut at a comma still reads), and on large
+  // screens the one before that. In a pause the words stay, dimmed; a new
+  // line rises in unless motion is reduced.
   function syncCaption(audio) {
     const band = listen.bar && listen.bar.querySelector('.pf-listen__caption');
     const index = band ? cueIndex(audio.currentTime) : -1;
@@ -1371,10 +1373,13 @@
       return;
     }
     const before = listen.cues[index - 1];
-    const prev = band.querySelector('.pf-listen__caption-prev');
+    const older = band.querySelector('.pf-listen__caption-older');
+    const prev = band.querySelector('.pf-listen__caption-prev:not(.pf-listen__caption-older)');
     const now = band.querySelector('.pf-listen__caption-text');
-    // The line before only if it was just shown (not after a seek).
-    prev.textContent = before && before === listen.shown ? before.words : '';
+    // The lines before only as they were just shown (none after a seek).
+    const rolled = before && before === listen.shown;
+    older.textContent = rolled && prev.textContent ? prev.textContent : '';
+    prev.textContent = rolled ? before.words : '';
     now.textContent = cue.words;
     listen.shown = cue;
     band.classList.add('is-shown');
