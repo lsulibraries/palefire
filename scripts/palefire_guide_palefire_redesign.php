@@ -888,6 +888,12 @@ HTML),
 <li>In the exhibitions band, an exhibition without oral history clips now shows how many images it has and about how long it takes to read, instead of empty Clips and Listening.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Press, in place of In the building', <<<'HTML'
+<ul>
+<li>The last fact in the exhibitions band is now Press: a Read the release link to the news post about the exhibition’s show at Hill, with when it was shown underneath (“Shown Jan–Mar 2010”). The treasure chest icon and the vague About the show link are gone.</li>
+<li>Occult, AVES, Integrating LSU and Georgetown 272 have their show dates, taken from their own posts. Four others will show their dates once someone confirms them.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------

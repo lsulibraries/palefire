@@ -730,8 +730,7 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
   color: var(--pf-showcase-muted);
 }
 
-// In the building: the title page's treasure chest, in the accent, and
-// the post about the show.
+// Press: the link to the post about the show in the building.
 .pf-showcase__fact--place dd {
   font-size: 1rem;
 }
@@ -752,20 +751,6 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
       text-decoration-color: var(--pf-exhibit-accent);
       transition-duration: $pf-hover-in;
     }
-  }
-}
-
-.pf-showcase__chest {
-  flex: none;
-  width: 1.125rem;
-  height: 1.125rem;
-  color: var(--pf-exhibit-accent);
-
-  svg {
-    display: block;
-    width: 100%;
-    height: 100%;
-    fill: currentColor;
   }
 }
 

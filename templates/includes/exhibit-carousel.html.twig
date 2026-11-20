@@ -28,9 +28,9 @@
  *   total, "about m:ss each" under it: PalefireHooks::exhibitionClips()),
  *   or, for an exhibition without clips, Images; Reading (an estimate:
  *   PalefireHooks::exhibitionReading());
- *   In the building (the title page's treasure chest and a link to the
- *   post about the show, its place and months under it:
- *   PalefireHooks::physicalShow()). Then Enter, alone, on the line of the
+ *   Press ("Read the release", a link to the post about its show in the
+ *   building, with "Shown Jan–Mar 2010" under it from the post's On view
+ *   dates: PalefireHooks::physicalShow()). Then Enter, alone, on the line of the
  *   arrows. Wide, the facts sit on the canvas's foot and Enter on the
  *   arrows' line whichever summary is shown (a subgrid,
  *   _exhibit-showcase.scss), so nothing jumps as it changes.
@@ -78,9 +78,6 @@
 {% import _self as pf %}
 {% set heading = heading == 'h3' ? 'h3' : 'h2' %}
 {% set shown = items|length %}
-{# The title page's mark for a physical show (exhibit-cover.html.twig);
-   nothing where the server has no FA Pro files. #}
-{% set chest = source('libraries/fontawesome-pro/svgs/light/treasure-chest.svg', ignore_missing = true) %}
 {% set captioned = items|filter(ex => ex.object)|length > 0 %}
 {% if items %}
   {{ attach_library('palefire/exhibit-showcase') }}
@@ -195,18 +192,16 @@
                 </div>
                 {% endif %}
                 <div class="pf-showcase__fact pf-showcase__fact--place">
-                  <dt>{{ 'In the building'|t }}</dt>
+                  <dt>{{ 'Press'|t }}</dt>
                   <dd>
-                    {% if ex.show %}
+                    {% if ex.show.url %}
                       <span class="pf-showcase__fact-place">
-                        {% if chest %}<span class="pf-showcase__chest" aria-hidden="true">{{ chest|raw }}</span>{% endif %}
-                        {% if ex.show.url %}
-                          <a href="{{ ex.show.url }}">{{ ex.show.where ?: 'About the show'|t }}<span class="visually-hidden">: {{ ex.title }}</span></a>
-                        {% else %}
-                          {{ ex.show.where ?: 'Yes'|t }}
-                        {% endif %}
+                        <a href="{{ ex.show.url }}">{{ 'Read the release'|t }}<span class="visually-hidden">: {{ ex.title }}</span></a>
                       </span>
-                      {% if ex.show.dates %}<span class="pf-showcase__fact-note">{{ ex.show.dates }}</span>{% endif %}
+                      {% if ex.show.dates %}<span class="pf-showcase__fact-note">{{ 'Shown @dates'|t({'@dates': ex.show.dates}) }}</span>{% endif %}
+                    {% elseif ex.show.dates %}
+                      {# A physical exhibition's own post: it is the release. #}
+                      {{ 'Shown @dates'|t({'@dates': ex.show.dates}) }}
                     {% else %}
                       {{ pf.none() }}
                     {% endif %}
