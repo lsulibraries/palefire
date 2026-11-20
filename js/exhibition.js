@@ -1133,6 +1133,9 @@
         folded.replaceWith(transcript);
       }
     });
+    // A transcript in the panel: from lg a wider reading column
+    // (.is-transcript, _exhibition.scss).
+    view.dialog.classList.toggle('is-transcript', !!view.body.querySelector('.pf-exhibit-audio__read'));
   }
 
   // --pf-viewer-top-h for the pinned player (_exhibition.scss); kept
@@ -2155,6 +2158,7 @@
     const name = card.querySelector('.pf-interview__name').textContent.trim();
     const photo = card.querySelector('.pf-interview__photo img');
     stopAudio(view);
+    view.dialog.classList.remove('is-reading');
     view.dialog.removeAttribute('aria-label');
     view.dialog.setAttribute('aria-labelledby', 'pf-viewer-title');
     view.title.hidden = false;
@@ -2332,6 +2336,7 @@
     stopAudio(view);
     setWash(view, null);
     view.body.replaceChildren();
+    view.dialog.classList.remove('is-reading', 'is-transcript');
     view.scale.hidden = true;
     view.scale.replaceChildren();
     view.count.textContent = n > 1 ? Drupal.t('Image @n of @total', { '@n': loose.index + 1, '@total': n }) : '';

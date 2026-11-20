@@ -5182,6 +5182,25 @@ $pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last
   }
 }
 
+// Transcripts: an oral history clip or a full interview in the object
+// view (js/exhibition.js panelAudio() sets .is-transcript). From lg the
+// panel widens to a reading column, up to 36rem (40% of the screen), so
+// the transcript, already in the larger transcript type, runs about 60
+// characters to the line rather than 30 to 45; the photo keeps the rest.
+// While the speaker's biography is open beside it (.pf-viewer__bio, sized
+// for a panel no wider than a third of the screen) the panel keeps its
+// usual width. Below lg the transcript already takes the screen; there,
+// as everywhere, its lines stop at 36rem (about 65 characters).
+.pf-viewer--exhibit.is-transcript:not(:has(> .pf-viewer__bio.is-open)) {
+  @include media-breakpoint-up(lg) {
+    --pf-panel-w: max(20rem, min(36rem, 40vw));
+  }
+}
+
+.pf-viewer--exhibit.is-transcript .pf-exhibit-audio__text {
+  max-width: 36rem;
+}
+
 // A clip with no picture (exhibit-reel.html.twig): a reel in its box, drawn
 // in 1px lines of the swatch's text color at one opacity per part (the
 // box's edge 60%, the reel 100%, its tape 35% and 20%). The box is 82% the

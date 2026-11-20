@@ -879,6 +879,12 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: A reading column for oral history transcripts', <<<'HTML'
+<ul>
+<li>Oral history clips and full interviews open with a wider transcript panel on larger screens, so the words run about 55 characters to the line instead of 42, with the photo beside it.</li>
+<li>On tablets and phones, where the transcript fills the screen, its lines stop at a comfortable reading width.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: Free People of Color’s history chapters hang as walls', <<<'HTML'
 <ul>
 <li>Golden Age and Decline and Civil War are walls now: each chapter is cut into four text plates at the turns in Michael Taylor’s argument, with its documents hung between them. Open the first plate and press next to read the chapter in order, documents and all.</li>
