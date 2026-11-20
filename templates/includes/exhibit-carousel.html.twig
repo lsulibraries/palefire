@@ -25,7 +25,9 @@
  *   subtitle, the start of the intro (else the credit line), then the
  *   facts at its foot, label over value, four slots every exhibition
  *   keeps ("—" where it has none): Year; Clips; Listening (the clips'
- *   total, "about m:ss each" under it: PalefireHooks::exhibitionClips());
+ *   total, "about m:ss each" under it: PalefireHooks::exhibitionClips()),
+ *   or, for an exhibition without clips, Images; Reading (an estimate:
+ *   PalefireHooks::exhibitionReading());
  *   In the building (the title page's treasure chest and a link to the
  *   post about the show, its place and months under it:
  *   PalefireHooks::physicalShow()). Then Enter, alone, on the line of the
@@ -157,6 +159,23 @@
                   <dt>{{ 'Year'|t }}</dt>
                   <dd>{{ ex.year ?: pf.none() }}</dd>
                 </div>
+                {% if not ex.clips.count %}
+                <div class="pf-showcase__fact">
+                  <dt>{{ 'Images'|t }}</dt>
+                  <dd>{{ ex.reading.images ?: pf.none() }}</dd>
+                </div>
+                <div class="pf-showcase__fact">
+                  <dt>{{ 'Reading'|t }}</dt>
+                  <dd>
+                    {% if ex.reading.total %}
+                      <time datetime="{{ ex.reading.total.iso }}">{{ ex.reading.total.text }}</time>
+                      <span class="pf-showcase__fact-note">{{ 'estimated'|t }}</span>
+                    {% else %}
+                      {{ pf.none() }}
+                    {% endif %}
+                  </dd>
+                </div>
+                {% else %}
                 <div class="pf-showcase__fact">
                   <dt>{{ 'Clips'|t }}</dt>
                   <dd>{{ ex.clips.count ?: pf.none() }}</dd>
@@ -174,6 +193,7 @@
                     {% endif %}
                   </dd>
                 </div>
+                {% endif %}
                 <div class="pf-showcase__fact pf-showcase__fact--place">
                   <dt>{{ 'In the building'|t }}</dt>
                   <dd>

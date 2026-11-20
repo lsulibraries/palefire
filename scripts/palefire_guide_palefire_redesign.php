@@ -139,6 +139,7 @@ HTML),
 <ul>
 <li><a href="/node/133022">Combined Search Project</a>: the new search page, with its own status board and Day by day log.</li>
 <li><a href="/v2/special/guides/ldl-quartex-migration">LDL Quartex Migration</a>: the Louisiana Digital Library's move to Quartex, which runs beside the redesign.</li>
+<li><a href="/v2/guides/exhibition-migration-review">Exhibition Migration Review</a> and <a href="/v2/guides/special-collections-exhibitions">Special Collections Exhibitions</a>: how the oral history and Special Collections exhibitions moved, with every correction for curators to check.</li>
 <li><a href="/v2/special/internal/styleguide">Palefire style guide</a>: the palette, type, components and the rules behind them, for editors and developers.</li>
 <li><a href="/v2/internal/analytics">Website Analytics</a>: the last 28 days of visits, searches and Combined Search feedback, for staff only.</li>
 </ul>
@@ -879,6 +880,12 @@ HTML),
 <ul>
 <li>When nothing is scheduled at Hill, no blog post is from the last 30 days and no exhibition is on view, News and events now disappears from Special Collections instead of showing one lonely card. The opening screen’s numbers close up behind it.</li>
 <li>It comes back by itself within an hour of an event appearing in LibCal, a new blog post, or an exhibition’s On view dates starting. Nothing to switch on or off.</li>
+</ul>
+HTML),
+  $text('Fri Nov 20: Special Collections exhibitions get their own guide and facts', <<<'HTML'
+<ul>
+<li>A new guide, <a href="/v2/guides/special-collections-exhibitions">Special Collections Exhibitions</a>, records how AVES, Audubon, Occult and the Union Art Gallery moved to the new site: what changed, what was corrected, and what curators still need to check. It also sets out proposals for AVES’s 43 biographies.</li>
+<li>In the exhibitions band, an exhibition without oral history clips now shows how many images it has and about how long it takes to read, instead of empty Clips and Listening.</li>
 </ul>
 HTML),
 ]);

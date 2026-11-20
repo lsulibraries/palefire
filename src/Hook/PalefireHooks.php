@@ -1239,6 +1239,7 @@ class PalefireHooks {
           'physical' => TRUE,
           'show' => ['url' => ''] + self::physicalShow($post),
           'clips' => NULL,
+          'reading' => NULL,
           'object' => NULL,
           'unpublished' => !$post->isPublished(),
           'title_style' => 'sans',
@@ -1330,6 +1331,8 @@ class PalefireHooks {
       'object' => _palefire_cover_object_label($node),
       'changed' => (int) $node->getChangedTime(),
       'clips' => self::exhibitionClips($node),
+      // Images and reading time, shown in their place without clips.
+      'reading' => self::exhibitionReading($node),
     ];
   }
 
@@ -1379,41 +1382,7 @@ class PalefireHooks {
    *   known.
    */
   public static function exhibitionClips(NodeInterface $node): array {
-    $cid = 'palefire:exhibit_clips:' . $node->id() . ':' . $node->getChangedTime();
-    $bin = \Drupal::cache();
-    if ($hit = $bin->get($cid)) {
-      $found = $hit->data;
-    }
-    else {
-      $found = ['count' => 0, 'timed' => 0, 'seconds' => 0.0];
-      $walk = function (iterable $items) use (&$walk, &$found): void {
-        foreach ($items as $item) {
-          $block = $item->entity ?? NULL;
-          if (!$block instanceof ParagraphInterface || !$block->isPublished()) {
-            continue;
-          }
-          if ($block->bundle() === 'exhibit_audio') {
-            $file = $block->hasField('field_audio_file') ? $block->get('field_audio_file')->entity : NULL;
-            if ($file instanceof FileInterface) {
-              $found['count']++;
-              $length = self::mediaSeconds($file->getFileUri());
-              if ($length !== NULL) {
-                $found['timed']++;
-                $found['seconds'] += $length;
-              }
-            }
-          }
-          elseif ($block->hasField('field_guide_blocks')) {
-            $walk($block->get('field_guide_blocks'));
-          }
-        }
-      };
-      if ($node->hasField('field_scroll_section')) {
-        $walk($node->get('field_scroll_section'));
-      }
-      $bin->set($cid, $found, Cache::PERMANENT, ['node:' . $node->id()]);
-    }
-
+    $found = self::exhibitionTally($node);
     $count = (int) $found['count'];
     $known = $count > 0 && $found['timed'] === $count;
     $total = (int) round($found['seconds']);
@@ -1426,6 +1395,109 @@ class PalefireHooks {
         'iso' => 'PT' . intdiv($average, 60) . 'M' . ($average % 60) . 'S',
       ] : NULL,
     ];
+  }
+
+  /**
+   * An exhibition's images and an estimate of its reading time.
+   *
+   * For exhibitions without clips (Special Collections'), the band's facts
+   * in place of Clips and Listening. Images: the published figures (single
+   * or grouped) with a picture, and each gallery's lead image. Reading: the
+   * words of its intro, text blocks, biographies and captions (not catalog
+   * records or transcripts) at 238 words a minute, the average for silent
+   * reading of nonfiction (Brysbaert 2019).
+   *
+   * @return array{images: int, words: int, total: ?array}
+   *   The counts, and the time as totalLength() gives it, NULL with no text.
+   */
+  public static function exhibitionReading(NodeInterface $node): array {
+    $found = self::exhibitionTally($node);
+    $words = (int) $found['words'];
+    return [
+      'images' => (int) $found['images'],
+      'words' => $words,
+      'total' => $words ? self::totalLength((int) round($words / 238 * 60)) : NULL,
+    ];
+  }
+
+  /**
+   * One walk through an exhibition's published blocks, cached.
+   *
+   * Clips (and the lengths read from their files), images and words, kept
+   * in the cache per node and last change, so a page of cards reads each
+   * file once, until an edit, and the card's two calls share one walk.
+   *
+   * @return array{count: int, timed: int, seconds: float, images: int, words: int}
+   */
+  private static function exhibitionTally(NodeInterface $node): array {
+    static $memo = [];
+    $cid = 'palefire:exhibit_tally:' . $node->id() . ':' . $node->getChangedTime();
+    if (isset($memo[$cid])) {
+      return $memo[$cid];
+    }
+    $bin = \Drupal::cache();
+    if ($hit = $bin->get($cid)) {
+      return $memo[$cid] = $hit->data;
+    }
+    $found = ['count' => 0, 'timed' => 0, 'seconds' => 0.0, 'images' => 0, 'words' => 0];
+    $count_words = function (FieldableEntityInterface $entity, string $field) use (&$found): void {
+      if ($entity->hasField($field) && !$entity->get($field)->isEmpty()) {
+        $text = Html::decodeEntities(strip_tags(preg_replace('#<br\s*/?>|</(p|li|h[1-6]|td|th)>#i', ' ', (string) $entity->get($field)->value)));
+        $found['words'] += (int) preg_match_all('/[\p{L}\p{N}]\S*/u', $text);
+      }
+    };
+    $walk = function (iterable $items) use (&$walk, &$found, $count_words): void {
+      foreach ($items as $item) {
+        $block = $item->entity ?? NULL;
+        if (!$block instanceof ParagraphInterface || !$block->isPublished()) {
+          continue;
+        }
+        switch ($block->bundle()) {
+          case 'exhibit_audio':
+            $file = $block->hasField('field_audio_file') ? $block->get('field_audio_file')->entity : NULL;
+            if ($file instanceof FileInterface) {
+              $found['count']++;
+              $length = self::mediaSeconds($file->getFileUri());
+              if ($length !== NULL) {
+                $found['timed']++;
+                $found['seconds'] += $length;
+              }
+            }
+            continue 2;
+
+          case 'exhibit_figure':
+            if ($block->hasField('field_figure_image') && !$block->get('field_figure_image')->isEmpty()) {
+              $found['images']++;
+            }
+            break;
+
+          case 'exhibit_page':
+            if ($block->hasField('field_exhibit_lead') && !$block->get('field_exhibit_lead')->isEmpty()) {
+              $found['images']++;
+            }
+            $count_words($block, 'field_exhibit_lead_caption');
+            break;
+
+          case 'exhibit_citation':
+            // A catalog record is looked up, not read through.
+            continue 2;
+        }
+        foreach (['field_block_body', 'field_entry_bio', 'field_figure_caption'] as $field) {
+          $count_words($block, $field);
+        }
+        foreach (['field_guide_blocks', 'field_gallery_items'] as $field) {
+          if ($block->hasField($field)) {
+            $walk($block->get($field));
+          }
+        }
+      }
+    };
+    $count_words($node, 'field_intro');
+    if ($node->hasField('field_scroll_section')) {
+      $walk($node->get('field_scroll_section'));
+    }
+    $bin->set($cid, $found, Cache::PERMANENT, ['node:' . $node->id()]);
+    return $memo[$cid] = $found;
   }
 
   /**

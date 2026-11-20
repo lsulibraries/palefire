@@ -1,0 +1,23 @@
+<p><strong>Status: proposed, not decided.</strong> AVES is the only Special Collections exhibition with biographies so far: 43 of them, 118 to 1,293 words (about 400 on average), three of them for two people (Godman and Salvin, the Schomburgks, the Phelpses). Together they are most of the exhibition’s 48,000 words. Today each one sits in its entry under a “Biography” label, folded after about ten lines with a “Read the full biography” button, and the Biographies gallery is a hand-written list of links.</p>
+<h3>What works</h3>
+<ul>
+<li>Every person has an anchor, so a link such as /v2/special/exhibitions/aves#schauensee reaches them.</li>
+<li>The fold keeps a long life from pushing the books and plates out of sight.</li>
+</ul>
+<h3>What doesn’t</h3>
+<ul>
+<li>A link to a person lands on the heading with the biography still folded.</li>
+<li>The fold cuts mid-sentence, at a height, not at a thought.</li>
+<li>Life dates live in the heading text, “Rodolphe Meyer de Schauensee (1901-1984)”, so the site can’t sort, compare or draw them.</li>
+<li>The Biographies list is typed by hand, and has to be edited whenever an entry changes.</li>
+</ul>
+<h3>Proposals, smallest first</h3>
+<ol>
+<li><strong>Open on arrival.</strong> When the address names a person, unfold their biography. A script change only, no content.</li>
+<li><strong>Life dates as data.</strong> Move “(1901-1984)” out of the heading into the entry’s Date field as a range, shown under the name. The three pairs keep their dates in the heading, since the field holds one range. A script can do the other 40, and the dates also let a gallery be shown as a timeline.</li>
+<li><strong>A short summary.</strong> An optional “In brief” field of one or two sentences, written by a curator, shown while folded in place of the clipped first lines. With no summary, the fold stays as it is.</li>
+<li><strong>A generated index of people.</strong> Replace the hand-written list with an index built from the entries: name, life dates and gallery, sortable by name or by birth, each linking to the entry. Drawn as thin lifespan bars on one shared axis (1514 to 2004), it shows at a glance who overlapped with whom, in the Swiss manner of the rest of the site.</li>
+<li><strong>Portraits.</strong> Where Special Collections holds a likeness, a small portrait beside the name. Only where one exists, never a placeholder.</li>
+</ol>
+<p>Not proposed: a separate page per person, or a site-wide list of people shared across exhibitions. With one exhibition of biographies, that would add editing work without readers to gain from it. It can be revisited if Audubon or a new exhibition adds lives.</p>
+<p><strong>Suggested order:</strong> 1 and 2 now (no new writing needed), 4 next, 3 and 5 as curators have time.</p>
