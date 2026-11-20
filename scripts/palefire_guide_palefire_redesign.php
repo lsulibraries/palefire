@@ -918,6 +918,7 @@ HTML),
 <li>The old two-page exhibition Woven Louisiana History: Acadian Textiles is rebuilt as a v2 exhibition with the other oral history exhibitions, not published yet: the weaver Gladys Clark and the seamstress Laura Mae Romero, who made work for LSU’s Acadian Handicraft Project, each a picture on one wall with their recording, transcript and a short biography.</li>
 <li>Two text plates hang beside them: the story of the project, from its records in Special Collections, and where the interviews come from.</li>
 <li>Gladys Clark’s portrait is a new, sharper scan from the 2024 Hill exhibition’s files, and a basket of the brown cotton she spun opens the gallery.</li>
+<li>Its 2024 press release turned up: the page now names the Hill Memorial Library exhibition it belonged to and the people who organized it, quotes them, and opens on the release’s photograph of Gladys Clark weaving in costume, with a second of an Acadian Handicraft display in New York.</li>
 </ul>
 HTML),
   $text('Fri Nov 20: Free People of Color’s history chapters hang as walls', <<<'HTML'

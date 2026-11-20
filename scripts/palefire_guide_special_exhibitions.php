@@ -426,9 +426,9 @@ $section('Woven Louisiana History: Acadian Textiles', [
 <p>Built at <a href="/v2/oralhistory/exhibitions/woven">/v2/oralhistory/exhibitions/woven</a>, not published yet. It is two interviews, so it lives with the oral history exhibitions; /v2/special/exhibitions/woven redirects there.</p>
 <p>Exhibition: Woven Louisiana History: Acadian Textiles, two interview excerpts with makers for LSU’s Acadian Handicraft Project (1942–1962): the weaver Gladys Clark and the seamstress Laura Mae Romero.<br>Old site: /woven/clark and /woven/romero, one photograph, one recording and one transcript each.</p>
 <h3>Changed on the page</h3>
-<ul><li>One gallery, In Their Words, a wall: the two interviews as picture tiles (photograph, clip, transcript and a short biography), with two text plates, The Acadian Handicraft Project and About the Interviews.
+<ul><li>One gallery, In Their Words, a wall: the two interviews as picture tiles (photograph, clip, transcript and a short biography), with text plates between them: The Acadian Handicraft Project, The Hill Memorial Library Exhibition (from the 2024 press release, with its organizers’ words) and About the Interviews.
 </li><li>New text from LSU Libraries finding aids (Acadian Handicraft Project Records, Mss. 1880; Gladys Clark Papers, Mss. 4953): the introduction, Gladys Clark’s biography and the project plate. Laura Mae Romero’s biography comes from her own words.
-</li><li>Pictures: Gladys Clark’s portrait from its 2,750 × 4,200 rescan for the 2024 Hill exhibition (the old page’s was 750 px), and a new gallery lead from the same files, a basket of coton jaune. Laura Mae Romero’s 1945 newspaper photograph stays at 233 px: no better copy on the R: drive or in the Louisiana Digital Library.
+</li><li>Pictures: Gladys Clark’s portrait from its 2,750 × 4,200 rescan for the 2024 Hill exhibition (the old page’s was 750 px), and two photographs captioned in the 2024 press release: Gladys Clark weaving in costume, c. 1950 (the gallery’s lead, from a 5,569 × 4,430 scan), and an Acadian Handicraft display in New York, c. 1949. Laura Mae Romero’s 1945 newspaper photograph stays at 233 px: no better copy on the R: drive or in the Louisiana Digital Library.
 </li></ul>
 <h3>Corrected</h3>
 <table>
@@ -445,7 +445,7 @@ $section('Woven Louisiana History: Acadian Textiles', [
 </li></ul>
 <h3>To verify</h3>
 <ul><li>Gladys Clark’s interviewer: the old source line says Maida Bergeron, its transcript Maida Owens.
-</li><li>The cover year, 2024 (the old pages have no date), and the coton jaune photograph’s source.
+</li><li>Settled by the <a href="https://lib.lsu.edu/24/08/29/fallexhibition">2024 press release</a>: the cover year, the exhibition in Hill Memorial Library (September 23–December 13, 2024) it belonged to, its organizers for the credit line, and the portrait’s caption (towels, c. 1980, not placemats).
 </li><li>Left as heard: “little pin offers”, “Mrs. Dickie Daspitt”, “Mr. Isaac Hank”, and Louise Olivier “from Grand Coteau” (the finding aid says Arnaudville).
 </li></ul>
 <h3>New wording to check</h3>

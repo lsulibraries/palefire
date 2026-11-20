@@ -9,7 +9,7 @@
  * /v2/oralhistory/exhibitions/woven with the oral history exhibitions.
  * Run palefire_exhibit_setup.php first.
  *
- * Copy the "woven-web" folder’s masters/ (3 JPEGs) and audio/ (2 M4A
+ * Copy the "woven-web" folder’s masters/ (5 JPEGs) and audio/ (2 M4A
  * clips) to the server first, then:
  *
  *   drush php:script scripts/palefire_exhibit_woven.php -- images=$HOME/woven-web/masters audio=$HOME/woven-web/audio
@@ -31,15 +31,19 @@
  * page’s photograph, the clip and its transcript, and a short biography,
  * which open in the object view), with two text plates between and after
  * them: The Acadian Handicraft Project (from the project records’ finding
- * aid, Mss. 1880) and About the Interviews (the old pages’ source lines).
+ * aid, Mss. 1880), The Hill Memorial Library Exhibition (from the 2024
+ * press release, with its curators’ words) and About the Interviews (the
+ * old pages’ source lines), and the press release’s photograph of an
+ * Acadian Handicraft display in New York, c. 1949.
  * Changes: speaker labels in bold on their own paragraphs, a few
  * mis-heard words and typos fixed, curly quotes, the newspaper’s name
  * (Abbeville Meridional); listed in
  * docs/special-exhibition-corrections/woven.md.
  *
  * Images: Gladys Clark’s portrait from its 2,750 × 4,200 scan for the
- * 2024 Hill exhibition (the old page’s was 750 px), the coton jaune
- * photograph from the same files as the gallery’s lead, and Laura Mae
+ * 2024 Hill exhibition (the old page’s was 750 px), its publicity scans
+ * of Gladys Clark weaving in costume, c. 1950 (the gallery’s lead) and
+ * the New York display, and Laura Mae
  * Romero’s 1945 newspaper photograph at the old page’s 233 px (no better
  * copy found). Each is imported once as an Image media item (named
  * "Woven: <file name>", reused on a re-run) under
@@ -329,8 +333,8 @@ $values = [
   'field_exhibit_physical_note' => $data['physical_note'] !== '' ? $data['physical_note'] : NULL,
   // The cover is a portrait: shown whole over a blur, with its object label.
   'field_exhibit_cover_framed' => 1,
-  'field_exhibit_cover_title' => 'Gladys Clark with handwoven placemats',
-  'field_exhibit_cover_date' => '1980s',
+  'field_exhibit_cover_title' => 'Gladys Clark with handwoven towels',
+  'field_exhibit_cover_date' => 'c. 1980',
   'field_exhibit_cover_medium' => 'Photograph. Gladys Clark Papers, Mss. 4953',
   'path' => ['alias' => $alias],
 ];
