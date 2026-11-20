@@ -879,6 +879,17 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Text plates and a reading view for exhibitions', <<<'HTML'
+<ul>
+<li>Exhibition walls can now hang text plates: a number and a short summary set large, like a pull quote, the same height as the pictures beside them, with the title and a reading time underneath. Free People of Color in Louisiana’s The Collections (one plate per partner library) and Terminology are the first, as walls of plates only.</li>
+<li>Entries with no picture open in a reading view: the plate fades back and the text gets a wide column in larger type, for reading at length.</li>
+</ul>
+HTML),
+  $text('Fri Nov 20: Every Free People of Color gallery opens on a picture', <<<'HTML'
+<ul>
+<li>The Collections, Terminology and Resources had no lead picture. The Collections now opens on the sculptor Eugène Warburg’s 1851 sketch of a marble floor for St. Louis Cathedral, kin to his letter on the cover; Terminology on the page of the register, whose color column is what the glossary explains; Resources on the cover of Basile Barès’s carnival music of 1875, one of the old exhibition’s own pictures, now from Tulane’s copy.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: Free People of Color in Louisiana comes to v2', <<<'HTML'
 <ul>
 <li>The 2015 exhibition from the NEH project with the Louisiana State Museum, the New Orleans Public Library, The Historic New Orleans Collection and Tulane is built as a new exhibition page, not published yet: Michael Taylor’s history in seven chapters, the 60 collections by partner, Terminology, Resources and About the Project.</li>
