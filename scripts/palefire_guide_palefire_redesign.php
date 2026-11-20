@@ -879,6 +879,13 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Free People of Color in Louisiana comes to v2', <<<'HTML'
+<ul>
+<li>The 2015 exhibition from the NEH project with the Louisiana State Museum, the New Orleans Public Library, The Historic New Orleans Collection and Tulane is built as a new exhibition page, not published yet: Michael Taylor’s history in seven chapters, the 60 collections by partner, Terminology, Resources and About the Project.</li>
+<li>The old pages had four small pictures. The new page has twelve, all from the project’s own collection in the Louisiana Digital Library, at full size: a receipt to Rose signed by Andrew Jackson, a mother’s petition to free her daughter, the register free people of color had to sign to stay in the state, a sheriff’s sale, the sculptor Eugène Warburg’s letter to Paris and more. Each caption links its record.</li>
+<li>Eight typos fixed and dead partner links replaced; curators can check every change in the Special Collections Exhibitions guide.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: News and events steps aside when there is no news', <<<'HTML'
 <ul>
 <li>When nothing is scheduled at Hill, no blog post is from the last 30 days and no exhibition is on view, News and events now disappears from Special Collections instead of showing one lonely card. The opening screen’s numbers close up behind it.</li>

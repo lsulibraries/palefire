@@ -4,7 +4,7 @@
  * @file
  * Guide page: "Special Collections Exhibitions", every change made to the text,
  * layout and images of the Special Collections online exhibitions (AVES,
- * Audubon, Occult, Union Art Gallery) when they moved to Palefire, and the
+ * Audubon, Occult, Union Art Gallery, Free People of Color) when they moved to Palefire, and the
  * open proposals for AVES's biographies,
  * for curators to check: what was corrected (old → new), what to verify,
  * and what was written new. As a Modular page in guide mode. Run
@@ -160,6 +160,7 @@ $section('How the exhibitions were moved', [
 <li><strong>AVES</strong> (2012) and <strong>Occult Science and Philosophy in the Renaissance</strong> (2011) were Hill Online Exhibitions on exhibitions.blogs.lib.lsu.edu, a blog that is gone. Their text comes from the Wayback Machine’s copies.</li>
 <li><strong>John James Audubon in Louisiana</strong> (2021) was at lib.lsu.edu/exhibitions/john-james-audubon. The Wayback Machine has its landing and section pages; the bird and manuscript pages come from the students’ copy at /audubon.</li>
 <li><strong>LSU Union Art Gallery</strong> was a six-page showcase on libstage, never on the public site.</li>
+<li><strong>Free People of Color in Louisiana</strong> (2015) was a set of static pages at /sites/all/files/sc/fpoc, later copied to Showcase pages under /fpoc. Its text comes from the static pages.</li>
 </ul>
 <p>Each now lives at /v2/special/exhibitions/&lt;name&gt;, as one page of galleries. Each is built by a script from a data file in the theme (scripts/data/&lt;name&gt;.json), so it can be rebuilt, and every correction is made in the data file as well as on the page.</p>
 <h3>Text</h3>
@@ -249,6 +250,56 @@ $section('AVES', [
 <ul><li>The 16 titles for the photographs on the People and Places and Modern Fieldwork walls (2026-11-20), each written from its caption: People and Places: The interior of Guiana, Wied on the Rio Doce, Spix and a ritual drink, Bates mobbed by aracaris, Camp in British Guiana, The Beebes at the barranca, Blair Beebe’s tent, Two castles, Field research today, Candles and computers. Modern Fieldwork: John O’Neill on the Rio Heath, 1977; On the Rio Shesha, 1987; Condor Expedition, 2006; Life in the Condor camp; Preparing Jocotoco antpittas; Tumbes, 2009. And the Biographies timeline’s intro.
 </li><li>The 42 biography cards’ Summary and Role (<code>scripts/palefire_exhibit_aves_bio_cards.php</code>, 2026-11-20): two sentences each, drafted only from that entry’s own biography. Change any on the entry’s edit form; the script never overwrites a filled field.
 </li><li>The 16 gallery lead captions, the credit line and alt text for every image.
+</li></ul>
+HTML),
+]);
+
+$section('Free People of Color in Louisiana: Revealing an Unknown Past', [
+  $text(NULL, <<<'HTML'
+<p>Built at <a href="/v2/special/exhibitions/fpoc">/v2/special/exhibitions/fpoc</a>, not published yet.</p>
+<p>Exhibition: Free People of Color in Louisiana: Revealing an Unknown Past, the online exhibition of the NEH grant project (2013–2015) of LSU Libraries Special Collections, the Louisiana State Museum, the New Orleans Public Library, The Historic New Orleans Collection and Tulane University’s Louisiana Research Collection.<br>Old site: the static pages at /sites/all/files/sc/fpoc (2015), copied to twelve Showcase pages under /fpoc (with /special/fpoc), whose characters were mis-encoded. The text is taken from the static pages.</p>
+<h3>Changed on the page</h3>
+<ul><li>Eleven galleries: Introduction; the six chapters of Michael Taylor’s history (Contexts, Early Days, Transition, Golden Age, Decline and Civil War, Legacies); The Collections; Terminology; Resources; About the Project.
+</li><li>The Collections: one entry per partner, each with a link to its research center, and its 60 collections as paragraphs.
+</li><li>Resources: the Selected Bibliography is a Sources list; the three lists of links follow.
+</li><li>About the Project takes in the Grant Team page.
+</li><li>Pictures: the old pages had four, at 250px. Three came from The Historic New Orleans Collection’s own holdings and aren’t in the digital collection (the Jules Lion lithograph of the cathedral, the portrait of Victor Séjour, and the <em>Variétés du Carnaval</em> sheet music), so they are left out. The twelve pictures on the new page all come from the project’s collection in the Louisiana Digital Library, made from its 4,000px masters: Bellazire Meullion’s 1845 receipt (from the old About page, now at full size), the Warburg letter (the cover), Marianne’s petition, the Circe act of freedom, the Durand letter, the Lemelle certification, the receipt to Rose signed by Andrew Jackson, the Durnford memorandum book, the Register of free colored persons (its cover and a page), the 1860 sheriff’s sale broadside and the Desdunes prospectus.
+</li></ul>
+<h3>Corrected</h3>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>Ponce de Léon</del></td><td><ins>Ponce de León</ins></td></tr>
+<tr><td><del>their experiences..</del></td><td><ins>their experiences.</ins></td></tr>
+<tr><td><del>a 25 years-long liaison</del></td><td><ins>a 25-year liaison</ins></td></tr>
+<tr><td><del>crystalized</del></td><td><ins>crystallized</ins></td></tr>
+<tr><td><del>French speaking-free people of color</del></td><td><ins>French-speaking free people of color</ins></td></tr>
+<tr><td><del>Lousiiana</del></td><td><ins>Louisiana</ins> <em>Johanna Lee Davis Smith’s dissertation, in the bibliography</em></td></tr>
+<tr><td><del>expressed in herein</del></td><td><ins>expressed herein</ins> <em>the NEH notice</em></td></tr>
+<tr><td><del>àcet État</del></td><td><ins>à cet État</ins> <em>Marigny’s <em>Réflexions</em>, in the collection list</em></td></tr>
+</tbody>
+</table>
+<ul><li>Curly quotes and apostrophes, and en dashes in number ranges (1718–1803).
+</li>
+<li>The italics and spacing around <em>creole</em>, <em>criollo</em> and <em>crioulo</em> (Terminology).
+</li></ul>
+<h3>Links</h3>
+<ul><li>The Grant Team is listed as it was in 2015, without its e-mail addresses.
+</li><li>LSU catalog links go to Combined Search; LSU and Louisiana State Museum finding aids (PDFs) still work and are kept.
+</li><li>The partners’ old catalog and finding aid links no longer work (The Historic New Orleans Collection’s catalog, Tulane’s Archon and Voyager, the New Orleans Public Library’s nutrias.org pages), so they’re gone; each partner’s entry links to its research center instead.
+</li><li>Resources: the links the Showcase pages had already updated are used (UNC Greensboro, the Amistad Research Center and Le Musée de f.p.c. on the Wayback Machine, Rootsweb). The University of Virginia’s visual record has moved to slaveryimages.org.
+</li></ul>
+<h3>To verify</h3>
+<p>Left as written:</p>
+<ul><li>“Institute Catholique” (usually “Institution Catholique des Orphelins Indigents”, or “Institut Catholique”).
+</li><li>“Henriette Delille … foundress of the Sisters of the Holy Family, the second oldest Catholic religious order for women of color.”
+</li><li>“Réflexions … Reprèsentans” in the collection list keeps the 1848 title page’s spelling.
+</li><li>The grant team’s titles are as of 2015.
+</li></ul>
+<h3>New wording to check</h3>
+<ul><li>The credit line.
+</li><li>The twelve captions and alt texts, written from each item’s LDL record.
+</li><li>The cover’s object label (A. Sampson, Letter introducing the sculptor Eugène Warburg, 1852).
 </li></ul>
 HTML),
 ]);

@@ -191,7 +191,7 @@ const corrections = (html) => html.replace(/<ul>((?:(?!<\/?ul>)[\s\S])*?)<\/ul>/
 // ---- Exhibitions ------------------------------------------------------------
 const OH = 'https://lib.lsu.edu/sites/all/files/oralhistory/presentations/';
 const oral = SPECIAL
-  ? [['aves', 'aves'], ['audubon', 'audubon'], ['occult', 'occult'], ['unionartgallery', 'unionartgallery', 'unpublished']]
+  ? [['aves', 'aves'], ['audubon', 'audubon'], ['occult', 'occult'], ['unionartgallery', 'unionartgallery', 'unpublished'], ['fpoc', 'fpoc', 'unpublished']]
   : [
     ['mossville', 'mossvilleexhibit'], ['gu272', 'gu272'], ['graphicdesign', 'graphicdesign'], ['klsu', 'klsu'],
     ['storm', 'storm'], ['jf', 'jf'], ['lsuag', 'lsuag'], ['lady', 'lady'], ['rpoe', 'rpoe'], ['dntume', 'dntume'], ['football', 'football'],
@@ -230,7 +230,7 @@ let tail = src.slice(tailStart);
 const what = SPECIAL
   ? `the text,
  * layout and images of the Special Collections online exhibitions (AVES,
- * Audubon, Occult, Union Art Gallery) when they moved to Palefire, and the
+ * Audubon, Occult, Union Art Gallery, Free People of Color) when they moved to Palefire, and the
  * open proposals for AVES's biographies,`
   : `the text,
  * audio and images of the eleven oral history exhibitions when they moved
