@@ -6782,6 +6782,51 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
 
 // A slab across the caption (the site's secondary button), the words at
 // its start and the arrow at its end.
+// Restore: the large deck back to its column (js/series-deck.js), at the
+// drawing's top right.
+.pf-series__restore {
+  @extend %pf-landing-label;
+  position: absolute;
+  top: 0;
+  right: calc((100% - var(--deck-w, 100%)) / 2);
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  min-height: 2.75rem;
+  padding: 0 .875rem;
+  border: 1px solid #{$pf-hairline};
+  background: var(--pf-deck-bg);
+  color: var(--pf-toc-color);
+  cursor: pointer;
+  transition: color $pf-hover-out ease;
+
+  &[hidden] {
+    display: none;
+  }
+
+  &:hover {
+    color: var(--pf-section-fg, var(--bs-body-color));
+    transition-duration: $pf-hover-in;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-ui-gold, var(--pf-g-accent, #{$pf-gold}));
+    outline-offset: 2px;
+  }
+
+  svg {
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+::view-transition-group(pf-series-deck) {
+  animation-duration: .5s;
+  animation-timing-function: cubic-bezier(.2, .7, .2, 1);
+}
+
 .pf-series__now-open {
   @extend %pf-button-secondary;
   flex: none;
@@ -6916,6 +6961,49 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
     // twelve cards.
     .pf-series__views[data-pf-view="list"] .pf-series__list {
       --pf-fold-rows: 12;
+    }
+
+    // The easter egg (js/series-deck.js): double-clicked, the deck is drawn
+    // across both columns, centered and up to 60rem wide, with the series
+    // under it; it scrolls with the page, unfaded. Restore (at its top
+    // right), another double-click or Escape puts it back.
+    .pf-series__machine {
+      cursor: zoom-in;
+      user-select: none;
+    }
+
+    &.is-big {
+      .pf-series__split {
+        row-gap: clamp(2rem, 4vw, 3rem);
+      }
+
+      :is(.pf-series__side, .pf-series__body) {
+        grid-column: 1 / -1;
+      }
+
+      .pf-series__side {
+        padding: 0;
+      }
+
+      .pf-series__deck {
+        --deck-w: min(100cqw, 60rem);
+        --over: 0px;
+        position: relative;
+        top: auto;
+        max-height: none;
+        scroll-margin-top: calc(var(--pf-header-h) + 1.5rem);
+      }
+
+      .pf-series__machine {
+        cursor: zoom-out;
+        -webkit-mask-image: none;
+        mask-image: none;
+      }
+
+      .pf-series__now {
+        align-self: center;
+        width: var(--deck-w);
+      }
     }
   }
 }

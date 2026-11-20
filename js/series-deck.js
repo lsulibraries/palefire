@@ -27,7 +27,11 @@
  * tech and out of the tab order; nothing here is needed): its PLAY, PAUSE
  * and STOP keys work. PLAY keeps it playing after the pointer leaves, PAUSE
  * holds the reels and needles where they are (again to go on), STOP lets it
- * run down there and then; pointing at a series takes over again. Reduced motion (or the Settings
+ * run down there and then; pointing at a series takes over again. And a
+ * double-click on the deck draws it large, across both columns, the series
+ * under it, so its detail shows; Restore (its corner), another
+ * double-click or Escape puts it back, the page where it was. The change
+ * morphs where the browser can (View Transitions). Reduced motion (or the Settings
  * drawer's "Reduce motion"): the caption and the tape change, the meters
  * light with their needles at playing level (CSS), nothing runs.
  *
@@ -427,9 +431,50 @@
     const largest = links.reduce((best, link) => (number(seriesOf(link).count) > number(seriesOf(best).count) ? link : best), links[0]);
     put(largest, true);
 
+    // The deck drawn large (.is-big) and back.
+    const restore = document.createElement('button');
+    restore.type = 'button';
+    restore.className = 'pf-series__restore';
+    restore.tabIndex = -1;
+    restore.hidden = true;
+    restore.innerHTML = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 2v4H2M10 2v4h4M6 14v-4H2M10 14v-4h4"/></svg><span></span>';
+    restore.querySelector('span').textContent = Drupal.t('Restore');
+    deck.append(restore);
+    let back = 0;
+    const big = (on) => {
+      if (on === section.classList.contains('is-big') || (on && !section.classList.contains('has-deck'))) {
+        return;
+      }
+      const change = () => {
+        if (on) {
+          back = window.scrollY;
+        }
+        section.classList.toggle('is-big', on);
+        restore.hidden = !on;
+        if (on) {
+          deck.scrollIntoView({ block: 'start', behavior: 'instant' });
+        }
+        else {
+          window.scrollTo({ top: back, behavior: 'instant' });
+        }
+      };
+      if (!document.startViewTransition || still()) {
+        change();
+        return;
+      }
+      deck.style.viewTransitionName = 'pf-series-deck';
+      document.startViewTransition(change).finished.finally(() => {
+        deck.style.viewTransitionName = '';
+      });
+    };
+
     let loaded = false;
     const layout = () => {
       const on = wide.matches;
+      if (!on) {
+        section.classList.remove('is-big');
+        restore.hidden = true;
+      }
       section.classList.toggle('has-deck', on);
       deck.hidden = !on;
       if (on && !loaded) {
@@ -486,6 +531,17 @@
       }
       else {
         hold(false);
+      }
+    });
+    machine.addEventListener('dblclick', (event) => {
+      if (!event.target.closest('.key')) {
+        big(!section.classList.contains('is-big'));
+      }
+    });
+    restore.addEventListener('click', () => big(false));
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        big(false);
       }
     });
     section.addEventListener('focusin', hand);

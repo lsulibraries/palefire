@@ -640,6 +640,7 @@ HTML),
 <li>What Endures: three episodes to a page now, so the list stays short enough to see together with the cassette and the episode’s description.</li>
 <li>Oral History’s series no longer repeat a “Series” heading and intro (kept for screen readers); the tape deck moves up level with the first cards.</li>
 <li>The Grid / List switch now lines up with the last column of cards under it, on every page that has one.</li>
+<li>Double-click the Oral History tape deck to see it large across the page; Restore, Escape or another double-click puts it back.</li>
 </ul>
 HTML),
   $text('Thu Nov 19: Scholarly Repository full text', <<<'HTML'
