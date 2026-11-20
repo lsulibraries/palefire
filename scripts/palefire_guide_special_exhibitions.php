@@ -4,7 +4,7 @@
  * @file
  * Guide page: "Special Collections Exhibitions", every change made to the text,
  * layout and images of the Special Collections online exhibitions (AVES,
- * Audubon, Occult, Union Art Gallery, Free People of Color) when they moved to Palefire, and the
+ * Audubon, Occult, Union Art Gallery, Free People of Color, New from Old Natchez) when they moved to Palefire, and the
  * open proposals for AVES's biographies,
  * for curators to check: what was corrected (old → new), what to verify,
  * and what was written new. As a Modular page in guide mode. Run
@@ -161,6 +161,7 @@ $section('How the exhibitions were moved', [
 <li><strong>John James Audubon in Louisiana</strong> (2021) was at lib.lsu.edu/exhibitions/john-james-audubon. The Wayback Machine has its landing and section pages; the bird and manuscript pages come from the students’ copy at /audubon.</li>
 <li><strong>LSU Union Art Gallery</strong> was a six-page showcase on libstage, never on the public site.</li>
 <li><strong>Free People of Color in Louisiana</strong> (2015) was a set of static pages at /sites/all/files/sc/fpoc, later copied to Showcase pages under /fpoc. Its text comes from the static pages.</li>
+<li><strong>New from Old Natchez</strong> (2002) was a set of Showcase pages under /natchez, whose Image and Transcript links go to the 2002 files. Its text comes from the Showcase pages.</li>
 <li><strong>Made in America: Selected Imprints from 1776–1826</strong> (2026) had only an announcement at /260908/madeinamerica. Its text comes from the exhibition’s own panels.</li>
 <li><strong>From Red Stick to River Capital</strong> (1999) was a set of static pages at /sites/all/files/sc/exhibitions/e-exhibits/redstick, later copied to Showcase pages under /brhistory. Its text comes from the Showcase pages, checked against the static pages.</li>
 </ul>
@@ -649,6 +650,49 @@ $section('British Voices from South Asia', [
 </li></ul>
 <h3>New wording to check</h3>
 <ul><li>The credit line and subtitle, the six essay plate headings, the interview plate headings and the 51 summaries, the cover’s object label and the alt text.
+</li></ul>
+HTML),
+]);
+
+$section('New from Old Natchez', [
+  $text(NULL, <<<'HTML'
+<p>Built at <a href="/v2/special/exhibitions/natchez">/v2/special/exhibitions/natchez</a>, not published yet.</p>
+<p>Exhibition: New from Old Natchez, manuscripts about the Natchez area recently acquired by LSU Libraries Special Collections, shown at the Historic Natchez Foundation from February to August 2002 during the Historic Natchez Conference. Texts by Tara Zachary, Assistant Curator for Manuscripts.<br>Old site: the Showcase pages /natchez/introduction and nodes 290–298 (eight collections and the bibliography), whose Image and Transcript links go to the 2002 files. The text is from the Showcase pages, the transcriptions from the 2002 files.</p>
+<h3>Changed on the page</h3>
+<ul><li>Ten galleries, all walls with a lead picture: Introduction; the eight collections (Conner, Farrar, Hunt, McMurran-Austen, Muggah-Glover-Guyther, Peirce-Haralson-Rumble, Schwartz, Stewart); About the Exhibition (the Louisiana and Lower Mississippi Valley Collections, the credits and the bibliography).
+</li><li>Each collection opens with text plates on the family and the papers; the Schwartz note on the Federal occupation is a plate of its own, Natchez under occupation. Each numbered item is an entry with a short title: its pages, turned in the object view, its note and its transcription. Rebecca Minor’s two letters, one item on the old page, are two entries.
+</li><li>Pictures: 77, each the best copy found. Most are the 2002 exhibition’s own 300 dpi scans on the R: drive (EXHIB_Natchez Exhibit Images - 2002), about twice the old web size. Two McMurran letters come from the Louisiana Digital Library at full length (12 and 4 pages, where the old site showed 9 and 3 images); three McMurran letters are only in the old web images. The cover and two Introduction tiles are new crops from the scrapbook scans: the 1913 baptism under the hill and La Belle Talton.
+</li><li>The 2002 contact details (e-mail, phone, the Foundation’s address) are gone; the physical exhibition is in the credit line.
+</li></ul>
+<h3>Corrected</h3>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>January 17, 1817</del></td><td><ins>January 29, 1817</ins> <em>Israel Loring’s letter, dated “29th Jany 1817”</em></td></tr>
+<tr><td><del>Zachary’s Taylor’s nomination</del></td><td><ins>Zachary Taylor’s nomination</ins></td></tr>
+<tr><td><del>J.W. Alfvord</del></td><td><ins>J.W. Alvord</ins></td></tr>
+<tr><td><del>A letter … give an account</del></td><td><ins>gives an account</ins></td></tr>
+<tr><td><del>Pierce-Haralson-Rumble</del></td><td><ins>Peirce-Haralson-Rumble</ins> <em>the Introduction</em></td></tr>
+<tr><td><del>as new member of the elite</del></td><td><ins>as a new member of the elite</ins></td></tr>
+<tr><td><del>Cartes de visites</del></td><td><ins>Cartes de visite</ins></td></tr>
+<tr><td><del>teachers salaries</del></td><td><ins>teachers’ salaries</ins></td></tr>
+</tbody>
+</table>
+<ul><li>Small fixes in “the John T. McMurran Sr.’s death”, “(d.1899) … Md,”, “p. 64-74” and the Harris citation; curly quotes and en dashes in ranges.
+</li><li>Transcriptions: 20 characters the old files had lost in the Minor and Rumble letters are restored from context as quotation marks or dashes.
+</li><li>The full list is in the theme’s docs/special-exhibition-corrections/natchez.md.
+</li></ul>
+<h3>To verify</h3>
+<p>Left as written:</p>
+<ul><li>Alie McMurran’s November 1856 letter has no transcription: the old file stops after its first line, and neither R: nor the LDL has one. The Lovell and Brady transcriptions end before the letters do, as on the old site.
+</li><li>Mary Elizabeth McMurran is “(1835–1861)” but died “in 1864” in the next paragraph.
+</li><li>The scrapbook is dated “ca. 1898–1903”, but holds photographs of 1905–1906 and ca. 1913.
+</li><li>McCrery, MacCrerys and Macrery: three spellings of one family.
+</li><li>The Schwartz collection is “Papers” in its heading and “J.C. Schwartz Records” in the Introduction.
+</li></ul>
+<h3>New wording to check</h3>
+<ul><li>The subtitle (“Manuscripts recently acquired by LSU Special Collections”), the credit line and the physical-exhibition note.
+</li><li>The entry and plate titles, the plates’ Summaries, the Introduction’s three tile notes, the captions, the cover’s object label and the alt text for every picture.
 </li></ul>
 HTML),
 ]);

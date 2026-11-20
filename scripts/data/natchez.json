@@ -1,0 +1,1162 @@
+{
+ "title": "New from Old Natchez",
+ "subtitle": "Manuscripts recently acquired by LSU Special Collections",
+ "credit": "<p>An exhibition of manuscripts about the Natchez area recently acquired by LSU Libraries Special Collections, shown at the Historic Natchez Foundation from February to August 2002 as part of the Historic Natchez Conference. Texts by Tara Zachary, Assistant Curator for Manuscripts.</p>",
+ "cover": "natchez-baptism-1913.jpg",
+ "cover_label": {
+  "maker": "Unidentified photographer",
+  "title": "Baptism in the Mississippi River under the hill at Natchez",
+  "date": "ca. 1913",
+  "medium": "Photograph in Mary Macrery Britton Conner’s scrapbook. Lemuel P. Conner Family Papers, LSU Libraries Special Collections"
+ },
+ "year": "2002",
+ "physical_note": "Shown at the Historic Natchez Foundation, Natchez, Mississippi, from February to August 2002, during the Historic Natchez Conference.",
+ "source": "https://lib.lsu.edu/natchez/introduction and its nine sibling pages (nodes 290–298), from the 2002 site",
+ "pages": [
+  {
+   "title": "Introduction",
+   "anchor": "introduction",
+   "display": "wall",
+   "lead": "mcmurran111856p1.jpg",
+   "focus": "top",
+   "lead_caption": "<p><strong>Alie McMurran to her father, George Austen, [November 1856], first page.</strong><br>McMurran-Austen Family Papers, Mss. 4795, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p15140coll10:5020\">Louisiana Digital Library</a></p>",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "Alie McMurran’s Natchez",
+     "anchor": "introduction-alie-mcmurran",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<blockquote><p>“<em>We that think the South behind the times certainly so far I have seen nothing to prove it. Beautiful residences, well-kept grounds, fine and certainly the elegant establishments that have driven up to the door at Melrose magnificent hundred-dollar dresses but I have looked in wonder and astonishment certainly in the forty calls I had before leaving . . . There is a great wealth mostly planters having residences around Natchez Oh these grandees. I wonder if they would be so polite, so wondrous prompt in their attention if they knew Mrs. McMurran was a plain farmer’s daughter.</em>”</p></blockquote><p>So wrote Alie Austen McMurran, newly married to Natchez’s John McMurran, Jr., to her mother in November 1857, of her impressions of Natchez and Natchez society. A native of Maryland from a non-slaveholding family, Alie McMurran’s correspondence offers a view of antebellum Natchez and plantation and slave society from the perspective of an outsider suddenly expected to participate in it as a new member of the elite.</p><p>Her letters are part of the McMurran-Austen Family Papers, a recent addition to LSU’s <a href=\"/v2/special\">Special Collections</a>. Examples of her writings are featured in New from Old Natchez, an exhibition of manuscript materials recently acquired by the LSU Special Collections about the Natchez area. The physical exhibition will be on display at the Historic Natchez Foundation from mid-February to August, 2002, as part of the Historic Natchez Conference.</p>"
+      }
+     ],
+     "summary": "Alie McMurran’s correspondence offers a view of antebellum Natchez and plantation and slave society from the perspective of an outsider suddenly expected to participate in it."
+    },
+    {
+     "type": "entry",
+     "title": "A tenant writes to David Hunt, 1822",
+     "anchor": "introduction-shenak-letter",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "hunt01101822p2.jpg",
+       "caption": "<p><strong>Edmond Shenak (?) to David Hunt, January 10, 1822, second page.</strong><br>David Hunt Letters, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+       "layout": "center"
+      },
+      {
+       "type": "text",
+       "body": "<p>Shenak rented some of Hunt’s land on Lake Concordia. He reports his improvements and negotiates the coming year’s arrangements. The whole letter, with Hunt’s reply, is in <a href=\"#hunt-shenak-1822\">David Hunt Letters</a>.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "The exhibition",
+     "anchor": "introduction-exhibition",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>The exhibition is comprised of reproductions of a sampling of letters, photographs, scrapbooks, and ledgers. Items from the David Hunt Letters illustrate the financial concerns of an antebellum planter. The McMurran-Austen Family Papers, described above, also relate to women and family life, plantation administration, and the Civil War. The papers of B.G. Farrar, a Union officer who raised a regiment of African-American soldiers in the Natchez vicinity and commanded Vidalia, address those activities. The Muggah-Glover-Guyther Family Papers and the Peirce-Haralson-Rumble Family Papers also pertain to women and family life, as well as social life and customs in the Natchez area.</p><p>Additions to collections previously held by LSU the J.C. Schwartz Records, Robert H. Stewart Family Account Books, and the Lemuel P. Conner Family Papers are also represented. Newly acquired ledgers of the merchants Schwartz and Stewart document yellow fever epidemics, Civil War and Reconstruction economics, and deaths of local residents. A scrapbook from the Conner papers that includes late 19th-century photographs of former slaves and African-American baptisms at Natchez Under the Hill is also featured.</p>"
+      }
+     ],
+     "summary": "The exhibition is comprised of reproductions of a sampling of letters, photographs, scrapbooks, and ledgers."
+    },
+    {
+     "type": "entry",
+     "title": "Baptism under the hill",
+     "anchor": "introduction-baptism",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "natchez-baptism-1913.jpg",
+       "caption": "<p><strong>Baptism in the Mississippi River under the hill at Natchez, ca. 1913.</strong><br>Photograph in Mary Macrery Britton Conner’s scrapbook. Lemuel P. Conner Family Papers, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+       "layout": "center"
+      },
+      {
+       "type": "text",
+       "body": "<p>From a page of Mary Macrery Britton Conner’s scrapbook: “Baptisms in the Mississippi River under the hill at Natchez, ca. 1913, and at Dixie Pond.” The whole page is in <a href=\"#conner-scrapbook-4\">Lemuel P. Conner Family Papers</a>.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "La Belle Talton",
+     "anchor": "introduction-la-belle-talton",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "la-belle-talton.jpg",
+       "caption": "<p><strong>La Belle Talton, ca. 1905–1906.</strong><br>Photograph in Mary Macrery Britton Conner’s scrapbook. Lemuel P. Conner Family Papers, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+       "layout": "center"
+      },
+      {
+       "type": "text",
+       "body": "<p>From a page of photographs of former slaves of the MacCrerys and their descendants in Mary Macrery Britton Conner’s scrapbook. The whole page is in <a href=\"#conner-scrapbook-2\">Lemuel P. Conner Family Papers</a>.</p>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Lemuel P. Conner Family Papers, 1846–1913 and 1935",
+   "anchor": "conner",
+   "display": "wall",
+   "lead": "conner-scrapbook-3.jpg",
+   "focus": "top",
+   "lead_caption": "<p><strong>Scenes at Cedar Grove Plantation and a baptism.</strong><br>A page of Mary Macrery Britton Conner’s scrapbook. Lemuel P. Conner Family Papers, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "The Conners of Natchez",
+     "anchor": "conner-family",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p><strong>Lemuel P. Conner Family Papers, 1846–1913 and 1935</strong><br>Addition of 597 items and 7 manuscript volumes</p><p>Lemuel Parker Conner (1827–1891) was born in Natchez and attended Yale University. He studied law under John T. McMurran of Natchez. In 1848, he married Elizabeth Francis (Fanny) Turner; the couple had ten children. He served as a lieutenant colonel under General Braxton Bragg during the Civil War. After the war, he managed Killarney and Rifle Point plantations in Concordia Parish, La.</p><p>In the 1880s, he resumed practicing law in Vidalia and St. Joseph, La., and opened a firm with his son, Lemuel P. Conner, Jr. (1861–1943), who had graduated from Louisiana State University in 1882. The younger Conner married Mary Macrery Britton in 1888, and they had four children. They lived at Clover Nook in Natchez, and Conner continued to practice law in the area. In 1927, he was elected to the office of City Clerk in Natchez, and he served in that position until his retirement in 1941.</p>"
+      }
+     ],
+     "summary": "Lemuel Parker Conner (1827–1891) was born in Natchez and attended Yale University. He studied law under John T. McMurran of Natchez."
+    },
+    {
+     "type": "entry",
+     "title": "The papers",
+     "anchor": "conner-papers",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>The Lemuel P. Conner Family Papers comprise family and business correspondence, legal and business papers, plantation records, printed items, manuscript volumes, and photographs. Items relate to family, social, and economic life; plantation operation and cotton culture; slavery and labor problems; and politics of the 19th and 20th centuries.</p><p>The accretion includes a scrapbook kept by Mary Macrery Britton Conner (ca. 1898–1903) that includes photographs of former family slaves and their descendants, African-American baptisms, and newspaper clippings relating to African-Americans. One ledger is filled with newspaper clippings relating to New Orleans and Natchez from the 1870s to the 1880s, including Natchez city [financial?] statements, 1863–1888, articles on elections, sexton’s reports, and separately printed broadsides of Natchez city financial statements. Three additional ledgers contain accounts of the Bank of the United States in Natchez (1841–1858) and of the Commercial and Railroad Bank of Natchez (1842–1860) and an inventory (ca. 1935?) of Clover Nook. Lemuel P. Conner, Jr.’s notebooks for his chemistry and history classes at Louisiana State University (1881) are also present. Photographic prints and negatives show Conner family members and residences, as well as some Natchez scenes.</p>"
+      }
+     ],
+     "summary": "The accretion includes a scrapbook kept by Mary Macrery Britton Conner that includes photographs of former family slaves and their descendants, African-American baptisms, and newspaper clippings."
+    },
+    {
+     "type": "entry",
+     "title": "Mammy, Mandy and a former slave of the Chotards",
+     "anchor": "conner-scrapbook-1",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "conner-scrapbook-1.jpg",
+       "caption": "<p><strong>Photographs of Mammy, Mandy, and an unidentified former slave of the related Chotard family, at Elgin.</strong><br>Mary Macrery Britton Conner’s scrapbook. Lemuel P. Conner Family Papers, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+       "layout": "center"
+      },
+      {
+       "type": "text",
+       "body": "<p>The notation indicates that Mandy’s grandparents came from Nashville over the Natchez Trace with Grandma and Grandpa McCrery in 1805.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Louisa, Russ, Old All Right and La Belle Talton",
+     "anchor": "conner-scrapbook-2",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "conner-scrapbook-2.jpg",
+       "caption": "<p><strong>Photographs of former slaves of the MacCrerys and their descendants Louisa, the Ayres nurse; Russ; Old All Right; and La Belle Talton, ca. 1905–1906.</strong><br>Mary Macrery Britton Conner’s scrapbook. Lemuel P. Conner Family Papers, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+       "layout": "center"
+      },
+      {
+       "type": "text",
+       "body": "<p>Photographs of former slaves of the MacCrerys and their descendants Louisa, the Ayres nurse; Russ; Old All Right; and La Belle Talton, ca. 1905–1906. [unclear]</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Cedar Grove and a baptism",
+     "anchor": "conner-scrapbook-3",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "conner-scrapbook-3.jpg",
+       "caption": "<p><strong>Scenes at Cedar Grove Plantation and a baptism.</strong><br>Mary Macrery Britton Conner’s scrapbook. Lemuel P. Conner Family Papers, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+       "layout": "center"
+      },
+      {
+       "type": "text",
+       "body": "<p>Cedar Grove had been the home of the Sharp family and is located on Kingston Road, just southeast of Natchez.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Baptisms under the hill and at Dixie Pond",
+     "anchor": "conner-scrapbook-4",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "conner-scrapbook-4.jpg",
+       "caption": "<p><strong>Baptisms in the Mississippi River under the hill at Natchez, ca. 1913, and at Dixie Pond.</strong><br>Mary Macrery Britton Conner’s scrapbook. Lemuel P. Conner Family Papers, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+       "layout": "center"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "B. G. Farrar Papers, 1863–1870",
+   "anchor": "farrar",
+   "display": "wall",
+   "lead": "farrar08111863.jpg",
+   "focus": "top",
+   "lead_caption": "<p><strong>Special Order No. 218, August 11, 1863.</strong><br>Directing the 30th Regiment Missouri Volunteers to recruit African-Americans at Natchez. B. G. Farrar Papers, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "Bernard G. Farrar",
+     "anchor": "farrar-farrar",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p><strong>B. G. Farrar Papers, 1863–1870</strong><br>13 items</p><p>Brevet Brigadier General Bernard G. Farrar, Colonel of the 6th U.S. Colored Artillery (Heavy) enlisted in the 30th Missouri Infantry in 1862. In August 1863, while assigned to the post at Natchez, Miss., he recruited a regiment of African-American soldiers. This unit became the 6th U.S. Colored Heavy Artillery. Farrar resigned from his post as the unit’s colonel in May 1865, and took a position in St. Louis. Farrar also served alternately as the commander of forces at Vidalia, La., and Natchez.</p><p>The collection includes letters, orders, and affidavits related to the recruiting of African-American soldiers, anticipated attacks, and plundering of plantations in the Natchez and Vidalia area. A letter published in the Natchez Democrat gives an account of an attack led by Farrar near Vidalia. An 1870 letter to Farrar from J.W. Alvord, General Superintendent of Education, Bureau of Refugees, Freedmen, and Abandoned Lands relates to the education of the freedmen.</p>"
+      }
+     ],
+     "summary": "In August 1863, while assigned to the post at Natchez, Miss., he recruited a regiment of African-American soldiers. This unit became the 6th U.S. Colored Heavy Artillery."
+    },
+    {
+     "type": "entry",
+     "title": "Special Order No. 218, August 11, 1863",
+     "anchor": "farrar-special-order-1863",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "farrar08111863.jpg",
+       "caption": "<p><strong>Special Order No. 218, August 11, 1863.</strong><br>B. G. Farrar Papers, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+       "layout": "center"
+      },
+      {
+       "type": "text",
+       "body": "<p>Special Order No. 218, August 11, 1863, directing the 30th Regiment Missouri Volunteers to recruit African-Americans at Natchez for service in the Army. By this time, the actions of the Louisiana Native Guards at Port Hudson had proven the valor and commitment of African-American soldiers. Their success in battle tipped the opinion of the Northern public, Federal officials, and military strategists in favor of recruiting blacks for the Army.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "The hands on Surham’s plantation, January 19, 1864",
+     "anchor": "farrar-surham-1864",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "<p><strong>Letter, January 19, 1864, to Lt. Col. H.A. McCaleb, with McCaleb’s reply.</strong><br>B. G. Farrar Papers, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+       "figures": [
+        {
+         "image": "farrar01191864p1.jpg"
+        },
+        {
+         "image": "farrar01191864p2.jpg"
+        }
+       ]
+      },
+      {
+       "type": "text",
+       "body": "<p>Letter, January 19, 1864, ordering Lt. Col. H.A. McCaleb, commanding officer of the 2nd Mississippi Artillery, to conscript hands from W.Q. Surham’s plantation. Includes McCaleb’s reply.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<h4>Transcription</h4><p>Hd Qrs. US Forces</p><p>Natchez Jany 19 1864</p><p>Comdg Officer 2nd</p><p>Miss, AD(?)</p><p>Sir:</p><p>You will turn over to Mr. Packard lessee of Mosville Plantation, all the hands that your recruiting officers have conscripted and taken from said plantation.</p><p>If you continue to corrupt the hands in the employ of lessees, duly appointed by the Commdr. who represents the government, you will be arrested and reported to Capt. Hd. Qr. for disobedience of orders.</p><p>Reply to<br>W. Q. Surham<br>Brig. Genl</p><p>[On the reverse:]</p><p>Hd Qrts 2nd Miss</p><p>Natchez Jan 19 1864</p><p>Col. B G Farrar</p><p>I will refer the within to you and await your answer before taking any action in the matter.</p><p>Respectfully your obd servt</p><p>H. A. McCaleb<br>Lt. Col Comdg 2nd Miss</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Plundering on the Tensas, December 11, 1864",
+     "anchor": "farrar-tensas-1864",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "<p><strong>B.G. Farrar to Captain T.C. Prescott, December 11, 1864.</strong><br>B. G. Farrar Papers, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+       "figures": [
+        {
+         "image": "farrar12111864p1.jpg"
+        },
+        {
+         "image": "farrar12111864p2.jpg"
+        }
+       ]
+      },
+      {
+       "type": "text",
+       "body": "<p>Letter, December 11, 1864, B.G. Farrar to Captain T.C. Prescott, about plundering by troops (probably former Confederates) of a woman’s home on the Tensas River.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<h4>Transcription</h4><p>Hd Qrs. U.S. Forces</p><p>Vidalia, La., Dec. 11, 1864</p><p>Capt.</p><p>Mrs. Russels, who resides on the Tensas, came to my picket lines with a statement that three men — Joe Frees, Rool, and Seth[?] Brogan, formerly attached to Jones Scouts and now living about Lake Concordia — came to her house several nights since and plundered her house of clothing, etc. They also threatened to return with wagons and carry off the cotton on the plantation. These men have been plundering all along the Tensas, and I most respectfully request permission to arrest them and have the matter investigated before the provost marshal. Mrs. Russels is desirous of seeing the Genl. Commanding about this matter. She is now at the picket line with a lady friend who accompanied her.</p><p>I have the honor to be</p><p>Very respectfully,</p><p>B. G. Farrar<br>Col. Comdg</p><p>Capt. S. C. Prescott<br>A.A.A. Genl.</p><p>[Reply:]</p><p>Head Quarters U.S. Forces<br>Natchez, Miss., Dec. 17, 1864</p><p>Respectfully returned to Col. B. G. Farrar, with instructions to arrest the three men mentioned and send them to St. Bechtel, Act.[ing] Provost Marshal. Mrs. Russell may be admitted, and such other witnesses as may be deemed proper, and sent over. Col. Farrar is also instructed to arrest any and all the men of Jones’ Scouts whom he may detect committing depredations.</p><p>By Command of<br>Brig. Genl. Brayman<br>T. C. Prescott<br>Capt. and A.A.A.G.</p>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "David Hunt Letters, 1804, 1810–1811, 1815–1818, 1820–1839",
+   "anchor": "hunt",
+   "display": "wall",
+   "lead": "hunt01291817.jpg",
+   "focus": "top",
+   "lead_caption": "<p><strong>Israel Loring to David Hunt, January 29, 1817.</strong><br>David Hunt Letters, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "David Hunt",
+     "anchor": "hunt-hunt",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p><strong>David Hunt Letters, 1804, 1810–1811, 1815–1818, 1820–1839</strong><br>95 items</p><p>Like many early settlers and wealthy plantation owners of the Natchez district, David Hunt was a native of New Jersey. He owned several plantations, mercantiles, and cotton gins in the Natchez area, many of which he had inherited from his uncle Abijah Hunt after the latter’s death in an 1811 duel. David Hunt had a home in Natchez but spent most of his time at Woodlawn, his plantation in Greenville, near Cole’s Creek. He also had business interests in Cincinnati and Lexington. The collection includes personal and business letters from his brothers and financial agents relating to the purchase of slaves, leasing his lands, and shipping cotton, as well as family news and fortunes.</p>"
+      }
+     ],
+     "summary": "Like many early settlers and wealthy plantation owners of the Natchez district, David Hunt was a native of New Jersey."
+    },
+    {
+     "type": "entry",
+     "title": "Israel Loring to David Hunt, 1817",
+     "anchor": "hunt-loring-1817",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "hunt01291817.jpg",
+       "caption": "<p><strong>Israel Loring to David Hunt, January 29, 1817.</strong><br>David Hunt Letters, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+       "layout": "center"
+      },
+      {
+       "type": "text",
+       "body": "<p>Israel Loring of Gibson Point, Mississippi, to David Hunt, January 29, 1817, regarding transporting cotton.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<h4>Transcription</h4><p>Gibson Point 29th Jany 1817</p><p>Dear Sir</p><p>I will thank you to inform me your arrangements to get your cotton from this place. Jn. M. Thompson has a boat in forwardness and offers to take it to N. Orleans for two dollars per bale Towards what he owes the house as there is no prospect of getting his debt in any way except that of humouring him perhaps he had better take it. I have between 70 and 80 bales in the ware house. D. McCaleb’s [?] cotton dtd [deposited] in Mr. Calvits gin by Balch[?] was pd out to Jas. McCaleb. This I can set straight.</p><p>Should you go to Natchez to the Bank Disct. at this timewill you be so good as to put my note in the bank for eight hundred dollars by signing my name and yours for 60 to 90 days. I stand in need of that amt out of my stmts [statements].</p><p>Your ob[edient] servant</p><p>Israel Loring</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Edmond Shenak to David Hunt, 1822",
+     "anchor": "hunt-shenak-1822",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "<p><strong>Edmond Shenak (?) to David Hunt, January 10, 1822.</strong><br>David Hunt Letters, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+       "figures": [
+        {
+         "image": "hunt01101822p1.jpg"
+        },
+        {
+         "image": "hunt01101822p2.jpg"
+        }
+       ]
+      },
+      {
+       "type": "text",
+       "body": "<p>Edmond Shenak (?) to David Hunt, January 10, 1822. Shenak rented some of Hunt’s land on Lake Concordia. He reports his improvements and negotiates the coming year’s arrangements.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<h4>Transcription</h4><p>Lake Concordia January 10, 1822</p><p>Mr. David Hunt</p><p>Dear Sir</p><p>I received your letter dated December 14th 1821. I am very sorry that you could not pay me a visit for I think if you was to see the place that you would think five hundred dollars a very [high?] rent taking every thing into concideration since I have been on the place I have added to the field sixty acres of land which was grown up with thorns, briers and other stuff but it was my intention to stay this year if we could agree on the price. I will give you for this year five hundred dollars if the water don’t come over and if it over flows I will pay no rent although I think five hundred dollars very high rent but on those terms I will take the place for this year. As respects last year’s rent I will pay as soon as possible. I am now attempting to get my cotton to the gin but the weather is such that I make a bad hand of it. But I hope I will be able to pay you in a few days. I am very sorry that you have had to wait this long for your money. I will leave your money at the house of Mr. Fisk in company as soon as possible. Let me know from you as soon as you can.</p><p>Yours respectfully,<br>Ed [Edmond] Senak[?]</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Hunt’s reply to Shenak, 1822",
+     "anchor": "hunt-reply-1822",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "hunt01141822p1.jpg",
+       "caption": "<p><strong>David Hunt to Edmond Shenak, January 14, 1822.</strong><br>David Hunt Letters, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+       "layout": "center"
+      },
+      {
+       "type": "text",
+       "body": "<p>Hunt’s reply to Shenak, January 14, 1822.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<h4>Transcription</h4><p>Woodlawn Jan. 14th 1822</p><p>Mr. Edmond Shenak</p><p>Dear Sir</p><p>Your respects of the 10th Inst. is at hand. In answer thereto I shall accept of your proposition of five hundred dollars for the rent of the plantation you now reside on for the ensuing year. Should the fresh overflow the cultivatable land and prevent your making a crop no rent will be expected. If it should be a partial overflow so in proportion will the rent be expected.</p><p>The payment for the last year’s rent will be in due time and the place of payment quite to my satisfaction. I shall expect the present year to be made namely Messrs Fisk and McNeil [?].</p><p>Very respectfully yours,<br>David Hunt</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Cotton seed from Honduras, 1823",
+     "anchor": "hunt-brady-1823",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "<p><strong>J. Brady of Wilkins and Linton to David Hunt, October 25, 1823.</strong><br>David Hunt Letters, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+       "figures": [
+        {
+         "image": "hunt10251823p1.jpg"
+        },
+        {
+         "image": "hunt10251823p2.jpg"
+        },
+        {
+         "image": "hunt10251823p3.jpg"
+        }
+       ]
+      },
+      {
+       "type": "text",
+       "body": "<p>J. Brady of Wilkins and Linton, cotton factors of New Orleans, to David Hunt, October 25, 1823. Brady inquires as to Hunt’s desire to obtain cotton seed from Honduras, and discusses other possible sources. The suffering in Natchez to which he refers was the yellow fever epidemic of 1823. John Quitman reported the extermination of entire families during that outbreak (James, p. 267). The letter also evidences Natchez planters’ involvement in the international cotton trade.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<h4>Transcription</h4><p>N. Orleans 25th October 1823</p><p>David Hunt Esq.</p><p>Dear Sir</p><p>Your esteemed favor of 15th past wk 19th is before us. Several wealthy planters on the river coast have through a friend of ours been anxious to obtain cotton seed from the Bay of Honduras of standards as being the highest point at which they can be obtained but no vessel has as yet been dispatched in that direction, nor indeed is there any commerce with the parts of Mexico or the Republic of Columbia where cotton is exported. We know of no better chances thus far than getting the seed from Vera Cruz and if you wish it, Mr. Hunt, will with great pleasure undertake to get our supply.</p><p>It is impossible to form an idea of the cash. The seed probably will cost nothing but the transportation from the interior and the shipping charges may be great. Please to say what are your wishes—or if you think proper we can get from the Carolinas a specimen of the green seed or upland cotton, the Sea Island or the [variety?] which cotton is as far as we can judge from samples in Charleston about the quality.</p><p>We have calculated that you were all this summer enjoying the healthy and pleasing territory of the western country and regret with you the cause of this disappointment. Natchez is still the scene of suffering beyond all former example and we experience much surprise that there has been no better or more ingenuous account of its origin than has yet become public. They must rest their hopes entirely upon God and hard and repeated frosts.</p><p>We are doing very little in cotton as yet; the dreadful havoc of rot seems to have influenced the physical energies of the planters. What we have received is generally of but middling quality and apart very poor indeed but the cotton price we have had is around 18 cents. The English markets are discouraging or at least vacillating and unsteady and has sunk; as the falling off, everything depends upon the word of the speculators who are the principal holders. They are alarmed in England at the continued imports of American cotton and the idea that Bahia and other parts of Brazil will pour in large stocks of cotton that have accumulated there during the blockade.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Peter Dickerson to David Hunt, 1830",
+     "anchor": "hunt-dickerson-1830",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "<p><strong>Peter Dickerson to David Hunt, December 3, 1830.</strong><br>David Hunt Letters, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+       "figures": [
+        {
+         "image": "hunt12031830p1.jpg"
+        },
+        {
+         "image": "hunt12031830p2.jpg"
+        }
+       ]
+      },
+      {
+       "type": "text",
+       "body": "<p>Peter Dickerson of Snowhill, Maryland, to David Hunt, December 3, 1830. Dickerson, a slave trader with whom Hunt frequently did business, answers Hunt’s inquiries about the availability of slaves.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<h4>Transcription</h4><p>Snowhill [Md] December 3, 1830</p><p>Mr. Hunt<br>Dear Sir,</p><p>I have a wish to write to you at any rate while I am writing I will ask the favour of you to forward my dividend. I am in hopes that I shall not have occasion to give you all the trouble in future as I think my friend in Natchez could do it with as little trouble as you. But I want to hear from you and I should be glad to hear how your friend Dunbar succeeded in his purchases. He wrote to me from Washington a letter of inquiry respecting the chance of purchasing on this shore which I honestly informed him was dull. I should have been glad to have seen him but I knew that he could not complete his purchases here in any time that he would like to stay. As there was several others here before him who were advertising at that time for 440 slaves all having the start. His chance was only good for a scattering one sometimes. With respect to the woman that you mentioned, I am out of all hope of obtaining one that I could recommend. I knew of two that I thought either would suit you but I cannot obtain them on any terms. There has been something said about a new bank in your state. I should like to know if it will go into operation and what will be the effect on the old one.</p><p>My wife and her three children are all well and I hope that you can say the same of yours.</p><p>With great esteem I am your friend,<br>Peter Dickerson</p>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "McMurran-Austen Family Papers, 1846–1878, 1942",
+   "anchor": "mcmurran",
+   "display": "wall",
+   "lead": "mcmurran08291856p1.jpg",
+   "focus": "top",
+   "lead_caption": "<p><strong>Mary Louise McMurran to John T. McMurran, Jr., August 29, 1856, first page.</strong><br>McMurran-Austen Family Papers, Mss. 4795, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p15140coll10:6584\">Louisiana Digital Library</a></p>",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "The McMurrans of Melrose",
+     "anchor": "mcmurran-family",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p><strong>McMurran-Austen Family Papers, 1846–1878, 1942</strong><br>143 items (bulk: 1856–1868)</p><p>John T. McMurran (1801–1866), a lawyer and state senator in Natchez, Mississippi, was married to the former Mary Louise Turner (1814–1891), with whom he had two children, John T. McMurran, Jr., and Mary Elizabeth McMurran (1835–1861). They built Melrose near Natchez in 1845, and it remained in the family until the Civil War.</p><p>John Jr. married Alie Austen (d. 1899) of Baltimore County, Md., in 1856, and they resided at Riverside Plantation in Wilkinson County, Miss., until the Civil War. During the war, John enlisted in a local artillery unit but was discharged in 1862 for deafness. In 1864 he worked as a clerk for the federal war department in Washington D.C. John Jr. and Alie had two daughters, Caroline (Carrie) and Alice (Alie), who moved with their mother from Riverside to her family home, Filstone Farm in Maryland, during the Civil War.</p><p>Mary Elizabeth McMurran married Farar Conner and lived in Natchez before moving to New Orleans, Louisiana, in 1857. They had two children, a son, Farar (Fazee), and a daughter. Farar remarried after Mary Elizabeth’s death from a spinal disease in 1864.</p>"
+      }
+     ],
+     "summary": "John T. McMurran, a lawyer and state senator in Natchez, and Mary Louise Turner built Melrose near Natchez in 1845, and it remained in the family until the Civil War."
+    },
+    {
+     "type": "entry",
+     "title": "The papers",
+     "anchor": "mcmurran-papers",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>The collection includes correspondence, printed items, photographs, and miscellaneous papers. The correspondence, primarily among John T. McMurran, Mary Louise McMurran, Alie McMurran, John T. McMurran, Jr., and the Austen family, pertains to John and Alie’s wedding and courtship, women and family life, the 1856 Know-Nothing National Convention in Baltimore and Whig political sentiment in Natchez, and opinions about secession and the Civil War. The letters also include a description of Riverside Plantation’s slaves and Alie’s impressions of the institution of slavery, Natchez, and Natchez society. Letters between Alie and John T. McMurran Jr., during his tenure as a clerk for the federal government during the war reflect his growing anti-Southern attitudes. Post-war letters from Natchez friends provide a description of conditions in Natchez and relate their bitterness toward Yankees. Printed items include clippings regarding John T. McMurran Sr.’s death in a steamboat accident and wedding invitations. Cartes de visite of Alie and Carrie, John Jr. and Alie’s daughters, are also present. Miscellaneous items include a household inventory, J. T. McMurran, Jr.’s discharge from the Confederate army in 1862, and military passes.</p>"
+      }
+     ],
+     "summary": "The letters include a description of Riverside Plantation’s slaves and Alie’s impressions of the institution of slavery, Natchez, and Natchez society."
+    },
+    {
+     "type": "entry",
+     "title": "Mary Louise McMurran to her son, August 29, 1856",
+     "anchor": "mcmurran-1856-08-29",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "<p><strong>Mary Louise McMurran to John T. McMurran, Jr., August 29, 1856.</strong><br>McMurran-Austen Family Papers, Mss. 4795, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p15140coll10:6584\">Louisiana Digital Library</a></p>",
+       "figures": [
+        {
+         "image": "mcmurran08291856p1.jpg"
+        },
+        {
+         "image": "mcmurran08291856p2.jpg"
+        },
+        {
+         "image": "mcmurran08291856p3.jpg"
+        },
+        {
+         "image": "mcmurran08291856p4.jpg"
+        }
+       ]
+      },
+      {
+       "type": "text",
+       "body": "<p>Mary Louise McMurran to John T. McMurran, Jr., August 29, 1856. She discusses his pending marriage in Maryland and expresses excitement that he will be near the Know-Nothing nominating convention and tells who from Natchez will participate. She also describes conditions at Riverside Plantation.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<h4>Transcription</h4><p>Melrose</p><p>August 29, 1856</p><p>My beloved Son,</p><p>The pleasure afforded us by your letter of the 16th inst., received (however, not until yesterday) you can well imagine. To know you were well and happy with your sweet Alie, and that soon she will be all thine own: this is welcome, and glad tidings to those who so truly, earnestly desire your well being, as all do here....</p><p>...Baltimore will be full of visitors the third week in Sept. as the National Convention opens then on the 17th. You will be too busy to attend of course but you can gain much and early information of the proceedings which will be of great interest to your Father. We hear Dr. Duncan, Mr. Saml. P. Duncan, Mr. Marshall, and Mr. J.P. Walworth are to be there of our section. You will be married at a notable time if the National nomination is given to Mr. Fillmore. The only man (your father thinks) to save our ship of Union, at this period.</p><p>Your father intends returning to Riverside tomorrow to remain until Wednesday. He thinks his presence necessary to inspire the Negroes to do their best in picking now. There is so much cotton open which would be lost should bad weather come again. There is also much sickness (tho of light character) according to Wickwire’s last letter, which he wishes to investigate the cause of, as it interferes with the full force which should now be in the field.</p><p>In his absence I shall be quite alone, unless Sister Fanny will lend me one or two of her little flock for company, but I have plenty of occupation, and pleasant thoughts, so do not fear the time passing heavily.</p><p>Ever in truest affection,<br>Your most devoted Mother</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Alie McMurran to her father, November 1856",
+     "anchor": "mcmurran-1856-11",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "<p><strong>Alie McMurran to her father, George Austen, [November 1856].</strong><br>McMurran-Austen Family Papers, Mss. 4795, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p15140coll10:5020\">Louisiana Digital Library</a></p>",
+       "figures": [
+        {
+         "image": "mcmurran111856p1.jpg"
+        },
+        {
+         "image": "mcmurran111856p2.jpg"
+        },
+        {
+         "image": "mcmurran111856p3.jpg"
+        },
+        {
+         "image": "mcmurran111856p4.jpg"
+        },
+        {
+         "image": "mcmurran111856p5.jpg"
+        },
+        {
+         "image": "mcmurran111856p6.jpg"
+        },
+        {
+         "image": "mcmurran111856p7.jpg"
+        },
+        {
+         "image": "mcmurran111856p8.jpg"
+        },
+        {
+         "image": "mcmurran111856p9.jpg"
+        },
+        {
+         "image": "mcmurran111856p10.jpg"
+        },
+        {
+         "image": "mcmurran111856p11.jpg"
+        },
+        {
+         "image": "mcmurran111856p12.jpg"
+        }
+       ]
+      },
+      {
+       "type": "text",
+       "body": "<p>Alie McMurran to her father, George Austen, [November 1856]. Alie describes her arrival at Riverside Plantation and recounts her impressions of the slaves, plantation life, her responsibilities as a slave mistress, Melrose, the McMurrans, and Natchez.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Mary Louise McMurran to Alie, November 12, 1856",
+     "anchor": "mcmurran-1856-11-12",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "<p><strong>Mary Louise McMurran to Alie McMurran, November 12, 1856.</strong><br>McMurran-Austen Family Papers, Mss. 4795, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-p15140coll10:6600\">Louisiana Digital Library</a></p>",
+       "figures": [
+        {
+         "image": "mcmurran11121856p1.jpg"
+        },
+        {
+         "image": "mcmurran11121856p2.jpg"
+        },
+        {
+         "image": "mcmurran11121856p3.jpg"
+        },
+        {
+         "image": "mcmurran11121856p4.jpg"
+        }
+       ]
+      },
+      {
+       "type": "text",
+       "body": "<p>Mary Louise McMurran to Alie McMurran, November 12, 1856, in which she advises Alie of the loneliness of plantation life for women and reports the local reaction to the election of 1856.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<h4>Transcription</h4><p>Melrose</p><p>Nov. 12th 1856</p><p>I thought of you, my dearest Alie, that very cold Saturday night fearing you might suffer from exposure in leaving the heated air of the steamer for the [?], frosty atmosphere of the shore. Johns’ letter telling of your safe arrival at sunrise the next morning was quite a relief.</p><p>I am impatient to know your first impressions and after thoughts of Riverside and hope you will like it as well as John does. Of the three plantations I prefer Riverside, myself: would rather reside on it than either of the others. Being so near the river, and seeing boats passing so constantly, takes from the feeling of loneliness a lady is apt to feel in plantation life, unless thoroughly interested in all its daily business and routine.</p><p>Last night the Democrats had a grand torch light rejoicing (that was as grand as they could have in Natchez, which always has been Whig) and from the close approach of the sound of drum and fife, and the cheering, they must have marched to Monmouth to give the General a blast for victory. Farar says it hurts him—it makes him mad—to hear and see a Democrat. Husband feels it too, but as usual, says but little. They say now it is doubtful if your Maryland has gone for Fillmore. I shall be sorry if it is so. Maryland stood alone true to the old faith, and I felt proud of your state, Alie, that it was so. There is scarce a doubt now Buchanan is to be our next President. Well, if they will but hold together our glorious Union we minorities must rest content.</p><p>Your own loving and devoted</p><p>Mother</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Mary Louise McMurran to Alie, February 21, 1857",
+     "anchor": "mcmurran-1857-02-21",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "<p><strong>Mary Louise McMurran to Alie McMurran, February 21, 1857.</strong><br>McMurran-Austen Family Papers, Mss. 4795, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+       "figures": [
+        {
+         "image": "mcmurran02211857p1.jpg"
+        },
+        {
+         "image": "mcmurran02211857p2.jpg"
+        },
+        {
+         "image": "mcmurran02211857p3.jpg"
+        }
+       ]
+      },
+      {
+       "type": "text",
+       "body": "<p>Mary Louise McMurran to Alie McMurran, February 21, 1857. She describes her daughter Mary Conner’s difficulty breastfeeding her newborn and reveals her attitudes about breastfeeding. She also gives an account of Natchez social activities.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<h4>Transcription</h4><p>Melrose</p><p>Feb 21st 1857</p><p>It was with much pleasure, dearest Alie, we received letters from you and John on Thursday</p><p>Baby grows, but does not gain much flesh. We feed him now with arrowroot. Mary not giving sufficient nourishment for the poor little one. She still nurses him, and will continue to do so, though she has not much strength to spare in that way.</p><p>He is almost ravenous sometimes, tugging away, where there is poor return for his labor. It is a real misfortune not to give plenty of milk for one’s baby. Only the breast will fully satisfy the infant. This is a great drawback to both Mary and the infant, and is a source of much anxiety to me. We have visitors almost every day. Yesterday, Charlotte Calhoun and Mr. Robertsonall complain of the inaction in the (little) world of Natchez society. The military companies are today celebrating the 22nd then the Phoenix Ball comes off and there is an end to gaiety (!!) until after Lentwhich commences next Wednesday. After Easter the gentlemen of the Club are to open the new Club House to the ladies in a grand Ball. They will then have in the gas fixtures and illuminate the whole housethese are all the [?] I have collected, so you see what a meagre account it is, dear Alie.</p><p>Write often, dearest, to your ever-loving</p><p>Melrose</p><p>Feb 21st 1857</p><p>It was with much pleasure, dearest Alie, we received letters from you and John on Thursday.</p><p>Baby grows, but does not gain much flesh. We feed him now with arrowroot. Mary not giving sufficient nourishment for the poor little one. She still nurses him, and will continue to do so, though she has not much strength to spare in that way. She is almost ravenous sometimes, tugging away, where there is poor return for her labor. It is a real misfortune not to give plenty of milk for one’s baby. Only the breast will fully satisfy the infant. This is a great drawback to both Mary and the infant, and is a source of much anxiety to me.</p><p>We have visitors almost every day. Yesterday, Charlotte Calhoun and Mr. Robertson all complain of the inaction in the (little) world of Natchez society. The military companies are today celebrating the 22nd then the Phoenix Ball comes off and there is an end to gaiety until after Lent which commences next Wednesday. After Easter the gentlemen of the Club are to open the new Club House to the ladies in a grand Ball. They will then have in the gas fixtures and illuminate the whole house. These are all the notes I have collected, so you see what a meagre account it is, dear Alie.</p><p>Write often, dearest, to your ever-loving Mother</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "John T. McMurran to his son, March 9, 1858",
+     "anchor": "mcmurran-1858-03-09",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "<p><strong>John T. McMurran, Sr., to John T. McMurran, Jr., March 9, 1858.</strong><br>McMurran-Austen Family Papers, Mss. 4795, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+       "figures": [
+        {
+         "image": "mcmurran03091858p1.jpg"
+        },
+        {
+         "image": "mcmurran03091858p2.jpg"
+        }
+       ]
+      },
+      {
+       "type": "text",
+       "body": "<p>John T. McMurran, Sr., to John T. McMurran, Jr., March 9, 1858. John T. McMurran makes arrangements for the transfer of some slaves from Riverside Plantation to Moro Plantation (also spelled Morrow), one of the three McMurran plantations. Moro was a joint venture with a partner named Vardaman and was located in Concordia Parish.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<h4>Transcription</h4><p>Natchez, March 9, 1858</p><p>Dear Son,</p><p>Mr. Vardaman writes me he is willing to take the lot of Riverside negroes on hire for Moro the balance of the year. I will instruct the Princess to come for them and bring them up to Moro Landing tomorrow week (the 17th) so that you can have them in readiness and advise Mr. Vardaman when you ship. I shall instruct him to be ready for them at that time. I suppose you will inform them that it is for the year for want of land at home.</p><p>The list will be:<br>Cyrus and Phebe his wife<br>Lije and Maria his wife<br>Frank and Sallie his wife<br>Lawrence<br>Maria<br>Mary Slaughter<br>Jimmy (instead of Tilda)</p><p>I wrote you on Saturday my reasons for desiring the change as to Jimmy for Tilda. If you think you might really want a couple of them to cultivate the crop, I suggest to keep Frank and Sallie, as the weakest pair, but I hope you can conveniently spare the whole of them according to your list, with the single change named.</p><p>I wish you would send up Diver(?) to me here when you send up the other negroes. He may as well bring his tool chest and his clothing, as I may send him up the river before he goes back. Give him a pass that will carry him by day or night out to here and have his tool chest marked for Harris Wharf boat so that it may not be misplaced there.</p><p>I hope to hear from Buckner & St. about the peas on Thursday so that I can order up the gunny bags for the peas on the Princess at the time she takes the negroes on. You have had fine weather for three to four weeks and hope it may continue. All well here and with love to Alie.</p><p>Yours Affectionately,<br>J.T. McMurran</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Tonie Quitman Lovell to Alie, February 10, 1866",
+     "anchor": "mcmurran-1866-02-10",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "<p><strong>Antonia (Tonie) Quitman Lovell to Alie McMurran, February 10, 1866.</strong><br>McMurran-Austen Family Papers, Mss. 4795, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+       "figures": [
+        {
+         "image": "mcmurran02101866p1.jpg"
+        },
+        {
+         "image": "mcmurran02101866p2.jpg"
+        },
+        {
+         "image": "mcmurran02101866p3.jpg"
+        },
+        {
+         "image": "mcmurran02101866p4.jpg"
+        },
+        {
+         "image": "mcmurran02101866p5.jpg"
+        },
+        {
+         "image": "mcmurran02101866p6.jpg"
+        }
+       ]
+      },
+      {
+       "type": "text",
+       "body": "<p>Antonia (Tonie) Quitman Lovell, daughter of John Quitman, to Alie McMurran, February 10, 1866. She describes their Christmas, difficulties in hiring servants, and her current living situation. She also expresses her desire to leave Natchez and her bitterness towards the Yankees.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<h4>Transcription</h4><p>Elmscourt</p><p>Feb 10th 1866</p><p>Thank you thousands of times, my dearest Alie, for your delightful letter of Jan. 4th which Linton placed in my hand as he came from town some weeks ago. Again and again was it read and reread.</p><p>Yes, Elmscourt is now my home for awhile. John will make no permanent investments in this country as we intend leaving at the earliest possible time. The house is partially furnished. Most of the furniture in use is our own, some we got from Monmouth and some recently purchased from Frank Surget, old-fashioned but very nice. So we are very comfortably fixed. But our great trouble is for servants. It is too far in the country for the delicate constitutions of the American ladies of African descent to walk with church and too retired from the gaieties of town so have been most of the time minus both cook and dining room servants, as Billy, our mainstay, has been sick. Imagine me, dearest Alie, cooking dinner, cleaning rooms, etc. all of which pastimes I have enjoyed since being at Elmscourt, very conducive to health, no doubt, but it mars the flesh of my bones badly. Sweet and sad are the influences of the season; oppression almost and call up such longings for the absent and the past. You ask about our Christmas. We had, for these times, quite a merry one, as Linton insisted upon everyone’s dining with us.</p>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Muggah-Glover-Guyther Family Papers, 1844–1852, 1906",
+   "anchor": "muggah",
+   "display": "wall",
+   "lead": "muggah03231844.jpg",
+   "focus": "top",
+   "lead_caption": "<p><strong>Mary Anderson to Mary Curtis Lynch, [March 23, 1844].</strong><br>Muggah-Glover-Guyther Family Papers, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "Mary Glover of Anchorage",
+     "anchor": "muggah-glover",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p><strong>Muggah-Glover-Guyther Family Papers, 1844–1852, 1906</strong><br>13 items (bulk: 1844–1848)</p><p>Mary Glover lived at Anchorage, her family’s plantation near Natchez. Her brothers were Frank and George Glover. Their cousin Mary Anderson was married to the Baptist minister in Natchez, ca. 1848, and may have lived with Mary Glover at Anchorage. Cousins Julia and Mary Curtis, correspondents in the collection, wed James Milne Muggah and Richard Lynch, both of St. Mary Parish, Louisiana.</p><p>The collection is primarily comprised of letters from Mary Glover to her cousins in which she describes Natchez balls and recreational activities and expresses her desire to find a husband. In addition, she reveals much about women’s lives of the time, opinions on marriage and pregnancy, constraints of place and family obligations, and religious life and attitudes. The collection also includes photographs of LSU cadet and relative Kennard Guyther and newspaper clippings about his death, as well as a photograph of the Silliman Institute (Clinton, La.) class of 1897.</p>"
+      }
+     ],
+     "summary": "Mary Glover’s letters to her cousins describe Natchez balls and recreational activities and reveal much about women’s lives of the time."
+    },
+    {
+     "type": "entry",
+     "title": "Mary Anderson to Mary Curtis Lynch, 1844",
+     "anchor": "muggah-anderson-1844",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "muggah03231844.jpg",
+       "caption": "<p><strong>Mary Anderson to Mary Curtis Lynch, [March 23, 1844].</strong><br>Muggah-Glover-Guyther Family Papers, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+       "layout": "center"
+      },
+      {
+       "type": "text",
+       "body": "<p>Mary Anderson to Mary Curtis Lynch, [March 23, 1844]. In this addition to a letter from Mary Glover to Mary Lynch, Mary Anderson gives advice on spiritual and marital matters and gives the news that her husband has taken a position as the Baptist minister in Natchez. Her inquiry as to whether Mary has begun wearing loose gowns is an allusion to pregnancy.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<h4>Transcription</h4><p>[Anchorage, March 23, 1844]</p><p>Dear Cousin Mary,</p><p>It is a great pleasure to me to give you a part of this letter. We were all much pleased to hear of your happiness in your new relation and home. You must have a delightful country where you live; it is so far south, and I suppose you enjoy the sea breeze. I expect it will be very beneficial to your health. Have you learned how to keep house yet? Are you fond of gardening and attending to poultry?</p><p>I have been looking for a letter from your sister Julia some time but have not received one yet. Have you heard from her? Do you expect her to visit you? Write her word she must stop at Natchez if she should, and spend some time with us. Tell Mr. Lynch Mr. Anderson has accepted the call to the Baptist church in Natchez and will probably remain here for many years if we both live. Have you any Baptist meetings near you? Do you hear preaching often? If you are deprived of these great privileges, dear Mary, you must pray and live devotedly, and perhaps your prayers will soon be heard, and churches built up and you will live in a country where all may love to serve the good Lord.</p><p>Remember to set a good example before your companion, that he seeing your good works may also be constrained to seek the pearl of great price. Mother, Husband, and Agnes send their respects to you and Mr. Lynch. Tell me in your answer if you have commenced wearing loose gowns yet. When you write to Julia remember me to her. Receive my prayers for your future happiness and prosperity, both in this life and the everlasting life.</p><p>I remain your affectionate friend,<br>M. P. Anderson</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Mary Glover to Cousin Julia, June 21, 1848",
+     "anchor": "muggah-glover-1848",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "<p><strong>Mary Glover to Cousin Julia, June 21, 1848.</strong><br>Muggah-Glover-Guyther Family Papers, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+       "figures": [
+        {
+         "image": "muggah06211848p1.jpg"
+        },
+        {
+         "image": "muggah06211848p2.jpg"
+        }
+       ]
+      },
+      {
+       "type": "text",
+       "body": "<p>Mary Glover to Cousin Julia, June 21, 1848. Mary mentions the celebration in Natchez over Zachary Taylor’s nomination for president. Additionally, she makes veiled references to pregnancy.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<h4>Transcription</h4><p>Anchorage, June 21st 1848</p><p>My dear Cousin Julia,</p><p>I feel ashamed that I have not answered your very interesting letter before this. We have nothing new here; since the conventions the political community have found something new to talk about. Is Mr. Muggah a Whig or Democrat? There was general rejoicing in Natchez when they heard that Gen. Taylor was nominated.</p><p>Why don’t Cousin Mary write? I wrote to her a long time ago. Is her health good? Has not Cousin Margaret made up her mind to take that widower yet? Tell her it would be so pleasant to have three places to visit when we go over. I don’t know whether I like to have any young lady about for I am always afraid to romp much with married ladies. They are generally delicate. We have a very comfortable way of dressing up here, which I have no doubt would suit you. Just put a yoke on the neck of your dress and let the skirt hang loose from that. We call them slips, particularly adaptable to married ladies, but some of us single ladies fancy them so much that we wear them occasionally too. I would recommend it to you.</p><p>Ma unites with me in sending much love to you, Cousin Mary and Margaret, also your children. Remember us to Mr. Muggah. Hoping to hear from you soon, I remain your very affectionate Cousin,</p><p>Mary M. Glover</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Mary Glover to Cousin Julia, September 20, 1850",
+     "anchor": "muggah-glover-1850",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "<p><strong>Mary Glover to Cousin Julia, September 20, 1850.</strong><br>Muggah-Glover-Guyther Family Papers, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+       "figures": [
+        {
+         "image": "muggah09201850p1.jpg"
+        },
+        {
+         "image": "muggah09201850p2.jpg"
+        }
+       ]
+      },
+      {
+       "type": "text",
+       "body": "<p>Mary Glover to Cousin Julia, September 20, 1850. Mary relates the excitement in Natchez over the recently finished telegraph line between Vicksburg and Natchez.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<h4>Transcription</h4><p>Anchorage Sept 20th 1850</p><p>Dear Cousin Julia,</p><p>Natchez has been very well all summer. It is now getting more lively. The new fall goods are coming, which of course draws people. The style for ladies’ dress is very gay for the winter. The telegraph from Vicksburg is finished to Natchez. It is particularly a rapid way of getting news. I believe they intend to meet the New Orleans line. The office in town has afforded considerable sport here. The backwoods folks go in to see and those in town are amused at their expense. We have no news that would interest you. With the hope that you all are well, I remain very affectionately your Cousin,</p><p>Mary</p>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Peirce-Haralson-Rumble Family Papers, 1809–1925",
+   "anchor": "peirce",
+   "display": "wall",
+   "lead": "peirce12141888p1.jpg",
+   "focus": "top",
+   "lead_caption": "<p><strong>Wilson Rumble to Mary Haralson, December 14, 1888, first page.</strong><br>On the letterhead of Rumble &amp; Wensel, grocers and cotton factors of Natchez. Peirce-Haralson-Rumble Family Papers, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "Frances Peirce Haralson and her family",
+     "anchor": "peirce-family",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p><strong>Peirce-Haralson-Rumble Family Papers, 1809–1925</strong><br>63 items (bulk: 1856–1861 and 1885–1888)</p><p>Frances Temple Peirce was born in Boston, Mass., in 1826, and she apparently was related to the Minors of Natchez and Terrebonne Parish, La., through her mother Mary Lintot Steer Peirce. She was educated in Natchez and married Bertrand Haralson of St. Francisville. Their daughter Mary Haralson married Wilson Rumble, a Natchez grocer and cotton factor in business with Theodore Wensel.</p><p>The collection comprises correspondence, legal documents, genealogical materials, and miscellaneous printed and graphic items. Letters received by Frances Haralson primarily relate to Natchez social life and family news. Love letters between Wilson Rumble and Mary Haralson pertain to their pending marriage and their expectations, social activities in Natchez and Bayou Sarah, and Wilson’s work and economic conditions in Natchez.</p>"
+      }
+     ],
+     "summary": "Letters received by Frances Haralson primarily relate to Natchez social life and family news; love letters between Wilson Rumble and Mary Haralson pertain to their pending marriage."
+    },
+    {
+     "type": "entry",
+     "title": "Rebecca A. Minor to Frances Haralson, 1856",
+     "anchor": "peirce-minor-1856",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "<p><strong>Rebecca A. Minor to Frances Haralson, February 17, 1856.</strong><br>Peirce-Haralson-Rumble Family Papers, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+       "figures": [
+        {
+         "image": "peirce02171856p1.jpg"
+        },
+        {
+         "image": "peirce02171856p2.jpg"
+        },
+        {
+         "image": "peirce02171856p3.jpg"
+        }
+       ]
+      },
+      {
+       "type": "text",
+       "body": "<p>Rebecca A. Minor (aunt) to Frances Haralson, February 17, 1856. Rebecca Minor of Concord Plantation, wife of prominent Natchez planter William J. Minor, reports social news about and trips taken by mutual friends and acquaintances.</p><p>The planters of Natchez cultivated a genteel and distinctive lifestyle meant to display their wealth. Consequently, they frequented the spas of Virginia and Tennessee, summered in the North, and made the Grand Tour of Europe (James, p. 11).</p>"
+      },
+      {
+       "type": "text",
+       "body": "<h4>Transcription</h4><p>Concord Feby 17th 1856</p><p>My dear Frances,</p><p>Do excuse my having allowed your welcomed letter to have remained so long unanswered. I have been exceedingly occupied and having been very dull did not like to send you one of my stupid letters—.</p><p>Now dear F. I must give you some of the news of our neighborhood as I know even trifles from this place will give you pleasures. There has been but little visiting owing to the very severe winter. The two weddings in Mrs. Conner’s family have been the theme of conversation. Rebecca’s wedding was very private owing to the death of William Conner’s child, and I think Mrs. Conner has not been pleased with this event. Farar’s marriage to Miss Marry McMurran much more congenial. This wedding was very gay and pleasant. You cannot imagine how much happiness has improved the uninteresting face of Mrs. Farar Conner. I think you would scarcely recognise her. She has become lively and her face beams with happiness. At the Party given her by Mrs. Genl. Quitman it was remarked upon by all. Can you realize it that we have had a large and brilliant entertainment at Monmouth—dancing kept up until near three o’clock “five musicians”? Maria Chotard and Miss Charlott Calhoun were the belles of the evening. Very few young ladies in society this winter.</p><p>You will be surprised to hear of the death of Stephen D. Elliot. Poor man he died on Wednesday last of pneumonia in N. Orleans. His body was brought up in the Southern Bell on Friday evening. He was buried from his Mother’s residence and his remains placed in the Cherry Grove graveyard Saturday”—“Miss Ann Wilkins and Maria attended the funeral. They appeared much distressed. They even went down to C. Grove. Six members of the Surget family have died within the last six months—</p><p>Miss Mary Linton has returned from N. Orleans. She is looking more beautiful than I have ever seen. The spot upon her cheek is like a dimple. While in NO, Mr. Shibert was very devoted and it is said Miss M—received his attentions with seeming pleasure. Mr. Butenshun(?) is domiciled with Eustace Surget in his new house. They visit together and are called the Rivals. I still think Mary will accept Eustace in the end—</p><p>[crosswise, page one] I miss you all very much and how very lonely I am. Mr. Minor and William are absent and Stephen is engaged with his studies—We are all well. We are having the old dining room painted and papered for a parlor. It will be an improvement...Dear Frances, do write soon. I will promise to answer it earlier than I did your last—. Ever believe me to be your attached Aunt</p><p>R.A. Minor</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Rebecca A. Minor to Frances Haralson, 1857",
+     "anchor": "peirce-minor-1857",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "<p><strong>Rebecca A. Minor to Frances Haralson, September 20, 1857.</strong><br>Peirce-Haralson-Rumble Family Papers, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+       "figures": [
+        {
+         "image": "peirce09201857p1.jpg"
+        },
+        {
+         "image": "peirce09201857p2.jpg"
+        },
+        {
+         "image": "peirce09201857p3.jpg"
+        },
+        {
+         "image": "peirce09201857p4.jpg"
+        }
+       ]
+      },
+      {
+       "type": "text",
+       "body": "<p>Rebecca A. Minor (aunt) to Frances Haralson, September 20, 1857. Rebecca Minor of Concord Plantation, wife of prominent Natchez planter William J. Minor, reports social news about and trips taken by mutual friends and acquaintances.</p><p>The planters of Natchez cultivated a genteel and distinctive lifestyle meant to display their wealth. Consequently, they frequented the spas of Virginia and Tennessee, summered in the North, and made the Grand Tour of Europe (James, p. 11).</p>"
+      },
+      {
+       "type": "text",
+       "body": "<h4>Transcription</h4><p>Concord Sept 20th 1857</p><p>My dear Frances,</p><p>Your letter of 16th received on Friday morning. I regret extremely to hear of your painful sufferings but trust ere this you are restored to your usual good health. I attributed your long silence to “My little Niece,” thinking she was occupying your time. It gives me much pleasure to hear of your continued happiness and may you ever, My dear Frances, enjoy the gentle kindness of your attached husband—</p><p>I hope you will soon be pleasantly placed in your new home and that Mr. Haralson’s purchases of nurse, cook and waiter will prove all you desire in these different departments. I think you will understand “the manage” of an establishment remarkably well. Our summer has past very rapidly and with the exception of the influensa, our family have enjoyed their health. Your Uncle’s and my own attack of this disease has been quite severe. For nearly three weeks I have been suffering from its effects. Mr. Minor’s attack has been shorter but he had considerable fever. The rest of the family are well. Stephen and James spent a few weeks over at Pass Christian. I’ve heard frequently from John and Kate; the latter’s health has much improved . The air of Newport has always a beneficial effect upon K--. Surget has been much admired. He talks now very distinctly. William Hally and Rebecca Wilkins are in New York. The latter has not entirely recovered her health. Rebecca will join Kate on their return to New York. She was under the care of Ms. Samuel P. Duncan when she wrote. I think R-- will enjoy her visit as all the Southerns are congregating as usual at the New York Hotel. Mary Linton and Eustace Surget were there. William is still devoted to Miss Mary but can not say that she smiles on him. Hallie is with his Grandma—In ten days I shall expect William and H at home and many of our “absentees” are expected about that time. The family from Somerset were enjoying themselves at the Silver Springs in the Virginia Mountains. They will return about the 5 or 10th of next month—Mr Eustis left a few days since with [?] and Richard for Boston. He places his sons at some celebrated school in Boston and then Mr. E— returns home. The family at Arlington are all well with the exception of “Bobby.” He has a slight attack of fever. It is said the beautiful Belle has entirely regained her health. Miss Maria Wilkins and Belle have spent the summer at the Beesheba (?) Springs in Tennessee. Judge Boyd has entirely recovered his health. He returns to the United States in October—.</p><p>The Miss Buckners gave a pleasant party last week,which Louly enjoyed. Our neighborhood has been very dull this summer, so few remained at home—.</p><p>Believe me to be your attached Aunt<br>R.A. Minor</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Wilson Rumble to Mary Haralson, 1888",
+     "anchor": "peirce-rumble-1888",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "<p><strong>Wilson Rumble to Mary Haralson, December 14, 1888.</strong><br>Peirce-Haralson-Rumble Family Papers, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+       "figures": [
+        {
+         "image": "peirce12141888p1.jpg"
+        },
+        {
+         "image": "peirce12141888p2.jpg"
+        },
+        {
+         "image": "peirce12141888p3.jpg"
+        },
+        {
+         "image": "peirce12141888p4.jpg"
+        },
+        {
+         "image": "peirce12141888p5.jpg"
+        },
+        {
+         "image": "peirce12141888p6.jpg"
+        },
+        {
+         "image": "peirce12141888p7.jpg"
+        }
+       ]
+      },
+      {
+       "type": "text",
+       "body": "<p>Wilson Rumble to Mary Haralson, December 14, 1888. He expresses his eagerness to be married, discusses their wedding gifts, describes parties and styles in Natchez, and comments on the declining price of cotton. During their courtship and engagement, Wilson and Mary lived in Natchez and Bayou Sarah, respectively, and kept up a full correspondence, sending letters by steamboat almost every day.</p>"
+      },
+      {
+       "type": "text",
+       "body": "<h4>Transcription</h4><p>Dec 14th 1888</p><p>My own precious darling</p><p>I was so very much disappointed this morning by not receiving one of your dear sweet letters. I always look forward to their coming with so much pleasure. If I am sick they make me feel better. If I am downhearted, they cheer me up, and they also with their wonderful make up guide me on to better actions and greater achievements. I trust my darling Mary is not sick. If you are my precious dont fail to let me immediately know. Mary we now have only a short while to wait now. I will be with you by the 28th. I dont expect we will have much chance to talk as you will be so busy getting ready. I saw Mrs. Minor yesterday. She asked all about her kin down the river. She told me she wanted to send you a present and that she would give it to me to bring down when I come. Miss Bowman has a very pretty set of silver for us, also Mrs. Smyth. Wont we have lots of it? So much the better. I would not care if every one gave silver. I was at a swell party last night. It was given by Miss Mary Britton. I was completely disgusted by the way some of the ladies dressed. I do think this cool weather, they should be a little more particular about their dress. The supper was elegant, and as usual wine flowed freely. Mrs. Minor, Miss Jean and Miss Boyd were all present. Miss Minor wore a white satin covered with crystal beads. Miss Boyd wore a beautiful and artistic black silk, very low neck and no sleeves. The dress showed her magnificent figure to quite an advantage. At the same time it made me cold to look at her. I suppose you would like to know how I looked. Well I was dressed in full evening dress. You ought to have seen me in my swallow tail coat. Next Tuesday evening I will attend a tea at Mrs Klapps. It is to be another grand affair.</p><p>The cotton is falling off very fast and business is not quite so lively as it has been. Darling, our room, they have almost completed and I am satisfied you will be pleased with it. Miss Sallie Wensel and her cousin Miss Smith are very anxious to come down with the crowd and make the trip with us. Possibly they will. Mr. Kennedy and his bride (Miss Arrighi) will be on the boat with us. They are to be married on the first, and will come down on Leathers. Quite a merry time we will have darling laughing at the bridal party, not to mention what will be said about us—</p><p>With warmest love and many weary kisses for you very precious darling, I am</p><p>Devotedly yours<br>Wilson</p><p>For God sake write.</p>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "John C. Schwartz Papers, 1848–1898",
+   "anchor": "schwartz",
+   "display": "wall",
+   "lead": "schwartz-v1a-04.jpg",
+   "focus": "top",
+   "lead_caption": "<p><strong>Monthly cash sales, from volume 1A, a cashbook, 1863–1891.</strong><br>John C. Schwartz Papers, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "J.C. Schwartz, hardware merchant",
+     "anchor": "schwartz-schwartz",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p><strong>John C. Schwartz Papers, 1848–1898</strong><br>Addition of 13 manuscript volumes and ca. 2 linear feet (bulk: 1863–1888)</p><p>J.C. (John Conrad) Schwartz immigrated to America in 1839, arriving in Baltimore. In 1863 he purchased a hardware business in Natchez from Armand Perault, though he had apparently been in Natchez before then. He operated the store until his retirement in 1890, at which time he left the business to his son, John Edward Schwartz, and his son-in-law, Robert Percy Schwartz. He was also president of the Rosalie Cotton Mills, vice-president of the NJ&amp;CRR (probably the Natchez-Jackson and Clinton or Columbus Railroad), and a leader in the community. He owned land and buildings in Natchez.</p><p>The accretion consists primarily of manuscript volumes, including cashbooks (1863–1875), daybooks (1859–1876), an invoice book (1884–1885), ledgers (1852–1891), and a letterbook (1875). Volumes give cash sales, accounts with customers, and rents collected for properties. Unbound materials include correspondence with suppliers, printed advertisements and price lists. Legal papers and financial records relate to Schwartz’s acquisition of land and businesses. The accretion adds to Schwartz materials (53 manuscript volumes and over 6300 items) already in the Louisiana &amp; Lower Mississippi Valley Collections that comprise similar materials, dating 1859 to 1897.</p>"
+      }
+     ],
+     "summary": "In 1863 he purchased a hardware business in Natchez from Armand Perault. He operated the store until his retirement in 1890."
+    },
+    {
+     "type": "entry",
+     "title": "Natchez under occupation",
+     "anchor": "schwartz-occupation",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Federal forces landed at Natchez and occupied the town on July 13, 1863, without incident. They used the town primarily as a supply base for mounting forays into southwest Mississippi and eastern Louisiana. By July 1864, 5706 men were assigned to the post at Natchez, including more than 3500 African-Americans from surrounding plantations who were either employed by the Army as laborers or who had been recruited for military service (Coussons, p. 39).</p><p>With merchants largely dependent on the surrounding plantations for business, and those plantations idle as former slaves flocked to the occupying army in Natchez, commerce declined precipitously, as the Schwartz volume shows. In 1864, planters who were willing to take the oath of allegiance were allowed to resume shipping cotton, and newly arrived northern lessees also began planting. As a result, trade picked up, though inflation also accounts for the increased cash sales recorded by Schwartz in 1864. The economic situation gradually improved during the remainder of the war as trade restrictions were relaxed in light of the Confederacy’s decline, increasing supplies and lowering prices (Coussons, pp. 64–74). Natchez enjoyed relative prosperity after the war as Northern merchants infused capital into the community (Harris, p. 222).</p>"
+      }
+     ],
+     "summary": "Federal forces landed at Natchez and occupied the town on July 13, 1863, without incident. Commerce declined precipitously, as the Schwartz volume shows."
+    },
+    {
+     "type": "entry",
+     "title": "Cash sales through the war, 1863–1891",
+     "anchor": "schwartz-cashbook",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "<p><strong>Pages from volume 1A, a cashbook, 1863–1891.</strong><br>John C. Schwartz Papers, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+       "figures": [
+        {
+         "image": "schwartz-v1a-03.jpg"
+        },
+        {
+         "image": "schwartz-v1a-04.jpg"
+        },
+        {
+         "image": "schwartz-v1a-05.jpg"
+        }
+       ]
+      },
+      {
+       "type": "text",
+       "body": "<p>Pages from volume 1A, a cashbook (1863–1891) giving monthly totals of cash sales during the Civil War and the early years of Reconstruction.</p>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Robert H. Stewart Family Account Books, 1822–1826, 1858–1891",
+   "anchor": "stewart",
+   "display": "wall",
+   "lead": "stewart-v36-09291825.jpg",
+   "focus": "top",
+   "lead_caption": "<p><strong>A mortuary ledger, September 29, 1825.</strong><br>Robert H. Stewart Family Account Books, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "Robert Stewart and son, morticians",
+     "anchor": "stewart-stewart",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p><strong>Robert H. Stewart Family Account Books, 1822–1826, 1858–1891</strong><br>Addition of 6 manuscript volumes</p><p>Robert Stewart and his son, Robert H. Stewart, were morticians and furniture dealers of Natchez. Robert Stewart (the elder) was married to Susan Marschalk, the daughter of Andrew Marschalk, a prominent, early 19th-century editor and printer of Natchez. The younger Stewart owned Elder Grove Plantation at Bunch’s Bend, Carroll Parish, Louisiana.</p><p>The accretion includes cashbooks, which record daily sales and accounts payable; and ledgers, which document sales of caskets, list charges for grave-digging and hearse services, and give the names of the deceased and the customer. Of note are entries during the yellow fever epidemic of 1825 and the Civil War.</p>"
+      }
+     ],
+     "summary": "Robert Stewart and his son, Robert H. Stewart, were morticians and furniture dealers of Natchez."
+    },
+    {
+     "type": "entry",
+     "title": "The account books",
+     "anchor": "stewart-books",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Previously held volumes list expenses such as rent, wages, freight, and funeral equipment; amounts received for merchandise; and cost of funerals for both whites and blacks including caskets, digging of graves, and charges for hearse use and special equipment. Robert Stewart’s ledgers contain accounts for making and repairing furniture; for the management of the estate of Andrew Marschalk, 1834–1851; and accounts with journeymen, 1834–1857.</p><p>A plantation diary gives information for 1857–1858, and a cotton record book for Elder Grove Plantation covers 1859–1866. A memorandum book, 1884–1895, contains entries about the organizing of an association of funeral directors of Mississippi. Personal and household expenses of W.L. Stewart are recorded in a cashbook, 1887–1904, and two daybooks, 1859–1861 document activities of William H. Stewart, a furniture dealer of New Orleans. Other documents list the names of members of African-American benevolent societies; and expenses for the City of Natchez, including teachers’ salaries and building repairs, 1855–1856.</p>"
+      }
+     ],
+     "summary": "Previously held volumes list the cost of funerals for both whites and blacks, including caskets, digging of graves, and charges for hearse use."
+    },
+    {
+     "type": "entry",
+     "title": "Yellow fever, September 18 to October 9, 1825",
+     "anchor": "stewart-ledger-1825",
+     "blocks": [
+      {
+       "type": "gallery",
+       "caption": "<p><strong>Pages from a mortuary ledger, September 18 to October 9, 1825.</strong><br>Robert H. Stewart Family Account Books, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+       "figures": [
+        {
+         "image": "stewart-v36-09181825.jpg"
+        },
+        {
+         "image": "stewart-v36-09261825.jpg"
+        },
+        {
+         "image": "stewart-v36-09291825.jpg"
+        },
+        {
+         "image": "stewart-v36-10041825.jpg"
+        }
+       ]
+      },
+      {
+       "type": "text",
+       "body": "<p>Pages from a mortuary ledger for September 18 to October 9, 1825 show an increase in the number of deaths and funerals from previous pages. This rise can be attributed to the yellow fever epidemic of 1825. Yellow fever hit the town almost yearly during the late summer and early fall months, reaching epidemic proportions in 1823, 1826, 1837, 1839, and 1853 (James, p. 267). According to the Natchez Ariel, September 29, 1825, reports of Yellow Jack at the landing in 1825 resulted in an almost complete exodus, and weeds grew ten feet high on the town’s main streets.</p>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "About the Exhibition",
+   "anchor": "about",
+   "display": "wall",
+   "lead": "conner-scrapbook-2.jpg",
+   "focus": "center",
+   "lead_caption": "<p><strong>Louisa, Russ, Old All Right and La Belle Talton, ca. 1905–1906.</strong><br>A page of Mary Macrery Britton Conner’s scrapbook. Lemuel P. Conner Family Papers, Louisiana and Lower Mississippi Valley Collections, LSU Libraries Special Collections.</p>",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "The Louisiana and Lower Mississippi Valley Collections",
+     "anchor": "about-llmvc",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Preserved in the <a href=\"/v2/special\">Louisiana and Lower Mississippi Valley Collections at LSU</a> are more than 5,000 manuscript groups, totaling 25,000 linear feet in extent. The collections include the papers of individuals and families; the records of plantations, merchants, and financial institutions; and the records of political, social, and labor organizations. The most important of these collections relate specifically to the families and enterprises in the Lower Mississippi Valley, from Memphis to New Orleans, and are especially strong in the Natchez, St. Francisville, and Baton Rouge areas.</p>"
+      }
+     ],
+     "summary": "The most important of these collections relate to the families and enterprises in the Lower Mississippi Valley, from Memphis to New Orleans, and are especially strong in the Natchez area."
+    },
+    {
+     "type": "entry",
+     "title": "Credits",
+     "anchor": "about-credits",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>The physical exhibition was shown at the Historic Natchez Foundation, Natchez, Mississippi, from mid-February to August 2002, as part of the Historic Natchez Conference. Both physical and electronic exhibitions were prepared by staff of the LSU Libraries: Tara Zachary, Assistant Curator for Manuscripts, Special Collections, prepared the exhibition texts; Buddy Ethridge mounted the physical exhibition; Joe Scott scanned the items displayed; Matthew Mullenix designed the electronic exhibition.</p>"
+      }
+     ],
+     "summary": "Both physical and electronic exhibitions were prepared by staff of the LSU Libraries."
+    },
+    {
+     "type": "entry",
+     "title": "Bibliography",
+     "anchor": "about-bibliography",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p><strong>Coussons, John Stanford.</strong> <em>The Federal Occupation of Natchez, Mississippi, 1863–65.</em> (Thesis / Louisiana State University, 1958).</p><p><strong>Harris, William C.</strong> <em>Presidential Reconstruction in Mississippi.</em> (Baton Rouge: Louisiana State University Press, 1967).</p><p><strong>James, D. Clayton.</strong> <em>Antebellum Natchez.</em> (Baton Rouge: Louisiana State University Press, 1993).</p>"
+      }
+     ],
+     "summary": "Three books on Natchez under occupation, in Reconstruction and before the war, cited in the notes."
+    }
+   ]
+  }
+ ],
+ "alt": {
+  "conner-scrapbook-1.jpg": "A page of Mary Macrery Britton Conner’s scrapbook, ca. 1898–1913, with seven photographs of women and men outside houses and a newspaper clipping, with handwritten notes.",
+  "conner-scrapbook-2.jpg": "A page of Mary Macrery Britton Conner’s scrapbook, ca. 1898–1913, with six photographs: two women by a house, a man with a horse, a woman with a parasol, an old man with a cane, a buggy and, at the center, an oval portrait of a young woman, with handwritten notes.",
+  "conner-scrapbook-3.jpg": "A page of Mary Macrery Britton Conner’s scrapbook, ca. 1898–1913, with five photographs of a raised plantation house with people on its porch and of a crowd at a baptism, with handwritten notes.",
+  "conner-scrapbook-4.jpg": "A page of Mary Macrery Britton Conner’s scrapbook, ca. 1898–1913, with six photographs: a baptism at the river’s edge, an old man on a porch, a crowd on the riverbank, a man standing among trees, people on a ferry and a pond among trees, with handwritten captions.",
+  "farrar01191864p1.jpg": "Handwritten order in brown ink from Headquarters, U.S. Forces, Natchez, with a reply on the reverse, page 1 of 2",
+  "farrar01191864p2.jpg": "Handwritten order in brown ink from Headquarters, U.S. Forces, Natchez, with a reply on the reverse, page 2 of 2",
+  "farrar08111863.jpg": "A printed and handwritten military order on lined paper headed Headquarters, Department of the Tennessee, Vicksburg, signed at the bottom.",
+  "farrar12111864p1.jpg": "Handwritten letter in brown ink headed Headquarters, U.S. Forces, Vidalia, page 1 of 2",
+  "farrar12111864p2.jpg": "Handwritten letter in brown ink headed Headquarters, U.S. Forces, Vidalia, page 2 of 2",
+  "hunt01101822p1.jpg": "Handwritten letter in brown ink on stained paper, page 1 of 2",
+  "hunt01101822p2.jpg": "Handwritten letter in brown ink on stained paper, page 2 of 2",
+  "hunt01141822p1.jpg": "A one-page handwritten letter in brown ink on stained paper, signed David Hunt.",
+  "hunt01291817.jpg": "A one-page handwritten letter in faded brown ink on worn, stained paper with torn edges.",
+  "hunt10251823p1.jpg": "Handwritten letter in brown ink from New Orleans, page 1 of 3",
+  "hunt10251823p2.jpg": "Handwritten letter in brown ink from New Orleans, page 2 of 3",
+  "hunt10251823p3.jpg": "Handwritten letter in brown ink from New Orleans, page 3 of 3",
+  "hunt12031830p1.jpg": "Handwritten letter in brown ink from Snow Hill, Maryland, page 1 of 2",
+  "hunt12031830p2.jpg": "Handwritten letter in brown ink from Snow Hill, Maryland, page 2 of 2",
+  "la-belle-talton.jpg": "Oval studio portrait of La Belle Talton, a young Black woman with her hair swept up, wearing a white high-collared blouse with an eyelet lace collar.",
+  "mcmurran02101866p1.jpg": "Handwritten letter in brown ink headed Elmscourt, closely written, page 1 of 6",
+  "mcmurran02101866p2.jpg": "Handwritten letter in brown ink headed Elmscourt, closely written, page 2 of 6",
+  "mcmurran02101866p3.jpg": "Handwritten letter in brown ink headed Elmscourt, closely written, page 3 of 6",
+  "mcmurran02101866p4.jpg": "Handwritten letter in brown ink headed Elmscourt, closely written, page 4 of 6",
+  "mcmurran02101866p5.jpg": "Handwritten letter in brown ink headed Elmscourt, closely written, page 5 of 6",
+  "mcmurran02101866p6.jpg": "Handwritten letter in brown ink headed Elmscourt, closely written, page 6 of 6",
+  "mcmurran02211857p1.jpg": "Handwritten letter in brown ink headed Melrose, closely written, page 1 of 3",
+  "mcmurran02211857p2.jpg": "Handwritten letter in brown ink headed Melrose, closely written, page 2 of 3",
+  "mcmurran02211857p3.jpg": "Handwritten letter in brown ink headed Melrose, closely written, page 3 of 3",
+  "mcmurran03091858p1.jpg": "Handwritten letter in brown ink dated Natchez, March 9, 1858, page 1 of 2",
+  "mcmurran03091858p2.jpg": "Handwritten letter in brown ink dated Natchez, March 9, 1858, page 2 of 2",
+  "mcmurran08291856p1.jpg": "Handwritten letter in brown ink headed Melrose, on folded paper, page 1 of 4",
+  "mcmurran08291856p2.jpg": "Handwritten letter in brown ink headed Melrose, on folded paper, page 2 of 4",
+  "mcmurran08291856p3.jpg": "Handwritten letter in brown ink headed Melrose, on folded paper, page 3 of 4",
+  "mcmurran08291856p4.jpg": "Handwritten letter in brown ink headed Melrose, on folded paper, page 4 of 4",
+  "mcmurran11121856p1.jpg": "Handwritten letter in brown ink headed Melrose, Nov. 12th 1856, page 1 of 4",
+  "mcmurran11121856p2.jpg": "Handwritten letter in brown ink headed Melrose, Nov. 12th 1856, page 2 of 4",
+  "mcmurran11121856p3.jpg": "Handwritten letter in brown ink headed Melrose, Nov. 12th 1856, page 3 of 4",
+  "mcmurran11121856p4.jpg": "Handwritten letter in brown ink headed Melrose, Nov. 12th 1856, page 4 of 4",
+  "mcmurran111856p1.jpg": "Handwritten letter in brown ink headed Riverside, closely written on lined paper, page 1 of 12",
+  "mcmurran111856p10.jpg": "Handwritten letter in brown ink headed Riverside, closely written on lined paper, page 10 of 12",
+  "mcmurran111856p11.jpg": "Handwritten letter in brown ink headed Riverside, closely written on lined paper, page 11 of 12",
+  "mcmurran111856p12.jpg": "Handwritten letter in brown ink headed Riverside, closely written on lined paper, page 12 of 12",
+  "mcmurran111856p2.jpg": "Handwritten letter in brown ink headed Riverside, closely written on lined paper, page 2 of 12",
+  "mcmurran111856p3.jpg": "Handwritten letter in brown ink headed Riverside, closely written on lined paper, page 3 of 12",
+  "mcmurran111856p4.jpg": "Handwritten letter in brown ink headed Riverside, closely written on lined paper, page 4 of 12",
+  "mcmurran111856p5.jpg": "Handwritten letter in brown ink headed Riverside, closely written on lined paper, page 5 of 12",
+  "mcmurran111856p6.jpg": "Handwritten letter in brown ink headed Riverside, closely written on lined paper, page 6 of 12",
+  "mcmurran111856p7.jpg": "Handwritten letter in brown ink headed Riverside, closely written on lined paper, page 7 of 12",
+  "mcmurran111856p8.jpg": "Handwritten letter in brown ink headed Riverside, closely written on lined paper, page 8 of 12",
+  "mcmurran111856p9.jpg": "Handwritten letter in brown ink headed Riverside, closely written on lined paper, page 9 of 12",
+  "muggah03231844.jpg": "A one-page handwritten letter in brown ink on stained paper, closely written.",
+  "muggah06211848p1.jpg": "Handwritten letter in brown ink headed Anchorage, closely written, page 1 of 2",
+  "muggah06211848p2.jpg": "Handwritten letter in brown ink headed Anchorage, closely written, page 2 of 2",
+  "muggah09201850p1.jpg": "Handwritten letter in brown ink on stained, water-marked blue paper, page 1 of 2",
+  "muggah09201850p2.jpg": "Handwritten letter in brown ink on stained, water-marked blue paper, page 2 of 2",
+  "natchez-baptism-1913.jpg": "Black-and-white photograph of a river baptism at Natchez: a man in a dark coat and hat stands with his back to the camera as women in white guide a girl, her head wrapped in white, at the edge of the Mississippi, with trees on the far bank.",
+  "peirce02171856p1.jpg": "Handwritten letter in brown ink headed Concord, closely written and crossed, page 1 of 3",
+  "peirce02171856p2.jpg": "Handwritten letter in brown ink headed Concord, closely written and crossed, page 2 of 3",
+  "peirce02171856p3.jpg": "Handwritten letter in brown ink headed Concord, closely written and crossed, page 3 of 3",
+  "peirce09201857p1.jpg": "Handwritten letter in brown ink headed Concord, closely written, page 1 of 4",
+  "peirce09201857p2.jpg": "Handwritten letter in brown ink headed Concord, closely written, page 2 of 4",
+  "peirce09201857p3.jpg": "Handwritten letter in brown ink headed Concord, closely written, page 3 of 4",
+  "peirce09201857p4.jpg": "Handwritten letter in brown ink headed Concord, closely written, page 4 of 4",
+  "peirce12141888p1.jpg": "Handwritten letter in black ink on letterhead printed in red with an engraving of the Rumble and Wensel store, page 1 of 7",
+  "peirce12141888p2.jpg": "Handwritten letter in black ink on letterhead printed in red with an engraving of the Rumble and Wensel store, page 2 of 7",
+  "peirce12141888p3.jpg": "Handwritten letter in black ink on letterhead printed in red with an engraving of the Rumble and Wensel store, page 3 of 7",
+  "peirce12141888p4.jpg": "Handwritten letter in black ink on letterhead printed in red with an engraving of the Rumble and Wensel store, page 4 of 7",
+  "peirce12141888p5.jpg": "Handwritten letter in black ink on letterhead printed in red with an engraving of the Rumble and Wensel store, page 5 of 7",
+  "peirce12141888p6.jpg": "Handwritten letter in black ink on letterhead printed in red with an engraving of the Rumble and Wensel store, page 6 of 7",
+  "peirce12141888p7.jpg": "Handwritten letter in black ink on letterhead printed in red with an engraving of the Rumble and Wensel store, page 7 of 7",
+  "schwartz-v1a-03.jpg": "Ledger page in brown ink listing months and their cash sales in a column of figures, page 1 of 3",
+  "schwartz-v1a-04.jpg": "Ledger page in brown ink listing months and their cash sales in a column of figures, page 2 of 3",
+  "schwartz-v1a-05.jpg": "Ledger page in brown ink listing months and their cash sales in a column of figures, page 3 of 3",
+  "stewart-v36-09181825.jpg": "Ledger page in brown ink with dated entries for coffins, graves and hearse hire, each with its charge, page 1 of 4",
+  "stewart-v36-09261825.jpg": "Ledger page in brown ink with dated entries for coffins, graves and hearse hire, each with its charge, page 2 of 4",
+  "stewart-v36-09291825.jpg": "Ledger page in brown ink with dated entries for coffins, graves and hearse hire, each with its charge, page 3 of 4",
+  "stewart-v36-10041825.jpg": "Ledger page in brown ink with dated entries for coffins, graves and hearse hire, each with its charge, page 4 of 4"
+ }
+}

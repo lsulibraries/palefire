@@ -1078,6 +1078,13 @@ HTML),
 <li>Before, the covers sat over the ibis picture, where the citations faded into it. Any gallery made only of reading lists can be a wall the same way, by setting its Display to Wall.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: New from Old Natchez comes to v2', <<<'HTML'
+<ul>
+<li>New from Old Natchez, the 2002 exhibition of manuscripts about Natchez that Special Collections had just acquired, is drafted as an unpublished v2 exhibition: an Introduction, a gallery for each of the eight collections and About the Exhibition, every one a wall with a lead picture.</li>
+<li>Each letter or ledger hangs as one tile you can page through, with its note and, where the old site had one, a typed transcription. Each collection opens with short text plates on the family and the papers.</li>
+<li>The pictures are the exhibition’s own 2002 scans, found on the Special Collections drive at about twice the old size, and two letters come whole from the Louisiana Digital Library. The cover is a 1913 photograph of a river baptism at Natchez from a family scrapbook.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: Made in America, the fall 2026 exhibition, comes to v2', <<<'HTML'
 <ul>
 <li>Made in America: Selected Imprints from 1776–1826, the exhibition in Hill Memorial Library this fall for the nation’s 250th anniversary, is built as a v2 exhibition, not published yet. Its old page was only an announcement; the new one carries the exhibition’s own panels: the introduction, Thomas Paine, Benjamin Franklin, and the printers Isaiah Thomas, Mathew Carey and Benjamin Levy.</li>
