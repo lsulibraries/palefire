@@ -1036,13 +1036,19 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   list-style: none;
 }
 
-.pf-exhibit-family__link {
+// Under .pf-exhibit-family, so it outranks the breadcrumb's own link
+// style (.pf-breadcrumb--modular a, _landing-features.scss), whose 2px
+// bottom padding crowded a wrapped title onto the next row and whose
+// gold underline drew under a hovered row.
+.pf-exhibit-family .pf-exhibit-family__link {
   position: relative;
   display: grid;
   grid-template-columns: 4.5em minmax(0, 1fr);
   align-items: baseline;
   min-height: 2.75rem;
+  margin: 0;
   padding: .75rem 1.25rem .75rem 1.375rem;
+  background-image: none;
   font-size: .8125rem;
   letter-spacing: .06em;
   line-height: 1.4;
