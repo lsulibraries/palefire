@@ -164,6 +164,7 @@ $section('How the exhibitions were moved', [
 <li><strong>New from Old Natchez</strong> (2002) was a set of Showcase pages under /natchez, whose Image and Transcript links go to the 2002 files. Its text comes from the Showcase pages.</li>
 <li><strong>Made in America: Selected Imprints from 1776–1826</strong> (2026) had only an announcement at /260908/madeinamerica. Its text comes from the exhibition’s own panels.</li>
 <li><strong>From Red Stick to River Capital</strong> (1999) was a set of static pages at /sites/all/files/sc/exhibitions/e-exhibits/redstick, later copied to Showcase pages under /brhistory. Its text comes from the Showcase pages, checked against the static pages.</li>
+<li><strong>Blue and Gray for Boys and Girls</strong> (2012) was fifteen pages under /BlueandGrey. Five of them no longer open, so their text comes from the exhibition’s own 2012 label files, which match the pages that still open.</li>
 </ul>
 <p>Each now lives at /v2/special/exhibitions/&lt;name&gt;, as one page of galleries. Each is built by a script from a data file in the theme (scripts/data/&lt;name&gt;.json), so it can be rebuilt, and every correction is made in the data file as well as on the page.</p>
 <h3>Text</h3>
@@ -693,6 +694,50 @@ $section('New from Old Natchez', [
 <h3>New wording to check</h3>
 <ul><li>The subtitle (“Manuscripts recently acquired by LSU Special Collections”), the credit line and the physical-exhibition note.
 </li><li>The entry and plate titles, the plates’ Summaries, the Introduction’s three tile notes, the captions, the cover’s object label and the alt text for every picture.
+</li></ul>
+HTML),
+]);
+
+$section('Blue and Gray for Boys and Girls', [
+  $text(NULL, <<<'HTML'
+<p>Built at <a href="/v2/special/exhibitions/blue-and-grey">/v2/special/exhibitions/blue-and-grey</a>, not published yet.</p>
+<p>Exhibition: Blue and Gray for Boys and Girls, Civil War books for young people from the Michael Lehman Williamson Collection in Hill Memorial Library, in twelve cases from 1860 to 2001, with author profiles. The online text dates from July 2012; the 2012 introduction is signed by Leah Wood Jewett, Exhibitions Coordinator.<br>Old site: fifteen pages under /BlueandGrey (node/299–313). Cases 1, 2, 4 and 12 and Author Profiles return an error: each save had mis-encoded their characters again, until the pages were many megabytes. Their text comes from the exhibition’s 2012 label files on the R: drive, which match the pages that still open word for word. The old Introduction had no text, so the 2012 wall label is used.</p>
+<h3>Changed on the page</h3>
+<ul><li>Fifteen galleries, all walls with a lead picture: Introduction, Cases 1–12, Author Profiles and Links.
+</li><li>Each case: its wall text as a text plate, with its Sources; its books as tiles, each with its catalog record and the old note; an “Also in the case” plate for books with no picture; and the old photograph of the case. Case 9 had no wall text.
+</li><li>Author Profiles: 21 name tiles under Nineteenth century and Twentieth century, each with its source.
+</li><li>Pictures: the old pages had a 750px photograph of each case and one small drawing. The 61 covers and 11 illustrations are new, from the exhibition’s 2012 scans on the R: drive (up to 10,000px). Boykin’s Boys and Girls Stories of the War, which LSU has only on microfilm, is Duke University Libraries’ copy from the Internet Archive. None of the books are in the Louisiana Digital Library. Eleven books have no scan anywhere; most can be seen in the case photographs.
+</li><li>Cover: General Lee and Santa Claus (1867), with its object label. Every picture used as a cover or lead is 720p or larger, so the cover isn’t framed and no lead has “Show whole image” ticked: they fill the screen.
+</li></ul>
+<h3>Corrected</h3>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>Bellock &amp; Co.</del></td><td><ins>Blelock &amp; Co.</ins></td></tr>
+<tr><td><del>W. E. B. Dubois</del></td><td><ins>W. E. B. Du Bois</ins></td></tr>
+<tr><td><del>Schomberg Center for the Study of Black Culture</del></td><td><ins>Schomburg Center for Research in Black Culture</ins></td></tr>
+<tr><td><del>Zienert, Karen</del></td><td><ins>Zeinert, Karen</ins></td></tr>
+<tr><td><del>the Newberry Award-winning <em>Across Five Aprils</em></del></td><td><ins><em>Across Five Aprils</em>, a Newbery Honor book</ins></td></tr>
+<tr><td><del>in 1950 he claimed the same prize</del></td><td><ins>in 1951</ins> (Carl Sandburg)</td></tr>
+<tr><td><del>Fahs … 1990</del></td><td><ins>2001</ins> (Case 7 sources)</td></tr>
+<tr><td><del>Matthew Brady</del></td><td><ins>Mathew Brady</ins></td></tr>
+</tbody>
+</table>
+<ul><li>Curly quotes, dashes, titles in italics and call numbers in catalog form (PS1449 .C475 D78).
+</li><li>The full list, with small typos, is in the theme’s docs/special-exhibition-corrections/blue-and-grey.md.
+</li></ul>
+<h3>Links</h3>
+<ul><li>Kept: Carol Hurst’s Civil War in Children’s Literature; the Baldwin Library, de Grummond Collection and University of Minnesota at their new addresses; two Merry Coz pages and Dartmouth’s Casting Characters through the Wayback Machine.
+</li><li>Dropped: nine links that are dead or now lead only to a home page.
+</li></ul>
+<h3>To verify</h3>
+<ul><li>The year, 2012, and the credit: the case photographs and author sources look older (Case 12 ends in 2001), and the first curator isn’t named.
+</li><li>Hannah Courageous’s call number “S 3523 O4711 H36”.
+</li><li>“Reissued … see Case 12” for General Lee and Santa Claus and On the Blockade, which Case 12 doesn’t list.
+</li><li>Robertson as “Chairman” of the Centennial Commission, born 1930 with no death date; Tate among the “Fugitive Poets” of the 1930s.
+</li></ul>
+<h3>New wording to check</h3>
+<ul><li>The subtitle, credit line, cover label, plate headings, the Introduction’s closing sentence, the “Also in the case” plates, captions and the 86 alt texts.
 </li></ul>
 HTML),
 ]);

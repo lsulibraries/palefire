@@ -1099,6 +1099,13 @@ HTML),
 <li>Most pictures are now the Louisiana Digital Library’s full-size scans (Andrew D. Lytle’s photographs, postcards, University Archives) in place of the old 300-pixel images. The corrections and each picture’s source are in the Special Collections Exhibitions guide.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Blue and Gray for Boys and Girls comes to v2', <<<'HTML'
+<ul>
+<li>Blue and Gray for Boys and Girls, Special Collections’ exhibition of Civil War books for young people from the Michael Lehman Williamson Collection, is rebuilt as a v2 exhibition, not published yet: an introduction, twelve cases from 1860 to 2001, author profiles and links, every one a wall with a picture to open it.</li>
+<li>Each case hangs its essay as a text plate beside the covers and illustrations of its books, with the photograph of the case as it was shown. A third of the old pages no longer opened, so their text was recovered from the exhibition’s own label files.</li>
+<li>The pictures are new: the exhibition’s 2012 scans of the books, far sharper than the old pages’ small photographs.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------
