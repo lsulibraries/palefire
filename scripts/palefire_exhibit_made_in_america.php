@@ -1,0 +1,322 @@
+<?php
+
+/**
+ * @file
+ * Exhibition page: "Made in America: Selected Imprints from 1776–1826"
+ * (LSU Libraries Special Collections, Hill Memorial Library, from
+ * September 8, 2026; the announcement at /260908/madeinamerica) as an
+ * unpublished Modular page in exhibition mode. Run palefire_exhibit_setup.php
+ * and palefire_exhibit_bio_setup.php first.
+ *
+ * Copy the "made-in-america-web/masters" folder (28 JPEGs, up to 2560 px)
+ * to the server first, then:
+ *
+ *   drush php:script scripts/palefire_exhibit_made_in_america.php -- images=$HOME/made-in-america-masters
+ *   drush php:script scripts/palefire_exhibit_made_in_america.php -- images=$HOME/made-in-america-masters apply=1
+ *   drush cr
+ *
+ * A dry run unless apply=1. Optional arguments after "--":
+ *   images=<folder>       Required. The JPEG masters.
+ *   format=<text format>  Text format for the text (default: WYSIWYG).
+ *   path=<alias>          URL alias (default /v2/special/exhibitions/made-in-america).
+ *
+ * The text, in data/made-in-america.json, is word for word from the 2026
+ * announcement (the opening and two object labels) and the exhibition’s two
+ * panels, Introduction (Brandon Layton, with Thomas Paine and John D.
+ * Miles’s Benjamin Franklin) and Printing & Printers (overview, positions,
+ * Isaiah Thomas, Mathew Carey, Benjamin Levy). Changes are listed in
+ * docs/special-exhibition-corrections/made-in-america.md. Four galleries,
+ * each a wall with a lead picture: the panels’ paragraphs hang as text
+ * plates (an entry with a heading, a Summary and the text) between the
+ * objects.
+ *
+ * Images: the announcement had two, at 350 px. These 28 are the
+ * Digitization Lab’s 2026 scans for the exhibition (R:\SpecialCollections\
+ * Exhibitions\EXHIB AM imprints 2026, TIFFs up to 29,000 px), reduced to
+ * 2560 px. Each is imported once as an Image media item (named "Made in
+ * America: <file name>", reused on a re-run) under
+ * public://exhibitions/made-in-america. Missing files are listed.
+ *
+ * Creates one Modular page, UNPUBLISHED. It stops if a Modular page with
+ * the same title exists.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\File\FileExists;
+use Drupal\Core\File\FileSystemInterface;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\file\Entity\File;
+use Drupal\media\Entity\Media;
+use Drupal\node\Entity\Node;
+use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\paragraphs\Entity\ParagraphsType;
+
+if (PHP_SAPI !== 'cli') {
+  return;
+}
+
+$args = [];
+foreach ((isset($extra) && is_array($extra)) ? $extra : [] as $arg) {
+  if (str_contains((string) $arg, '=')) {
+    [$k, $v] = explode('=', (string) $arg, 2);
+    $args[trim($k)] = trim($v, " \t\"'");
+  }
+}
+$apply = ($args['apply'] ?? '') === '1';
+
+foreach (['exhibit_page', 'exhibit_entry', 'exhibit_figure', 'guide_text'] as $id) {
+  if (!ParagraphsType::load($id)) {
+    throw new \RuntimeException("'$id' not found. Run palefire_exhibit_setup.php first.");
+  }
+}
+if (!FieldConfig::loadByName('paragraph', 'exhibit_entry', 'field_entry_summary')) {
+  throw new \RuntimeException('Entries have no Summary field. Run palefire_exhibit_bio_setup.php first.');
+}
+
+$images_dir = rtrim($args['images'] ?? '', '/\\');
+if ($images_dir === '' || !is_dir($images_dir)) {
+  throw new \RuntimeException('Pass images=<folder>: the made-in-america-web/masters folder copied to the server.');
+}
+
+$data_file = __DIR__ . '/data/made-in-america.json';
+$data = json_decode((string) file_get_contents($data_file), TRUE);
+if (!is_array($data) || count($data['pages'] ?? []) !== 4) {
+  throw new \RuntimeException("Couldn't read the 4 galleries from $data_file.");
+}
+
+$title = $data['title'];
+$found = \Drupal::entityQuery('node')->accessCheck(FALSE)
+  ->condition('type', 'modular_page')
+  ->condition('title', $title)
+  ->range(0, 1)->execute();
+if ($found) {
+  throw new \RuntimeException("A page titled '$title' already exists (node " . reset($found) . '). Delete it first to rebuild it.');
+}
+
+// Text uses the WYSIWYG format, never full_html.
+$formats = filter_formats();
+$format = $args['format'] ?? NULL;
+foreach ($format === NULL ? $formats : [] as $id => $candidate) {
+  if ($id === 'wysiwyg' || strcasecmp((string) $candidate->label(), 'WYSIWYG') === 0) {
+    $format = $id;
+    break;
+  }
+}
+if ($format === NULL || !isset($formats[$format])) {
+  throw new \RuntimeException('No WYSIWYG text format found. Pass format=<machine name>.');
+}
+echo "Text format: $format" . PHP_EOL;
+
+// Every image the data names, checked before anything is saved.
+$files = [$data['cover']];
+$walk = function (array $blocks) use (&$walk, &$files): void {
+  foreach ($blocks as $b) {
+    if ($b['type'] === 'figure') {
+      $files[] = $b['image'];
+    }
+    if ($b['type'] === 'entry') {
+      $walk($b['blocks']);
+    }
+  }
+};
+foreach ($data['pages'] as $page) {
+  $files[] = $page['lead'];
+  $walk($page['blocks']);
+}
+$files = array_values(array_unique($files));
+$missing = array_values(array_filter($files, fn ($f) => !is_file("$images_dir/$f")));
+$no_alt = array_values(array_filter($files, fn ($f) => trim((string) ($data['alt'][$f] ?? '')) === ''));
+echo count($files) . ' images named, ' . (count($files) - count($missing)) . " found in $images_dir." . PHP_EOL;
+foreach ($missing as $f) {
+  echo "  Missing: $f" . PHP_EOL;
+}
+foreach ($no_alt as $f) {
+  echo "  No alt text: $f" . PHP_EOL;
+}
+
+$path = '/' . ltrim($args['path'] ?? '/v2/special/exhibitions/made-in-america', '/');
+$existing_alias = \Drupal::service('path_alias.manager')->getPathByAlias($path);
+if ($existing_alias !== $path) {
+  throw new \RuntimeException("$path is already in use ($existing_alias). Pass path=<another alias>.");
+}
+
+if (!$apply) {
+  foreach ($data['pages'] as $page) {
+    $tiles = $plates = 0;
+    foreach ($page['blocks'] as $b) {
+      if ($b['type'] !== 'entry') {
+        continue;
+      }
+      $has_figure = (bool) array_filter($b['blocks'], fn ($x) => $x['type'] === 'figure');
+      $has_figure ? $tiles++ : $plates++;
+    }
+    echo 'Gallery: ' . $page['title'] . " (wall, lead {$page['lead']}): $tiles picture tiles, $plates text plates" . PHP_EOL;
+  }
+  echo "Dry run: would create the unpublished page “{$title}” at $path. Nothing saved. Add apply=1 to save." . PHP_EOL;
+  return;
+}
+
+// The Image media type and its source field.
+$media_type = NULL;
+foreach (\Drupal::entityTypeManager()->getStorage('media_type')->loadMultiple() as $candidate) {
+  if ($candidate->getSource()->getPluginId() === 'image' && ($media_type === NULL || $candidate->id() === 'image')) {
+    $media_type = $candidate;
+  }
+}
+if (!$media_type) {
+  throw new \RuntimeException('No Image media type found.');
+}
+$source_field = $media_type->getSource()->getConfiguration()['source_field'];
+
+$skipped = [];
+$html = fn (string $markup) => ['value' => trim($markup), 'format' => $format];
+
+// Images. --------------------------------------------------------------------
+
+/** @var \Drupal\Core\File\FileSystemInterface $fs */
+$fs = \Drupal::service('file_system');
+$destination = 'public://exhibitions/made-in-america';
+$fs->prepareDirectory($destination, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
+$media_ids = [];
+
+// One media item per file, reused when it exists ("Made in America: <file>").
+$media = function (?string $file) use (&$media_ids, $images_dir, $fs, $destination, $media_type, $source_field, $data, &$skipped): ?int {
+  if (!$file) {
+    return NULL;
+  }
+  if (array_key_exists($file, $media_ids)) {
+    return $media_ids[$file];
+  }
+  $name = 'Made in America: ' . pathinfo($file, PATHINFO_FILENAME);
+  $existing = \Drupal::entityQuery('media')->accessCheck(FALSE)
+    ->condition('bundle', $media_type->id())->condition('name', $name)->range(0, 1)->execute();
+  if ($existing) {
+    return $media_ids[$file] = (int) reset($existing);
+  }
+  $path = $images_dir . '/' . $file;
+  if (!is_file($path)) {
+    $skipped[] = "Image not found: $path";
+    return $media_ids[$file] = NULL;
+  }
+  $uri = $fs->copy($path, "$destination/$file", FileExists::Rename);
+  $item = File::create(['uri' => $uri, 'status' => 1]);
+  $item->save();
+  [$width, $height] = getimagesize($path) ?: [NULL, NULL];
+  $entity = Media::create([
+    'bundle' => $media_type->id(),
+    'name' => $name,
+    'status' => 1,
+    $source_field => [
+      'target_id' => $item->id(),
+      'alt' => $data['alt'][$file] ?? '',
+      'width' => $width,
+      'height' => $height,
+    ],
+  ]);
+  $entity->save();
+  echo "Imported $file" . PHP_EOL;
+  return $media_ids[$file] = (int) $entity->id();
+};
+
+// Blocks. --------------------------------------------------------------------
+
+$ref = fn (?int $id) => $id ? ['target_id' => $id] : NULL;
+$keep = fn (array $values) => array_filter($values, fn ($v) => $v !== NULL && $v !== '');
+
+$block = function (array $b) use (&$block, $media, $ref, $keep, $html, &$skipped): ?Paragraph {
+  switch ($b['type']) {
+    case 'text':
+      return Paragraph::create([
+        'type' => 'guide_text',
+        'field_block_body' => $html($b['body']),
+        'field_text_style' => $b['style'] ?? 'default',
+      ]);
+
+    case 'figure':
+      $id = $media($b['image']);
+      if (!$id) {
+        $skipped[] = 'No image for "' . $b['image'] . '": the figure keeps its caption; add the image in the editor.';
+      }
+      return Paragraph::create($keep([
+        'type' => 'exhibit_figure',
+        'field_figure_image' => $ref($id),
+        'field_figure_caption' => $html($b['caption']),
+        'field_figure_layout' => $b['layout'] ?? 'side_end',
+      ]));
+
+    case 'entry':
+      // A text plate on a wall: a heading, a Summary and the text
+      // (palefire.theme, _palefire_exhibit_wall()). A picture tile needs no
+      // Summary.
+      return Paragraph::create($keep([
+        'type' => 'exhibit_entry',
+        'field_block_title' => $b['title'],
+        'field_section_anchor' => $b['anchor'],
+        'field_entry_summary' => $b['summary'] ?? NULL,
+        'field_guide_blocks' => array_values(array_filter(array_map($block, $b['blocks']))),
+      ]));
+  }
+  return NULL;
+};
+
+$has = fn (string $name) => (bool) FieldConfig::loadByName('paragraph', 'exhibit_page', $name);
+$sections = [];
+foreach ($data['pages'] as $page) {
+  $lead = $ref($media($page['lead'] ?? NULL));
+  $sections[] = Paragraph::create($keep([
+    'type' => 'exhibit_page',
+    'field_section_title' => $page['title'],
+    'field_section_anchor' => $page['anchor'],
+    'field_exhibit_lead' => $lead,
+    'field_exhibit_lead_focus' => $lead ? ($page['focus'] ?? 'center') : NULL,
+    // Shown whole (framed over a blur) only when the gallery's best picture
+    // is under 1280×720 ("whole": true in the data); none is here.
+    'field_exhibit_lead_whole' => $lead && !empty($page['whole']) && $has('field_exhibit_lead_whole') ? 1 : NULL,
+    'field_exhibit_lead_caption' => $lead && !empty($page['lead_caption']) && $has('field_exhibit_lead_caption') ? $html($page['lead_caption']) : NULL,
+    'field_exhibit_display' => $has('field_exhibit_display') ? ($page['display'] ?? 'wall') : NULL,
+    'field_guide_blocks' => array_values(array_filter(array_map($block, $page['blocks']))),
+  ]));
+  echo 'Built gallery: ' . $page['title'] . PHP_EOL;
+}
+
+// The page. ------------------------------------------------------------------
+
+$label = $data['cover_label'];
+$values = [
+  'type' => 'modular_page',
+  'title' => $title,
+  'status' => 0,
+  'field_scroll_section' => $sections,
+  'field_modular_type' => 'exhibition',
+  'field_exhibit_subtitle' => $data['subtitle'],
+  'field_exhibit_credit' => $html($data['credit']),
+  'field_exhibit_cover' => $ref($media($data['cover'])),
+  'field_exhibit_year' => $data['year'],
+  'field_exhibit_physical_note' => $data['physical_note'],
+  // The cover is a 1682 × 2560 scan, so it fills the screen; "Frame the
+  // cover" is only for a cover under 1280×720 ("cover_framed": true).
+  'field_exhibit_cover_framed' => !empty($data['cover_framed']) ? 1 : NULL,
+  'field_exhibit_cover_maker' => $label['maker'],
+  'field_exhibit_cover_title' => $label['title'],
+  'field_exhibit_cover_date' => $label['date'],
+  'field_exhibit_cover_medium' => $label['medium'],
+  'path' => ['alias' => $path],
+];
+$node_fields = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', 'modular_page');
+foreach (array_keys($values) as $name) {
+  if (str_starts_with($name, 'field_') && !isset($node_fields[$name])) {
+    $skipped[] = "$name is not on Modular page; run its setup script, or fill it in the editor.";
+    unset($values[$name]);
+  }
+}
+
+$node = Node::create(array_filter($values, fn ($v) => $v !== NULL));
+$node->setRevisionLogMessage('Exhibition: Made in America, from the 2026 exhibition’s panels and scans (palefire_exhibit_made_in_america.php).');
+$node->save();
+
+echo 'Created unpublished exhibition page: node/' . $node->id() . ' (' . $node->toUrl('canonical', ['absolute' => TRUE])->toString() . ')' . PHP_EOL;
+foreach (array_unique($skipped) as $line) {
+  echo 'Skipped: ' . $line . PHP_EOL;
+}
+echo 'Review it, then publish. Run: drush cr' . PHP_EOL;

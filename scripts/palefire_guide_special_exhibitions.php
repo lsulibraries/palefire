@@ -161,6 +161,7 @@ $section('How the exhibitions were moved', [
 <li><strong>John James Audubon in Louisiana</strong> (2021) was at lib.lsu.edu/exhibitions/john-james-audubon. The Wayback Machine has its landing and section pages; the bird and manuscript pages come from the students’ copy at /audubon.</li>
 <li><strong>LSU Union Art Gallery</strong> was a six-page showcase on libstage, never on the public site.</li>
 <li><strong>Free People of Color in Louisiana</strong> (2015) was a set of static pages at /sites/all/files/sc/fpoc, later copied to Showcase pages under /fpoc. Its text comes from the static pages.</li>
+<li><strong>Made in America: Selected Imprints from 1776–1826</strong> (2026) had only an announcement at /260908/madeinamerica. Its text comes from the exhibition’s own panels.</li>
 </ul>
 <p>Each now lives at /v2/special/exhibitions/&lt;name&gt;, as one page of galleries. Each is built by a script from a data file in the theme (scripts/data/&lt;name&gt;.json), so it can be rebuilt, and every correction is made in the data file as well as on the page.</p>
 <h3>Text</h3>
@@ -448,6 +449,40 @@ $section('Woven Louisiana History: Acadian Textiles', [
 </li></ul>
 <h3>New wording to check</h3>
 <ul><li>The introduction, the credit line, both biographies, both text plates, the clip titles, the lead caption and the alt text.
+</li></ul>
+HTML),
+]);
+
+$section('Made in America: Selected Imprints from 1776–1826', [
+  $text(NULL, <<<'HTML'
+<p>Built at <a href="/v2/special/exhibitions/made-in-america">/v2/special/exhibitions/made-in-america</a>, not published yet.</p>
+<p>Exhibition: Made in America: Selected Imprints from 1776–1826, for the nation’s 250th anniversary, in Hill Memorial Library from September 8, 2026, through the fall semester. Curated by Leah Wood Jewett, with text by Brandon Layton, John D. Miles and Lauren Coats; scans by Gabe Harrell.<br>Old site: one announcement page, /260908/madeinamerica, with three paragraphs and two object labels.</p>
+<h3>Changed on the page</h3>
+<ul><li>The text comes from the announcement and from the exhibition’s two panels, Introduction (Brandon Layton’s essay, Thomas Paine, John D. Miles’s Benjamin Franklin) and Printing &amp; Printers (Overview, Positions, Isaiah Thomas, Mathew Carey, Benjamin Levy), read from the panel files in the exhibition’s working folder on the R: drive.
+</li><li>Four galleries, each a wall with a lead picture: Introduction (the panel essay as seven text plates, with Paine, Franklin and two objects between them), Printing and Printers, Louisiana, and Natural History and Science. The plate titles are new; each plate’s summary is one of the panel’s own sentences where one fits.
+</li><li>Pictures: the announcement had two, at 350px. All 28 on the new page are the Digitization Lab’s 2026 scans for the exhibition (up to 29,000px), reduced to 2,560px: Bigelow’s tulip poplar (the cover) and bloodroot, the Louisiana Memorial newspaper of 1804, <em>The Constitutionalist</em> of 1811 with its report of the German Coast uprising, Eaton’s Erie Canal survey, Franklin’s Gulf Stream chart, Isaiah Thomas’s colophon, <em>Charlotte</em> printed for Mathew Carey, Carey’s list of books, Levy’s <em>Price-Current</em>, Moreau de Saint-Méry’s <em>Description</em>, Darby’s map, Jefferson’s batture <em>Proceedings</em>, the Battle of New Orleans print, Wilson, Say, Bartram, Dorsey and Coxe’s telegraph.
+</li></ul>
+<h3>Corrected</h3>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>Hiberian Journal</del></td><td><ins><em>Hibernian Journal</em></ins></td></tr>
+<tr><td><del>James Fennimore Cooper</del></td><td><ins>James Fenimore Cooper</ins></td></tr>
+<tr><td><del>Phyllis Wheatley</del></td><td><ins>Phillis Wheatley</ins></td></tr>
+<tr><td><del>returning to the United States 1785</del></td><td><ins>returning to the United States in 1785</ins></td></tr>
+<tr><td><del>Darby published the map following the War of 1812 by John Melish.</del></td><td><ins>The map was published following the War of 1812 by John Melish.</ins></td></tr>
+</tbody>
+</table>
+<ul><li>“travelled” became “traveled”, number ranges take en dashes, and the type note says it describes the text in Hill Memorial Library. The full list is in the theme’s docs/special-exhibition-corrections/made-in-america.md.
+</li></ul>
+<h3>To verify</h3>
+<ul><li>Left as written: Isaiah Thomas riding “on April 15th” (the ride was April 18, 1775); Webster’s “first American dictionary in 1783” (1783 is his speller); Franklin as “the consummate 19th-century man of letters”; Paine “making wire stays for sails”.
+</li><li>Which newspaper printed the Louisiana Memorial (the scan has no masthead; August 1804), which book Isaiah Thomas’s 1788 colophon ends, and which of the two 1816 Darby maps is on display.
+</li><li>Call numbers the catalog search didn’t find: Wilson, Dorsey, the Battle of New Orleans print, the Memorial newspaper and the <em>Price-Current</em>.
+</li><li>The panels’ suggested reading list (a QR code) isn’t on the page; the list isn’t in the working folder.
+</li></ul>
+<h3>New wording to check</h3>
+<ul><li>The gallery titles Louisiana and Natural History and Science, every plate title and summary, every object caption except the Bigelow and Darby labels, the four lead captions, the cover label and the alt text.
 </li></ul>
 HTML),
 ]);

@@ -1,0 +1,510 @@
+{
+ "title": "Made in America",
+ "subtitle": "Selected Imprints from 1776–1826",
+ "credit": "<p>Exhibition curated by Leah Wood Jewett, Exhibitions Manager, with text and editing contributions from Brandon Layton, PhD, Digital Engagement and Pedagogy Librarian; John D. Miles, PhD, Curator of Books and Head of Instruction; and Lauren Coats, PhD, Associate Professor, LSU Department of English. Digital scans produced by Gabe Harrell, Digitization Lab Manager.</p>",
+ "cover": "bigelow-tulip-poplar.jpg",
+ "cover_label": {
+  "maker": "Jacob Bigelow",
+  "title": "Tulip poplar (Liriodendron tulipifera), from American Medical Botany",
+  "date": "1817",
+  "medium": "Colored engraving. Boston: Cummings and Hilliard"
+ },
+ "year": "2026",
+ "physical_note": "On display in Hill Memorial Library from September 8, 2026, through the fall semester",
+ "source": "https://lib.lsu.edu/260908/madeinamerica (2026), and the exhibition’s panels and scans",
+ "pages": [
+  {
+   "title": "Introduction",
+   "anchor": "introduction",
+   "lead": "louisiana-memorial-1804.jpg",
+   "focus": "top",
+   "lead_caption": "<p><strong>“Important Document. Louisiana Memorial,” 1804.</strong><br>The inhabitants of Louisiana’s remonstrance to Congress against the law that organized the territory, as a newspaper printed it.</p>",
+   "display": "wall",
+   "blocks": [
+    {
+     "type": "text",
+     "body": "<p>Long before the internet, the printed “web” virtually connected Americans living across a broad and varied landscape. The printed word touched all aspects of the lives of early Americans, both literate and illiterate. Publications took the form of religious tracts, political pamphlets, newspapers, banknotes, bills of lading, and broadsides announcing ship arrivals, theater productions, and capture notices for enslaved people. In commemoration of the 250th anniversary of our nation’s founding, LSU Libraries Special Collections presents the exhibition “Made in America: Selected Imprints from 1776–1826,” on display in Hill Memorial Library beginning on September 8, 2026, running through the fall semester.</p><p>The story of print culture in America parallels the story of the nation itself. Printed works united a far-flung citizenry, forging a national identity. Ironically, the rapid spread of the printed word also amplified sectional differences, most notably regarding views on slavery. Holdings in the Rare Book Collection include important works from this period, reflecting domestic literature and political theory that were the cornerstones of early nation-building efforts, as well as the economic, technological, and transportation-related developments that influenced the expansion of printing.</p><p>Among the many items on display, the visitor will find works printed by famed printer/publishers Mathew Carey and Isaiah Thomas, early American novels <em>Arthur Mervyn</em> (Charles Brockden Brown, 1799) and <em>Charlotte Temple</em> (Susanna Rowson, 1794), and Louisiana-focused books by surveyor Andrew Ellicott and Henry Brackenridge. Works represent a variety of topics such as literature, politics, geography, religion, economics, natural history, travel, ethnography, and language.</p><p>The exhibition is free and open to the public. Visit <a href=\"/v2/special\">Special Collections</a> for hours and directions.</p>"
+    },
+    {
+     "type": "entry",
+     "title": "A world of print",
+     "anchor": "world-of-print",
+     "summary": "Early Americans lived in a world of print. In all its varied forms, print touched virtually every aspect of most Americans’ lives.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p><em>Brandon Layton, PhD, Digital Engagement and Pedagogy Librarian, LSU Libraries Special Collections</em></p><p>Early Americans lived in a world of print. In 1810, a resident of New Orleans might wake by reading a few verses from a Bible printed in Philadelphia or Boston. Heading out the door, he finds five daily newspapers, each with stories spanning local, national, and international events. In his front pocket, he carries banknotes—elaborately engraved precursors to paper currency. In his back pocket are crumpled receipts, promissory notes, bills of lading, and insurance policies. As he walks through the street, pasted broadsides cover posts and walls. They promote auctions, capture notices for enslaved peoples, ship arrivals, theater performances, store inventories, and the lottery. At Place d’Armes, hawkers sell papers, pamphlets, and chapbooks. His experience is not unusual. In all its varied forms, print touched virtually every aspect of most Americans’ lives.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Founded with print",
+     "anchor": "founded-with-print",
+     "summary": "America was founded with print. Print served as a central means of informing the voting public on the most important issues of the day.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>America was founded with print. Thomas Paine’s pamphlet <em>Common Sense</em> (1776) introduced the idea of declaring independence from Britain. America’s founders were especially concerned that for a democratic society to succeed, it needed a virtuous and informed citizenry. Print served as a central means of informing the voting public on the most important issues of the day. Congress set newspaper postage below the cost of letters to subsidize the circulation of news. The Federalist Papers (1787–1788)—a series of essays published in newspapers, pamphlets, and books—outlined the ratification debates over the U.S. Constitution. <em>George Washington’s Farewell Address</em> (1796) had over 140 reprints in newspapers and pamphlets. These kinds of publications helped shape a new national identity grounded in shared democratic ideals.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Thomas Paine",
+     "anchor": "thomas-paine",
+     "summary": "Paine’s publication did more to sway American colonists in favor of the Revolution than any other piece of writing.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Thomas Paine was the author of the most widely-read pamphlet in early America—<em>Common Sense</em> (January 1776). Paine’s 47-page political screed argued, for the first time, that the American colonies should declare independence from Great Britain. Paine’s publication did more to sway American colonists in favor of the Revolution than any other piece of writing. At least 100,000 copies were sold within the first three months.</p><p>Paine did not fit the traditional description of a revolutionary. He was English, having arrived in Philadelphia from England in 1774 at age 37. He trained as a staymaker (making wire stays for sails), but had mostly worked odd jobs: privateer, schoolteacher, grocer, tax collector, and editorial writer. His writing drew the attention of Benjamin Franklin, who helped Paine secure work in the print shop of Robert Aitken, editor of <em>Pennsylvania Magazine</em>.</p><p>After the Revolution, Paine became disillusioned with American leaders, especially George Washington. He traveled back to England, then to France, and only returned to the U.S. in the latter years of his life. The nation he had helped create came to view him as a pariah. In 1809, he died in relative obscurity. Only six people attended his funeral.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Partisan presses",
+     "anchor": "partisan-presses",
+     "summary": "While print culture could unify Americans, it also played a role in stoking sectional divisions.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>While print culture could unify Americans, it also played a role in stoking sectional divisions. With their own agendas and political patrons, printers were often partisan actors, advocating for specific parties, politicians, or policies. In 1790, the grandson of founding father and printing pioneer Benjamin Franklin, Benjamin Franklin Bache, founded the <em>Philadelphia Aurora</em>. The newspaper operated as an arm of the Jeffersonian Republican party, attacking Washington, John Adams, and other Federalists relentlessly.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "The Constitutionalist, 1811",
+     "anchor": "constitutionalist",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "constitutionalist-1811.jpg",
+       "caption": "<p><strong><em>The Constitutionalist</em> (Exeter, N.H.), vol. 1, no. 41, February 26, 1811.</strong><br>Its masthead is a chain of rings, one for each state, under Washington’s warning: “Against the insidious wiles of foreign influence, the jealousy of a free people ought to be constantly awake.” F44 .E9 C66 MCAGE</p>",
+       "layout": "side_end"
+      },
+      {
+       "type": "figure",
+       "image": "constitutionalist-insurrection.jpg",
+       "caption": "<p><strong>“Insurrection of Blacks,” from New Orleans, January 16, 1811.</strong><br>The same issue’s report, by the mails, of the German Coast uprising, beside Congress’s debate on whether free Black men might vote in the new state.</p>",
+       "layout": "side_end"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Print and slavery",
+     "anchor": "print-and-slavery",
+     "summary": "Nowhere did political debates become more heated than over slavery.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Nowhere did political debates become more heated than over slavery. Abolitionist presses condemned the evils of slavery, published narratives of the formerly enslaved, and swayed public sentiment in the North against the institution. In 1821, Benjamin Lundy founded the <em>Genius of Universal Emancipation</em>, a precursor to William Lloyd Garrison’s <em>The Liberator</em> (1831). In just one year (1837), the American Anti-Slavery Society published 7,877 books, 47,256 pamphlets, and 10,490 broadsides. Southern presses responded with full-throated defenses of slavery. In 1813, Virginia politician John Taylor of Caroline published the <em>Arator</em>, in which he argued that slavery remained economically vital to the southern states.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "A printing boom",
+     "anchor": "printing-boom",
+     "summary": "By the early nineteenth century, partisan politics, population growth, and economic expansion fueled a printing boom.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>By the early nineteenth century, partisan politics, population growth, and economic expansion fueled a printing boom. As the population grew from 3.9 million in 1790 to 9.6 million in 1820, newspaper circulation grew even faster: from 150 newspapers in 1800 to 365 by 1810, and 861 by 1826. Almost every American city had multiple papers, each competing for readers and influence.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Printers and commerce",
+     "anchor": "printers-and-commerce",
+     "summary": "Printers also played a role in facilitating the economic growth of the U.S. They created documents that underwrote commerce.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Printers also played a role in facilitating the economic growth of the U.S. During the 1790s, the first factories, textile mills, sprung up throughout the North, while the invention of the cotton gin in 1794 led to the expansion of plantation agriculture (and slavery) in the South. Canals, railways, and steamboats further fed commercial development. As entrepreneurs established factory towns along the Erie Canal (completed 1825), frontiersmen like Daniel Boone built new settlements in the West, and planters transformed the Deep South into the Cotton Kingdom. Printers followed. They created documents that underwrote commerce: bank notes, legal contracts, shipping manifests, tax forms, passports, public notices, and other ephemera.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Survey of the Erie Canal, 1824",
+     "anchor": "erie-canal",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "eaton-erie-canal-1824.jpg",
+       "caption": "<p><strong>Amos Eaton. <em>A Geological and Agricultural Survey of the District Adjoining the Erie Canal, in the State of New York</em>. Albany, 1824.</strong><br>The end of its folding profile of the canal’s rocks, from the Hudson to Lake Erie, and the title page. QE145 .E2</p>",
+       "layout": "side_end"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Independent in literature",
+     "anchor": "independent-in-literature",
+     "summary": "By 1810, the U.S. was no longer dependent on the importation of books from Europe.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>In book publishing, American printers had disadvantages compared to their European counterparts. The U.S. had no national copyright law before the Copyright Act of 1790. Individual states had a patchwork of legal codes, but nothing stopped one printer from picking up a copy of a competitor’s new publication and copying it wholesale. The first federal copyright law in 1790 changed the calculus, giving printers a new proprietary asset in the form of exclusive rights to print, reprint, publish, and sell specific titles for up to 28 years. The Embargo Act (1807) and the War of 1812 accelerated this shift by cutting off British imports and forcing American printers towards self-sufficiency. By 1810, the U.S. was no longer dependent on the importation of books from Europe. In fact, European publishers increasingly sought to reprint American works. By 1820, American book production alone totaled $2.5 million (roughly $70 million today). An advocate for copyright laws and the man responsible for the first American dictionary in 1783, Noah Webster, advocated for the U.S. becoming as “independent in literature as she is in politics, as famous for arts as for arms.”</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Benjamin Franklin",
+     "anchor": "benjamin-franklin",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "franklin-gulf-stream-chart.jpg",
+       "caption": "<p><strong>Benjamin Franklin’s “A Chart of the Gulf Stream,” with his remarks on the navigation from Newfoundland to New York.</strong><br>From his “Sundry Maritime Observations,” <em>Transactions of the American Philosophical Society</em>, vol. 2. Philadelphia, 1786. Q11 .P6</p>",
+       "layout": "side_end"
+      },
+      {
+       "type": "figure",
+       "image": "transactions-aps-1786.jpg",
+       "caption": "<p><strong>The chart folded out of the volume.</strong></p>",
+       "layout": "side_end"
+      },
+      {
+       "type": "text",
+       "body": "<p><em>John D. Miles, PhD, Curator of Books and Head of Instruction, LSU Libraries Special Collections</em></p><p>Benjamin Franklin was born in 1706, the fifteenth of seventeen children born to a Boston chandler. He received only two years of formal schooling and was apprenticed to his older brother James at age 12 to learn the printing trade. His first publications were anonymous satirical observations in his brother’s paper, <em>The New-England Courant</em>, under the name “Silence Dogood.” Franklin absconded to Philadelphia at age 17 and worked for a printer before moving to London to further his knowledge of the trade. Returning to Philadelphia in 1726 at the age of 20, he established himself as a successful printer, businessman, and governmental official, pursuits which he continued throughout his life.</p><p>Franklin effectively retired as a printer in 1747 at the age of 41, allowing more time for his political, scientific, and intellectual interests. His interests in Philadelphia included the Junto, a group of enterprising “lovers of reading” bound through intellectual pursuits and civic-mindedness, as well as Freemasonry, of which he was an adherent throughout his life.</p><p>Franklin was increasingly involved in colonial politics during the 1740s and 1750s. During this time he served as the postmaster of Philadelphia and later as the postmaster-general of British North America, and eventually of the United States. Turning his mind to scientific observation and discovery in his spare time, he famously investigated electricity, for which he was awarded the Copley Medal and elected to the Royal Society of London in 1756.</p><p>During the 1770s, while living in London, Franklin represented the interests of the Colonies to the British Parliament, beginning as an accommodationist who favored reconciliation, by the time he returned to Pennsylvania in 1775 he backed the Colonies’ cause. After first serving on the Second Continental Congress he was dispatched to France, returning to the United States in 1785 after the end of the Revolution. He attended the Constitutional Convention at the end of his life, summarizing its outcome as “A republic, madam, if you can keep it.”</p><p>Throughout his life Franklin credited books and reading with his successes, reveling as a child at his ability to assemble a small library, linking up with others of a “bookish inclination” as a young man, and later founding both the Library Company of Pennsylvania and the University of Pennsylvania. He trained and financed a network of printers who spread throughout the colonies, dispatching important news back to him, and forming a web of newspapers and correspondence that alloyed the colonies into a new nation. Whether printed paper money, the first novel to appear in the colonies, or his ubiquitous almanacs, Franklin represented the consummate 19th-century man of letters.</p>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Printing and Printers",
+   "anchor": "printing-and-printers",
+   "lead": "thomas-colophon-1788.jpg",
+   "focus": "center",
+   "lead_caption": "<p><strong>“Finis. Printed at Worcester, by Isaiah Thomas, MDCCLXXXVIII.”</strong><br>The colophon of a book Isaiah Thomas printed in 1788.</p>",
+   "display": "wall",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "Overview",
+     "anchor": "overview",
+     "summary": "The stereotype process in the 1810s and steam power in the late 1820s revolutionized printing; more readers had access to books, pamphlets, and newspapers.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Colonial printers and those who followed in the years after the American Revolution made use of the wooden hand press for printing. Variations were made to the design over time to increase efficiency. The introduction of the stereotype printing process in the 1810s and the advent of steam power in the late 1820s revolutionized the printing industry, increasing speed and lowering cost of production. As a result, more readers had access to books, pamphlets, and newspapers.</p><p>Paper and type were purchased from abroad until the beginning of domestic manufacture in the late 18th and early 19th centuries. In early years, wars, tariffs, and embargos with England limited American printers’ choices.</p><p>Though atypical, women did serve as printers before, during, and after the American Revolution. In all cases, they had become skilled printers while working in the family print shop and continued the work after their fathers or husbands died.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Positions",
+     "anchor": "positions",
+     "summary": "Apprentice, compositor, pressman, journeyman printer, printer, bookseller and publisher: who did what in an early American print shop.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p><strong>Apprentice.</strong> Also referred to as a “printer’s devil,” this individual worked under a professional, sometimes as an indentured servant for a number of years. Young boys who served as apprentices performed menial tasks as they learned more complex aspects of the trade.</p><p><strong>Bookseller.</strong> This individual could also act as publisher and printer as well as a seller of stationery.</p><p><strong>Compositor.</strong> Most often this role was filled by a literate individual who planned what the pages would look like and positioned and prepared type for the press.</p><p><strong>Journeyman printer.</strong> Individual who completed an apprenticeship with an established printer but did not yet have a print shop of his own. The journeyman printer often traveled widely in search of work.</p><p><strong>Pressman.</strong> Individual who operated the machinery, including a heavy lever that was part of the early wooden presses used in the United States. The work of the pressman was physically demanding, and in some cases enslaved men were employed to perform the function.</p><p><strong>Printer.</strong> Individual responsible for all aspects of the process. This person could operate as an independent contractor or as a publisher.</p><p><strong>Publisher.</strong> Individual responsible for identifying and securing content and arranging for printing and distribution of works. The publisher was responsible for securing public contracts (printing for Congress or the state legislature, for example), and took on the financial risk of printing. Publisher and printer could be the same person.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Isaiah Thomas",
+     "anchor": "isaiah-thomas",
+     "summary": "“…the Press, which, when free, is the acknowledged great bulwark of Liberty, and the boast of a Free and Independent People.”",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<blockquote><p>“…the Press, which, when free, is the acknowledged great bulwark of Liberty, and the boast of a Free and Independent People.”</p><p>—Isaiah Thomas, <em>Massachusetts Spy</em>, September 29, 1785</p></blockquote><p>Isaiah Thomas (1749–1831) was born in Massachusetts and was indentured as a printer’s apprentice beginning at age seven. He traveled to Halifax, Nova Scotia at age 16 after a disagreement with the master. He printed the <em>Halifax Gazette</em> until he was fired for using the newspaper to protest the infamous Stamp Act.</p><p>Thomas returned to Boston and began publishing <em>The Massachusetts Spy</em> newspaper in 1770. Written for a broad audience, the newspaper adopted a decidedly pro-Continental point of view. In 1774 and 1775, he published the <em>Royal American Magazine</em>, which included Paul Revere’s engravings and poems by the enslaved poet Phillis Wheatley. In April 1775, Thomas left Boston with his press under cover of darkness to evade British authorities who considered his activities seditious. He crossed the Charles River by ferry and set up operations in Worcester in central Massachusetts. Thomas joined the militia, and was among the men under Paul Revere who rode through the countryside on April 15th to warn of the British advance. The printer-turned-soldier participated in the Battle of Lexington, and then promoted the rebel view of the action with his most potent weapon: the printing press.</p><p>In the post-Revolution years, with much persistence, Thomas eventually controlled all aspects of printing for the books he published, from the paper mill to the bound book. He purchased his type from the Caslon foundry in England, and managed 20 bookstores across the region by the end of his career. He published the important retrospective <em>The History of Printing in America</em> in 1810, and two years later founded the American Antiquarian Society to preserve the printed history of the Revolution and fledgling nation, donating to it his vast personal library.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Mathew Carey",
+     "anchor": "mathew-carey",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "rowson-charlotte-1794.jpg",
+       "caption": "<p><strong>Susanna Rowson. <em>Charlotte. A Tale of Truth</em>. Second Philadelphia edition. Philadelphia: Printed for Mathew Carey, 1794.</strong><br>Volume 1, title page. PS2736 .R3 C5 1794</p>",
+       "layout": "side_end"
+      },
+      {
+       "type": "figure",
+       "image": "carey-books-advertisement.jpg",
+       "caption": "<p><strong>“Books, Published by M. Carey, No. 118, Market-Street.”</strong><br>Carey’s list of his own books, among them Rowson’s <em>The Inquisitor</em> and his account of the 1793 yellow fever in Philadelphia.</p>",
+       "layout": "side_end"
+      },
+      {
+       "type": "text",
+       "body": "<blockquote><p>“His energy, his high-mindedness, and his indomitable perseverance, will force themselves upon the most casual observer… Indeed, although few men have labored under greater incidental disadvantages, very few have been better prepared to overcome them by both moral and physical constitution.”</p><p>—Edgar Allan Poe, “Review of Carey’s Autobiography,” <em>Southern Literary Messenger</em>, February 1836</p></blockquote><p>Mathew Carey (1760–1839) was born in Ireland to a middle-class Catholic family. In spite of the British law restricting Irish Catholic involvement in the printing profession, Carey was apprenticed to the publisher of the <em>Hibernian Journal</em>. His political commentary eventually drew the ire of the Crown and Carey fled to Passy, France.</p><p>Carey met and impressed both Benjamin Franklin and the Marquis de Lafayette while in France. He returned to Ireland in 1780 and started his newspaper, <em>Volunteer’s Journal</em>. Carey quickly angered the Irish Parliament with his pen, and he fled to Philadelphia to avoid arrest in 1784. There, he set up shop as a publisher and bookseller, thanks to a loan from General Lafayette.</p><p>After starting a variety of printing projects, Carey launched <em>The American Museum</em> in 1787. The publication ran through 1792, and featured a wide range of articles on politics, economics, medicine, religion, morality, poetry, and humor—many of which were openly reprinted from other American and British periodicals, consistent with journalistic practice of the time. Carey used the outlet to promote American authors and preserve foundational American political documents, speeches, and debates for posterity, particularly the arguments surrounding adoption of the U.S. Constitution. Carey was later known for his contribution to the field of political economics.</p><p>During Carey’s career, he published the first Catholic Bible in the United States, along with numerous printings of the King James Bible, promoted a national book fair, and launched the careers of writers such as Noah Webster, Washington Irving, James Fenimore Cooper, and Edgar Allan Poe. While Mathew Carey is no longer a household name, the patriot-publisher’s legacy lives on in the printed word that he fostered. His books helped cultivate a distinctive American culture and sense of national identity, connecting individuals across the far reaches of the country’s geographical expanses.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Benjamin Levy",
+     "anchor": "benjamin-levy",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "price-current-1825.jpg",
+       "caption": "<p><strong><em>New-Orleans Price-Current, and Commercial Intelligencer</em>, vol. 4, no. 164, Saturday, September 17, 1825.</strong><br>“Published every Saturday, by John Wilie. Benj. Levy, Printer, No. 56 Conti-Street.”</p>",
+       "layout": "side_end"
+      },
+      {
+       "type": "text",
+       "body": "<blockquote><p>“He became one of the most active publishers in New Orleans during the period 1822–41, and was undoubtedly the first important Jewish printer-publisher not only in the South, but probably in the entire country.”</p><p>—Bertram W. Korn, “Benjamin Levy: New Orleans Printer and Publisher,” <em>Papers of the Bibliographical Society of America</em> 54, no. 4 (1960)</p></blockquote><p>Benjamin Levy (1786–1860) was one of the most active printers in New Orleans during the early nineteenth century. Born to a Jewish family in New York City and trained as a bookbinder, Levy came to New Orleans in 1811. He married into a prominent French family and ran a thriving stationery and print shop.</p><p>He printed stationery—bank notes, shipping manifests, tax forms, public notices, and account books. He established the first weekly business journal, the <em>New-Orleans Price Current and Commercial Intelligencer</em>. And he published over 300 books and pamphlets, most notably William Darby’s <em>A Geographical Description of the State of Louisiana</em> (1817). Due to a series of bad investments and the Panic of 1837, an economic depression, Levy went bankrupt in 1843, forcing him into an abrupt retirement.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Printed by the author, 1796",
+     "anchor": "moreau-de-saint-mery",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "moreau-description-1796.jpg",
+       "caption": "<p><strong>M. L. E. Moreau de Saint-Méry. <em>Description topographique et politique de la partie espagnole de l’isle Saint-Domingue</em>. Tome second. Philadelphia: printed and sold by the author, printer-bookseller, at the corner of Front and Walnut Streets, no. 84, 1796.</strong><br>“Imprimé &amp; se trouve chez l’Auteur, Imprimeur-Libraire.” F1901 .M826 LARA</p>",
+       "layout": "side_end"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "A note on the type",
+     "anchor": "caslon",
+     "summary": "Isaiah Thomas bought most of his type from the Caslon foundry; the exhibition’s own labels were set in a Caslon too.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>The exhibition’s text in Hill Memorial Library is rendered in the Libre Caslon font, based on the 18th-century typeface “Caslon” designed by British type founder William Caslon. Printer Isaiah Thomas purchased most of his type from the Caslon foundry.</p>"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Louisiana",
+   "anchor": "louisiana",
+   "lead": "darby-map-1816.jpg",
+   "focus": "center",
+   "lead_caption": "<p><strong>William Darby. <em>A Map of the State of Louisiana, with Parts of the State of Mississippi &amp; Territory of Alabama from Actual Surveys</em>, 1816.</strong></p>",
+   "display": "wall",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "Map of Louisiana, c. 1816",
+     "anchor": "darby-map",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "darby-map-1816.jpg",
+       "caption": "<p><strong>Darby, William. <em>A Map of the State of Louisiana, with Parts of the State of Mississippi &amp; Territory of Alabama from Actual Surveys</em>. New York: James Olmstead; New Orleans: Benjamin Levy, 1816.</strong><br>G4010 1816 .D37 MCAGE</p>",
+       "layout": "side_end"
+      },
+      {
+       "type": "figure",
+       "image": "darby-map-detail.jpg",
+       "caption": "<p><strong>The map around Baton Rouge.</strong></p>",
+       "layout": "side_end"
+      },
+      {
+       "type": "text",
+       "body": "<p>Darby surveyed the Atchafalaya Basin (1807–1809) and the Gulf Coast (1811). The map was published following the War of 1812 by John Melish. Feeling cheated by publisher Melish’s failure to credit Darby with information Melish incorporated into his own works, the surveyor had the map reprinted in New York and New Orleans.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "The batture, 1812",
+     "anchor": "batture",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "jefferson-proceedings-1812.jpg",
+       "caption": "<p><strong>Thomas Jefferson. <em>The Proceedings of the Government of the United States, in Maintaining the Public Right to the Beach of the Missisipi, Adjacent to New-Orleans, against the Intrusion of Edward Livingston</em>. Prepared for the use of counsel. New York: Ezra Sargeant, 1812.</strong><br>Its folding plan and the title page. F379 .N5 J4</p>",
+       "layout": "side_end"
+      },
+      {
+       "type": "figure",
+       "image": "jefferson-batture-plan.jpg",
+       "caption": "<p><strong>The Faubourg St. Marie and the beach, or batture, along the Mississippi</strong>, from the plan folded into the book.</p>",
+       "layout": "side_end"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Battle of New Orleans",
+     "anchor": "battle-of-new-orleans",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "battle-of-new-orleans.jpg",
+       "caption": "<p><strong><em>Battle of New Orleans and Defeat of the British under the Command of Sir Edward Packenham, by Genl. Andrew Jackson, 8th Jany. 1815</em>.</strong><br>Drawn by S. Seymour, engraved by J. W. Steel. Philadelphia: Wm. H. Morgan, No. 114 Chesnut St.</p>",
+       "layout": "side_end"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Natural History and Science",
+   "anchor": "natural-history-and-science",
+   "lead": "wilson-blue-jay.jpg",
+   "focus": "top",
+   "lead_caption": "<p><strong>Blue jay, yellow bird or goldfinch, and Baltimore bird.</strong><br>Alexander Wilson, <em>American Ornithology</em>, plate 1.</p>",
+   "display": "wall",
+   "blocks": [
+    {
+     "type": "entry",
+     "title": "Engravings of Tulip Poplar, 1817",
+     "anchor": "american-medical-botany",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "bigelow-tulip-poplar.jpg",
+       "caption": "<p><strong>Bigelow, Jacob. <em>American Medical Botany: Being a Collection of the Native Medicinal Plants of the United States, Containing their Botanical History and Chemical Analysis, and Properties and Uses in Medicine, Diet and the Arts, with Coloured Engravings</em>. Boston: Published by Cummings and Hilliard, at the Boston Bookstore, no. 1, Cornhill, 1817.</strong><br>QK99 .B47 v.1 pt.1 McIlhenny</p>",
+       "layout": "side_end"
+      },
+      {
+       "type": "figure",
+       "image": "bigelow-bloodroot.jpg",
+       "caption": "<p><strong>Bloodroot (<em>Sanguinaria canadensis</em>)</strong>, from the same work.</p>",
+       "layout": "side_end"
+      },
+      {
+       "type": "text",
+       "body": "<p>Bigelow (1786–1879) was a physician in the Boston area who studied botany under Benjamin Smith Barton. <em>American Medical Botany</em>, also illustrated by Bigelow, was born from the doctor’s desire to free the young nation from dependence on foreign medicine.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "American Ornithology",
+     "anchor": "american-ornithology",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "wilson-mockingbird.jpg",
+       "caption": "<p><strong>Alexander Wilson. <em>American Ornithology; or, the Natural History of the Birds of the United States</em>. Philadelphia: Bradford and Inskeep, 1808–1814.</strong><br>Mockingbird, hummingbirds and their nest, and towhee bunting.</p>",
+       "layout": "side_end"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "American Entomology",
+     "anchor": "american-entomology",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "say-monarch.jpg",
+       "caption": "<p><strong>Thomas Say. <em>American Entomology, or Descriptions of the Insects of North America</em>. Philadelphia, 1824–1828.</strong><br>The monarch butterfly. QL466 .S27</p>",
+       "layout": "side_end"
+      },
+      {
+       "type": "figure",
+       "image": "say-grasshopper.jpg",
+       "caption": "<p><strong>A grasshopper</strong>, from the same work.</p>",
+       "layout": "side_end"
+      },
+      {
+       "type": "figure",
+       "image": "say-reduvius.jpg",
+       "caption": "<p><strong>Assassin bugs (<em>Reduvius</em>)</strong>, from the same work.</p>",
+       "layout": "side_end"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Bartram’s Travels, 1791",
+     "anchor": "bartram",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "bartram-travels-1791.jpg",
+       "caption": "<p><strong>William Bartram. <em>Travels through North and South Carolina, Georgia, East and West Florida, the Cherokee Country, the Extensive Territories of the Muscogulges, or Creek Confederacy, and the Country of the Chactaws</em>. Philadelphia: James &amp; Johnson, 1791.</strong><br>The frontispiece, “Mico Chlucco the Long Warior or King of the Siminoles,” and the title page. F213 .B282</p>",
+       "layout": "side_end"
+      },
+      {
+       "type": "figure",
+       "image": "bartram-hydrangea.jpg",
+       "caption": "<p><strong><em>Hydrangea quercifolia</em></strong>, the oakleaf hydrangea, from the same book.</p>",
+       "layout": "side_end"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Elements of Surgery, 1813",
+     "anchor": "elements-of-surgery",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "dorsey-surgery-plate.jpg",
+       "caption": "<p><strong>John Syng Dorsey. <em>Elements of Surgery: For the Use of Students</em>. Philadelphia, 1813.</strong><br>Plate IX: splints for a fractured leg.</p>",
+       "layout": "side_end"
+      },
+      {
+       "type": "figure",
+       "image": "dorsey-surgery-1813.jpg",
+       "caption": "<p><strong>The plate beside its page.</strong></p>",
+       "layout": "side_end"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Coxe’s Revolving Telegraph",
+     "anchor": "telegraph",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "coxe-telegraph.jpg",
+       "caption": "<p><strong>“Coxe’s Revolving Telegraph,” plate 3 and its explanation.</strong><br><em>The Emporium of Arts and Sciences</em>. Philadelphia. T1 .E4</p>",
+       "layout": "side_end"
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "alt": {
+  "bigelow-tulip-poplar.jpg": "A colored engraving of a tulip poplar branch: broad four-lobed leaves, a green and orange cup-shaped flower and a cone of seeds, with small studies of its parts.",
+  "bigelow-bloodroot.jpg": "A colored engraving of bloodroot: a white flower and a deeply lobed leaf rising from a red root.",
+  "louisiana-memorial-1804.jpg": "A newspaper page in five columns, the first headed “Important Document. Louisiana Memorial. To the Congress of the United States.”",
+  "constitutionalist-1811.jpg": "A four-page newspaper opened flat, its masthead “Constitutionalist” set in a chain of linked rings.",
+  "constitutionalist-insurrection.jpg": "A newspaper column with the headings “Orleans” and “Insurrection of Blacks.”",
+  "franklin-gulf-stream-chart.jpg": "An engraved chart of the North Atlantic coast from the Gulf of Mexico to Labrador, with the Gulf Stream as a broad band curving northeast, beside a column of printed remarks.",
+  "transactions-aps-1786.jpg": "An open volume with Franklin’s Gulf Stream chart folded out beside it.",
+  "rowson-charlotte-1794.jpg": "The title page of “Charlotte. A Tale of Truth,” by Mrs. Rowson, volume 1, printed for Mathew Carey, 1794.",
+  "carey-books-advertisement.jpg": "A printed page headed “Books, Published by M. Carey, No. 118, Market-Street,” listing titles with their prices.",
+  "price-current-1825.jpg": "The masthead of the New-Orleans Price-Current and Commercial Intelligencer, with a woodcut of a sailing ship, dated September 17, 1825.",
+  "moreau-description-1796.jpg": "A French title page, “Description topographique et politique de la partie espagnole de l’isle Saint-Domingue,” tome second, Philadelphie, 1796.",
+  "darby-map-1816.jpg": "A hand-colored map of Louisiana and parts of Mississippi and Alabama, parish lines in color, the coast and the Mississippi delta along the bottom.",
+  "darby-map-detail.jpg": "Detail of the hand-colored map: the Mississippi winding past Baton Rouge among parish names.",
+  "jefferson-proceedings-1812.jpg": "An open book with a folding street plan along the river on the left and the title page on the right.",
+  "jefferson-batture-plan.jpg": "An engraved plan of a grid of city blocks between plantations and the Mississippi River.",
+  "battle-of-new-orleans.jpg": "An engraving of the Battle of New Orleans: Andrew Jackson and officers on horseback before lines of soldiers, a flag flying over the ramparts.",
+  "wilson-blue-jay.jpg": "A hand-colored engraving of a blue jay on a branch with a goldfinch above and a Baltimore oriole below.",
+  "wilson-mockingbird.jpg": "A hand-colored engraving of a mockingbird, hummingbirds at a flower, a nest with eggs and a towhee.",
+  "say-monarch.jpg": "A hand-colored engraving of two monarch butterflies, one with wings spread and one at rest on a stem.",
+  "say-grasshopper.jpg": "A hand-colored engraving of a grasshopper with wings spread, with smaller studies of others.",
+  "say-reduvius.jpg": "A hand-colored engraving of long-legged assassin bugs on plant stems.",
+  "bartram-travels-1791.jpg": "An open book: an engraved portrait of Mico Chlucco, the Long Warrior, in a feathered headdress, facing the title page.",
+  "bartram-hydrangea.jpg": "An engraving of an oakleaf hydrangea leaf and a cluster of flowers.",
+  "dorsey-surgery-plate.jpg": "An engraving of a leg bound in a long wooden splint, beside the splint and its parts drawn separately.",
+  "dorsey-surgery-1813.jpg": "An open book: the plate of a splinted leg facing a page of text.",
+  "coxe-telegraph.jpg": "An open book: a page explaining the plate, and an engraving of a tall signal tower with a semicircle of shutters and a flag on top.",
+  "eaton-erie-canal-1824.jpg": "An open book: the end of a long folding engraving, a view of the shore and a profile of rock layers beneath Lake Erie, beside the title page.",
+  "thomas-colophon-1788.jpg": "The foot of a printed page: “Finis” in an oval wreath above a ribboned frame with “Printed at Worcester, by Isaiah Thomas, MDCCLXXXVIII.”"
+ }
+}

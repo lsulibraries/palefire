@@ -1070,6 +1070,13 @@ HTML),
 <li>Before, the covers sat over the ibis picture, where the citations faded into it. Any gallery made only of reading lists can be a wall the same way, by setting its Display to Wall.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Made in America, the fall 2026 exhibition, comes to v2', <<<'HTML'
+<ul>
+<li>Made in America: Selected Imprints from 1776–1826, the exhibition in Hill Memorial Library this fall for the nation’s 250th anniversary, is built as a v2 exhibition, not published yet. Its old page was only an announcement; the new one carries the exhibition’s own panels: the introduction, Thomas Paine, Benjamin Franklin, and the printers Isaiah Thomas, Mathew Carey and Benjamin Levy.</li>
+<li>Four galleries, each a wall that opens on a picture: Introduction, Printing and Printers, Louisiana, and Natural History and Science. The panel text hangs as text plates between the books, maps, prints and newspapers on display.</li>
+<li>All 28 pictures are the Digitization Lab’s new scans made for the exhibition, from Darby’s 1816 map of Louisiana to Wilson’s blue jay and Franklin’s chart of the Gulf Stream.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------
