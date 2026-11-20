@@ -419,6 +419,39 @@ $section('Occult Science and Philosophy in the Renaissance', [
 HTML),
 ]);
 
+$section('Woven Louisiana History: Acadian Textiles', [
+  $text(NULL, <<<'HTML'
+<p>Built at <a href="/v2/oralhistory/exhibitions/woven">/v2/oralhistory/exhibitions/woven</a>, not published yet. It is two interviews, so it lives with the oral history exhibitions; /v2/special/exhibitions/woven redirects there.</p>
+<p>Exhibition: Woven Louisiana History: Acadian Textiles, two interview excerpts with makers for LSU’s Acadian Handicraft Project (1942–1962): the weaver Gladys Clark and the seamstress Laura Mae Romero.<br>Old site: /woven/clark and /woven/romero, one photograph, one recording and one transcript each.</p>
+<h3>Changed on the page</h3>
+<ul><li>One gallery, In Their Words, a wall: the two interviews as picture tiles (photograph, clip, transcript and a short biography), with two text plates, The Acadian Handicraft Project and About the Interviews.
+</li><li>New text from LSU Libraries finding aids (Acadian Handicraft Project Records, Mss. 1880; Gladys Clark Papers, Mss. 4953): the introduction, Gladys Clark’s biography and the project plate. Laura Mae Romero’s biography comes from her own words.
+</li><li>Pictures: Gladys Clark’s portrait from its 2,750 × 4,200 rescan for the 2024 Hill exhibition (the old page’s was 750 px), and a new gallery lead from the same files, a basket of coton jaune. Laura Mae Romero’s 1945 newspaper photograph stays at 233 px: no better copy on the R: drive or in the Louisiana Digital Library.
+</li></ul>
+<h3>Corrected</h3>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>the loom that I’ve been waiting on</del></td><td><ins>the loom that I’ve been weaving on</ins></td></tr>
+<tr><td><del>I didn’t want a card and spin</del></td><td><ins>I didn’t want to card and spin</ins></td></tr>
+<tr><td><del>What my mother would spend</del></td><td><ins>What my mother would spin</ins></td></tr>
+<tr><td><del>Pam Rabalis</del></td><td><ins>Pam Rabalais</ins></td></tr>
+<tr><td><del>Abbeville Meriodional</del></td><td><ins><em>Abbeville Meridional</em></ins></td></tr>
+</tbody>
+</table>
+<ul><li>Speaker labels in bold on their own paragraphs, a dozen small transcript fixes and the brackets made whole; the full list is in the theme’s docs/special-exhibition-corrections/woven.md.
+</li></ul>
+<h3>To verify</h3>
+<ul><li>Gladys Clark’s interviewer: the old source line says Maida Bergeron, its transcript Maida Owens.
+</li><li>The cover year, 2024 (the old pages have no date), and the coton jaune photograph’s source.
+</li><li>Left as heard: “little pin offers”, “Mrs. Dickie Daspitt”, “Mr. Isaac Hank”, and Louise Olivier “from Grand Coteau” (the finding aid says Arnaudville).
+</li></ul>
+<h3>New wording to check</h3>
+<ul><li>The introduction, the credit line, both biographies, both text plates, the clip titles, the lead caption and the alt text.
+</li></ul>
+HTML),
+]);
+
 $section('Biographies', [
   $text(NULL, <<<'HTML'
 <p><strong>Status: proposed, not decided.</strong> AVES is the only Special Collections exhibition with biographies so far: 43 of them, 118 to 1,293 words (about 400 on average), three of them for two people (Godman and Salvin, the Schomburgks, the Phelpses). Together they are most of the exhibition’s 48,000 words. Today each one sits in its entry under a “Biography” label, folded after about ten lines with a “Read the full biography” button, and the Biographies gallery is a hand-written list of links.</p>
