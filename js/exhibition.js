@@ -1562,7 +1562,7 @@
     button.innerHTML = '<span class="pf-exhibit-bio-open__kicker">' + Drupal.t('Biography') + '</span>'
       + '<span class="pf-exhibit-bio-open__name"></span>'
       + '<span class="pf-exhibit-bio-open__time">' + Drupal.t('@words words · @minutes min', { '@words': words, '@minutes': Math.max(1, Math.round(words / 238)) }) + '</span>'
-      + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M3 12h17.5M14 5.5l6.5 6.5-6.5 6.5"/></svg>';
+      + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M12 4.5v15M4.5 12h15"/></svg>';
     button.querySelector('.pf-exhibit-bio-open__name').textContent = data.name || Drupal.t('About the speaker');
     button.addEventListener('click', () => {
       if (bio.opener === button) {

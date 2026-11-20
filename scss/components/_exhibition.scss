@@ -3213,8 +3213,10 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
 }
 
 // A clip's biography in the object view (js/exhibition.js): a button in
-// its place, on hairlines like a gallery row (kicker, the speaker's name,
-// its length; the arrow nudges on hover), and a second panel. From lg the
+// its place, over a hairline that parts it from Listen (the caption's own
+// rule is above it, so no second one there): kicker, the speaker's name,
+// its length; a + that turns to × while it's open (it opens a panel, not
+// a page), and a second panel. From lg the
 // panel slides in from the view panel's edge over the stage, as wide as
 // the view panel (at most the stage), so the transcript stays in view;
 // below lg, or beside a side panel, it rises in over the whole view, its
@@ -3231,7 +3233,7 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
   color: inherit;
   background: none;
   border: 0;
-  border-block: 1px solid $pf-hairline;
+  border-bottom: 1px solid $pf-hairline;
 
   svg {
     grid-column: 2;
@@ -3239,18 +3241,17 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
     width: 1.25rem;
     height: 1.25rem;
     color: var(--pf-exhibit-accent);
-    transition: translate $pf-hover-out ease;
+    transition: rotate .4s $pf-exhibit-ease;
+  }
+
+  &[aria-expanded="true"] svg {
+    rotate: 45deg;
   }
 
   &:hover,
   &:focus-visible {
     .pf-exhibit-bio-open__name {
       color: var(--pf-g-hover, var(--pf-exhibit-accent));
-      transition-duration: $pf-hover-in;
-    }
-
-    svg {
-      translate: .25rem 0;
       transition-duration: $pf-hover-in;
     }
   }
