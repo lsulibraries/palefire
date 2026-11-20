@@ -219,21 +219,22 @@ html[data-pf-mode="exhibition"] .pf-section[style*="--pf-gallery-index"] {
   display: block;
 }
 
-.pf-exhibit-lead__link {
-  position: relative;
-  display: block;
-  color: inherit;
-  cursor: zoom-in;
+// A compact lead's View, after its caption, in the caption's column.
+.pf-exhibit-lead__view {
+  max-width: calc(var(--pf-exhibit-prose) + 2 * var(--pf-section-pad-inline));
+  margin: 0.25rem 0 0;
+  padding: 0 var(--pf-section-pad-inline);
 
-  // The band reaches the screen's edges, so the ring goes inside.
-  &:focus-visible {
-    outline: 2px solid var(--bs-body-color);
-    outline-offset: -4px;
+  .pf-exhibit-lead-label {
+    position: static;
+    max-width: none;
+    background: none;
+    border: 0;
+    backdrop-filter: none;
   }
 
-  &:is(:hover, :focus-visible) .pf-exhibit-figure__zoom {
-    opacity: 1;
-    transition-duration: $pf-hover-in;
+  .pf-exhibit-lead-label__view {
+    padding-inline: 0;
   }
 }
 
@@ -266,12 +267,8 @@ html[data-pf-mode="exhibition"] .pf-section[style*="--pf-gallery-index"] {
     }
   }
 
-  .pf-exhibit-lead__link {
-    display: flex;
-    justify-content: center;
-  }
-
-  .pf-exhibit-lead__caption {
+  .pf-exhibit-lead__caption,
+  .pf-exhibit-lead__view {
     max-width: var(--pf-exhibit-prose);
     margin-inline: auto;
     padding-inline: 0;
@@ -474,28 +471,6 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   }
 }
 
-.pf-exhibit-hero__link {
-  display: block;
-  height: 100%;
-  color: inherit;
-  cursor: zoom-in;
-
-  // The image reaches the screen's edges, so the ring goes inside.
-  &:focus-visible {
-    outline: 2px solid var(--bs-body-color);
-    outline-offset: -4px;
-  }
-
-  // The enlarge mark clear of the header, top right.
-  .pf-exhibit-figure__zoom {
-    z-index: 1;
-  }
-
-  &:is(:hover, :focus-visible) .pf-exhibit-figure__zoom {
-    opacity: 1;
-    transition-duration: $pf-hover-in;
-  }
-}
 
 .pf-exhibit-hero__frame {
   display: block;
@@ -3979,11 +3954,99 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
   overflow: clip;
 }
 
-.pf-exhibit-wall-hero__link {
+// A full-screen lead's label (paragraph--exhibit-page.html.twig,
+// lead_label()): the caption's first sentence and View, in a corner of the
+// picture, like a museum wall label. Only View opens the viewer; the
+// picture is not a link. Top right, under the breadcrumb bar (which lies
+// over the stage's top): clear of the title and text at the foot and left,
+// and of a bare wall's tiles, which rise over the foot. The text shows
+// from md; a phone has View alone.
+.pf-exhibit-lead-label {
   position: absolute;
-  inset: 0;
-  display: block;
-  cursor: zoom-in;
+  z-index: 2;
+  top: calc(var(--pf-landing-bar-h, 2rem) + 1rem);
+  right: clamp(0.75rem, 2.5vw, 2rem);
+  display: flex;
+  align-items: stretch;
+  max-width: min(26rem, calc(100% - 1.5rem));
+  color: var(--bs-body-color);
+  background: color-mix(in srgb, var(--bs-body-bg) 88%, transparent);
+  border: 1px solid $pf-hairline;
+  backdrop-filter: blur(6px);
+}
+
+.pf-exhibit-lead-label__text {
+  display: none;
+  align-self: center;
+  padding: 0.55rem 0.85rem;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--pf-exhibit-muted);
+  // Two lines at most.
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+
+  @include media-breakpoint-up(md) {
+    display: -webkit-box;
+  }
+}
+
+.pf-exhibit-lead-label__view {
+  display: inline-flex;
+  flex: none;
+  gap: 0.55rem;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 0.85rem;
+  font: var(--pf-mono-ui)/1.2 var(--pf-exhibit-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--bs-body-color);
+  text-decoration: underline 1px transparent;
+  text-underline-offset: 0.45em;
+
+  .pf-exhibit-lead-label__text + & {
+    @include media-breakpoint-up(md) {
+      border-left: 1px solid $pf-hairline;
+    }
+  }
+
+  svg {
+    flex: none;
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: var(--pf-g-hover, var(--pf-exhibit-accent));
+    text-decoration-color: currentColor;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--bs-body-color);
+    outline-offset: 2px;
+  }
+
+  @include pf-exhibit-motion {
+    transition:
+      color $pf-hover-out ease,
+      text-decoration-color $pf-hover-out ease;
+
+    svg {
+      transition: scale $pf-hover-out ease;
+    }
+
+    &:is(:hover, :focus-visible) {
+      transition-duration: $pf-hover-in;
+
+      svg {
+        scale: 1.15;
+        transition-duration: $pf-hover-in;
+      }
+    }
+  }
 }
 
 @property --pf-wash-turn {

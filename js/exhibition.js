@@ -1732,10 +1732,16 @@
     return { block: block, links: links, caption: caption };
   }
 
+  // A lightbox link's picture: its own <img>, or the one it names
+  // (data-pf-img: a lead's View link, beside the picture it opens).
+  function linkImg(link) {
+    return link.querySelector('img') || (link.dataset.pfImg ? document.getElementById(link.dataset.pfImg) : null);
+  }
+
   // The stage's image: at once the tile's own (already loaded), then the
   // size the stage needs from the figure's srcset once it has loaded.
   function mediaImg(link, cls, shown) {
-    const thumb = link.querySelector('img');
+    const thumb = linkImg(link);
     const img = document.createElement('img');
     img.className = cls;
     img.alt = thumb ? thumb.alt : '';
@@ -1821,7 +1827,7 @@
         onTurn(to);
       }
       // The next page's stage size, ready for the next turn.
-      const after = links[to + 1] && links[to + 1].querySelector('img');
+      const after = links[to + 1] && linkImg(links[to + 1]);
       if (after && after.getAttribute('srcset')) {
         const ahead = new Image();
         ahead.sizes = '(min-width: 62rem) 62vw, 100vw';
@@ -2305,7 +2311,7 @@
       opener: opener || link,
       entry: viewer.isOpen() && !wallState.loose ? wallState.index : null,
     };
-    viewer.show(objectHandler, () => fillLoose(links.indexOf(link)), { from: link.querySelector('img'), kind: 'exhibit' });
+    viewer.show(objectHandler, () => fillLoose(links.indexOf(link)), { from: linkImg(link), kind: 'exhibit' });
   }
 
   function fillLoose(index) {
@@ -2316,7 +2322,7 @@
     const link = loose.links[loose.index];
     const frame = document.createElement('div');
     frame.className = 'pf-viewer__frame';
-    const img = mediaImg(link, 'pf-viewer__img pf-viewer__zoomable', link.querySelector('img'));
+    const img = mediaImg(link, 'pf-viewer__img pf-viewer__zoomable', linkImg(link));
     img.dataset.full = link.href;
     frame.append(img);
     view.media.replaceChildren(frame);
@@ -2441,7 +2447,7 @@
     wallState.quiet = !!quiet;
     let thumb = wallState.tile && wallState.tile.querySelector('.pf-exhibit-wall__img');
     if (loose) {
-      thumb = loose.links[loose.index].querySelector('img');
+      thumb = linkImg(loose.links[loose.index]);
       if (!viewer.inSight(thumb, headerOffset())) {
         thumb = null;
       }

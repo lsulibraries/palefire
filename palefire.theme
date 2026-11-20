@@ -5504,6 +5504,9 @@ function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
   if ($variables['lead'] && $paragraph->hasField('field_exhibit_lead_caption') && trim(strip_tags((string) $paragraph->get('field_exhibit_lead_caption')->value)) !== '') {
     $variables['lead_caption'] = $paragraph->get('field_exhibit_lead_caption')->view(['label' => 'hidden', 'type' => 'text_default']);
   }
+  // A captioned lead's label in its corner, beside the View link that opens
+  // it (the picture itself is not a link): the caption's first sentence.
+  $variables['lead_label'] = $variables['lead_caption'] ? _palefire_exhibit_sentence((string) $paragraph->get('field_exhibit_lead_caption')->value, 80) : '';
   // Opening: "cover" (stored as "full", also when empty, for galleries
   // made before the field), "full" (stored as "pan") or "compact" (the
   // band above, as before).
@@ -6011,13 +6014,7 @@ function _palefire_exhibit_loose(ParagraphInterface $page): array {
     && $block->isPublished()
     && !$block->get('field_figure_image')->isEmpty()
     && !($block->hasField('field_figure_link') && !$block->get('field_figure_link')->isEmpty()));
-  // Up to the first full stop, ? or ! after 12 characters, without it,
-  // past abbreviations and initials ("ca. 1939–43", "vol. 31", "A. B.").
-  $sentence = function (string $html): string {
-    $text = _palefire_plain_excerpt($html, 2000);
-    $text = preg_match('/^(.{12,}?)(?<!\bca)(?<!\bc)(?<!\bvol)(?<!\bno)(?<!\bpp)(?<!\bp)(?<!\bSt)(?<!\bDr)(?<!\bMr)(?<!\bMrs)(?<!\bMs)(?<!\bJr)(?<!\bSr)(?<!\be\.g)(?<!\bi\.e)(?<!\b\p{Lu})[.!?](?:\s|$)/u', $text, $m) ? $m[1] : rtrim($text, '.');
-    return mb_strlen($text) > 90 ? rtrim(mb_substr($text, 0, mb_strrpos(mb_substr($text, 0, 88), ' ') ?: 88), ' ,;:') . '…' : $text;
-  };
+  $sentence = fn (string $html): string => _palefire_exhibit_sentence($html, 90);
   $captions = [];
   foreach ($figures as $figure) {
     $captions[$figure->id()] = $sentence((string) $figure->get('field_figure_caption')->value);
@@ -6036,6 +6033,19 @@ function _palefire_exhibit_loose(ParagraphInterface $page): array {
     $built[$key][$figure->id()] = ['anchor' => 'picture-' . $figure->id(), 'title' => $title];
   }
   return $built[$key];
+}
+
+/**
+ * A caption's first sentence, as plain text, without its full stop.
+ *
+ * Up to the first full stop, ? or ! after 12 characters, past
+ * abbreviations and initials ("ca. 1939–43", "vol. 31", "A. B."); cut at a
+ * word with "…" when longer than $max characters. '' when there is no text.
+ */
+function _palefire_exhibit_sentence(string $html, int $max = 90): string {
+  $text = _palefire_plain_excerpt($html, 2000);
+  $text = preg_match('/^(.{12,}?)(?<!\bca)(?<!\bc)(?<!\bvol)(?<!\bno)(?<!\bpp)(?<!\bp)(?<!\bSt)(?<!\bDr)(?<!\bMr)(?<!\bMrs)(?<!\bMs)(?<!\bJr)(?<!\bSr)(?<!\be\.g)(?<!\bi\.e)(?<!\b\p{Lu})[.!?](?:\s|$)/u', $text, $m) ? $m[1] : rtrim($text, '.');
+  return mb_strlen($text) > $max ? rtrim(mb_substr($text, 0, mb_strrpos(mb_substr($text, 0, $max - 2), ' ') ?: $max - 2), ' ,;:') . '…' : $text;
 }
 
 /**

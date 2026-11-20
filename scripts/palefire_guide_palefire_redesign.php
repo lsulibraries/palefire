@@ -879,6 +879,11 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Gallery pictures open from their label', <<<'HTML'
+<ul>
+<li>The big picture that opens a gallery no longer opens full screen wherever you click it, which happened by accident while reading. A small label in its top corner names the picture, and its View button opens it.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: No sideways scroll on exhibition walls on phones', <<<'HTML'
 <ul>
 <li>On a narrow phone a very tall picture beside a wide one could shrink to a sliver, and a word in its label pushed the page sideways (Georgetown 272’s clipping about James Farmer). Such a picture now takes its own row, and long words in labels wrap.</li>

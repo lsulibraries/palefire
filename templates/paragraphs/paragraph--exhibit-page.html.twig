@@ -62,10 +62,34 @@
  *   dated entry of the other galleries on one rail, printed after the
  *   gallery's own text (includes/exhibit-timeline.html.twig).
  *
+ * - lead_label: a captioned lead's label (its caption's first sentence),
+ *   set in a corner of a full-screen lead with a View link
+ *   (lead_label() below), the only way into the viewer: the picture itself
+ *   is not a link, so a click meant for the text over it doesn't open it.
+ *   A compact lead's View follows its caption.
+ *
  * js/exhibition.js shows one gallery at a time and adds the previous /
  * next links at the foot.
  */
 #}
+{#
+  A lead's label: its text (aria-hidden: the caption labels the figure)
+  and View, a link to the largest image that js/exhibition.js opens in the
+  viewer with the caption (caption_id, else the figure's figcaption) and
+  the page's own image (img_id) for its alt text and sizes.
+#}
+{% macro lead_label(image, text, caption_id, img_id) %}
+  <span class="pf-exhibit-lead-label">
+    {% if text %}<span class="pf-exhibit-lead-label__text" aria-hidden="true">{{ text }}</span>{% endif %}
+    <a class="pf-exhibit-lead-label__view" href="{{ image.full }}" data-pf-lightbox data-pf-img="{{ img_id }}"
+       {% if caption_id %}data-pf-caption="{{ caption_id }}"{% endif %}
+       {% if image.width %}data-width="{{ image.width }}" data-height="{{ image.height }}"{% endif %}>
+      {{- 'View'|t }}<span class="visually-hidden"> {{ 'the picture full screen'|t }}</span>
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M9.5 2.5h4v4M13.5 2.5 9 7M6.5 13.5h-4v-4M2.5 13.5 7 9"/></svg>
+    </a>
+  </span>
+{% endmacro %}
+{% import _self as pf %}
 {% set full = opener == 'full' %}
 {%
   set classes = [
@@ -105,7 +129,6 @@
     </nav>
   {% endif %}
 {% endset %}
-{% set lightbox_svg %}<svg class="pf-exhibit-figure__zoom" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M9.5 2.5h4v4M13.5 2.5 9 7M6.5 13.5h-4v-4M2.5 13.5 7 9"/></svg>{% endset %}
 <div{{ attributes.addClass(classes) }} data-pf-exhibit-page>
   {% if mark and wall_lead %}
     {# The gallery's mark (a call sign's logo) over its title, in the
@@ -124,21 +147,15 @@
         <div class="pf-exhibit-hero__stage">
           {% set hero_img %}
             <span class="pf-exhibit-hero__frame">
-              <img class="pf-exhibit-hero__img{{ lead_mirror ? ' pf-exhibit-mirror' }}" src="{{ lead.src }}"
+              <img class="pf-exhibit-hero__img{{ lead_mirror ? ' pf-exhibit-mirror' }}" id="{{ dom_id }}-lead-img" src="{{ lead.src }}"
                    {% if lead.srcset %}srcset="{{ lead.srcset }}" sizes="{{ lead.sizes }}"{% endif %}
                    {% if lead.width %}width="{{ lead.width }}" height="{{ lead.height }}"{% endif %}
                    style="object-position: {{ focus }}" alt="{{ lead_caption ? lead.alt }}" loading="lazy" decoding="async">
             </span>
           {% endset %}
+          {{ hero_img }}
           {% if lead_caption %}
-            <a class="pf-exhibit-hero__link" href="{{ lead.full }}" data-pf-lightbox data-pf-caption="{{ dom_id }}-caption"
-               {% if lead.width %}data-width="{{ lead.width }}" data-height="{{ lead.height }}"{% endif %}>
-              {{ hero_img }}
-              <span class="visually-hidden">{{ '(opens a larger view)'|t }}</span>
-              {{ lightbox_svg }}
-            </a>
-          {% else %}
-            {{ hero_img }}
+            {{ pf.lead_label(lead, lead_label, dom_id ~ '-caption', dom_id ~ '-lead-img') }}
           {% endif %}
         </div>
       </div>
@@ -163,20 +180,16 @@
   {% elseif lead %}
     {% set lead_classes = 'pf-exhibit-lead' ~ (lead_whole ? ' pf-exhibit-lead--whole') %}
     {% set lead_img %}
-      <img class="pf-exhibit-lead__img{{ lead_mirror ? ' pf-exhibit-mirror' }}" src="{{ lead.src }}"
+      <img class="pf-exhibit-lead__img{{ lead_mirror ? ' pf-exhibit-mirror' }}" id="{{ dom_id }}-lead-img" src="{{ lead.src }}"
            {% if lead.srcset %}srcset="{{ lead.srcset }}" sizes="{{ lead.sizes }}"{% endif %}
            {% if lead.width %}width="{{ lead.width }}" height="{{ lead.height }}"{% endif %}
            style="object-position: {{ focus }}; --pf-lead-x: {{ lead_x }}" alt="{{ lead_caption ? lead.alt }}" loading="lazy" decoding="async">
     {% endset %}
     {% if lead_caption %}
       <figure class="{{ lead_classes }} has-caption">
-        <a class="pf-exhibit-lead__link" href="{{ lead.full }}" data-pf-lightbox
-           {% if lead.width %}data-width="{{ lead.width }}" data-height="{{ lead.height }}"{% endif %}>
-          <span class="pf-exhibit-lead__frame">{{ lead_img }}</span>
-          <span class="visually-hidden">{{ '(opens a larger view)'|t }}</span>
-          {{ lightbox_svg }}
-        </a>
+        <span class="pf-exhibit-lead__frame">{{ lead_img }}</span>
         <figcaption class="pf-exhibit-lead__caption pf-guide-prose">{{ lead_caption }}</figcaption>
+        <p class="pf-exhibit-lead__view">{{ pf.lead_label(lead, '', '', dom_id ~ '-lead-img') }}</p>
       </figure>
     {% else %}
       <div class="{{ lead_classes }}" aria-hidden="true">
@@ -192,23 +205,21 @@
        scrolls, however long the intro once opened. #}
     {% set wall_img %}
       <span class="pf-exhibit-wall-hero__frame">
-        <img class="pf-exhibit-wall-hero__img{{ lead_mirror ? ' pf-exhibit-mirror' }}" src="{{ wall_lead.src }}"
+        <img class="pf-exhibit-wall-hero__img{{ lead_mirror ? ' pf-exhibit-mirror' }}" id="{{ dom_id }}-lead-img" src="{{ wall_lead.src }}"
              {% if wall_lead.srcset %}srcset="{{ wall_lead.srcset }}" sizes="{{ wall_lead.sizes }}"{% endif %}
              {% if wall_lead.width %}width="{{ wall_lead.width }}" height="{{ wall_lead.height }}"{% endif %}
              style="object-position: {{ focus }}" alt="{{ wall_lead_caption ? wall_lead.alt }}" loading="lazy" decoding="async">
+        {# In the frame, so it stays on screen with the picture. #}
+        {% if wall_lead_caption %}
+          {{ pf.lead_label(wall_lead, lead_label, dom_id ~ '-caption', dom_id ~ '-lead-img') }}
+        {% endif %}
       </span>
     {% endset %}
     <div class="pf-exhibit-wall-hero" data-pf-wall-hero
          {% if wall_lead_caption %}role="figure" aria-labelledby="{{ dom_id }}-caption"{% else %}aria-hidden="true"{% endif %}>
+      {{ wall_img }}
       {% if wall_lead_caption %}
-        <a class="pf-exhibit-wall-hero__link" href="{{ wall_lead.full }}" data-pf-lightbox data-pf-caption="{{ dom_id }}-caption"
-           {% if wall_lead.width %}data-width="{{ wall_lead.width }}" data-height="{{ wall_lead.height }}"{% endif %}>
-          {{ wall_img }}
-          <span class="visually-hidden">{{ '(opens a larger view)'|t }}</span>
-        </a>
         <div class="visually-hidden" id="{{ dom_id }}-caption">{{ wall_lead_caption }}</div>
-      {% else %}
-        {{ wall_img }}
       {% endif %}
     </div>
   {% endif %}
