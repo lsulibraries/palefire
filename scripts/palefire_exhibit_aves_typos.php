@@ -55,6 +55,7 @@ $fixes = [
   ['Brasilien</em> (Weimer, 1825-33)', 'Brasilien</em> (Weimar, 1825-33)'],
   ['Brasiliens </em>(Weimer, 1822-1831)', 'Brasiliens</em> (Weimar, 1822-1831)'],
   ['Charles Chubbs’s', 'Charles Chubb’s'],
+  ['took himwest', 'took him west'],
 ];
 
 $ids = \Drupal::entityQuery('node')->accessCheck(FALSE)

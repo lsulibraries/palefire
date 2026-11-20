@@ -919,6 +919,7 @@ HTML),
 <li>In exhibitions, a long biography is now a short card: when the person lived, their role, two sentences on who they were, and a Read the biography button that says how long it is. Their books and plates now sit right under the card instead of below a long page of text.</li>
 <li>Read the biography opens the whole life in a panel beside the gallery (a sheet from the bottom on phones), so the exhibition stays in view. Previous and Next move through the gallery’s people, and a citation shows its source right there under the paragraph.</li>
 <li>Each entry has two new optional fields, Summary and Role. Until a summary is written, the card shows the biography’s first sentence in italics, which marks the cards that still need one.</li>
+<li>All 42 people in AVES now have their two-sentence summary and role on their card, drafted from their own biographies for curators to review. A missing space in Hernández’s biography is fixed.</li>
 </ul>
 HTML),
 ]);

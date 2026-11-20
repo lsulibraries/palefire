@@ -234,6 +234,7 @@ $section('AVES', [
 <tr><td><del>(Weimer, 1825-33)</del></td><td><ins>(Weimar, 1825-33)</ins></td></tr>
 <tr><td><del>(Weimer, 1822-1831)</del></td><td><ins>(Weimar, 1822-1831)</ins></td></tr>
 <tr><td><del>Charles Chubbs’s</del></td><td><ins>Charles Chubb’s</ins></td></tr>
+<tr><td><del>took himwest</del></td><td><ins>took him west</ins> <em>Hernández, 2026-11-20</em></td></tr>
 <tr><td><del>Middleton Library</del></td><td><ins>Main Library</ins> <em>every text</em></td></tr>
 </tbody>
 </table>
@@ -242,7 +243,8 @@ $section('AVES', [
 </li><li>The lead images’ captions are taken from the print catalog’s illustration lists. Seven leads (Greenfield, Red-capped Manakin, the Andes, Buenaventura, Chubb paddling, the ongoing expedition and the Solitary Eagle) have no source and are decorative, with no caption.
 </li></ul>
 <h3>New wording to check</h3>
-<ul><li>The 16 gallery lead captions, the credit line and alt text for every image.
+<ul><li>The 42 biography cards’ Summary and Role (<code>scripts/palefire_exhibit_aves_bio_cards.php</code>, 2026-11-20): two sentences each, drafted only from that entry’s own biography. Change any on the entry’s edit form; the script never overwrites a filled field.
+</li><li>The 16 gallery lead captions, the credit line and alt text for every image.
 </li></ul>
 HTML),
 ]);

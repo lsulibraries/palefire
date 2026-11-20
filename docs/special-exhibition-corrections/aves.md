@@ -35,6 +35,7 @@ Text:
 - “jail– “a putrid” → “jail – “a putrid”; “of the world –that” → “of the world – that”; “and others– who” → “and others – who”; “ornithologists– Ridgway” → “ornithologists – Ridgway”; “perfect mentor– I” → “perfect mentor – I”
 - “(Weimer, 1825-33)” → “(Weimar, 1825-33)”; “(Weimer, 1822-1831)” → “(Weimar, 1822-1831)”
 - “Charles Chubbs’s” → “Charles Chubb’s”
+- “took himwest” → “took him west” (Hernández, 2026-11-20)
 - “Middleton Library” → “Main Library” (every text)
 
 ## To verify
@@ -44,4 +45,5 @@ Text:
 
 ## New wording to check
 
+- The 42 biography cards’ Summary and Role (`scripts/palefire_exhibit_aves_bio_cards.php`, 2026-11-20): two sentences each, drafted only from that entry’s own biography. Change any on the entry’s edit form; the script never overwrites a filled field.
 - The 16 gallery lead captions, the credit line and alt text for every image.
