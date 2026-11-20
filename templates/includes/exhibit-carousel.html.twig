@@ -23,14 +23,13 @@
  * - The summary, as a wall label: a line over the title (Featured and its
  *   note, a kicker that isn't plain "Exhibition", Unpublished), the title,
  *   subtitle, the start of the intro (else the credit line), then the
- *   facts at its foot, label over value, four slots every exhibition
- *   keeps ("—" where it has none): Year; Clips; Listening (the clips'
- *   total, "about m:ss each" under it: PalefireHooks::exhibitionClips()),
- *   or, for an exhibition without clips, Images; Reading (an estimate:
- *   PalefireHooks::exhibitionReading());
+ *   facts at its foot, a mono label over one value in each of four slots
+ *   every exhibition keeps ("—" where it has none, no notes under any):
+ *   Year; Clips; Listening (the clips' total:
+ *   PalefireHooks::exhibitionClips()), or, for an exhibition without
+ *   clips, Images; Est. reading (PalefireHooks::exhibitionReading());
  *   Press ("Read the release", a link to the post about its show in the
- *   building, with "Shown Jan–Mar 2010" under it from the post's On view
- *   dates: PalefireHooks::physicalShow()). Then Enter, alone, on the line of the
+ *   building: PalefireHooks::physicalShow()). Then Enter, alone, on the line of the
  *   arrows. Wide, the facts sit on the canvas's foot and Enter on the
  *   arrows' line whichever summary is shown (a subgrid,
  *   _exhibit-showcase.scss), so nothing jumps as it changes.
@@ -162,11 +161,10 @@
                   <dd>{{ ex.reading.images ?: pf.none() }}</dd>
                 </div>
                 <div class="pf-showcase__fact">
-                  <dt>{{ 'Reading'|t }}</dt>
+                  <dt><span aria-hidden="true">{{ 'Est. reading'|t }}</span><span class="visually-hidden">{{ 'Estimated reading time'|t }}</span></dt>
                   <dd>
                     {% if ex.reading.total %}
                       <time datetime="{{ ex.reading.total.iso }}">{{ ex.reading.total.text }}</time>
-                      <span class="pf-showcase__fact-note">{{ 'estimated'|t }}</span>
                     {% else %}
                       {{ pf.none() }}
                     {% endif %}
@@ -182,9 +180,6 @@
                   <dd>
                     {% if ex.clips.total %}
                       <time datetime="{{ ex.clips.total.iso }}">{{ ex.clips.total.text }}</time>
-                      {% if ex.clips.average and ex.clips.count > 1 %}
-                        <span class="pf-showcase__fact-note">{{ 'about'|t }} <time datetime="{{ ex.clips.average.iso }}">{{ ex.clips.average.text }}</time> {{ 'each'|t }}</span>
-                      {% endif %}
                     {% else %}
                       {{ pf.none() }}
                     {% endif %}
@@ -198,10 +193,6 @@
                       <span class="pf-showcase__fact-place">
                         <a href="{{ ex.show.url }}">{{ 'Read the release'|t }}<span class="visually-hidden">: {{ ex.title }}</span></a>
                       </span>
-                      {% if ex.show.dates %}<span class="pf-showcase__fact-note">{{ 'Shown @dates'|t({'@dates': ex.show.dates}) }}</span>{% endif %}
-                    {% elseif ex.show.dates %}
-                      {# A physical exhibition's own post: it is the release. #}
-                      {{ 'Shown @dates'|t({'@dates': ex.show.dates}) }}
                     {% else %}
                       {{ pf.none() }}
                     {% endif %}

@@ -718,28 +718,13 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
   min-width: 0;
 }
 
-.pf-showcase__fact-note {
-  display: block;
-  margin-top: .125rem;
-  color: var(--pf-showcase-muted);
-  font-size: .8125rem;
-  font-weight: 400;
-}
-
 .pf-showcase__none {
   color: var(--pf-showcase-muted);
 }
 
-// Press: the link to the post about the show in the building.
-.pf-showcase__fact--place dd {
-  font-size: 1rem;
-}
-
+// Press: the link to the post about the show in the building, set as
+// the other values are (size, weight, leading), only underlined.
 .pf-showcase__fact-place {
-  display: inline-flex;
-  align-items: center;
-  gap: .5rem;
-
   a {
     color: inherit;
     text-decoration: underline;
