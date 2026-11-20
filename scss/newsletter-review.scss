@@ -373,9 +373,10 @@
 
 // Staff answers on a note (includes/public-notes.html.twig): a status chip
 // and the versions it went through, the reply set in from the note, and
-// resolved notes folded under Resolved (n). Ink and muted only, both at text
-// contrast in either scheme; the chip's square says the status without
-// color (hollow open, half waiting, full changed, struck through kept).
+// resolved notes folded under Resolved (n). Ink and muted, at text contrast
+// in either scheme, and the accent for Changed; the chip's mark says the
+// status without color (hollow square open, half waiting, a check for
+// changed, an equals sign for kept as is).
 .pf-nlr .pf-pn__trail {
   display: flex;
   flex-wrap: wrap;
@@ -411,12 +412,33 @@
   background: linear-gradient(90deg, currentColor 50%, transparent 50%);
 }
 
-.pf-nlr .pf-pn__status--changed::before {
-  background: currentColor;
+// Changed: the one status that means done, filled in the accent with a
+// check, in the page's own background color on it.
+.pf-nlr .pf-pn__status--changed {
+  background: var(--pf-nlr-accent);
+  box-shadow: none;
+  color: var(--bs-body-bg);
+
+  &::before {
+    box-sizing: content-box;
+    width: .5rem;
+    height: .25rem;
+    margin-block-end: .1875rem;
+    border-block-end: 2px solid currentColor;
+    border-inline-start: 2px solid currentColor;
+    background: none;
+    box-shadow: none;
+    rotate: -45deg;
+  }
 }
 
+// Kept as is: an equals sign, the same as before.
 .pf-nlr .pf-pn__status--kept::before {
-  background: linear-gradient(currentColor, currentColor) center / 100% 1.5px no-repeat;
+  height: .375rem;
+  background:
+    linear-gradient(currentColor, currentColor) top / 100% 1.5px no-repeat,
+    linear-gradient(currentColor, currentColor) bottom / 100% 1.5px no-repeat;
+  box-shadow: none;
 }
 
 .pf-nlr .pf-pn__reply {
