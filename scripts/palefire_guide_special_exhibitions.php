@@ -798,7 +798,7 @@ $section('Louisiana for Bibliophiles: A History of Reading in the Bayou State', 
 <ul><li>The Introduction is the page’s intro. Eight galleries, all walls with a lead picture: Early Days, Creole Authors, African Americans, Women’s Reading and Novels, Practical Reading, Newspapers, Louisiana Libraries, and About the Exhibition (the curators, and the old Index as a plate whose “See …” lines link to the galleries).
 </li><li>The text between pictures is 45 text plates, each with a new heading and summary, hung before the pictures it describes; the longest sections are split where the subject turns. Books shown in several pages are one tile that pages through them.
 </li><li>Pictures: 58 of the 74 are new copies from the exhibition’s 2011 TIFF scans on the R: drive, cropped as the old pages had them, up to 2,560px (the old pages’ were 1,000px). Huey Long’s Bible is shown whole, the map beside his notes. Sixteen have no scan; the Louisiana Digital Library has none of them either.
-</li><li>Cover: the Hill reading room, 1903–1904, with its object label.
+</li><li>Cover: the Hill reading room, 1903–1904, with its object label. African Americans’ lead, the Teachers’ Journal cover, is the only picture under 720p (819 × 1,000, no scan), so it is shown whole over a blur of itself; the other leads fill the screen.
 </li></ul>
 <h3>Corrected</h3>
 <table>
