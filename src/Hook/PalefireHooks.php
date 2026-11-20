@@ -813,7 +813,7 @@ class PalefireHooks {
   /**
    * Variables for includes/exhibit-cover.html.twig on an exhibition page.
    *
-   * @return array{title: string, subtitle: string, title_style: string, credit: ?array, intro: ?array, prompt: string, year: ?int, physical: ?string, kicker: string, keyfacts: array, action: ?array, cover: ?array, cache: array}
+   * @return array{title: string, subtitle: string, title_style: string, credit: ?array, intro: ?array, prompt: string, year: ?int, physical: ?string, kicker: string, keyfacts: array, action: ?array, cover: ?array, bios_open: bool, cache: array}
    */
   private function exhibitHead(NodeInterface $node): array {
     $cache = CacheableMetadata::createFromObject($node);
@@ -928,6 +928,10 @@ class PalefireHooks {
       'keyfacts' => $keyfacts,
       'action' => $action,
       'cover' => $cover,
+      // "Open biographies with each clip" (field_exhibit_bios_open): in
+      // the object view a clip's biography opens with it from lg
+      // (js/exhibition.js), for short clips that say less than the life.
+      'bios_open' => $node->hasField('field_exhibit_bios_open') && (bool) $node->get('field_exhibit_bios_open')->value,
       'cache' => $render,
     ];
   }

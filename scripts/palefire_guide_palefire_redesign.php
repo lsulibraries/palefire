@@ -963,6 +963,7 @@ HTML),
 <li>Each clip opens with the short summary the old site had in its menu, and the wall opens with two sentences on who the ten speakers are, in place of a blown-up, mostly blank letterhead.</li>
 <li>The Biography button now carries the speaker’s name, and About the Project gets a picture: the cover of a 1968 brochure of New Orleans graphic artists, shown whole at its own size.</li>
 <li>The cover photo, Don Smith painting by a window, is small, and blown up to fill the screen it looked blurry. A new “Frame the cover” checkbox on exhibitions shows the photo whole, at its own size, over a soft blurred wash of itself. It is off unless ticked, so it only changes Graphic Design for now.</li>
+<li>Most of these clips run a minute or two, so each one now opens with its speaker’s biography beside the transcript. A new “Open biographies with each clip” checkbox on exhibitions turns this on. It only happens on a computer screen; on a phone the biography would cover the clip, so it stays behind the speaker’s name. Close it once and it stays closed.</li>
 </ul>
 HTML),
 ]);

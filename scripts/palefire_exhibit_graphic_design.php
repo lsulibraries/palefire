@@ -296,6 +296,7 @@ $values = [
   'field_exhibit_credit' => $html($data['credit']),
   'field_exhibit_cover' => $ref($media($data['cover'])),
   'field_exhibit_cover_framed' => !empty($data['cover_framed']) ? 1 : NULL,
+  'field_exhibit_bios_open' => !empty($data['bios_open']) ? 1 : NULL,
   'field_intro' => $html($data['intro']),
   'field_exhibit_year' => $data['year'],
   'field_exhibit_physical_note' => $data['physical_note'] !== '' ? $data['physical_note'] : NULL,

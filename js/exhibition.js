@@ -1481,7 +1481,12 @@
    * the name row when its credit names the speaker.
    * ------------------------------------------------------------------ */
 
-  const bio = { aside: null, opener: null, timer: 0 };
+  // auto: an exhibition with "Open biographies with each clip" (the
+  // cover's data-pf-exhibit-bios-open) opens the first biography with its
+  // clip, from lg where it slides in beside the transcript (not as a side
+  // panel, nor below lg, where it would cover the clip). Once per opening
+  // of the view: after that it stays as the visitor leaves it.
+  const bio = { aside: null, opener: null, timer: 0, auto: false };
 
   // "Name, interviewed by X, 2017" as {name, rest: "Interviewed by X, 2017"}.
   function creditSaid(credit) {
@@ -1666,6 +1671,10 @@
     if (open) {
       openBio(view, data, button, false);
     }
+    else if (!bio.auto && wide.matches && !view.dialog.classList.contains('is-side') && document.querySelector('[data-pf-exhibit-bios-open]')) {
+      bio.auto = true;
+      openBio(view, data, button, false);
+    }
   }
 
 
@@ -1673,6 +1682,7 @@
   // address back to its gallery. quiet: the caller does both.
   function objectClosed() {
     closeBio(false);
+    bio.auto = false;
     if (wallState.view) {
       stopAudio(wallState.view);
       setWash(wallState.view, null);

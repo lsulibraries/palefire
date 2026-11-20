@@ -25,6 +25,9 @@
  * - The cover (the poster, a small photograph) is framed: shown whole over
  *   a blurred wash of itself (Frame the cover; run
  *   palefire_exhibit_cover_framed.php first, or it says so and skips it).
+ * - Each clip opens with its speaker’s biography beside the transcript
+ *   (Open biographies with each clip; run palefire_exhibit_bios_open.php
+ *   first, or it says so and skips it): most clips run a minute or two.
  *
  * Anchors (and so links to entries) don’t change. Safe to run again: it
  * only sets what differs. A dry run unless apply=1.
@@ -150,11 +153,20 @@ $media_id = function (string $name): ?int {
 
 // The cover (the poster, a small photograph blown up) framed.
 if (!$node->hasField('field_exhibit_cover_framed')) {
-  $log[] = 'Skipped: Frame the cover is not on Modular page (run palefire_exhibit_cover_framed.php first).';
+  echo 'Skipped: Frame the cover is not on Modular page (run palefire_exhibit_cover_framed.php first).' . PHP_EOL;
 }
 elseif (!$node->get('field_exhibit_cover_framed')->value) {
   $node->set('field_exhibit_cover_framed', 1);
   $log[] = 'Cover: framed.';
+}
+
+// Short clips, long lives: each clip opens with its speaker’s biography.
+if (!$node->hasField('field_exhibit_bios_open')) {
+  echo 'Skipped: Open biographies with each clip is not on Modular page (run palefire_exhibit_bios_open.php first).' . PHP_EOL;
+}
+elseif (!$node->get('field_exhibit_bios_open')->value) {
+  $node->set('field_exhibit_bios_open', 1);
+  $log[] = 'Biographies: open with each clip.';
 }
 
 foreach ($node->get('field_scroll_section') as $section) {
@@ -279,7 +291,7 @@ if (!$log) {
 }
 elseif ($apply) {
   $node->setNewRevision(TRUE);
-  $node->setRevisionLogMessage('Graphic Design: clip headlines and summaries, credits, no wall lead, About lead (palefire_exhibit_graphic_design_layout.php).');
+  $node->setRevisionLogMessage('Graphic Design: clip headlines and summaries, credits, no wall lead, About lead, framed cover, biographies open (palefire_exhibit_graphic_design_layout.php).');
   $node->save();
   echo 'Saved node/' . $node->id() . '. Run: drush cr' . PHP_EOL;
 }

@@ -26,6 +26,9 @@
  *   Its focal point, when set, is where it stays in view when cropped.
  *   cover.framed ("Frame the cover" ticked): shown whole over a blurred
  *   wash of itself (.pf-exhibit-cover--framed), for a small or soft image.
+ * - bios_open ("Open biographies with each clip" ticked): the
+ *   data-pf-exhibit-bios-open flag js/exhibition.js reads to open a clip's
+ *   biography with it in the object view.
  *
  * The parts come in one after another on load (_exhibition.scss):
  * image, title, subtitle, the prompt and buttons, intro, then credit. The galleries follow
@@ -37,7 +40,7 @@
  */
 #}
 {{ attach_library('palefire/exhibition') }}
-<div class="pf-exhibit-cover{{ head.cover ? ' has-image' }}{{ head.cover and head.cover.framed ? ' pf-exhibit-cover--framed' }}">
+<div class="pf-exhibit-cover{{ head.cover ? ' has-image' }}{{ head.cover and head.cover.framed ? ' pf-exhibit-cover--framed' }}"{{ head.bios_open ? ' data-pf-exhibit-bios-open' }}>
   {% if head.cover %}
     <div class="pf-exhibit-cover__media" aria-hidden="true">
       {# Lazy in the markup so an address for a gallery (#…) doesn't fetch
