@@ -922,6 +922,12 @@ HTML),
 <li>All 42 people in AVES now have their two-sentence summary and role on their card, drafted from their own biographies for curators to review. A missing space in Hernández’s biography is fixed.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: A clip’s biography behind a button', <<<'HTML'
+<ul>
+<li>When an oral history clip opens, the speaker’s biography no longer fills the space above the recording and its transcript. In its place is a button with the speaker’s name and how long the biography is.</li>
+<li>On computers, the biography opens in a second panel beside the transcript, so you can read about the speaker while the clip plays. On phones and tablets it takes the screen, with Back to the clip to return. Moving to the next clip shows its speaker’s biography.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------

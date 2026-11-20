@@ -1409,10 +1409,185 @@
     return button;
   }
 
+  /* ---------------------------------------------------------------------
+   * A clip's biography
+   *
+   * In the object view a clip's biography would push its player and
+   * transcript far down the panel, so it waits behind a button where it
+   * stood: "Biography", the speaker's name, its length. The button opens a
+   * second panel (.pf-viewer__bio, _exhibition.scss) with the name, Life
+   * and Role and the summary when the entry has a biography card
+   * (js/exhibit-bio.js), and the biography. From lg it slides in over the
+   * stage beside the panel, so the transcript stays in view as the clip
+   * plays; below lg (and beside a side panel) it covers the view, with
+   * "Back to the clip". The clip plays on either way. Close, Back or Esc
+   * shuts it; stepping to another clip shows that one's speaker in it (or
+   * shuts it, a clip with no biography). The name comes from the clip's
+   * credit ("Name, interviewed by …"), else the biography's opening words
+   * ("Name was born …").
+   * ------------------------------------------------------------------ */
+
+  const bio = { aside: null, opener: null, timer: 0 };
+
+  function speakerOf(copy, text) {
+    const credit = copy.querySelector('.pf-exhibit-audio__credit');
+    const said = credit && credit.textContent.trim().match(/^(.{2,80}?),?\s+(?:is\s+)?interviewed\b/i);
+    if (said) {
+      return said[1].trim();
+    }
+    const opening = text.match(/^((?:\S+\s+){0,4}?\S+)\s+(?:was|is)\s/);
+    return opening ? opening[1] : '';
+  }
+
+  function bioAside(view) {
+    if (bio.aside && view.dialog.contains(bio.aside)) {
+      return bio.aside;
+    }
+    const aside = document.createElement('section');
+    aside.className = 'pf-viewer__bio';
+    aside.id = 'pf-viewer-bio';
+    aside.hidden = true;
+    aside.setAttribute('aria-labelledby', 'pf-viewer-bio-name');
+    aside.innerHTML = '<div class="pf-viewer__bio-top">'
+      + '<p class="pf-viewer__bio-kicker">' + Drupal.t('Biography') + '</p>'
+      + '<button type="button" class="pf-viewer__bio-close">'
+      + '<svg class="pf-viewer__bio-back" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M13.5 8h-11M6.5 4 2.5 8l4 4"/></svg>'
+      + '<svg class="pf-viewer__bio-x" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M3.5 3.5l9 9m0-9-9 9"/></svg>'
+      + '<span class="pf-viewer__bio-label">' + Drupal.t('Back to the clip') + '</span>'
+      + '</button>'
+      + '</div>'
+      + '<h3 class="pf-viewer__bio-name" id="pf-viewer-bio-name" tabindex="-1"></h3>'
+      + '<div class="pf-viewer__bio-body"></div>';
+    aside.querySelector('.pf-viewer__bio-close').addEventListener('click', () => closeBio(true));
+    // Esc shuts the biography, not the view.
+    aside.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        event.stopPropagation();
+        closeBio(true);
+      }
+    });
+    view.dialog.append(aside);
+    bio.aside = aside;
+    return aside;
+  }
+
+  function fillBio(aside, data) {
+    aside.querySelector('.pf-viewer__bio-name').textContent = data.name || Drupal.t('About the speaker');
+    const wrap = document.createElement('div');
+    wrap.className = 'pf-exhibit-bio-panel';
+    if (data.facts) {
+      wrap.append(data.facts.cloneNode(true));
+    }
+    if (data.summary) {
+      const lede = document.createElement('p');
+      lede.className = 'pf-exhibit-bio-panel__lede';
+      lede.textContent = data.summary.textContent.trim();
+      wrap.append(lede);
+    }
+    wrap.append(data.text.cloneNode(true));
+    aside.querySelector('.pf-viewer__bio-body').replaceChildren(wrap);
+    aside.scrollTop = 0;
+  }
+
+  function openBio(view, data, button, focus) {
+    const aside = bioAside(view);
+    window.clearTimeout(bio.timer);
+    fillBio(aside, data);
+    if (bio.opener && bio.opener !== button) {
+      bio.opener.setAttribute('aria-expanded', 'false');
+    }
+    bio.opener = button;
+    button.setAttribute('aria-expanded', 'true');
+    if (aside.hidden) {
+      aside.hidden = false;
+      // Its hidden style read first, so it slides in rather than appears.
+      window.getComputedStyle(aside).opacity;
+    }
+    aside.classList.add('is-open');
+    if (focus) {
+      aside.querySelector('.pf-viewer__bio-name').focus({ preventScroll: true });
+    }
+  }
+
+  // back: focus to the button that opened it (Close, Back, Esc).
+  function closeBio(back) {
+    const aside = bio.aside;
+    const opener = bio.opener;
+    bio.opener = null;
+    if (opener) {
+      opener.setAttribute('aria-expanded', 'false');
+    }
+    if (!aside || aside.hidden) {
+      return;
+    }
+    aside.classList.remove('is-open');
+    window.clearTimeout(bio.timer);
+    if (!back || reduceMotion()) {
+      aside.hidden = true;
+    }
+    else {
+      bio.timer = window.setTimeout(() => {
+        aside.hidden = true;
+      }, 400);
+    }
+    if (back && opener && opener.isConnected) {
+      opener.focus({ preventScroll: true });
+    }
+  }
+
+  // The view's copy of an entry: a clip's biography (and its card) out,
+  // the button in their place.
+  function clipBio(view, copy) {
+    const block = copy.querySelector('.pf-exhibit-bio');
+    const text = block && block.querySelector('.pf-exhibit-bio__text');
+    const open = !!(bio.aside && !bio.aside.hidden && bio.aside.classList.contains('is-open'));
+    if (!text || !copy.querySelector('.pf-exhibit-audio')) {
+      closeBio(false);
+      return;
+    }
+    const card = copy.querySelector('[data-pf-bio-card]');
+    const words = text.textContent.trim().split(/\s+/).length;
+    const data = {
+      name: speakerOf(copy, text.textContent.trim()),
+      text: text,
+      facts: card && card.querySelector('.pf-exhibit-card__facts'),
+      summary: card && card.querySelector('.pf-exhibit-card__summary:not(.is-opening)'),
+    };
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'pf-exhibit-bio-open';
+    button.setAttribute('aria-expanded', 'false');
+    button.setAttribute('aria-controls', 'pf-viewer-bio');
+    button.innerHTML = '<span class="pf-exhibit-bio-open__kicker">' + Drupal.t('Biography') + '</span>'
+      + '<span class="pf-exhibit-bio-open__name"></span>'
+      + '<span class="pf-exhibit-bio-open__time">' + Drupal.t('@words words · @minutes min', { '@words': words, '@minutes': Math.max(1, Math.round(words / 238)) }) + '</span>'
+      + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M3 12h17.5M14 5.5l6.5 6.5-6.5 6.5"/></svg>';
+    button.querySelector('.pf-exhibit-bio-open__name').textContent = data.name || Drupal.t('About the speaker');
+    button.addEventListener('click', () => {
+      if (bio.opener === button) {
+        closeBio(true);
+      }
+      else {
+        openBio(view, data, button, true);
+      }
+    });
+    block.before(button);
+    block.remove();
+    if (card) {
+      card.closest('.pf-exhibit-card').remove();
+    }
+    // Open while stepping through the clips: the next speaker's life in it.
+    if (open) {
+      openBio(view, data, button, false);
+    }
+  }
+
 
   // Closed: focus back where the view was opened from, and (an entry) the
   // address back to its gallery. quiet: the caller does both.
   function objectClosed() {
+    closeBio(false);
     if (wallState.view) {
       stopAudio(wallState.view);
       setWash(wallState.view, null);
@@ -1750,6 +1925,7 @@
     copy.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
     copy.querySelectorAll('.pf-exhibit-bio__toggle').forEach((el) => el.remove());
     copy.querySelectorAll('.pf-exhibit-bio').forEach((el) => el.classList.remove('is-folded'));
+    clipBio(view, copy);
     stopAudio(view);
     view.body.replaceChildren(...Array.from(copy.childNodes));
     if (turned) {

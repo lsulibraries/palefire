@@ -3202,6 +3202,224 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
   }
 }
 
+// A clip's biography in the object view (js/exhibition.js): a button in
+// its place, on hairlines like a gallery row (kicker, the speaker's name,
+// its length; the arrow nudges on hover), and a second panel. From lg the
+// panel slides in from the view panel's edge over the stage, as wide as
+// the view panel (at most the stage), so the transcript stays in view;
+// below lg, or beside a side panel, it rises in over the whole view, its
+// Close a labeled "Back to the clip". Both at once with reduced motion.
+.pf-exhibit-bio-open {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 1rem;
+  row-gap: .25rem;
+  align-items: center;
+  width: 100%;
+  padding: .875rem 0;
+  text-align: start;
+  color: inherit;
+  background: none;
+  border: 0;
+  border-block: 1px solid $pf-hairline;
+
+  svg {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--pf-exhibit-accent);
+    transition: translate $pf-hover-out ease;
+  }
+
+  &:hover,
+  &:focus-visible {
+    .pf-exhibit-bio-open__name {
+      color: var(--pf-g-hover, var(--pf-exhibit-accent));
+      transition-duration: $pf-hover-in;
+    }
+
+    svg {
+      translate: .25rem 0;
+      transition-duration: $pf-hover-in;
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--bs-body-color);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    svg {
+      transition: none;
+    }
+  }
+}
+
+.pf-exhibit-bio-open__kicker,
+.pf-exhibit-bio-open__time {
+  @extend %pf-exhibit-kicker;
+  grid-column: 1;
+}
+
+.pf-exhibit-bio-open__name {
+  grid-column: 1;
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--bs-heading-color, var(--bs-body-color));
+  transition: color $pf-hover-out ease;
+}
+
+.pf-viewer__bio {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: .75rem max(1rem, env(safe-area-inset-right, 0px)) 2.5rem max(1rem, env(safe-area-inset-left, 0px));
+  color: var(--bs-body-color);
+  background: var(--bs-body-bg);
+  opacity: 0;
+  translate: 0 1rem;
+
+  &[hidden] {
+    display: none;
+  }
+
+  &.is-open {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  @include pf-exhibit-motion {
+    transition: opacity .35s ease, translate .5s $pf-exhibit-ease;
+  }
+
+  @include media-breakpoint-up(lg) {
+    .pf-viewer:not(.is-side) > & {
+      inset: 0 var(--pf-panel-w) 0 auto;
+      width: min(var(--pf-panel-w), calc(100% - var(--pf-panel-w)));
+      padding: .75rem 2.25rem 3rem;
+      border-left: 1px solid $pf-hairline;
+      box-shadow: -1.5rem 0 3rem -2rem rgba(0, 0, 0, .5);
+      translate: 1.5rem 0;
+
+      &.is-open {
+        translate: 0 0;
+      }
+    }
+
+    // The text folded away: the biography at the screen's edge.
+    .pf-viewer.is-full:not(.is-side) > & {
+      right: 0;
+    }
+  }
+}
+
+// lg, the biography open: the stage's tools and Next move in beside it.
+@include media-breakpoint-up(lg) {
+  .pf-viewer:not(.is-side, .is-full):has(> .pf-viewer__bio.is-open) {
+    --pf-bio-w: min(var(--pf-panel-w), calc(100vw - 2 * var(--pf-panel-w)));
+
+    .pf-viewer__next {
+      right: calc(var(--pf-bio-w) + .5rem);
+    }
+
+    .pf-viewer__tools {
+      right: calc(var(--pf-bio-w) + .75rem);
+    }
+  }
+}
+
+.pf-viewer__bio-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 2.75rem;
+}
+
+.pf-viewer__bio-kicker {
+  @extend %pf-exhibit-kicker;
+}
+
+// Phones: "Back to the clip" with an arrow. lg: a square × like Close.
+.pf-viewer__bio-close {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  min-width: 2.75rem;
+  height: 2.75rem;
+  padding: 0 1rem;
+  font: var(--pf-mono-label)/1 var(--pf-exhibit-mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: inherit;
+  background: none;
+  border: 1px solid $pf-hairline;
+  transition: color $pf-hover-out ease;
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: var(--pf-g-hover, var(--pf-exhibit-accent));
+    transition-duration: $pf-hover-in;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--bs-body-color);
+    outline-offset: 2px;
+  }
+}
+
+.pf-viewer__bio-x {
+  display: none;
+}
+
+@include media-breakpoint-up(lg) {
+  .pf-viewer:not(.is-side) > .pf-viewer__bio {
+    .pf-viewer__bio-close {
+      padding: 0;
+    }
+
+    .pf-viewer__bio-back {
+      display: none;
+    }
+
+    .pf-viewer__bio-x {
+      display: block;
+    }
+
+    .pf-viewer__bio-label {
+      @include visually-hidden;
+    }
+  }
+}
+
+.pf-viewer__bio-name {
+  margin: 0;
+  font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -.02em;
+  color: var(--bs-heading-color, var(--bs-body-color));
+
+  &:focus {
+    outline: 0;
+  }
+}
+
 .pf-exhibit-audio__summary {
   min-height: 2.75rem;
   padding: 0.65rem 0;
