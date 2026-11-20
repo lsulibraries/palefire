@@ -102,10 +102,11 @@ $labels = [
     'date' => '1944',
     'medium' => 'Gumbo, 1944. LD3118 .G8, University Archives',
   ],
+  // Its poster since 2026-11-20 (palefire_oral_history_showcase_order.php).
   $oh . 'graphicdesign' => [
-    'maker' => 'Byron Levy',
-    'title' => 'Sketchbook and art',
-    'medium' => 'Photographed in July 2008, the day his oral history was taken',
+    'title' => 'Don Smith in his studio',
+    'date' => 'ca. 1961',
+    'medium' => 'The exhibition’s poster',
   ],
   $oh . 'klsu' => [
     'title' => 'KLSU antenna',

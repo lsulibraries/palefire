@@ -19,7 +19,9 @@
  *   Jazz Fest, KLSU, Graphic Design and Do Not Tear Up My Earth have no
  *   post on the site (checked 2026-11-20).
  * - Graphic Design’s canvas (field_exhibit_cover): its poster, Don Smith
- *   painting by a window, in place of Byron Levy at Preservation Hall.
+ *   painting by a window, in place of Byron Levy at Preservation Hall,
+ *   and its cover label (the footnote under the canvas) to match: “Don
+ *   Smith in his studio, ca. 1961”, the exhibition’s poster.
  * - Order: the Showcase’s tiles (the tile showcase on /v2/oralhistory
  *   whose items are all oral history exhibitions) newest first. Within a
  *   year, by the month the show opened: 2015 KLSU then Tempests (as
@@ -131,6 +133,33 @@ else {
   $say("Canvas of “{$graphic->label()}” (node/{$graphic->id()}): media/$poster, the poster (was media/$was).");
   $graphic->set('field_exhibit_cover', $poster);
   $save($graphic, "Cover: media/$poster, the exhibition’s poster");
+}
+// Its object label (the band's footnote under the canvas), for the poster:
+// replaced while it still names Byron Levy's sketchbook, the old cover.
+$label = [
+  'maker' => NULL,
+  'title' => 'Don Smith in his studio',
+  'date' => 'ca. 1961',
+  'medium' => 'The exhibition’s poster',
+  'url' => NULL,
+];
+if ($graphic && $graphic->hasField('field_exhibit_cover_title')) {
+  $title = (string) $graphic->get('field_exhibit_cover_title')->value;
+  if ($title === $label['title']) {
+    echo "Leave “{$graphic->label()}”: its cover label already names the poster." . PHP_EOL;
+  }
+  elseif ($title !== '' && $title !== 'Sketchbook and art') {
+    echo "Leave “{$graphic->label()}”: its cover label is “{$title}”, edited since; set it on the edit form." . PHP_EOL;
+  }
+  else {
+    $say("Cover label of “{$graphic->label()}”: “{$label['title']}, {$label['date']}”, {$label['medium']} (was “" . ($title ?: 'none') . '”).');
+    foreach ($label as $key => $value) {
+      if ($graphic->hasField('field_exhibit_cover_' . $key)) {
+        $graphic->set('field_exhibit_cover_' . $key, $value);
+      }
+    }
+    $save($graphic, 'Cover label: the poster');
+  }
 }
 
 // Order. ---------------------------------------------------------------

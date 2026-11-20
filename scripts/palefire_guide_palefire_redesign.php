@@ -926,7 +926,7 @@ HTML),
 <ul>
 <li>The exhibitions on the Oral History page now run from the newest, History of Graphic Design in South Louisiana (2019), to the oldest, Do Not Tear Up My Earth (2001).</li>
 <li>History of KLSU and History of Graphic Design now show their years, and the Mossville History Project links to the news post from when it went online.</li>
-<li>History of Graphic Design is now pictured by its poster, the designer Don Smith painting at a window.</li>
+<li>History of Graphic Design is now pictured by its poster, the designer Don Smith painting at a window, and the label under the picture says so: Don Smith in his studio, about 1961.</li>
 </ul>
 HTML),
   $text('Fri Nov 20: Biographies open beside the gallery', <<<'HTML'
