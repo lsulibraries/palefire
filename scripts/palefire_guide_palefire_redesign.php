@@ -879,6 +879,11 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: No sideways scroll on exhibition walls on phones', <<<'HTML'
+<ul>
+<li>On a narrow phone a very tall picture beside a wide one could shrink to a sliver, and a word in its label pushed the page sideways (Georgetown 272’s clipping about James Farmer). Such a picture now takes its own row, and long words in labels wrap.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: A reading column for oral history transcripts', <<<'HTML'
 <ul>
 <li>Oral history clips and full interviews open with a wider transcript panel on larger screens, so the words run about 55 characters to the line instead of 42, with the photo beside it.</li>

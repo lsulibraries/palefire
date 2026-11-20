@@ -4882,9 +4882,13 @@ $pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last
 
   // Phones: a photograph alone on its row fills it (the 1.75 cap left a
   // 1.4 one 20px short of a 353px column). Held to 60% of the screen's
-  // height instead, so a lone portrait doesn't run past a screen.
+  // height instead, so a lone portrait doesn't run past a screen. No tile
+  // narrower than 7.5rem: a very tall picture (a 1:3 clipping) beside a
+  // wide one would otherwise shrink to a 50px sliver with its label a word
+  // a line; it takes the next row instead.
   @include media-breakpoint-down(md) {
-    max-width: calc(var(--pf-r) * 60svh);
+    min-width: min(100%, 7.5rem);
+    max-width: max(min(100%, 7.5rem), calc(var(--pf-r) * 60svh));
   }
 
   @include pf-exhibit-motion {
@@ -4979,10 +4983,14 @@ $pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last
   border-top: 1px solid $pf-hairline;
 }
 
+// A long word in a narrow tile hyphenates, or breaks, rather than running
+// past the tile and widening the page.
 .pf-exhibit-wall__name {
   min-width: 0;
   font-size: 0.9375rem;
   line-height: 1.3;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 .pf-exhibit-wall__tag {
