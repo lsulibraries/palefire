@@ -6,8 +6,9 @@
  * exhibitions band of Oral History's Showcase
  * (includes/exhibit-carousel.html.twig), this one shown first, then the
  * next and on round, without its index rule: the band's title is the
- * panel's (visually hidden) heading. Then a button back to the family's
- * home and, for Special Collections, every exhibition. _exhibition.scss
+ * panel's (visually hidden) heading. Then a plain link back to the
+ * family's home and, for Special Collections, every exhibition: quieter
+ * than the band's Enter, well below it, so it reads as the way out. _exhibition.scss
  * (.pf-exhibit-end), _exhibit-showcase.scss.
  *
  * - end.others: PalefireHooks::exhibitionCard() arrays, this exhibition
@@ -31,13 +32,13 @@
   {% endif %}
   <ul class="pf-exhibit-end__back">
     <li>
-      <a class="pf-exhibit-button pf-exhibit-end__home" href="{{ end.parent.url }}">
+      <a class="pf-exhibit-end__home" href="{{ end.parent.url }}">
         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M13.5 8h-11M7 3.5 2.5 8 7 12.5"/></svg>
         {{- end.parent.title -}}
       </a>
     </li>
     {% if end.all %}
-      <li><a class="pf-exhibit-button pf-exhibit-end__home" href="{{ end.all }}">{{ 'All exhibitions'|t }}</a></li>
+      <li><a class="pf-exhibit-end__home" href="{{ end.all }}">{{ 'All exhibitions'|t }}</a></li>
     {% endif %}
   </ul>
 </nav>

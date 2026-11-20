@@ -1122,23 +1122,24 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
 // After the last gallery (includes/exhibit-end.html.twig): every other
 // exhibition in the family in the exhibitions band of Oral History's
 // Showcase (.pf-showcase, _exhibit-showcase.scss: its own column and
-// rhythm, the plate faded behind it), with no index rule, then a button
-// back to the family's home on the band's column.
+// rhythm, the plate faded behind it), with no index rule, then a plain
+// link back to the family's home on the band's column.
 .pf-exhibit-end {
   position: relative;
   isolation: isolate;
   padding-bottom: clamp(3rem, 6vw, 5rem);
 }
 
-// The band's foot meets the button row, not a second gap.
+// Clearly more room than any gap inside the band, so the link reads as
+// the page's way out, not one of the band's controls.
 .pf-exhibit-end__showcase .pf-showcase__carousel {
-  padding-bottom: clamp(2rem, 4vw, 3rem);
+  padding-bottom: clamp(3.5rem, 7vw, 5.5rem);
 }
 
 .pf-exhibit-end__back {
   display: flex;
   flex-wrap: wrap;
-  gap: .75rem;
+  gap: .5rem 2.5rem;
   margin: 0 max(var(--pf-section-pad-inline, 1.25rem), (100% - 1280px) / 2);
   padding: 0;
   list-style: none;
@@ -1149,9 +1150,46 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   padding-top: clamp(2.5rem, 5vw, 4rem);
 }
 
-.pf-exhibit-end__home svg {
-  width: 1rem;
-  height: 1rem;
+// A link, not a button: the mono caps of the buttons, no box, an
+// underline and the accent on hover, the arrow leading the way back.
+.pf-exhibit-end__home {
+  display: inline-flex;
+  gap: .6rem;
+  align-items: center;
+  min-height: 2.75rem;
+  font: var(--pf-mono-ui)/1.2 var(--pf-exhibit-mono);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--bs-body-color);
+  text-decoration: underline 1px transparent;
+  text-underline-offset: .45em;
+  transition:
+    color $pf-hover-out ease,
+    text-decoration-color $pf-hover-out ease;
+
+  svg {
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+    transition: translate $pf-hover-out ease;
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: var(--pf-g-hover, var(--pf-exhibit-accent));
+    text-decoration-color: currentColor;
+    transition-duration: $pf-hover-in;
+
+    svg {
+      translate: -.25rem 0;
+      transition-duration: $pf-hover-in;
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--bs-body-color);
+    outline-offset: 3px;
+  }
 }
 
 // A link's target flashes once it is reached.
@@ -1783,6 +1821,11 @@ $pf-exhibit-wash-fade: clamp(14rem, 24vw, 30rem);
   // until js/modular-toc.js wires it.
   &--contents:is(:hover, :focus-visible) svg {
     translate: none;
+  }
+
+  // Back to the start (the exhibition end's own card): its arrow rises.
+  &--top:is(:hover, :focus-visible) svg {
+    translate: 0 -.25rem;
   }
 
   &[hidden] {

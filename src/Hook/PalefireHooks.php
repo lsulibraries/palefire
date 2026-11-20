@@ -1018,7 +1018,9 @@ class PalefireHooks {
    * exhibitionCard() items): this one shown first, where the reader is,
    * then the one after it and on round, so Next reads straight through;
    * then the way back to the family's home (includes/exhibit-end.html.twig).
-   * Empty for a family of one.
+   * Empty for a family of one. This one's button and canvas go back to its
+   * start (#main-content, "Back to the start", an up arrow: top), not to
+   * the page the reader is already on.
    */
   private function exhibitEnd(NodeInterface $node): array {
     $cache = CacheableMetadata::createFromObject($node);
@@ -1027,7 +1029,13 @@ class PalefireHooks {
     $others = [];
     for ($step = 0; $count > 1 && $step < $count; $step++) {
       $item = $family['items'][($family['index'] + $step) % $count];
-      $others[] = self::exhibitionCard($item['node'], $cache);
+      $card = self::exhibitionCard($item['node'], $cache);
+      if ($step === 0) {
+        $card['url'] = '#main-content';
+        $card['cta'] = (string) t('Back to the start');
+        $card['top'] = TRUE;
+      }
+      $others[] = $card;
     }
     $render = [];
     $cache->applyTo($render);
