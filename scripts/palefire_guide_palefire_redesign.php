@@ -914,6 +914,11 @@ HTML),
 <li>The Hide image button is gone from the clips, since Keep listening already lets you put the picture away and go on through the exhibition.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: The Showcase holds its shape on big screens', <<<'HTML'
+<ul>
+<li>On very wide screens, or zoomed far out, the exhibitions band on the Oral History page squeezed into a thin strip. It now keeps the same width as the rest of the page at any size, and lines up with the sections below it.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: Biographies open beside the gallery', <<<'HTML'
 <ul>
 <li>In exhibitions, a long biography is now a short card: when the person lived, their role, two sentences on who they were, and a Read the biography button that says how long it is. Their books and plates now sit right under the card instead of below a long page of text.</li>

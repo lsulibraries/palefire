@@ -581,6 +581,14 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
   isolation: auto;
 }
 
+// Its section already sets the page's column (its inner's padding), so
+// the band adds no column of its own: it sits on the section's lines, as
+// the sections after it do. Taking it twice squeezed the grid to nothing
+// on wide screens.
+.pf-showcase.pf-showcase--embed {
+  --pf-showcase-col: 0px;
+}
+
 // On a cover the label is black on white (21:1) whatever the page.
 .pf-showcase__ribbon {
   position: absolute;
