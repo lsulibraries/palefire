@@ -1,0 +1,524 @@
+{
+ "title": "Sugar at LSU",
+ "subtitle": "A Chronology",
+ "credit": "<p>An exhibition from LSU Libraries Special Collections for the two hundredth anniversary of commercial sugar production in Louisiana, 1995. Curated by Christina Riquelmy and Debra Currie; mounted by Emily Robison. The text is the 1995 exhibition’s, so its “today” is 1995.</p>",
+ "cover": "first-sugar-kettle-1905.jpg",
+ "cover_label": {
+  "maker": "LSU Photograph Collection, 1886–1926",
+  "title": "First kettle used in making sugar in Louisiana",
+  "date": "1905",
+  "medium": "Photograph. University Archives, LSU Libraries Special Collections",
+  "url": "https://louisianadigitallibrary.org/islandora/object/lsu-ua-uap:2153"
+ },
+ "year": "1995",
+ "source": "https://lib.lsu.edu/sugar/introduction (Showcase nodes 274–281, from the 1995 exhibition’s website, revised 2002)",
+ "alt": {
+  "first-sugar-kettle-1905.jpg": "A large iron sugar kettle on the old downtown LSU campus, two cadets standing to its left, the Agriculture and Chemistry buildings behind.",
+  "audubon-sugar-factory-1926.jpg": "The Audubon Sugar Factory on the new LSU campus in Baton Rouge in 1926: a tall smokestack beside brick factory buildings across an open lawn.",
+  "sugar-kettle-plaque.jpg": "A historical marker headed Sugar Kettle, with a pelican over the outline of Louisiana, telling how Étienne de Boré granulated sugar in the kettle in 1795.",
+  "levee-sugar-sheds-refinery.jpg": "Horse-drawn carts loaded with barrels on the New Orleans levee, long sugar sheds and a smoking refinery behind.",
+  "laboratory-and-residence-1899.jpg": "The laboratory of the Sugar Experiment Station at Audubon Park, a two-story building among moss-hung oaks, the director’s house beside it.",
+  "first-seedling-cane-1907.jpg": "Three small clay pots, each holding a young sugarcane seedling.",
+  "sugar-students-1902.jpg": "Ten young men of the Audubon Sugar School sitting and standing among cut cane in a field, several eating sugarcane.",
+  "chemical-lab-1899.jpg": "Two men at work in a long chemical laboratory with shelves of bottles and glassware.",
+  "thornton-cane-storage-derrick.jpg": "A tall steel derrick rising over cane storage at a sugar factory, captioned by hand Thornton Cane Storage 80 ft Steel Derrick at Geo. M. Murrells.",
+  "experimental-cane-harvester-1907.jpg": "An experimental cane harvester pulled by a team of mules through a field of cut cane, five men standing by.",
+  "sug1a.jpg": "A handwritten bill of lading in French for raw sugar shipped from Port-au-Prince to Marseille, with a printed ship at the top.",
+  "sug1b.jpg": "A seventeenth-century engraving of a West Indian sugar mill, with workers feeding cane to rollers turned by animals.",
+  "sug2a.jpg": "A replica eighteenth-century sugarhouse with an open shed, a nineteenth-century cane grinder in the foreground.",
+  "sug2b.jpg": "An engraving of workers cutting tall sugarcane in a field.",
+  "sug4a.jpg": "A patent drawing of a multiple-effect evaporator: a row of tall vessels joined by pipes.",
+  "sug4b.jpg": "A bronze plaque with the profile portrait of Norbert Rillieux.",
+  "sug4c.jpg": "An engraving of a steam-powered sugar mill: a beam engine and gears driving horizontal rollers.",
+  "sug5a.jpg": "An engraving of a cane transfer device: a tall wooden frame with a crane lifting bundles of cane.",
+  "sug5b.jpg": "A wood engraving of the sugar harvest: workers and mule carts in the cane field, a sugarhouse smoking behind.",
+  "sug6a.jpg": "The interior of a laboratory at the Audubon Park experiment station in 1894, with benches, glassware and a man at work.",
+  "sug6b.jpg": "The interior of a sugar mill around 1900, with a large vacuum pan, pipes and a workman.",
+  "sug7a.jpg": "A man standing in a field of tall P.O.J. 213 cane at Hollywood Plantation, 1927.",
+  "sug7b.jpg": "The front page of the American Sugar Cane League’s Bulletin, March 1, 1925, announcing P.O.J. cane.",
+  "sug8b.jpg": "A student standing among the tall evaporating vessels and pan of the Audubon Sugar School’s sugarhouse.",
+  "sug9a.jpg": "A tram of trailers full of visitors pulled by a tractor at a sugarcane field day in the 1940s.",
+  "sug9b.jpg": "The front page of The Sugar Bulletin, March 1, 1929.",
+  "sug10a.jpg": "A researcher on a ladder attaching sugarcane tassels inside a tall partitioned crossing booth.",
+  "sug10b.jpg": "Visitors on a trailer listening to a speaker beside a cane field at a field day, 1986.",
+  "sug10c.jpg": "A hand holding a small sugarcane seedling over a greenhouse bed of seedlings.",
+  "sug11a.jpg": "A man cutting cane by hand with a cane knife among tall stalks.",
+  "sug11c.jpg": "A 1940s mechanical cane harvester working in a field.",
+  "sug11d.jpg": "A modern cane harvester on top of a high pile of cut cane in a field.",
+  "sug12a.jpg": "A close view of a fire ant attacking a sugarcane borer larva on a leaf.",
+  "sug13.jpg": "Sugar crystals, magnified, on a black ground.",
+  "sug14.jpg": "An advertisement for Owensboro improved cane wagons, with a drawing of a wooden wagon.",
+  "sug15a.jpg": "A hand-colored lithograph of a man in an apron shaping sugar into cones at a table."
+ },
+ "pages": [
+  {
+   "title": "Introduction",
+   "anchor": "introduction",
+   "lead": "audubon-sugar-factory-1926.jpg",
+   "focus": "center",
+   "lead_caption": "<p><strong>The Audubon Sugar Factory on the new LSU campus in Baton Rouge, 1926, the year after the sugar school moved there from Audubon Park.</strong><br>LSU Photograph Collection, 1886–1926, University Archives, LSU Libraries Special Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-ua-uap:2129\">Louisiana Digital Library</a></p>",
+   "blocks": [
+    {
+     "type": "plate",
+     "title": "Two Hundred Years of Louisiana Sugar",
+     "anchor": "two-hundred-years",
+     "summary": "LSU’s part in preserving the history of Louisiana’s sugar industry, told in a chronological panorama of the artifacts and techniques of sugar production.",
+     "body": [
+      "<p>Celebrating the 200th anniversary of commercial sugar production in Louisiana (1995), this exhibition highlights the role and contributions of Louisiana State University in preserving the vital history of the sugar industry in our state. The extensive holdings in the LSU Libraries’ Special Collections, supplemented by materials from the Libraries’ general collection, the LSU Rural Life Museum, the Audubon Sugar Institute, the LSU Agricultural Center, and generous individuals, offer a chronological panorama of the artifacts and techniques of sugar production in Louisiana and the Lower Mississippi Valley.</p>",
+      "<p>The online exhibition is based on the 1995 physical exhibition curated by LSU librarians Christina Riquelmy and Debra Currie and mounted by Emily Robison. Its thirteen cases follow the industry from the first cane in Asia to the research stations of the 1990s; the pictures here are those of the cases, with the items shown in each listed after its text.</p>"
+     ]
+    }
+   ]
+  },
+  {
+   "title": "History to the 1700s",
+   "anchor": "to-1800",
+   "lead": "sugar-kettle-plaque.jpg",
+   "focus": "center",
+   "lead_caption": "<p><strong>The marker beside Étienne de Boré’s sugar kettle on the LSU campus, erected by the Louisiana Tourist Commission in 1970.</strong><br>University Archives, LSU Libraries Special Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-ua-uap:2347\">Louisiana Digital Library</a></p>",
+   "blocks": [
+    {
+     "type": "plate",
+     "title": "Antecedents and Beginnings",
+     "anchor": "antecedents-and-beginnings",
+     "summary": "From India to the Caribbean, then to French Louisiana, where Étienne de Boré’s crop of 1795 made about 100,000 pounds of sugar; by 1801 there were 75 mills.",
+     "body": [
+      "<p>The sugarcane plant, indigenous to southern Asia, was first used for the production of sugar between the 7th and 4th century B.C. in northern India. Cane cultivation eventually spread westward to the Near East and was introduced to the Mediterranean region by the Arabs, giving rise to a cane sugar industry that flourished there until the late 1500s. Columbus introduced sugarcane to the New World on his second voyage in 1493, when it was first planted on the island of Hispaniola. During the 16th and 17th centuries, the Spanish, English, and French established sugar production in their Caribbean Island colonies. The French colony of St. Domingue (present-day Haiti) was, by the late 18th century, one of the most important sugar producers in the Caribbean at a time when world demand for sugar was rising rapidly. Shipments of raw sugar from St. Domingue such as those recorded on the displayed bills of lading were destined for the European market by way of refineries in France.</p>",
+      "<p>In the early 1700s, Pierre Le Moyne d’Iberville had sugarcane from St. Domingue planted along the lower Mississippi, but his attempt to cultivate it failed. A little over a decade later, Jean-Baptiste Le Moyne de Bienville, the first administrator of France’s Louisiana colony, succeeded in growing sugarcane brought from Martinique in his garden at New Orleans. Cane from St. Domingue was introduced anew by the French Jesuits, who raised several crops of it at their New Orleans plantation (today the site of the Central Business District) during the 1750s. A few colonists successfully produced sugar commercially in the New Orleans area in the late 1750s and early 1760s, having planted cane brought from St. Domingue or obtained from the Jesuits. After the transfer of Louisiana to Spain, indigo became the favored cash crop, and although some planters continued cultivating sugarcane, there is no evidence of further attempts to produce sugar in Louisiana until the 1790s. In 1791, slaves and free people of color in St. Domingue launched a violent revolt against the French planters. Many sugar plantations were destroyed, and thousands of colonists ultimately fled the island. Some of the exiles sought refuge in New Orleans, and the experienced sugarmakers among them brought valuable knowledge and skills to the nascent Louisiana sugar industry. One of these sugarmakers was employed by Étienne de Boré at his plantation located in the area of present-day Audubon Park, where in 1795 the cane crop produced about 100,000 pounds of sugar. Encouraged by Boré’s success, more Louisiana planters undertook cane cultivation, and as early as 1797 more than 550,000 pounds of sugar were shipped from New Orleans. By 1801 there were 75 sugar mills in Louisiana, and the region was well on its way to becoming a significant producer of cane sugar on the North American continent.</p>",
+      "<p><strong>Also in case 1</strong></p><ul><li>Diagram of sugar kettles with furnace; implements used in sugarmaking; sugarcane plant and seed cane; animal-powered cane mill; sugarhouse interior and plan. Reproduced from 18th-century engravings probably extracted from <em>Recueil de planches pour la nouvelle édition du Dictionnaire raisonné des sciences, des arts et des métiers, avec leur explication</em>. Neufchâtel, Société Typographique, 1779. Sugar Imprints Collection, Louisiana and Lower Mississippi Valley Collections</li><li>Jacques-François Dutrône de La Couture. <em>Histoire de la canne et précis sur les moyens de la cultiver et d’en extraire le sucre</em>. Paris, Brochot, 1801. Rare TP375.7 D87</li><li>Plan of New Orleans. Lt. Dumont de Montigny. <em>Mémoires historiques sur la Louisiane</em>. Paris, C.J.B. Bauche, 1753. Louisiana Collection Rare F372 D89 v.2, c.2</li><li>Photograph of the sugar kettle used on Étienne de Boré’s plantation, now on the LSU campus near the Chemical Engineering Building. Photo courtesy LSU Agricultural Center. (The exhibition’s cover shows the same kettle on the old downtown campus in 1905.)</li></ul>"
+     ]
+    },
+    {
+     "type": "picture",
+     "title": "Bills of lading, 1776 and 1785",
+     "anchor": "bills-of-lading",
+     "image": "sug1a.jpg",
+     "caption": "<p><strong>Bills of lading, 27 March 1776 and 3 August 1785, for shipments of raw sugar from Port-au-Prince to Marseille.</strong><br>Sugar Imprints Collection, Louisiana and Lower Mississippi Valley Collections</p>"
+    },
+    {
+     "type": "picture",
+     "title": "Sugar mill, West Indies",
+     "anchor": "west-indies-mill",
+     "image": "sug1b.jpg",
+     "caption": "<p><strong>Sugar mill, West Indies, 17th century.</strong><br>Reproduced from Charles de Rochefort, <em>Histoire naturelle et morale des îles Antilles de l’Amérique</em>. Rotterdam, A. Leers, 1665. Rare F2001 R62 c.2</p>"
+    }
+   ]
+  },
+  {
+   "title": "The 1800s",
+   "anchor": "1800s",
+   "lead": "levee-sugar-sheds-refinery.jpg",
+   "focus": "center",
+   "lead_caption": "<p><strong>George François Mugnier, No. 518, Levee, Sugar Sheds, &amp; Refinery, New Orleans, between 1885 and 1910. Raw sugar arriving by steamboat was sold daily at auction on the levee (case 3).</strong><br>Glass plate negative. George François Mugnier New Orleans Scenes, LSU Libraries Special Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-sc-gfm:10\">Louisiana Digital Library</a></p>",
+   "blocks": [
+    {
+     "type": "plate",
+     "title": "Early Sugar Plantations",
+     "anchor": "early-sugar-plantations",
+     "summary": "Plantations along the river and bayous, each with its own sugarhouse: cane crushed in an animal-powered mill, the juice boiled down in open kettles until the “strike.”",
+     "body": [
+      "<p>The sugarcane areas of Louisiana developed first along the Mississippi, both downriver and upriver from New Orleans. Sugar plantations were also established along the banks of Bayou Lafourche, Bayou Teche, and Bayou Terrebonne, and in the Red River valley of present-day Rapides Parish. Since waterborne transportation was the primary means of moving goods before the advent of railroads, nearly all the early sugar plantations fronted a navigable waterway. Planters soon learned what adjustments were necessary for cultivating a tropical plant in a semitropical climate and how to face the challenges posed by Louisiana’s low-lying terrain. Word spread quickly of the profits to be made in sugarcane, and Anglo-Americans from other areas of the South and from the eastern seaboard joined the Creole planters after the United States acquired the Louisiana territory in 1803.</p>",
+      "<p>The method of producing cane sugar in early 19th-century Louisiana was largely derived from the 18th-century European sugar colonies in the Caribbean. Each cane plantation in Louisiana had its own sugarhouse. The cane was crushed using an animal-powered three-roller mill. The extracted cane juice was heated, clarified, and evaporated in a set of large open kettles of decreasing size which were enclosed in brickwork over a furnace. Lime was the substance most often used to clarify the cane juice, and the impurities that rose to the surface were skimmed off. After a syrup resulted from the evaporation of the juice, the sugarmaker, using rule-of-thumb techniques, determined when sugar crystals had formed. This was called a “strike” and was the point at which the concentrated syrup was turned out into shallow wooden tanks and left to cool. The crystallized mass was then placed in large barrels (hogsheads), each of which had several holes at the bottom that allowed the molasses to drain out. Molasses was collected in cisterns and later packed into separate barrels for market. The cane grinding season, or <em>roulaison</em>, was a festive time on most plantations. Social gatherings, dances, and candy pullings took place after the cane was ground, and visitors to plantation sugarhouses were often treated to “hot punch,” a drink made of partially boiled cane juice and French brandy.</p>",
+      "<p><strong>Also in case 2</strong></p><ul><li>Letter from Mary C. Weeks to Alfred Conrad, 29 November 1820, reporting on “forty seven hogsheads of beautiful sugar” made at Weeks Island, Iberia Parish. David Weeks and Family Papers, Mss. 528, Louisiana and Lower Mississippi Valley Collections. The date 1802 on the letter is an apparent transposition by the writer, Mary Conrad Weeks, who was born in 1796 and married David Weeks in 1818.</li><li>Benjamin Silliman. <em>Manual on the Cultivation of the Sugar Cane and the Fabrication and Refinement of Sugar</em>. Washington, F.P. Blair, 1833. Louisiana Collection Rare TP377 S58</li><li>Plantation diary of Paul L. DeClouet, St. Martin Parish, 1867. Alexandre E. DeClouet and Family Papers, Mss. 74, Louisiana and Lower Mississippi Valley Collections</li><li>Letter from N. Wilson to Joseph Erwin, 21 February 1818, reporting on sugar production at Erwin’s plantation in Iberville Parish. Edward J. Gay and Family Papers, Mss. 1295, Louisiana and Lower Mississippi Valley Collections</li></ul>"
+     ]
+    },
+    {
+     "type": "picture",
+     "title": "A sugarhouse",
+     "anchor": "sugarhouse",
+     "image": "sug2a.jpg",
+     "caption": "<p><strong>Replica of a late 18th-century sugarhouse, with a 19th-century cane grinder in the foreground.</strong> The case also showed its set of kettles and the sugarhouse interior. The replica is at the LSU Rural Life Museum, 6200 Burden Lane, Baton Rouge, part of the Working Plantation exhibit, which includes more than a dozen buildings furnished to show activities on a typical 19th-century working plantation in Louisiana.<br>Photo by Jim Zietz, LSU Public Relations</p>"
+    },
+    {
+     "type": "picture",
+     "title": "Cutting sugarcane",
+     "anchor": "cutting-sugarcane",
+     "image": "sug2b.jpg",
+     "caption": "<p><strong>Cutting sugarcane, 19th century.</strong><br>Reproduced from Baptiste Dureau, <em>Notice sur la culture de la canne à sucre et sur la fabrication du sucre en Louisiane</em>. Paris, 1852. Louisiana Collection TP379 U5 D87</p>"
+    },
+    {
+     "type": "plate",
+     "title": "Sugar and Money",
+     "anchor": "sugar-and-money",
+     "summary": "Louisiana made 95% of the South’s sugar before the Civil War, sold at auction on the New Orleans levee through factors and banks, its profits rising and falling with tariffs.",
+     "body": [
+      "<p>Antebellum Louisiana accounted for 95% of the sugar produced in the South. Although a few refineries existed, including the Louisiana Sugar Refining Company in New Orleans, refining was not a significant part of the antebellum sugar industry. Louisiana’s product was chiefly raw sugar, most of which was shipped to cities in the upper Mississippi Valley either directly from the plantations or by way of New Orleans. Some of the sugar from the Teche region was shipped directly to East Coast ports. Packed in hogsheads marked with the name of the plantation on which it was made, the raw sugar that arrived in New Orleans by steamboat was sold daily at auction on the levee. Planters usually consigned their sugar to commission merchants, or factors, who often also played the role of financiers. Since sugarcane required greater capital investment than other crops and was unpredictable as well, planters were dependent on their factors for credit and on banks for the financing of plantation operations. Several planters’ banks existed, including the state-chartered Consolidated Association of Planters of Louisiana, established in 1828. Planter-members who bought shares in the bank could be reasonably certain of obtaining loans.</p>",
+      "<p>Throughout the history of the Louisiana sugar industry, import tariffs on foreign sugar have affected the profitability of Louisiana sugar. Increased tariff protection in the 1820s and 1840s, for example, led to dramatic rises in the number of sugar plantations. Louisiana’s sugar interests sought to persuade federal officials to maintain favorable tariffs since the early years of the industry. Tariffs were often a contentious issue in national politics throughout the 19th century, and tariff reductions for imported sugar always drew negative reactions from Louisiana planters concerned about the profitability of their own product.</p>",
+      "<p><strong>In case 3</strong></p><ul><li>New Orleans levee with sugar sheds in background, late 19th century. Reproduced from the original in the New Orleans Scenes Photographic Collection, Mss. 1552, Louisiana and Lower Mississippi Valley Collections. (The gallery opens on it, from George François Mugnier’s glass negative.)</li><li>Plantation sugar house, 1850s, and sugar mill, 1850s. Reproduced from <em>Harper’s New Monthly Magazine</em>, November 1853. Middleton Library AP2 H3</li><li>New Orleans levee. Reproduced from <em>Harper’s Weekly</em>, March 30, 1861. Rare Flat 051 H234</li><li>Sugar auction announcement, 1861. Loan, LSU Rural Life Museum</li><li>Steamboat bill of lading, 27 January 1869, for a sugar shipment from Assumption Parish to New Orleans. Severin Landry and Family Papers, Mss. 210, Louisiana and Lower Mississippi Valley Collections</li><li>P.A. Champomier. <em>Statement of the Sugar Crop Made in Louisiana</em>. New Orleans, 1855. Louisiana Collection HD9107 L8 C5 c.5</li><li>Letter from Edward J. Gay to Col. Andrew Hynes, 26 November 1842, giving account of sugar sales at St. Louis on behalf of Hynes &amp; Craighead of Iberville Parish. Edward J. Gay and Family Papers, Mss. 1295, Louisiana and Lower Mississippi Valley Collections</li><li>Bank deposit book of Fauche Cougot, 1835–1836. Consolidated Association of Planters of Louisiana Papers, Mss. 82, Louisiana and Lower Mississippi Valley Collections</li><li>Josiah S. Johnston. <em>Letter of Mr. Johnston of Louisiana to the Secretary of the Treasury</em>. Washington, 1831. Louisiana Collection Rare SB231 J7 c.1</li></ul>"
+     ]
+    },
+    {
+     "type": "plate",
+     "title": "Beginnings of Technological Change",
+     "anchor": "beginnings-of-technological-change",
+     "summary": "Steam mills, vacuum pans, Norbert Rillieux’s multiple-effect evaporator, bagasse furnaces and centrifugals: the slow arrival of new technique before the Civil War.",
+     "body": [
+      "<p>During most of the 19th century, technical innovations were adopted slowly in the Louisiana sugar industry. Planters in antebellum Louisiana generally lacked scientific knowledge, and no local institutions existed to train people to operate or repair new types of devices. Progressive planters looked mainly to France for scientific and technical knowledge. Several French-educated scientists were instrumental in introducing early improvements in Louisiana’s sugar industry. J.B. Avequin, a New Orleans apothecary, studied sugarcane chemistry to determine milling efficiency and published his findings in French scientific journals. <em>De Bow’s Review</em>, an influential periodical published in New Orleans beginning in 1846, reprinted French articles on scientific aspects of sugar manufacture and espoused progressive views regarding the role of science.</p>",
+      "<p>Steam power, the first 19th-century innovation in sugar manufacture, was introduced to the Louisiana sugar industry in 1822 with the importation of the state’s first steam-powered cane mill. Steam engines gradually began supplanting animal power for mills during the 1830s and 1840s. Steam vacuum pans, invented in England, were first used on several Louisiana plantations in the 1830s. Early vacuum pans were closed vessels with double bottoms, in which cane juice was heated and evaporated under reduced pressure. This was more efficient than the open-kettle method and also yielded a higher quality sugar. The vacuum pan design was enlarged and improved by Norbert Rillieux (1806–1894), a free person of color born in New Orleans and educated in France. Rillieux’s invention was the multiple-effect evaporation system, linking several vessels by a series of steam chambers so that each vessel after the first was heated by the vapor from the preceding one. Rillieux’s design significantly reduced fuel consumption and is considered the most important innovation in 19th-century sugar manufacturing technology. Multiple-effect evaporation was first used in Louisiana and then spread to other parts of the world.</p>",
+      "<p>Another fuel-saving innovation, introduced in Louisiana in the 1850s, was the bagasse furnace. Bagasse, the residue of milled cane, began to replace wood as a fuel in Louisiana sugarhouses. Just before the Civil War, a few Louisiana plantations also switched from the barrel drainage method of purging molasses to the use of centrifugals. Adopted from the European beet-sugar industry, these screened vessels rotated at high speed, retaining the crystallized sugar while allowing the molasses to escape. Centrifugals reduced the amount of time required for purging and yielded a drier raw sugar.</p>",
+      "<p><strong>Also in case 4</strong></p><ul><li>“Oaks’s Apparatus,” vacuum pan design, circa 1832. Reproduced from Benjamin Silliman, <em>Manual on the Cultivation of the Sugar Cane and the Fabrication and Refinement of Sugar</em>. Washington, F.P. Blair, 1833. Louisiana Collection Rare TP377 S58</li><li><em>Manuel pratique pour la fabrication du sucre de canne</em>. Paris, Rignoux, 1845. Rare TP377 A53 1845</li><li><em>The Commercial Review of the South and West</em> (<em>De Bow’s Review</em>), v. 4. New Orleans, 1847. Louisiana Collection HF1 D2 c.3</li><li>“Moses Thompson’s Furnace …” Bagasse furnace design, 1850s. Reproduced from the original in the David Weeks and Family Papers, Mss. 528, Louisiana and Lower Mississippi Valley Collections</li><li>J.B. Avequin. “Sur la matière cireuse de la canne à sucre,” <em>Annales de chimie et de physique</em>, 2nd series, v. 75 (1840). Chemistry Library QD1 A7</li></ul>"
+     ]
+    },
+    {
+     "type": "picture",
+     "title": "Norbert Rillieux",
+     "anchor": "rillieux",
+     "image": "sug4b.jpg",
+     "caption": "<p><strong>Norbert Rillieux, commemorative plaque placed at the Louisiana State Museum in 1934 by representatives of the sugar industry from around the world.</strong><br>Reproduced from <em>Norbert Rillieux</em>. Amsterdam, 1934. Louisiana Collection TP140 R55 N67</p>"
+    },
+    {
+     "type": "picture",
+     "title": "Rillieux’s patents",
+     "anchor": "rillieux-patents",
+     "image": "sug4a.jpg",
+     "caption": "<p><strong>Designs of Rillieux’s first and second patents for multiple-effect evaporation.</strong><br>Reproduced from Noel Deerr, <em>The History of Sugar</em>. London, Chapman and Hall, 1949–1950. Middleton Library TP375.7 D4 v.2, c.2</p>"
+    },
+    {
+     "type": "picture",
+     "title": "Steam-powered sugar mill",
+     "anchor": "steam-mill",
+     "image": "sug4c.jpg",
+     "caption": "<p><strong>Steam-powered sugar mill, circa 1830.</strong><br>Reproduced from George R. Porter, <em>The Nature and Properties of the Sugar Cane</em>. London, Smith Elder, 1830. Rare TP377 P83 c.1</p>"
+    },
+    {
+     "type": "plate",
+     "title": "Devastation and Transition",
+     "anchor": "devastation-and-transition",
+     "summary": "War, ruin and the change from slave to wage labor; then new implements and mills, and German chemistry, which in the end transformed the Louisiana sugarhouse.",
+     "body": [
+      "<p>During the Civil War, most of Louisiana’s sugar parishes came under the control of Union forces by the end of 1863. Some planter families fled to Texas, and wartime conditions in Louisiana caused such widespread physical destruction, financial ruin, and social disruption, that many plantations and other sugar-related enterprises did not survive the war. Some plantations passed to new owners, among whom were Northern investors as well as Louisiana businessmen not previously involved in the sugar industry. The transition from a slave economy to a wage labor system involved many struggles and adjustments. Beginning around 1870, immigrant laborers including Chinese, Swedes, Spaniards, and Italians were employed in the cane fields for brief periods. African Americans nevertheless still constituted the majority of cane workers, and their struggles for better wages continued into the 20th century.</p>",
+      "<p>Planting, cultivation, and harvesting of sugarcane continued to be done entirely by hand in the latter 19th century. Several new agricultural implements were introduced, including some developed in Louisiana, such as cane cultivators, stubble shavers and stubble diggers. Aids for loading, unloading, and lifting cut cane—slings and derricks—were also first used in the late 19th century. Milling and processing began taking place on a larger scale with the introduction of new mill designs and improved methods for cane juice extraction and clarification. Many of the advances in process equipment during this period originated in Germany’s beet-sugar industry. German ideas introduced into Louisiana during the late 19th century included detailed record-keeping techniques and the application of chemical science to sugar production. Sugarhouse chemists initially faced considerable opposition from sugar boilers and other mill workers who employed only traditional methods handed down on the job, but ultimately chemical control completely transformed business practices in the Louisiana sugar industry.</p>",
+      "<p><strong>Also in case 5</strong></p><ul><li>Disc cultivator. Reproduced from Noel Deerr, <em>Cane Sugar</em>. London, Norman Rodger, 1921. Louisiana Collection SB231 D5 1921 c.2</li><li>Cane mill, 1870s. Reproduced from Isaac Hedges, <em>Sugar Canes and Their Products, Culture and Manufacture</em>. St. Louis, 1879. Louisiana Collection TP405 H46</li><li>Freedmen’s Bureau circular, 4 December 1865. Severin Landry and Family Papers, Mss. 210, Louisiana and Lower Mississippi Valley Collections</li><li>German designs for sugar factory vessels. F. Stohmann, <em>Handbuch der Zuckerfabrikation</em>. Berlin, Wiegandt, Hempel &amp; Parey, 1878. Rare TP377 S76</li><li>Advertisement for cane-juice sulphur bleacher, circa 1878. Edward J. Gay and Family Papers, Mss. 1295, Louisiana and Lower Mississippi Valley Collections</li><li>Hydraulic pressure regulator for sugar mills, 1880s. Reproduced from Louisiana Sugar Planters’ Association, <em>Regular Monthly Meeting, August 1887</em>. New Orleans, 1887. Louisiana Collection SB215 L6863</li><li>B.F. Avery stubble digger. Reproduced from J.B. Wilkinson, <em>The Diffusion Process in Louisiana and Texas</em>. New Orleans, L. Graham, 1889. Louisiana Collection TP382 W55</li><li>Lezin A. Becnel. <em>Report on the Results of Belle Alliance, Evan Hall and Souvenir Sugar Houses for the Crop of 1888</em>. New Orleans, L. Graham, 1889. Louisiana Collection HD9107 B44 1889</li></ul>"
+     ]
+    },
+    {
+     "type": "picture",
+     "title": "Cane transfer device",
+     "anchor": "cane-transfer",
+     "image": "sug5a.jpg",
+     "caption": "<p><strong>Cane transfer device, 1890s.</strong><br>Reproduced from <em>The Louisiana Planter and Sugar Manufacturer</em>, October 12, 1895. Louisiana Collection TP375 P58</p>"
+    },
+    {
+     "type": "picture",
+     "title": "The Sugar Harvest in Louisiana",
+     "anchor": "sugar-harvest",
+     "image": "sug5b.jpg",
+     "caption": "<p><strong>“The Sugar Harvest in Louisiana,” by A.R. Waud.</strong><br>Reproduced from <em>Harper’s Weekly</em>, October 30, 1875. Rare Flat 051 H234</p>"
+    }
+   ]
+  },
+  {
+   "title": "The 1900s",
+   "anchor": "1900s",
+   "lead": "laboratory-and-residence-1899.jpg",
+   "focus": "center",
+   "lead_caption": "<p><strong>Laboratory and Residence, LSU Sugar Experiment Station at Audubon Park, New Orleans, 1899.</strong> The laboratory in front, the side of the director’s house beside it.<br>LSU Photograph Collection, 1886–1926, University Archives, LSU Libraries Special Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-ua-uap:553\">Louisiana Digital Library</a></p>",
+   "blocks": [
+    {
+     "type": "plate",
+     "title": "Birth of the Modern Industry",
+     "anchor": "birth-of-the-modern-industry",
+     "summary": "The Louisiana Sugar Planters’ Association, the Sugar Experiment Station and, in 1891, the Audubon Sugar School, the first school in the world for the cane sugar industry.",
+     "body": [
+      "<p>The organization largely responsible for setting in motion the modernization of Louisiana’s sugar industry was founded in 1877 by a group of prominent planters, among whom were John Dymond, Duncan F. Kenner, Henry McCall, and Edward J. Gay. The initial objective of the Louisiana Sugar Planters’ Association (LSPA) was to lobby the federal government for favorable import tariffs, but the organization soon also became the chief proponent of scientific research and technological innovation in the Louisiana sugar industry. The LSPA espoused scientific and technological advancement as a means of facing increased foreign competition and it succeeded in attracting U.S. Department of Agriculture chemists to Louisiana in the 1880s to conduct studies on sugar production. In 1885, the LSPA sponsored the establishment of the state’s first agricultural experiment station at Kenner and hired William Carter Stubbs (1846–1924) as director. The station’s research was guided by agricultural and processing problems in the Louisiana sugar industry, and station staff frequently presented papers at the LSPA’s monthly meetings. Following its move to Audubon Park in New Orleans in 1890, the Sugar Experiment Station was briefly at the forefront of research in sugar chemistry nationally and internationally. The first specialized school in the world for training experts for the cane sugar industry was founded at the Audubon Park station in 1891, with the station staff serving as the faculty. The Audubon Sugar School offered a two-year curriculum in agriculture, chemistry, and mechanical engineering that included both classroom and practical work. Financial difficulties forced the school to close in 1896, but its curriculum was incorporated into a degree program at LSU beginning in 1897.</p>",
+      "<p>Between 1880 and 1900, the Louisiana sugar industry underwent major transformations. Animal-powered mills and open kettles largely disappeared, and a sustained trend began toward fewer mills, larger cane acreages, and greater production using improved methods. Many sugar properties were incorporated as individual planters were unable to finance the operation of modern factories. Traditional plantation culture gave way to a separation of cane-growing from sugar manufacture. Central factories on large plantations began processing cane purchased from other growers together with their own. Louisiana faced increased competition from cane sugar imported from Cuba, Hawaii, and the Philippines, and debates over tariff reductions in the 1890s led to a partisan split in the Louisiana Sugar Planters’ Association. The organization went into decline and ultimately merged with the American Cane Growers’ Association in 1922, creating the American Sugar Cane League.</p>",
+      "<p><strong>Also in case 6</strong></p><ul><li>Two plates showing “The sugar industry of Louisiana,” drawings by J.O. Davidson. Reproduced from <em>Harper’s Weekly</em>, July 21 and 28, 1883. Rare Flat 051 H234</li><li><em>Annual Announcement and Catalogue of the Audubon Park Sugar School</em>, 1893–94. Louisiana Collection S537 L82</li><li>William Carter Stubbs. <em>Sugar Cane: A Treatise on Its History, Botany and Agriculture</em>. Savannah, D.G. Purse, 1901. Louisiana Collection SB231 S93 pt.1–2, c.2</li><li>Guilford L. Spencer. <em>Report of Experiments in the Manufacture of Sugar by Diffusion</em>. Washington, Government Printing Office, 1889. Louisiana Collection TP375.8 U6 S74 1889</li><li>Louisiana Sugar Planters’ Association. <em>Regular Monthly Meeting, August 1887</em>. New Orleans, 1887. Louisiana Collection SB215 L6863</li><li>Louisiana Agricultural Experiment Station. <em>Bulletin</em>, no. 20. Baton Rouge, 1889. Louisiana Collection S67 E36, series 1</li></ul>"
+     ]
+    },
+    {
+     "type": "picture",
+     "title": "Inside a sugar mill, about 1900",
+     "anchor": "st-louis-plantation-mill",
+     "image": "sug6b.jpg",
+     "caption": "<p><strong>Interior of a sugar mill belonging to the Edward J. Gay Planting and Manufacturing Company, St. Louis Plantation, Iberville Parish, circa 1900.</strong><br>Edward J. Gay and Family Papers, Mss. 1295, Louisiana and Lower Mississippi Valley Collections</p>"
+    },
+    {
+     "type": "picture",
+     "title": "The experiment station laboratory, 1894",
+     "anchor": "experiment-station-1894",
+     "image": "sug6a.jpg",
+     "caption": "<p><strong>Interior of the laboratory, Audubon Park, 1894.</strong> The case showed it with a photograph of the experiment station, Audubon Park, New Orleans, the same year.<br>Charles E. Coates Papers, Mss. 2283, Louisiana and Lower Mississippi Valley Collections</p>"
+    },
+    {
+     "type": "plate",
+     "title": "An Industry under Siege",
+     "anchor": "an-industry-under-siege",
+     "summary": "The mosaic virus nearly wiped out Louisiana sugar by 1926; disease-resistant P.O.J. cane from Java, first grown at Southdown Plantation, brought it back from the brink.",
+     "body": [
+      "<p>Louisiana’s sugar industry was ravaged and nearly wiped out by the mosaic virus in the early 1900s. Sugar production had reached an all-time high of nearly 400,000 tons in 1904, but by 1926 it had bottomed out at less than 50,000 tons. While most sugar planters were slow to react to this insidious threat to their industry, a few, most notably Southdown Plantation, recognized the urgency of the situation and began fighting back. Salvation came in the form of disease-resistant varieties of sugarcane which had been imported from Java by the U.S. Department of Agriculture (USDA). Named for their point of origin, the Proefstation Oost Java (East Java Experimental Station), they were known as P.O.J. varieties. Southdown requested and received three such varieties (P.O.J. 36, 213, and 234) from the USDA in 1922 and 1923. Fears that the varieties might not be suitable for Louisiana’s subtropical climate were quickly quelled as they performed exceedingly well during testing.</p>",
+      "<p>In 1925, Southdown made P.O.J. 234 available to sugar planters throughout the state, and for the next few years, the Louisiana Experiment Stations, the USDA, and the American Sugar Cane League worked in concert to encourage planters to adopt the new disease-resistant varieties. Although the P.O.J. varieties only dominated for a few years until the breeding program took hold, they are credited with bringing the industry back from the brink of extinction.</p>",
+      "<p><strong>Also in case 7</strong></p><ul><li>P.O.J. 234, Hollywood Plantation, Terrebonne Parish, November 1924. Reproduced from the Henry C. Minor Estate Partnership Papers, Mss. 1509, Louisiana and Lower Mississippi Valley Collections</li><li>Baton Rouge Sugar Refinery, near the University, 1899. Reproduced from the LSU Photograph Collection, Audubon Sugar School, Louisiana and Lower Mississippi Valley Collections</li><li>View of field including plantation railroad, Southdown Plantation. Reproduced from the Henry C. Minor Estate Partnership Papers, Mss. 1509, Louisiana and Lower Mississippi Valley Collections</li><li>View of Southdown Refinery from Dairy. Reproduced from the Henry C. Minor Estate Partnership Papers, Mss. 1509, Louisiana and Lower Mississippi Valley Collections</li><li>View of Bagasse Shipping Shed, Celotex Co., Southdown Refinery, Terrebonne Parish, 1923. Reproduced from the Henry C. Minor Estate Partnership Papers, Mss. 1509, Louisiana and Lower Mississippi Valley Collections</li><li>Aerial view of Southdown, 1923. Reproduced from the Henry C. Minor Estate Partnership Papers, Mss. 1509, Louisiana and Lower Mississippi Valley Collections</li><li>Photograph of auction of first sugar made in Louisiana from P.O.J. cane at the New Orleans Sugar Exchange, October 1927. Reproduced from the Henry C. Minor Estate Partnership Papers, Mss. 1509, Louisiana and Lower Mississippi Valley Collections</li><li>Donaldsonville Fair, October 1928, “Terrebonne, Home of P.O.J. Cane.” Reproduced from the Henry C. Minor Estate Partnership Papers, Mss. 1509, Louisiana and Lower Mississippi Valley Collections</li><li>“We’re engaged to be married!” New Orleans <em>Times-Picayune</em> cartoon, November 3, 1929. Henry C. Minor Estate Partnership Papers, Mss. 1509, Louisiana and Lower Mississippi Valley Collections</li><li><em>Louisiana Hails P.O.J.</em> Illinois Central System publication. Henry C. Minor Estate Partnership Papers, Mss. 1509, Louisiana and Lower Mississippi Valley Collections</li></ul>"
+     ]
+    },
+    {
+     "type": "picture",
+     "title": "P.O.J. 213, Hollywood Plantation",
+     "anchor": "poj-213",
+     "image": "sug7a.jpg",
+     "caption": "<p><strong>P.O.J. 213, Hollywood Plantation, Aug. 20, 1927.</strong><br>Reproduced from the Henry C. Minor Estate Partnership Papers, Mss. 1509, Louisiana and Lower Mississippi Valley Collections</p>"
+    },
+    {
+     "type": "picture",
+     "title": "P.O.J. cane: an important announcement",
+     "anchor": "poj-announcement",
+     "image": "sug7b.jpg",
+     "caption": "<p><strong>American Sugar Cane League of the U.S.A., <em>Bulletin</em>, vol. 3, no. 11, March 1, 1925.</strong><br>Henry C. Minor Estate Partnership Papers, Mss. 1509, Louisiana and Lower Mississippi Valley Collections</p>"
+    },
+    {
+     "type": "picture",
+     "title": "Thornton cane storage derrick",
+     "anchor": "thornton-derrick",
+     "image": "thornton-cane-storage-derrick.jpg",
+     "caption": "<p><strong>Thornton Cane Storage 80 ft. Steel Derrick at Geo. M. Murrell’s, Iberville Parish.</strong> Shown in case 7 without a picture online; this is the photograph itself, scanned for the Libraries’ 2013 exhibition <em>Of Kin and Cane</em>.<br>Edward J. Gay and Family Papers, Mss. 1295, Louisiana and Lower Mississippi Valley Collections</p>"
+    },
+    {
+     "type": "plate",
+     "title": "LSU Steps In",
+     "anchor": "lsu-steps-in",
+     "summary": "In 1897 LSU took over the Audubon Sugar School under Charles E. Coates: three years of classes in Baton Rouge, two in the sugarhouse at Audubon Park.",
+     "body": [
+      "<p>When William C. Stubbs, the original Director of the Audubon Sugar School, recommended that the School be closed in the fall of 1896, it was not without a plan. Although the School had never been a financial success and had proven a burden to his research staff, who had also served as the faculty for the School, he recognized the need for such an institution. However, he thought that the Sugar Experiment Station should focus on research, and that the teaching should be left to others. He lost little time in proposing that LSU incorporate the School’s curriculum into a degree program. In a seven-page letter, he laid out a series of recommendations as to the direction he thought the program should take, including significant changes to the curriculum.</p>",
+      "<p>LSU President Thomas D. Boyd and the LSU Board of Supervisors agreed that the School should be brought under the auspices of LSU. It was placed in the capable hands of Dr. Charles E. Coates, who served as Director until 1937, and was reopened in the fall of 1897. With changing leadership came a corresponding shift in the curriculum. Emphasis moved from agriculture to chemical and mechanical engineering, as students followed one of two courses of study: sugar agriculture and chemistry; or sugar chemistry and engineering. The five-year program consisted of three years of classroom instruction at LSU’s campus in Baton Rouge and two years of practical instruction in sugar technology at the Sugar Experiment Station in Audubon Park. Although the students’ time was split between the two locations, the School’s physical location remained at Audubon Park until 1925, when the entire program, along with the Sugar Experiment Station, was relocated to Baton Rouge.</p>",
+      "<p><strong>Also in case 8</strong></p><ul><li>Laboratory and Residence, LSU Sugar Experiment Station at Audubon Park, 1899. Reproduced from the LSU Photograph Collection, Audubon Sugar School, Louisiana and Lower Mississippi Valley Collections. (The gallery opens on it.)</li><li>Photograph of the Interior of Engineering Lab. Reproduced from the LSU Photograph Collection, Audubon Sugar School, Louisiana and Lower Mississippi Valley Collections</li><li>At the Small Pan. Reproduced from the Charles E. Coates Papers, Mss. 2283, Louisiana and Lower Mississippi Valley Collections</li><li>Photograph of sugar students at work, Audubon Park, 1902. Reproduced from the LSU Photograph Collection, Audubon Sugar School, Louisiana and Lower Mississippi Valley Collections. (It opens About the Exhibition.)</li><li>William C. Stubbs’s letter to LSU President Thomas D. Boyd, November 11, 1896, proposing that LSU incorporate the Audubon Sugar School. William C. Stubbs Letter, Mss. 2283, Louisiana and Lower Mississippi Valley Collections</li><li>1897/98 Audubon Sugar School Catalogue (the first year the program was under LSU). Louisiana Collection S537 L82</li><li>“Performance Tests of Sugar House Heating and Evaporating Apparatus,” in Louisiana <em>Bulletin</em> No. 149 (August 1914). Courtesy of Audubon Sugar Institute</li><li>A.G. Mundinger, <em>The Manufacture of Sugar by the Roller Process</em>, 1902. LSU Collection, Bachelor’s Theses, Louisiana and Lower Mississippi Valley Collections</li><li>Zinc printer’s plate (with print) for “Golden Tiger Syrup” labels, Audubon Sugar School, circa 1930s. Plate loaned by LSU Rural Life Museum; print courtesy of Elaine Smyth</li></ul>"
+     ]
+    },
+    {
+     "type": "picture",
+     "title": "At the effects and pan",
+     "anchor": "effects-and-pan",
+     "image": "sug8b.jpg",
+     "caption": "<p><strong>At the Effects and Pan, Audubon Sugar School.</strong><br>Reproduced from the Charles E. Coates Papers, Mss. 2283, Louisiana and Lower Mississippi Valley Collections</p>"
+    },
+    {
+     "type": "picture",
+     "title": "Chemistry lab, Audubon Park, 1899",
+     "anchor": "chemistry-lab-1899",
+     "image": "chemical-lab-1899.jpg",
+     "caption": "<p><strong>Chemical Lab, Audubon Sugar Experiment Station, 1899: Simon Baum (front) and Jim Harp (rear).</strong> Shown in case 8 without a picture online.<br>LSU Photograph Collection, 1886–1926, University Archives, LSU Libraries Special Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-ua-uap:147\">Louisiana Digital Library</a></p>"
+    },
+    {
+     "type": "plate",
+     "title": "Changing with the Times",
+     "anchor": "changing-with-the-times",
+     "summary": "The school and factory move to the Baton Rouge campus in 1925, LSU hosts the world’s cane technologists in 1938, and the Audubon Sugar Institute follows in 1976.",
+     "body": [
+      "<p>The Louisiana Sugar Planters’ Association, the American Cane Growers’ Association, and the Producers’ and Manufacturers’ Protective Association merged in 1922 to create the American Sugar Cane League, which was organized to provide the leadership sorely needed by the industry.</p>",
+      "<p>LSU provided a complementary source of training for leadership. In 1925, the Sugar Experiment Station and the Audubon Sugar School and Factory were relocated to the new LSU campus in Baton Rouge. The School had made quite a name for itself, with its graduates holding top management positions worldwide. In 1938, LSU’s selection as host of the sixth congress of the International Society of Sugar Cane Technologists paid homage to its status as an international force within the industry. The sixty-seven delegates from Louisiana included such notables as Charles E. Coates, E. W. Kerr, Arthur G. Keller, and William G. Taggart. LSU repeated as host when the fourteenth congress was held in New Orleans in 1971.</p>",
+      "<p>The School continued to churn out graduates and the Sugar Factory remained a working entity until the mid-1960s, when the program was derailed by the Cuban Revolution. As Cuban exiles, many with years of experience in the sugar industry, flooded the United States, Sugar School graduates suddenly began having difficulty finding jobs. The 1970s saw the demise of the Sugar School and the birth of the Audubon Sugar Institute in 1976. The Institute was created to serve the state sugar industry, and has been instrumental in sustaining research and promoting communication throughout the state.</p>",
+      "<p><strong>Also in case 9</strong></p><ul><li>Audubon Sugar Factory in commercial operation in the 1960s. Courtesy of Audubon Sugar Institute</li><li>Audubon Sugar Factory at the LSU campus in Baton Rouge, 1926. Courtesy of Audubon Sugar Institute. (The exhibition opens on a print of it from the University Archives.)</li><li>Photograph of the Special Sugar Exhibit in the U.S. Exhibit of Agricultural Colleges, Louisiana Purchase Exposition, St. Louis, Missouri, 1904. Reproduced from <em>Louisiana at Louisiana Purchase Exposition</em>. New Orleans, American Printing Co., 1904. Louisiana Collection T860 F3 L8</li><li>Jar of “La cuite” (from the French word meaning “cooked”), Audubon Sugar Institute, 1970s. Loan, LSU Rural Life Museum</li><li><em>Handbook</em>, Sixth Congress of the International Society of Sugar Cane Technologists, Baton Rouge, Oct. 24–Nov. 5, 1938. Louisiana Collection TP375 I5 1938d c.1</li><li>“Investigations on the Sugar Cane Disease Situation in 1925 and 1926,” in Louisiana <em>Bulletin</em> No. 197 (April 1927). Courtesy of Audubon Sugar Institute</li><li>Delegates from Louisiana. Reproduced from International Society of Sugar Cane Technologists, <em>Proceedings of the Sixth Congress</em>, held at Louisiana State University, Baton Rouge, Louisiana, October 24 to November 5, 1938. Louisiana Collection TP375 I456 1938 c.7</li><li><em>Raising Cane in Louisiana</em>. American Sugar Cane League publication. Courtesy of Audubon Sugar Institute</li></ul>"
+     ]
+    },
+    {
+     "type": "picture",
+     "title": "Sugarcane field day tram",
+     "anchor": "field-day-tram",
+     "image": "sug9a.jpg",
+     "caption": "<p><strong>Tram for visitors to a Sugarcane Field Day in the 1940s.</strong><br>Courtesy of LSU Agricultural Center</p>"
+    },
+    {
+     "type": "picture",
+     "title": "The Sugar Bulletin, 1929",
+     "anchor": "sugar-bulletin-1929",
+     "image": "sug9b.jpg",
+     "caption": "<p><strong><em>The Sugar Bulletin</em>, vol. 7, no. 11, March 1, 1929.</strong><br>Henry C. Minor Estate Partnership Papers, Mss. 1509, Louisiana and Lower Mississippi Valley Collections</p>"
+    }
+   ]
+  },
+  {
+   "title": "Today and Tomorrow",
+   "anchor": "today-and-tomorrow",
+   "lead": "first-seedling-cane-1907.jpg",
+   "focus": "center",
+   "lead_caption": "<p><strong>A Louisiana seedling cane: “the first seedling ever grown in Louisiana, 1907,” on the authority of Dr. William G. Taggart, written on the back.</strong> The case showed a photograph of the first cane grown from seed in Louisiana, 1907.<br>LSU Photograph Collection, 1886–1926, University Archives, LSU Libraries Special Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-ua-uap:7\">Louisiana Digital Library</a></p>",
+   "blocks": [
+    {
+     "type": "plate",
+     "title": "A Tradition of Research",
+     "anchor": "a-tradition-of-research",
+     "summary": "Breeding for disease resistance at Houma and on the LSU campus, where photoperiod control, found in 1949, made the cane flower; by 1995, 80,000 new varieties a year.",
+     "body": [
+      "<p>Research has been and remains vital to the survival of the sugar industry. The Audubon Sugar Institute and the Sugar Experiment Station, which merged in 1988, have been key players along with the U.S. Department of Agriculture (USDA) in sustaining the tradition of research which revived the industry when it was nearly wiped out by the mosaic virus in the 1920s.</p>",
+      "<p>Responding to the need for disease-resistant hybrids, the USDA established stations at Canal Point, Florida, in 1919, and Houma, Louisiana, in 1926, where researchers developed breeding and testing programs. The program at Houma received a major boost in 1949, when photoperiod control of flowering was discovered by LSU researchers Dr. St. John Poindexter Chilton and Dr. Clayton C. Mooreland. Louisiana is too far north for sugarcane to flower naturally, but with photoperiod control—which in essence fools the plants into flowering by artificially altering day length—crosses could be made in greenhouses on the LSU campus. This program remains in full swing today at the St. Gabriel Research Station, where 80,000 new varieties are grown each year in facilities that were constructed in 1982.</p>",
+      "<p>Research in other areas, such as Integrated Pest Management (IPM) and alternative uses of industry by-products, is also conducted at the Sugar Experiment Station and in a number of related academic departments at LSU. Research findings are communicated to practitioners via the Louisiana Cooperative Extension Service, trade publications, and field days, at which they can interact with the researchers and learn about new techniques.</p>",
+      "<p><strong>Also in case 10</strong></p><ul><li>Exterior view of photoperiod greenhouse and plants on carts, St. Gabriel Research Station. Photograph by John Wozniak, LSU Agricultural Center</li><li>Flowering sugarcane plants on cart, St. Gabriel Research Station. Courtesy of Audubon Sugar Institute</li><li>An example of Integrated Pest Management in which Lepidopterous larvae on sugarcane weeds provide alternate food sources to build up early season fire ant populations and enhance control of the sugarcane borer. Courtesy of LSU Department of Entomology</li><li>Dr. Jeff Hoy at the 4th Annual LSU Area Sugarcane Field Day, July 1986. Photograph by John Wozniak, LSU Agricultural Center</li><li>Photograph of the first cane grown from seed in Louisiana, 1907. LSU Photograph Collection, Audubon Sugar School, Louisiana and Lower Mississippi Valley Collections. (The gallery opens on it.)</li><li><em>Sugarcane Research Annual Progress Report</em>, 1994. Courtesy of Audubon Sugar Institute</li><li>“Sugar Cane. (Field Experiments),” in Louisiana <em>Bulletin</em> No. 14 (January 1888). Courtesy of Audubon Sugar Institute</li><li>“Sugarcane Smut in Louisiana: Biology and Control,” in Louisiana <em>Bulletin</em> No. 839 (April 1993). Courtesy of LSU Agricultural Center</li></ul>"
+     ]
+    },
+    {
+     "type": "picture",
+     "title": "Crossing sugarcane",
+     "anchor": "crossing-sugarcane",
+     "image": "sug10a.jpg",
+     "caption": "<p><strong>Joey Quebedeaux attaches sugarcane tassels in a partitioned cubicle to maintain cross purity.</strong><br>Courtesy of LSU Department of Entomology</p>"
+    },
+    {
+     "type": "picture",
+     "title": "Field day, 1986",
+     "anchor": "field-day-1986",
+     "image": "sug10b.jpg",
+     "caption": "<p><strong>Dr. Jeff Hoy speaking to attendees at the 4th Annual LSU Area Sugarcane Field Day, July 1986.</strong><br>Photograph by John Wozniak, LSU Agricultural Center</p>"
+    },
+    {
+     "type": "picture",
+     "title": "One of 80,000 varieties",
+     "anchor": "new-variety",
+     "image": "sug10c.jpg",
+     "caption": "<p><strong>One of 80,000 sugarcane varieties grown each year at the St. Gabriel Research Station.</strong><br>Courtesy of Audubon Sugar Institute</p>"
+    },
+    {
+     "type": "plate",
+     "title": "Technology and Growth",
+     "anchor": "technology-and-growth",
+     "summary": "From under 5,000 tons in the late 1700s to over 1,000,000 in 1994: mechanization, above all the mechanical harvester after World War II, and ever fewer, larger factories.",
+     "body": [
+      "<p>Despite many peaks and valleys, commercial sugar production in Louisiana has grown steadily from a humble beginning of less than 5,000 tons in the late 1700s to a record high of more than 1,000,000 tons in 1994. No single factor has influenced this growth as much as technology.</p>",
+      "<p>The process of converting field cane into refined sugar has many phases: planting, cultivation, harvesting, loading, transporting, unloading, extraction, clarification, separation, and refining. Each of these phases has seen an evolution from manual to animal power and finally to full mechanization. This move towards mechanization has freed the industry from the limitations imposed by the availability of a labor force and allowed a steady increase in the acreage devoted to sugarcane. A major breakthrough occurred following World War II when the mechanical harvester was introduced commercially. Proclaimed to do the work of 200 workers, it gained rapid acceptance and changed the face of the industry.</p>",
+      "<p>Similar economies of scale led first to a shift in the 1800s from plantation sugar houses to large centralized sugar factories and refineries, and then to a steady decline in their numbers throughout this century. This trend continues today, as can be attested to by the recent closing of the Supreme Sugar Refinery, leaving just two commercial refineries in Louisiana.</p>",
+      "<p><strong>Also in case 11</strong></p><ul><li>Vacuum pan. Reproduced from <em>Catalogue of Sugar Cane Machinery, Steam Engines, Etc.</em> Cincinnati, Blymyer Iron Works Co., June 1, 1886. Louisiana and Lower Mississippi Valley Collections TP381 B44 1886</li><li>Multiple effect. Reproduced from Paul Horsin-Déon, <em>Traité théorique et pratique de la fabrication du sucre</em>. Paris, E. Bernard, 1882. Rare TP390 H78</li><li>Centrifugal. Reproduced from J.B. Wilkinson, Jr., <em>The Diffusion Process in Louisiana and Texas</em>. New Orleans, L. Graham &amp; Son, 1889. Louisiana and Lower Mississippi Valley Collections TP382 W55</li><li>Bagasse burner. Reproduced from J.B. Wilkinson, Jr., <em>The Diffusion Process in Louisiana and Texas</em>. New Orleans, L. Graham &amp; Son, 1889. Louisiana and Lower Mississippi Valley Collections TP382 W55</li><li>Photograph of manual planting, 1940s. Courtesy of LSU Agricultural Center</li></ul>"
+     ]
+    },
+    {
+     "type": "picture",
+     "title": "Cutting cane by hand",
+     "anchor": "manual-harvest",
+     "image": "sug11a.jpg",
+     "caption": "<p><strong>Manual harvesting.</strong><br>Reproduced from <em>Louisiana Sugar: A Story of Louisiana Cane Sugar</em>, American Sugar Cane League, 1938. Louisiana and Lower Mississippi Valley Collections SB228 A73</p>"
+    },
+    {
+     "type": "picture",
+     "title": "Experimental cane harvester, 1907",
+     "anchor": "harvester-1907",
+     "image": "experimental-cane-harvester-1907.jpg",
+     "caption": "<p><strong>Experimental cane harvester, Audubon Park Experiment Station, 1907.</strong><br>LSU Photograph Collection, 1886–1926, University Archives, LSU Libraries Special Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-ua-uap:316\">Louisiana Digital Library</a></p>"
+    },
+    {
+     "type": "picture",
+     "title": "A 1940s harvester",
+     "anchor": "harvester-1940s",
+     "image": "sug11c.jpg",
+     "caption": "<p><strong>Mechanical cane harvester of the 1940s.</strong><br>Courtesy of LSU Agricultural Center</p>"
+    },
+    {
+     "type": "picture",
+     "title": "A modern harvester",
+     "anchor": "harvester-modern",
+     "image": "sug11d.jpg",
+     "caption": "<p><strong>A cane harvester of the 1990s.</strong><br>Photo by John Wozniak, LSU Agricultural Center</p>"
+    },
+    {
+     "type": "plate",
+     "title": "Overcoming Adversity",
+     "anchor": "overcoming-adversity",
+     "summary": "Fickle federal support, floods, freezes and hurricanes, and disease and pests, met with tissue culture and integrated pest management, the fire ant among its allies.",
+     "body": [
+      "<p>Overcoming adversity has been a way of life for the Louisiana sugar industry. Of all threats, one of the most vexing has been federal legislation. The federal government has been a fickle suitor to the industry, establishing and eliminating support with annoying regularity. The American Sugar Cane League has made it its mission to play watchdog and coordinate efforts to lobby for support in Washington.</p>",
+      "<p>Mother Nature has also been unkind at times; floods, droughts, hurricanes, and hard freezes have had a crippling effect upon the sugarcane crop. In earlier years, sugarcane growers responded cautiously to these devastations by planting conservatively, thus guaranteeing a slow recovery in productivity. Following the hard freeze in 1989, however, they aggressively planted all their acreage, leading to the dramatic recovery. The threat from disease began escalating in the early part of this century when contaminated sugarcane varieties were imported from other countries; the damage was compounded when two or more diseases attacked in concert. In the 1980s, researchers developed a new procedure, using disease-free tissue culture in mass propagation of healthy seed cane, that has gone far in reducing this threat. Pests such as the infamous sugarcane borer, <em>Diatraea saccharalis</em> F., are controlled with insecticides and through Integrated Pest Management (IPM). An IPM success story is the fire ant (<em>Solenopsis invicta</em> Buren), an insect only a sugarcane grower could love; it seems one of their favorite meals is the sugarcane borer.</p>",
+      "<p><strong>Also in case 12</strong></p><ul><li>Red rot disease. Reproduced from <em>Sugar-Cane Diseases of the World</em>, ed. by J.P. Martin, E.V. Abbott, and C.G. Hughes. New York, Elsevier, 1961. Courtesy of Dr. Jeffrey Hoy</li><li>Mosaic disease. Reproduced from <em>Sugar-Cane Diseases of the World</em>, ed. by J.P. Martin, E.V. Abbott, and C.G. Hughes. New York, Elsevier, 1961. Courtesy of Dr. Jeffrey Hoy</li><li>P.O.J. varieties, from <em>Louisiana Hails P.O.J.</em>, Illinois Central System publication. Reproduced from the Henry C. Minor Estate Partnership Papers, Mss. 1509, Louisiana and Lower Mississippi Valley Collections</li><li>Photograph of frozen cane field. Courtesy of Audubon Sugar Institute</li><li>Photograph of freeze-damaged cane, 1989. Courtesy of Audubon Sugar Institute</li><li>Hurricane-damaged cane. Photograph by John Wozniak, LSU Agricultural Center</li><li>Ratoon stunting disease, in Hideo Koike, <em>Sugar-Cane Diseases: A Guide for Field Identification</em>. Rome, Food and Agriculture Organization of the United Nations, 1988. Middleton SB608 S9 K64 1988</li><li>Photograph of adult female moth of sugarcane borer. Reproduced from the Charles E. Coates Papers, Mss. 2283, Louisiana and Lower Mississippi Valley Collections</li><li>Photograph of man spraying cane field, 1930s. Courtesy of LSU Agricultural Center</li><li>Print of <em>Euetheola rugiceps</em>, commonly known as the sugarcane beetle. Courtesy of Elaine Smyth</li><li><em>The Sugar Bulletin</em>, official bulletin of the American Sugar Cane League of the U.S.A. (May 1995). Louisiana and Lower Mississippi Valley Collections SB215 S89, vol. 73, no. 8</li></ul>"
+     ]
+    },
+    {
+     "type": "picture",
+     "title": "Fire ant and sugarcane borer",
+     "anchor": "fire-ant",
+     "image": "sug12a.jpg",
+     "caption": "<p><strong>Fire ant attacking a sugarcane borer.</strong><br>Courtesy of LSU Department of Entomology</p>"
+    },
+    {
+     "type": "plate",
+     "title": "The Cane in Louisiana",
+     "anchor": "the-cane-in-louisiana",
+     "summary": "A tropical grass at the northern edge of its range: a short season, early-maturing, frost-resistant varieties, and since 1926 thousands of hybrids named by letters and numbers.",
+     "body": [
+      "<p>Sugarcane, or <em>Saccharum</em>, grows naturally in tropical areas. Believed to be native to New Guinea, sugarcane can now be found in parts of Asia, Africa, Europe, and Central, South, and North America. Generally, at least three annual crops can be harvested from a single planting, the original plant cane crop plus two or three additional cuttings, called “ratoon” crops. Sugarcane can grow to tremendous heights. Experimental varieties have exceeded 20 feet, but for commercial varieties grown in Louisiana, heights of between six and nine feet are the norm.</p>",
+      "<p>Because Louisiana is far north for sugarcane, growers are faced with a shortened growing season (approximately nine months) and potential weather hazards. Thus, certain traits are required for commercial varieties to be successful, such as early maturation, frost-resistance, and hardiness. High sugar yield is particularly important because sugarcane is immature when harvested in Louisiana.</p>",
+      "<p>For over 100 years (from 1825 to 1926), the Louisiana Purple and Louisiana Striped varieties dominated the industry. When those varieties fell prey to disease, the breeding program was intensified and a procession of thousands of hybrid varieties began which continues today. So many are developed each year that naming them all is impossible, and a new system for identifying the varieties had to be developed. Today, a combination of letters and numbers indicates the place and year of origin for each.</p>",
+      "<p><strong>Also in case 13</strong></p><ul><li>Sugarcane stalks. Courtesy of Audubon Sugar Institute</li><li>Modern cane harvester in action. Photograph by John Wozniak, LSU Agricultural Center</li><li>Polariscope, with syrup sample tube, for determining sugar content, early 20th century. Loan, LSU Rural Life Museum</li><li>Photograph of chemistry classroom at LSU with polariscopes set on lab bench, 1909. Loan, LSU Rural Life Museum</li><li>Baumé syrup hydrometer (two-piece wood container), used to determine water and total solids (density) of a solution. Loan, LSU Rural Life Museum</li><li>“Canne Sucre,” from Dutrône de La Couture, <em>Précis sur la canne et sur les moyens d’en extraire le sel essentiel</em>. Paris, Duplain, Dubuisson, Debure, Le Jay fils, De Senne, 1790. Rare TP376 D8</li><li>“Sugar Has Myriad Uses.” Reproduced from <em>Sugar: Facts and Figures</em>. New York, United States Cuban Sugar Council, 1948. Middleton HD9100.5 U63 c.3</li></ul>"
+     ]
+    },
+    {
+     "type": "picture",
+     "title": "Sugar crystals",
+     "anchor": "sugar-crystals",
+     "image": "sug13.jpg",
+     "caption": "<p><strong>Sugar crystals.</strong><br>Photograph courtesy of Audubon Sugar Institute</p>"
+    }
+   ]
+  },
+  {
+   "title": "Also on Display",
+   "anchor": "also-on-display",
+   "lead": "sug15a.jpg",
+   "lead_whole": true,
+   "focus": "center",
+   "lead_caption": "<p><strong>Man shaping sugar into cones, 19th century.</strong> Hand-colored lithograph.<br>In <em>Sugar: How It Grows and How It Is Made</em>. London, [1845?]. Rare SB231 S84</p>",
+   "blocks": [
+    {
+     "type": "plate",
+     "title": "Lent by the LSU Rural Life Museum",
+     "anchor": "rural-life-museum-loans",
+     "summary": "Cane knives, a kettle skimmer, a barrel stencil from Bonne Espérance plantation, a sugar cone mold and the hand tools of the cane field.",
+     "body": [
+      "<ul><li>Cane knives, early 20th century, used in harvesting sugarcane</li><li>Skimmer, circa 1840, for removing impurities during open-kettle boiling of cane juice</li><li>Sugar barrel stencil, circa 1858, used to mark shipments of raw sugar from St. James Parish plantation “Bonne Espérance”</li><li>Sugar cone mold and snips, 19th century, used for serving sugar at table</li><li>Windrow hook and stalk shaver, late 19th century, agricultural tools used in sugarcane cultivation</li></ul>"
+     ]
+    },
+    {
+     "type": "plate",
+     "title": "Other Items",
+     "anchor": "other-items",
+     "summary": "Cane country in print, cloth and signs: a novel of the Audubon Sugar School, syrup labels, festival programs, a cane-field afghan and the Étienne de Boré street sign.",
+     "body": [
+      "<ul><li>Blessing the cane crop, New Iberia, circa 1950. Photo reproduced from J. Carlyle Sitterson, <em>Sugar Country</em>. Lexington, University of Kentucky Press, 1953. Louisiana Collection HD9105 S5 c.1</li><li>John Earle Uhler. <em>Cane Juice</em>. New York, Grosset &amp; Dunlap, 1931. The main character in this novel is a young Cajun from Lafourche Parish who attends LSU in the late 1920s to study at the Audubon Sugar School. Louisiana Collection PS3541 H54 C35 1931</li><li>Longwood Plantation cane syrup label, early 20th century, and “Golden Gate” cane syrup tin, circa 1920. Loan, collection of W.H. “Bill” Lee, Baton Rouge</li><li>Louisiana Sugar Cane Festival and Fair programs, 1956 and 1976. Louisiana Collection S555 L685</li><li>“Raising cane” bumper sticker and Louisiana sugarcane poster, courtesy of the American Sugar Cane League</li><li>Panoramic view of cane fields, Southdown Plantation, Terrebonne Parish, 1920s. Photograph from the Henry C. Minor Estate Partnership Papers, Mss. 1509, Louisiana and Lower Mississippi Valley Collections</li><li>Photo of cane harvest near Reserve, 1948, showing workers windrowing cane cut by a mechanical harvester. Courtesy of the LSU Agricultural Center</li><li>Man shaping sugar into cones, 19th century. Hand-colored lithograph. In <em>Sugar: How It Grows and How It Is Made</em>. London, [1845?]. Rare SB231 S84. (The gallery opens on it.)</li><li>“Sugarcane Country” cotton afghan. Design created by Cile B. Schmidt, Ashland Plantation, Bunkie, in memory of her father, a lifelong sugarcane farmer. Loan, Cile B. Schmidt</li><li>Étienne de Boré Street sign, designating an LSU campus road off South Stadium Road. Sign supplied by Dr. Freddie Martin, Audubon Sugar Institute, courtesy of the Office of Parking, Traffic &amp; Transportation</li></ul>"
+     ]
+    },
+    {
+     "type": "picture",
+     "title": "Cane wagons",
+     "anchor": "cane-wagons",
+     "image": "sug14.jpg",
+     "caption": "<p><strong>Cane wagon advertisement.</strong><br>Reproduced from Louisiana Sugar Planters’ Association, <em>Year Book</em>, 1910. Louisiana Collection SB215 L6864</p>"
+    }
+   ]
+  },
+  {
+   "title": "About the Exhibition",
+   "anchor": "about",
+   "lead": "sugar-students-1902.jpg",
+   "focus": "center",
+   "lead_caption": "<p><strong>Sugar students at work, Audubon Park, November 1902.</strong> Shown in case 8.<br>LSU Photograph Collection, 1886–1926, University Archives, LSU Libraries Special Collections. <a href=\"https://louisianadigitallibrary.org/islandora/object/lsu-ua-uap:1091\">Louisiana Digital Library</a></p>",
+   "blocks": [
+    {
+     "type": "plate",
+     "title": "Bibliography",
+     "anchor": "bibliography",
+     "summary": "Twenty histories, studies and handbooks of Louisiana sugar and the Audubon Sugar School, from Noel Deerr’s Cane Sugar of 1911 to the bicentennial papers of 1995.",
+     "body": [
+      {
+       "style": "sources",
+       "html": "<ul><li>Becnel, Thomas. <em>Labor, Church, and the Sugar Establishment: Louisiana, 1887–1976</em>. Baton Rouge: Louisiana State University Press, 1980.</li><li>Billeaud, Ramon. “The Industry That Would Not Die: A Look at the 200 Year Old Louisiana Sugar Industry, Its History, Technology, Politics.” Paper presented at the Annual Meeting of the American Society of Sugar Cane Technologists, Louisiana Division, February 2, 1995. Thibodaux: American Sugar Cane League, 1995.</li><li>Breaux, R.D., J.J. Matherne, R.W. Millhollon, and R.D. Jackson. <em>Culture of Sugarcane for Sugar Production in the Mississippi Delta</em> (Agriculture Handbook No. 417). Washington: Agricultural Research Service, U.S. Department of Agriculture, 1972.</li><li>Coates, Charles E. “An Experiment in the Education of Chemical Engineers: The Twenty-Fifth Anniversary of the Audubon Sugar School.” Reprinted from the <em>Journal of Industrial and Engineering Chemistry</em>, vol. 9, no. 4 (April 1917).</li><li>Conrad, Glenn R., and Ray F. Lucas. <em>White Gold: A Brief History of the Louisiana Sugar Industry, 1795–1995</em>. Lafayette: Center for Louisiana Studies, University of Southwestern Louisiana, 1995.</li><li>Deerr, Noel. <em>Cane Sugar: A Text-Book on the Agriculture of the Sugar Cane, the Manufacture of Cane Sugar, and the Analysis of Sugar House Products</em>. Altrincham (Manchester): Norman Rodger, 1911.</li><li>Deerr, Noel. <em>The History of Sugar</em>. London: Chapman and Hall, 1949–50.</li><li>Feiger, E.A. “The Audubon Sugar School.” In <em>In the Land of Sugar Cane, 1946: Review and Pictorial of the Fifth Annual Louisiana Sugar Cane Festival and Fair</em>. New Iberia: Louisiana Sugar Cane Festival and Fair Association, 1947.</li><li>Galloway, J.H. <em>The Sugar Cane Industry: An Historical Geography from Its Origins to 1914</em>. Cambridge: Cambridge University Press, 1989.</li><li><em>Green Fields: Two Hundred Years of Louisiana Sugar</em>. Lafayette: Center for Louisiana Studies, University of Southwestern Louisiana, 1980.</li><li>Heitmann, John Alfred. <em>The Modernization of the Louisiana Sugar Industry, 1830–1910</em>. Baton Rouge: Louisiana State University Press, 1987.</li><li>Hugill, J.A.C., ed. <em>Sugar</em>. London: Cosmos Publications, 1949.</li><li><em>The Louisiana Sugar Industry</em>. Thibodaux: American Sugar Cane League, 1995.</li><li>Maier, Emile A. <em>A Story of Sugar Cane Machinery</em>. New Orleans: Sugar Journal, 1952.</li><li>Mintz, Sidney W. <em>Sweetness and Power: The Place of Sugar in Modern History</em>. New York: Viking, 1985.</li><li>“Over a Half Century of Sugar at LSU.” <em>LSU Alumni News</em>, v. 22, no. 10 (November 1946).</li><li>Richard, Charley. “200 Years of Progress in the Louisiana Sugar Industry: A Brief History.” Reprinted from <em>Sugar Journal</em>, February 1995.</li><li>Simon, E.C. <em>A Brief Discussion of the History of Sugar Cane: Its Culture, Breeding, Harvesting, Manufacturing and Products</em>. Baton Rouge: Louisiana Sugar Experiment Station, 1969.</li><li>Sitterson, J. Carlyle. <em>Sugar Country: The Cane Sugar Industry in the South, 1753–1950</em>. Lexington: University of Kentucky Press, 1953.</li><li><em>The Year Book of the Louisiana Sugar Cane Industry, 1939</em>. New Orleans: Sugar Journal, 1940.</li></ul>"
+      }
+     ]
+    },
+    {
+     "type": "plate",
+     "title": "Acknowledgments",
+     "anchor": "acknowledgments",
+     "summary": "The people and institutions who lent, photographed and advised, from the Audubon Sugar Institute and the Rural Life Museum to colleagues across the LSU Libraries.",
+     "body": [
+      "<p><em>The curators are grateful to the following people and institutions for assistance and cooperation in preparing the exhibition:</em></p><ul><li>Freddie Martin, Audubon Sugar Institute</li><li>Wade F. Faw, Sugarcane Specialist, Louisiana Cooperative Extension Service</li><li>John Dutton and David Floyd, LSU Rural Life Museum</li><li>John Wozniak, LSU Agricultural Center</li><li>Jim Zietz, LSU Public Relations</li><li>Cile B. Schmidt, Ashland Plantation, Bunkie</li><li>Jeffrey W. Hoy, LSU Dept. of Plant Pathology &amp; Crop Physiology</li><li>T. Eugene Reagan, LSU Dept. of Entomology</li><li>Mr. W.H. “Bill” Lee</li><li>Mr. Don Morrison</li><li>and the American Sugar Cane League.</li></ul>",
+      "<p><em>The curators also thank their (present and former) colleagues in the LSU Libraries for invaluable assistance:</em></p><ul><li>Judy Bolton, Head, Special Collections Public Services</li><li>Reni Zietz, Merle Suhayda, and Sissy Albertine, Special Collections/Image Resources</li><li>Mitchell Brown, Chemistry Library</li><li>David Wuolu and Colleen Wiseman, Electronic Reference, Middleton Library</li><li>Kim Tran, Acquisitions, Middleton Library</li><li>and Pat Havard, Access Services, Special Collections.</li></ul>"
+     ]
+    },
+    {
+     "type": "plate",
+     "title": "The Exhibition",
+     "anchor": "the-exhibition",
+     "summary": "Curated in 1995 by Christina Riquelmy and Debra Currie, mounted by Emily Robison; online since, its website made by Tatiana Shabelnik and Chuck Thomas and redesigned in 2002.",
+     "body": [
+      "<p>Exhibition curated by Christina Riquelmy (Special Collections Rare Book Cataloger) and Debra Currie (Reference Librarian, Middleton Library). Exhibition mounted by Emily Robison, assisted by Special Collections staff and student assistants.</p>",
+      "<p>The original website was created by Tatiana Shabelnik and Chuck Thomas with the assistance of Elaine Smyth; the 2002 revision was designed by Matt Mullenix, Special Collections Web Administrator. Special thanks to Mr. Jean-Guillaume Dumas for use of his sugar cane image in the production of that site.</p>",
+      "<p>This page (2026) keeps the 1995 text and the pictures of the online exhibition. Where the LSU Libraries hold a better scan of the same item, it is used instead: the levee, the experiment station laboratory and the 1907 harvester come from the Louisiana Digital Library. A few items the cases showed without a picture online are added from the same sources: the 1905 kettle, the Audubon Sugar Factory in 1926, the sugar students of 1902, the chemistry laboratory of 1899, the first seedling cane and the Thornton cane storage derrick.</p>"
+     ]
+    }
+   ]
+  }
+ ]
+}

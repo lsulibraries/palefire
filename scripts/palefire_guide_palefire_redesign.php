@@ -1085,6 +1085,13 @@ HTML),
 <li>Before, the covers sat over the ibis picture, where the citations faded into it. Any gallery made only of reading lists can be a wall the same way, by setting its Display to Wall.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Sugar at LSU comes to v2', <<<'HTML'
+<ul>
+<li>Sugar at LSU: A Chronology, the 1995 exhibition for two hundred years of Louisiana sugar, is drafted as an unpublished v2 exhibition: seven galleries from the Introduction to Today and Tomorrow, Also on Display and About the Exhibition, every one a wall with a lead picture.</li>
+<li>Each of the thirteen cases’ essays hangs as a text plate with a short summary and a list of the case’s other items, followed by its pictures.</li>
+<li>Ten pictures are new or sharper copies from the Louisiana Digital Library and the Special Collections drive, among them the 1905 photograph of the first sugar kettle on the cover, the Audubon Sugar Factory in 1926 and a Mugnier glass negative of the New Orleans levee and refinery.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: New from Old Natchez comes to v2', <<<'HTML'
 <ul>
 <li>New from Old Natchez, the 2002 exhibition of manuscripts about Natchez that Special Collections had just acquired, is drafted as an unpublished v2 exhibition: an Introduction, a gallery for each of the eight collections and About the Exhibition, every one a wall with a lead picture.</li>

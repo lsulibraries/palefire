@@ -4,7 +4,7 @@
  * @file
  * Guide page: "Special Collections Exhibitions", every change made to the text,
  * layout and images of the Special Collections online exhibitions (AVES,
- * Audubon, Occult, Union Art Gallery, Free People of Color, New from Old Natchez) when they moved to Palefire, and the
+ * Audubon, Occult, Union Art Gallery, Free People of Color, New from Old Natchez, Sugar at LSU) when they moved to Palefire, and the
  * open proposals for AVES's biographies,
  * for curators to check: what was corrected (old → new), what to verify,
  * and what was written new. As a Modular page in guide mode. Run
@@ -166,6 +166,7 @@ $section('How the exhibitions were moved', [
 <li><strong>From Red Stick to River Capital</strong> (1999) was a set of static pages at /sites/all/files/sc/exhibitions/e-exhibits/redstick, later copied to Showcase pages under /brhistory. Its text comes from the Showcase pages, checked against the static pages.</li>
 <li><strong>The Baton Rouge Bus Boycott</strong> (1998, revised 2002) was a set of Showcase pages under /boycott, linking to the 2002 static site for its clips and interviews. Its text comes from the Showcase pages, checked against the static pages. It is an oral history exhibition, so it lives at /v2/oralhistory/exhibitions/boycott.</li>
 <li><strong>Blue and Gray for Boys and Girls</strong> (2012) was fifteen pages under /BlueandGrey. Five of them no longer open, so their text comes from the exhibition’s own 2012 label files, which match the pages that still open.</li>
+<li><strong>Sugar at LSU: A Chronology</strong> (1995, revised 2002) was a set of Showcase pages under /sugar, with the same pictures at /sites/all/files/sc/exhibitions/e-exhibits/sugar. Its text comes from the Showcase pages.</li>
 </ul>
 <p>Each now lives at /v2/special/exhibitions/&lt;name&gt;, as one page of galleries. Each is built by a script from a data file in the theme (scripts/data/&lt;name&gt;.json), so it can be rebuilt, and every correction is made in the data file as well as on the page.</p>
 <h3>Text</h3>
@@ -822,6 +823,50 @@ $section('Louisiana for Bibliophiles: A History of Reading in the Bayou State', 
 </li></ul>
 <h3>New wording to check</h3>
 <ul><li>The 45 plate headings and summaries, the tiles’ short titles, the cover label and the 74 alt texts.
+</li></ul>
+HTML),
+]);
+
+$section('Sugar at LSU: A Chronology', [
+  $text(NULL, <<<'HTML'
+<p>Built at <a href="/v2/special/exhibitions/sugar">/v2/special/exhibitions/sugar</a>, not published yet.</p>
+<p>Exhibition: Sugar at LSU: A Chronology, LSU Libraries Special Collections, 1995, for the two hundredth anniversary of commercial sugar production in Louisiana. Curated by Christina Riquelmy and Debra Currie, mounted by Emily Robison. Website by Tatiana Shabelnik and Chuck Thomas, with Elaine Smyth; revised in 2002 by Matt Mullenix.<br>Old site: the Showcase pages /sugar/introduction and nodes 275–281 (History to 1700s, The 1800s, 1900s, Today and Tomorrow, Additional Information, Bibliography, Acknowledgements), with 29 pictures at 600px. The text is from the Showcase pages.</p>
+<h3>Changed on the page</h3>
+<ul><li>Seven galleries, all walls with a lead picture: Introduction; History to the 1700s; The 1800s; The 1900s; Today and Tomorrow; Also on Display (was Additional Information); About the Exhibition (the bibliography, the acknowledgements and the credits).
+</li><li>Each of the thirteen cases’ essays is a text plate with a heading and a Summary, its paragraphs unchanged, then the case’s other items as an “Also in case N” list. The case’s pictures hang after it as entries with short titles.
+</li><li>Pictures: 36. Ten come from better copies: nine from Louisiana Digital Library masters (the Mugnier glass negative of the levee and refinery, the 1899 laboratory, the 1907 cane harvester, and six items the cases listed but the old site didn’t picture: the 1905 kettle on the cover, the 1926 Audubon Sugar Factory, the 1970 kettle marker, the first seedling of 1907, sugar students in 1902 and the 1899 chemical laboratory), and the Thornton cane derrick from a 2013 exhibition scan on the R: drive. The other 26 are the old 600px files; no rescans were found. Every lead and the cover is 1280×720 or larger except Also on Display’s, the old 447×600 man shaping sugar cones, which is shown whole (framed over a blur of itself) rather than enlarged.
+</li><li>The text is 1995’s, so the credit line says so, and its “today” and “this century” read in time.
+</li></ul>
+<h3>Corrected</h3>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>Etienne de Bore</del></td><td><ins>Étienne de Boré</ins> <em>as on the 1970 marker</em></td></tr>
+<tr><td><del>Thorton Cane Storage</del></td><td><ins>Thornton</ins> <em>as written on the photograph</em></td></tr>
+<tr><td><del>William G. Taggert</del></td><td><ins>Taggart</ins> <em>as on the 1907 seedling photograph</em></td></tr>
+<tr><td><del>Deer, Noel</del></td><td><ins>Deerr, Noel</ins> <em>the bibliography, twice</em></td></tr>
+<tr><td><del>frost-resistance, and heartiness</del></td><td><ins>hardiness</ins></td></tr>
+<tr><td><del>Solenopsis invecta</del></td><td><ins><em>Solenopsis invicta</em></ins></td></tr>
+<tr><td><del>Eutheola rugiceps</del></td><td><ins><em>Euetheola rugiceps</em></ins></td></tr>
+<tr><td><del>Sugar-Cane Disease</del></td><td><ins>Sugar-Cane Diseases</ins> <em>Koike’s title</em></td></tr>
+<tr><td><del>Debbie Currie</del></td><td><ins>Debra Currie</ins> <em>as in the Acknowledgements</em></td></tr>
+<tr><td><del>1500’s, 1700’s, 1790’s</del></td><td><ins>1500s, 1700s, 1790s</ins> <em>every decade</em></td></tr>
+</tbody>
+</table>
+<ul><li>French accents restored in the bibliography and case lists (précis, canne à sucre, raisonné, Neufchâtel, Mémoires, Amérique, Traité, Dutrône, Baumé, Espérance).
+</li><li>Small fixes in spacing and punctuation, double hyphens as em dashes, titles in italics, en dashes in ranges; sug9b’s caption no longer links to its own image.
+</li><li>The full list is in the theme’s docs/special-exhibition-corrections/sugar.md.
+</li></ul>
+<h3>To verify</h3>
+<p>Left as written:</p>
+<ul><li>“Dr. Clayton C. Mooreland”: may be Moreland.
+</li><li>The present-tense figures (80,000 new varieties a year, two refineries left after Supreme closed) are 1995’s.
+</li><li>Two captions name more views than are pictured: the experiment station with the 1894 laboratory interior, and the plantation replica with its kettles and interior.
+</li><li>Photographers’ credits (Jim Zietz, John Wozniak, Joey Quebedeaux, Jeff Hoy) are as the old pages gave them.
+</li></ul>
+<h3>New wording to check</h3>
+<ul><li>The title split (“Sugar at LSU” / “A Chronology”), the credit line and the cover’s object label.
+</li><li>The gallery title changes, the plate titles and Summaries, the entry titles, the lead captions, the notes in brackets in the case lists, and the alt text for every picture.
 </li></ul>
 HTML),
 ]);
