@@ -974,10 +974,6 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   }
 }
 
-.pf-exhibit-wall__contents:has(> [hidden]) {
-  display: none;
-}
-
 .pf-exhibit-opener__head {
   display: flex;
   flex-wrap: wrap;

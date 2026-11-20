@@ -3,7 +3,7 @@
 /**
  * @file
  * AVES: American spelling in its pictures' alt text ("Colour plate" is
- * "Color plate").
+ * "Color plate"): figures, gallery cover images, any image or media field.
  *
  *   drush php:script scripts/palefire_exhibit_aves_alt_spelling.php
  *   drush php:script scripts/palefire_exhibit_aves_alt_spelling.php -- apply=1
@@ -53,29 +53,36 @@ $fix = fn (string $alt) => (string) preg_replace('/\b([Cc])olour/u', '$1olor', $
 $media = [];
 $page_changed = FALSE;
 
-// Every figure on the page, however deep: its image's alt, on the media
-// item or on the figure itself.
+// Every picture on the page, however deep: a figure's image, a gallery's
+// cover image, any image or media field. Its alt is on the media item, or
+// on the paragraph's own image field.
 $walk = function (FieldableEntityInterface $entity) use (&$walk, $fix, $say, &$media, &$page_changed): void {
-  if ($entity->hasField('field_figure_image') && !$entity->get('field_figure_image')->isEmpty()) {
-    $item = $entity->get('field_figure_image')->first();
-    $target = $item->entity;
-    if ($target instanceof MediaInterface) {
-      $source = $target->getSource()->getConfiguration()['source_field'] ?? NULL;
-      if ($source && $target->hasField($source) && !$target->get($source)->isEmpty()) {
-        $alt = (string) $target->get($source)->alt;
-        if ($fix($alt) !== $alt && !isset($media[$target->id()])) {
-          $media[$target->id()] = $target;
-          $say('Media ' . $target->id() . ': ' . $alt . ' => ' . $fix($alt));
+  foreach ($entity->getFieldDefinitions() as $name => $definition) {
+    $type = $definition->getType();
+    $media_ref = $type === 'entity_reference' && $definition->getSetting('target_type') === 'media';
+    if (($type !== 'image' && !$media_ref) || $entity->get($name)->isEmpty()) {
+      continue;
+    }
+    foreach ($entity->get($name) as $item) {
+      $target = $item->entity;
+      if ($target instanceof MediaInterface) {
+        $source = $target->getSource()->getConfiguration()['source_field'] ?? NULL;
+        if ($source && $target->hasField($source) && !$target->get($source)->isEmpty()) {
+          $alt = (string) $target->get($source)->alt;
+          if ($fix($alt) !== $alt && !isset($media[$target->id()])) {
+            $media[$target->id()] = $target;
+            $say('Media ' . $target->id() . ': ' . $alt . ' => ' . $fix($alt));
+          }
         }
       }
-    }
-    elseif (isset($item->alt) && $fix((string) $item->alt) !== (string) $item->alt) {
-      $say('Figure ' . $entity->id() . ': ' . $item->alt . ' => ' . $fix((string) $item->alt));
-      $item->alt = $fix((string) $item->alt);
-      if (method_exists($entity, 'setNeedsSave')) {
-        $entity->setNeedsSave(TRUE);
+      elseif ($type === 'image' && $fix((string) $item->alt) !== (string) $item->alt) {
+        $say($entity->bundle() . ' ' . $entity->id() . ': ' . $item->alt . ' => ' . $fix((string) $item->alt));
+        $item->alt = $fix((string) $item->alt);
+        if (method_exists($entity, 'setNeedsSave')) {
+          $entity->setNeedsSave(TRUE);
+        }
+        $page_changed = TRUE;
       }
-      $page_changed = TRUE;
     }
   }
   foreach ($entity->getFieldDefinitions() as $name => $definition) {

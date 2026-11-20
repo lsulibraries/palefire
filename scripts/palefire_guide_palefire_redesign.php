@@ -944,6 +944,7 @@ HTML),
 <li>In every exhibition, a long opening essay now folds at the foot of its first screen with Read more, and so does any long text in a gallery. Sources shows its first twelve, with Show all 177 sources; a citation still takes you straight to its source.</li>
 <li>Biographies, a typed list of names, is now a timeline of the lives in the order they were born, each name opening its biography. Life dates move out of the headings into each entry’s Date, so links to the old addresses still work.</li>
 <li>Most people in AVES are shown by a plate from their own book, which read like a portrait of them. Each of those tiles now says which book it comes from (“from Birds of Jamaica”) under the person’s name, taken from the picture’s caption. Alt text in AVES now spells color the American way.</li>
+<li>A wall’s line of facts (“10 entries”) no longer ends in a Contents button, which read as the contents of those entries. The exhibition’s contents are still a click away in the rail.</li>
 </ul>
 HTML),
   $text('Fri Nov 20: A clip’s biography behind a button', <<<'HTML'

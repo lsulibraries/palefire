@@ -65,9 +65,11 @@
     wall ? 'pf-gallery--wall',
   ]
 %}
-{# Every gallery's way to the exhibition's contents without scrolling back:
-   by its entry links or its wall's facts, the rail's panel opening beside
-   it (js/modular-toc.js wires [data-pf-landing-contents] and shows it). #}
+{# A story gallery's way to the exhibition's contents without scrolling
+   back, beside its entry links: the rail's panel opening beside it
+   (js/modular-toc.js wires [data-pf-landing-contents] and shows it). A
+   wall's facts don't carry it: beside "10 entries" it read as the
+   entries' contents. #}
 {% set contents_button %}
   <button type="button" class="pf-exhibit-contents" data-pf-landing-contents hidden>
     <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5.5 4h8M5.5 8h8M5.5 12h8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="2.5" cy="4" r="1" fill="currentColor"/><circle cx="2.5" cy="8" r="1" fill="currentColor"/><circle cx="2.5" cy="12" r="1" fill="currentColor"/></svg>
@@ -205,7 +207,6 @@
       {% for stat in wall.stats %}
         <li>{{ stat }}</li>
       {% endfor %}
-      <li class="pf-exhibit-wall__contents">{{ contents_button }}</li>
     </ul>
   {% elseif opener == 'cover' %}
     {# A cover's entry links under its title, on the image. #}
