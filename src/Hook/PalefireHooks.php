@@ -827,6 +827,12 @@ class PalefireHooks {
       // The whole screen at any width. The page's first image: preloaded
       // from <head> unless the address opens a gallery (below).
       $cover = $item ? _palefire_exhibit_image($item, '100vw', $cache, TRUE) : NULL;
+      // "Frame the cover" (field_exhibit_cover_framed): a small or soft
+      // image shown whole at its own scale over a blurred wash of itself,
+      // not blown up to fill the screen (exhibit-cover.html.twig).
+      if ($cover) {
+        $cover['framed'] = $node->hasField('field_exhibit_cover_framed') && (bool) $node->get('field_exhibit_cover_framed')->value;
+      }
     }
 
     // Title style: "sans" (the default, also when the field is empty or

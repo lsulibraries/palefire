@@ -4,6 +4,7 @@
   "credit": "<p>A listening station of the T. Harry Williams Center for Oral History, LSU Libraries, from the History of Graphic Design in South Louisiana project. Curated by Nancy Sharon Collins, with Jennifer A. Cramer. Made possible by the AIGA Katrina Relief Grant program, AIGA New Orleans, the Louisiana Cultural Economy Foundation, and Loyola University New Orleans Special Collections and Archives.</p>",
   "intro": "<p>History seems to know a lot about the sounds and tastes of south Louisiana, through jazz, Mardi Gras, and great food. But what does it look like in terms of visual culture?</p><p>Meet the fathers and daughters of local pop culture. If you watched the TV show <em>Mad Men</em>, this project preserved the real thing: art directors, illustrators, printers, and designers who shaped the look of New Orleans and south Louisiana, in their own words.</p>",
   "cover": "donsmith.jpg",
+  "cover_framed": true,
   "year": 2019,
   "physical_note": "",
   "source": "https://lib.lsu.edu/sites/all/files/oralhistory/presentations/graphicdesign/c1.html",
@@ -12,19 +13,27 @@
       "title": "The Interviews",
       "anchor": "interviews",
       "category": "",
-      "lead": "borne.jpg",
+      "lead": null,
       "display": "wall",
       "focus": "center",
-      "lead_caption": "<p>Engraved letterhead for Mrs. I. J. Borne, Vice President, Lafourche National Bank of Thibodaux.</p>",
+      "lead_caption": "",
       "blocks": [
         {
+          "type": "text",
+          "body": "<p>Ten voices from south Louisiana’s commercial art world: art directors, illustrators, designers, an ad man, a paper salesman, and a banker with a mimeograph. Each picture opens its clip, with the transcript and the speaker’s biography.</p>"
+        },
+        {
           "type": "entry",
-          "title": "Mary Borne",
+          "title": "Business school in the Great Depression",
           "anchor": "mary-borne",
           "bio": "<p>Mary Serena Gibbons, known as Miss Weenie, was born in 1916 in the countryside near Baton Rouge. Her lifelong nickname came from her brother, who called her “teeny weeny” when she was a baby. Later, when she was four, he taught her the alphabet and sums. Understanding arithmetic served her well throughout her life, and in school math became her favorite subject.</p><p>As far as she knows, she became Louisiana’s first woman banker. She was the first female banker at the First National Bank of Thibodaux and worked there for fifty years. Mrs. Borne was included in the History of Graphic Design in South Louisiana project because she was very proud of having purchased one of the first mimeograph machines in Louisiana. She saw its money-making potential: with it, she could offer cheap printing to small organizations and church groups that otherwise had no budget to print their newsletters, flyers, and announcements.</p><p>Mimeograph machines were perhaps the first office-size printers marketed to small and medium-sized businesses. Byron Fowler in Alexandria, Louisiana, was the first distributor to sell them in the state.</p><p>This recording is from her 2010 oral history session, when she was 94 years old; her quiet voice reflects her age at the time.</p>",
           "published": true,
           "source": "c1.html",
           "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Mary Borne, known as Miss Weenie, tells how her father paid for her education during the Great Depression. She was 94 when this was recorded in 2010, and her quiet voice reflects her age.</p>"
+            },
             {
               "type": "figure",
               "image": "borne.jpg",
@@ -36,19 +45,23 @@
               "type": "audio",
               "title": "Business school in the Great Depression",
               "file": "mary_borne_soundbite.m4a",
-              "credit": "Mary Borne, 2010",
+              "credit": "Mary Borne, interviewed in 2010",
               "transcript": "<p><strong>INTERVIEWER:</strong> And after you graduated from twelfth grade, what did you do?</p><p><strong>MARY BORNE:</strong> I went to . . . When I graduated there was a big depression, and I knew my dad had taken all these others through college, and I knew that it was going to be a hardship. He and Mama were getting older then. So I saw in the paper this business school for just a hundred dollars. So I asked my daddy if I could go there, and he said, “Sure, but I’m going to have to take you the first day, to see if they’ll take ten dollars a month, because there’s really not much cash.” It was a big depression at that time.</p>"
             }
           ]
         },
         {
           "type": "entry",
-          "title": "Tom Varisco",
+          "title": "“My art guy”: designing political campaigns",
           "anchor": "tom-varisco",
           "bio": "<p>Tom Varisco, originally from Lafayette, Louisiana, calls himself a “design director.” Tom Varisco Designs is a well-known regional branding company, opened in New Orleans more than thirty years before this 2010 recording. Two examples of his iconic work are the logo of the New Orleans Jazz &amp; Heritage Festival and Foundation, Inc., and the photographic essay <em>Spoiled</em>. This award-winning publication documented the discarded refrigerators that populated New Orleans after Hurricane Katrina. Varisco has been profiled in <em>Communication Arts</em>, <em>How</em>, <em>Publish</em>, and <em>Photo District News</em> and has judged many design competitions.</p><p>He received the first Fellow Award from the New Orleans chapter of the American Institute of Graphic Arts (AIGA).</p><p>In his interview he describes the variety of projects and campaigns that helped him open his studio, his love for working in film, and how to have a successful relationship with a client in today’s fast-paced, technology-based society. Though he has no one favorite movie, he loves <em>8½</em>, <em>Annie Hall</em>, <em>Citizen Kane</em>, and <em>The Godfather</em> I and II.</p><p><a href=\"https://www.tomvariscodesigns.com/\">tomvariscodesigns.com</a></p>",
           "published": true,
           "source": "c2.html",
           "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Tom Varisco, originally from Lafayette, calls himself a “design director.” In this 2010 recording he describes the projects and political campaigns that helped him open his studio in New Orleans more than thirty years earlier.</p>"
+            },
             {
               "type": "figure",
               "image": "varisco.jpg",
@@ -60,19 +73,23 @@
               "type": "audio",
               "title": "“My art guy”: designing political campaigns",
               "file": "tom_varisco_soundbite.m4a",
-              "credit": "Tom Varisco, 2010",
+              "credit": "Tom Varisco, interviewed in 2010",
               "transcript": "<p>Someone from, I think, the Institute of Politics at Loyola [University] called me originally. It might have been [Ed Redwink?] when I moved here. When I was in Houston, the guy I worked for . . . actually did political campaigns, and he liked them. And I honestly at that time, I didn’t care if someone was a Republican or a Democrat, you know. I just thought the idea of actually designing something and having it up was a pretty fun thing to do. You design a billboard, it’s up immediately. You take part in a TV spot and people respond to it immediately. And there’s polling done, and so they say, “Okay, we love the candidate.” Immediately he gets better polling numbers, and you think we had something to do with that. And so the idea of actually having that sort of power as the designer, when most people thought designers—and still do a lot of times think people who are designers are the ones who do sketches on the corner. You know, they are not. In fact, I had one candidate, Sidney Barthelemy, who was the mayor of New Orleans, didn’t know how to refer to me, and we were being paid pretty well. There was a team of three or four of us who were doing all of his work, and he introduced me at this huge gathering of fundraising. People that were going to take part in the campaign, and he got to me, and he said, “This is Tom Varisco, my art guy.”</p>"
             }
           ]
         },
         {
           "type": "entry",
-          "title": "Don Smith",
+          "title": "“I want to work here”",
           "anchor": "don-smith",
           "bio": "<p>Don C. (Christopher) Smith, painter, sculptor, and art director, was born in New Orleans in 1929.</p><p>When he was about twelve, he drew a P-38, a World War II fighter plane, on his school loose-leaf binder. He knew he could be a successful artist when his fellow students wanted him to draw the fighter plane on their binders, too.</p><p>He attended Tulane University and then convinced his father to pay for enrollment in the Famous Artists School, a popular mail-order course of the twentieth century advertised in the back of comic books. Smith attributes his accomplishments in the fine and commercial art fields to this experience. In 1954 he talked his way into an entry-level job at the Fitzgerald Agency, where he worked until retirement, rising over time to the title of Art Director.</p><p>Smith is an accomplished artist in a wide range of mediums, including watercolor painting and cast bronze sculpture.</p><p>In addition to his fine art and long advertising career, Smith is particularly proud of his illustrations for <em>Western Horseman</em> magazine, such as the February 1962 cover illustration “Waterhole.” This realistic, full-page cover art shows a cowboy riding a horse through a western watering hole. Smith was fond of painting Western motifs, painting commissions for <em>Western Horseman</em> as early as 1957.</p>",
           "published": true,
           "source": "c3.html",
           "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Don Smith recalls what drove him to take an entry-level job at the Fitzgerald Agency, where he worked until retirement and rose to art director.</p>"
+            },
             {
               "type": "figure",
               "image": "donsmith.jpg",
@@ -84,19 +101,23 @@
               "type": "audio",
               "title": "“I want to work here”",
               "file": "don_smith_i_want_to_work_here.m4a",
-              "credit": "Don Smith",
+              "credit": "Don Smith, interviewed for this project",
               "transcript": "<p><strong>DON SMITH:</strong> I said, look, I’m a college graduate, but I’m willing to sweep the floors. I want to work here.</p>"
             }
           ]
         },
         {
           "type": "entry",
-          "title": "Kenny Harrison",
+          "title": "Failing every subject except art",
           "anchor": "kenny-harrison",
           "bio": "<p>Harrison talks about the excitement of working with other talented artists. Over time, he developed many techniques through thousands of assignments, and he credits his background in drawing with his ability to adapt to the computer.</p><p>He emphasizes the importance of perseverance for up-and-coming artists: to expect many rejections, the luck factor, and meeting the right people.</p><p>At the time of this recording, he was the Features Design Editor and Illustrator at <em>The Times-Picayune</em>. Harrison was part of the newspaper’s 1997 and 2006 Pulitzer Prize–winning teams, each receiving the Gold Medal for Public Service.</p>",
           "published": true,
           "source": "c4.html",
           "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Kenny Harrison recounts his love of art, which began in elementary school.</p>"
+            },
             {
               "type": "figure",
               "image": "harrisonjpg2.jpg",
@@ -108,19 +129,23 @@
               "type": "audio",
               "title": "Failing every subject except art",
               "file": "kenny_harrison_soundbite.m4a",
-              "credit": "Kenny Harrison",
+              "credit": "Kenny Harrison, interviewed for this project",
               "transcript": "<p><strong>KENNY HARRISON:</strong> Went to the School of Visual Arts in Manhattan, studying first fine arts. Then I switched over to illustration. I never did graduate. I started working while I was in school.</p><p><strong>INTERVIEWER:</strong> So that’s from elementary school, you were in like an arts-geared school . . . specialized school?</p><p><strong>HARRISON:</strong> Well, that was college, School of Visual Arts, but elementary school, I was interested in art. Forever. I have my third grade report card at my desk where I failed every subject except for art.</p><p><strong>INTERVIEWER:</strong> Except for art.</p><p><strong>HARRISON:</strong> Yeah, and I got left back in third grade. I’m completely dyslexic. And school was kind of hard, but art wasn’t, so I focused on what my strengths were.</p>"
             }
           ]
         },
         {
           "type": "entry",
-          "title": "Gus Levy",
+          "title": "Retouching for the newsroom",
           "anchor": "gus-levy",
           "bio": "<p>Gus Daniel Levy, a native of New Orleans born in 1923, spent most of his early life Uptown, raised by his grandparents, aunts, and uncles. His father was a frustrated artist.</p><p>In high school, Levy took art lessons from Joseph Smith at Fortier High School from 1936 to 1940. Smith was an excellent artist who took Levy under his wing during the Great Depression.</p><p>He worked for <em>The Times-Picayune</em> for five years as a layout artist and night retouch artist, his duties divided between the advertising, promotion, and editorial art staffs. He usually worked the 2 p.m. to 10 p.m. shift and frequented clubs and bars in the French Quarter. He did retouching with an airbrush and gray and white paint, and a lot of layout, paste-ups, and montages, cutting and pasting images by hand. “Layout” consisted of a pencil diagram with cast type; he would align characters (set type) by pasting them together, working closely with a designated compositor. Levy also worked as an illustrator during his time there.</p><p>Levy became art director at the Godwin Advertising firm in New Orleans, designing for industrial and commercial clients like banks and insurance companies. After several years, he left to work for himself and teamed up with his wife, who was also working for an advertising firm. Their big clients included the Bank of New Orleans and the First National Bank of Commerce.</p><p>He worked on cartoon strips such as <em>Mike and Joe</em> and <em>Crack Backs</em>. His competitors included Ted Drell, Charles Dolce, Charles Steinball, George Mouton, and Harry Marrone. For a brief time he was president of ADDA, the Art Directors and Designers Association of New Orleans, which grew out of a desire to further its members’ interest in design.</p>",
           "published": true,
           "source": "c5.html",
           "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Gus Levy remembers the afternoon-to-night shift in the art department of the Times-Picayune, where he retouched photographs with an airbrush, cut and pasted layouts by hand, and more than once retouched the eyes of the dead open for a front-page mugshot.</p>"
+            },
             {
               "type": "figure",
               "image": "upton_guslevy_01.jpg",
@@ -132,7 +157,7 @@
               "type": "audio",
               "title": "Retouching for the newsroom",
               "file": "gus_levy_newsroom.m4a",
-              "credit": "Gus Levy",
+              "credit": "Gus Levy, interviewed for this project",
               "transcript": "<p>I went to work at two in the afternoon at the [Times-]Picayune and worked for Rusty Collier, the staff artist in charge. We had about a four-person art department there. And she was wonderful. She defended me when I missed deadlines and kept me from getting fired on several occasions. But it was a fun job because I worked with the news staff. I could remember on a couple of occasions, in order to get a mugshot of a deceased on the cover, I had to open the deceased eyes. The photographers would bring me the photograph and I would retouch the eyes open, so that it looked . . . the person looked alive. Well, you couldn’t do that in these days.</p>"
             },
             {
@@ -174,12 +199,16 @@
         },
         {
           "type": "entry",
-          "title": "Michael Deas",
+          "title": "Faster and cheaper wins: the move to digital",
           "anchor": "michael-deas",
           "bio": "<p>Michael Deas was born in New Orleans, where he lives today.</p><p>Deas is a self-taught illustrator with a distinctive, personal approach to drawing. His painting and drawing methods do not rely on digital technology; he finds the process of working by hand meditative and creative. For his commercial illustration and portraiture, he works in the laborious and highly demanding medium of oil paint.</p><p>His hyper-realistic style is evident in his work for the United States Postal Service. Deas has illustrated several famous postage stamps: Marilyn Monroe, Humphrey Bogart, and Tennessee Williams, to name a few.</p><p>Perhaps his most famous image is the original painting still used in a current version of the Columbia Pictures logo. The highly recognizable woman in a toga, framed by our very recognizable Gulf Coast and Lake Pontchartrain clouds, is iconic.</p><p>Deas was the subject of a one-artist exhibition at the Ogden Museum of Southern Art in New Orleans. He is also considered a leading authority on the poet Edgar Allan Poe.</p>",
           "published": true,
           "source": "c6.html",
           "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Michael Deas, who still paints by hand, shares his view of the move to digital media.</p>"
+            },
             {
               "type": "figure",
               "image": "dean.jpg",
@@ -191,19 +220,23 @@
               "type": "audio",
               "title": "Faster and cheaper wins: the move to digital",
               "file": "michael_deas_soundbite.m4a",
-              "credit": "Michael Deas",
+              "credit": "Michael Deas, interviewed for this project",
               "transcript": "<p><strong>INTERVIEWER:</strong> Digital, yes. [laughs]</p><p><strong>MICHAEL DEAS:</strong> What about it?</p><p><strong>INTERVIEWER:</strong> Yes, what happened? What’s your perspective of what happened there, when the computer thing came on?</p><p><strong>DEAS:</strong> To be honest, it’s a combination of something new and just good old-fashioned capitalism. It caught on because it was a new medium. It was a new media to work, new medium to work in. And so people embraced the new because they were curious about it. But it’s gonna not only be embraced, it’s gonna stay put, because it’s basic capitalism, which is that it’s faster. It’s cheaper. And if you look at anything in history, anything that is faster and cheaper wins.</p>"
             }
           ]
         },
         {
           "type": "entry",
-          "title": "Justin Shiels",
+          "title": "Clashing stripes and Andy Warhol",
           "anchor": "justin-shiels",
           "bio": "<p>Justin Shiels was born in 1985 in Memphis, Tennessee. He moved to New Orleans to attend Loyola University and graduated in 2007, majoring in graphic design with a concentration in video. He and his sister were raised by a single mother, and he chose a Jesuit university because his sister had also attended one.</p><p>As a child, he wrote stories, drew, and made comic books. His sister taught him to draw during church, starting with drawings of girls in dresses. Their church was Southern Baptist, but not traditional: it was pro-gay and tolerant.</p><p>Shiels’s identity as a Black man is integral to his work, and he loves to show diversity and minorities in his art. His biggest influence was Andy Warhol, because he made the mundane awesome. Other influences include Basquiat, Milton Glaser, and Saul Bass.</p><p>He likes to show things in the clearest way rather than lying to the customer. Shiels explains his process of designing for a client, and the problems of working with clients who don’t understand that content drives design. His message is that people are immensely more powerful than they think, and that the world is changing so that people of his generation can have a positive impact.</p><p><a href=\"https://justinshiels.com/\">justinshiels.com</a></p>",
           "published": true,
           "source": "c7.html",
           "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Justin Shiels shares his earliest memory of fashion, stripes worn against stripes, and the influence of Andy Warhol.</p>"
+            },
             {
               "type": "figure",
               "image": "justin.jpg",
@@ -215,26 +248,30 @@
               "type": "audio",
               "title": "Stripes against stripes",
               "file": "justin_shiel_stripes.m4a",
-              "credit": "Justin Shiels",
+              "credit": "Justin Shiels, interviewed for this project",
               "transcript": "<p>My earliest memory as a child . . . I can remember . . . my mom let me pick out my own clothes. When I was little, really young. She gave me a pair of pants that had stripes, vertical stripes . . . and I had a shirt that had horizontal stripes. I always wanted to wear them together. That was my favorite thing, and I guess that’s a fashion faux pas, but I thought it was so fresh the way, like . . . I don’t know . . . the stripes would go against each other.</p>"
             },
             {
               "type": "audio",
               "title": "Andy Warhol",
               "file": "justin_shiel_warhol.m4a",
-              "credit": "Justin Shiels",
+              "credit": "Justin Shiels, interviewed for this project",
               "transcript": "<p>My biggest influence would have to be Andy Warhol. He’s a big asshole, but in general he just had this ability to make the mundane awesome. And I think that’s like . . . so dope, because that’s maybe at the heart of my work. Appreciating the normal person and parts of life that are often overlooked.</p>"
             }
           ]
         },
         {
           "type": "entry",
-          "title": "Kathy Cain and Paulette Hurdlik",
+          "title": "Designers are problem solvers",
           "anchor": "kathy-cain-and-paulette-hurdlik",
           "bio": "<p>Kathy Cain and Paulette Hurdlik of Zehno Cross-Media Communications were recorded in December 2009. To their knowledge, theirs was the first female-run design studio in New Orleans. Paulette has since retired.</p><p>They opened shop around 1984 as Design Partners, a name chosen to reflect the importance of partnering with a client, a notion that holds throughout the recording. A false early rumor was that they were a lesbian couple.</p><p>Paulette was from Minnesota and Kathy is from New Orleans. They have opposite personalities but share a common belief that money is not their business’s driving force. Paulette wanted to name the company Blonde Ambition so she could write off hair dye.</p><p>Kathy loved the physical process of making, while Paulette found it tedious. A favorite interview question for potential hires was what percent of design is art and what percent engineering. The correct answer: at least 80 percent should be engineering. Design is problem-solving, they say.</p><p>Accounts were evaluated annually “by profit and how much we like them,” and the goal was to retire one or two clients a year. At the time of the recording, Zehno was keeping clients longer than cookie-cutter firms, handled print, web, and video work, and had a dozen workers and 6,000 square feet of office space. Asked about the green movement, they said they would be doing less print and more web, and that print was becoming a luxury item.</p><p>Paulette and Kathy became co-presidents of ADDA and led it from 1985 to the early 1990s. AIGA New Orleans was chartered in 1997, and ADDA closed.</p><p><a href=\"https://zehno.com/\">zehno.com</a></p>",
           "published": true,
           "source": "c8.html",
           "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Kathy Cain and Paulette Hurdlik, who ran the first female-run design studio in New Orleans, on their favorite question for a new designer: how much of design is engineering, and how much is art.</p>"
+            },
             {
               "type": "figure",
               "image": "kathy.jpg",
@@ -246,19 +283,23 @@
               "type": "audio",
               "title": "Designers are problem solvers",
               "file": "kathy_cain_paulette_hurdlik_zehno.m4a",
-              "credit": "Kathy Cain and Paulette Hurdlik, 2009",
+              "credit": "Kathy Cain and Paulette Hurdlik, interviewed in 2009",
               "transcript": "<p><strong>PAULETTE HURDLIK:</strong> You know, we have an interview question that we still use and that we used way back then, and it is, “What would you say the percentage of engineer and the percentage of art is in being a designer?” And the correct answer for us, based on what you just heard Kathy describe, is . . . is it’s got to be at least 80 percent engineering. And if anyone comes in here and says, “Oh, like a hundred percent art,” I mean, forget it. I mean, that’s not what a designer is. We’re problem solvers.</p>"
             }
           ]
         },
         {
           "type": "entry",
-          "title": "Byron Levy",
+          "title": "From engineering to the paper business",
           "anchor": "byron-levy",
           "bio": "<p>Born in 1921 in New Orleans, Byron Levy lived Uptown on Jefferson Avenue.</p><p>As a child, he made model airplanes, and as an adult he became interested in radio-controlled planes. More scientifically minded than his peers, he worked in the shipyard and then served in the Army Air Corps.</p><p>After World War II, he decided that the paper business might be more lucrative than engineering. By then, commercial printing had taken off as an industry, giving technically minded salespeople careers in the region. Levy tells a funny story about trouble with the paper that wrapped Milk of Magnesia bottles: he identified the paper, produced in nearby Biloxi, knew the paper mill, and was able to solve the problem.</p><p>In about 1960, Levy was instrumental in organizing the Art Directors and Designers Association of New Orleans. He, along with Don Smith, Ted Drell, and Gus Levy, produced the 1961 audio/visual slide show promoting designers to the advertising community in the region. He also knew Don Smith in business.</p><p>He explains the importance of publicity for graphic designers, and that ADDA was an important vehicle to promote the graphic arts industry. In time, ADDA turned into AIGA. Levy understood the balance between profitability and the other sides of the paper business.</p><p>This 2009 recording was made in the common room of the retirement community near the LSU campus in Baton Rouge where Levy and his wife lived. At the time, Levy took printmaking classes several times a week at Louisiana State University.</p>",
           "published": true,
           "source": "c9.html",
           "blocks": [
+            {
+              "type": "text",
+              "body": "<p>Byron Levy briefly describes his career, from engineering and wartime service to the family paper business, in his 2009 interview.</p>"
+            },
             {
               "type": "figure",
               "image": "byron_levy_preservation_hall.jpg",
@@ -270,7 +311,7 @@
               "type": "audio",
               "title": "From engineering to the paper business",
               "file": "byron_levy_his_career.m4a",
-              "credit": "Byron Levy, 2009",
+              "credit": "Byron Levy, interviewed in 2009",
               "transcript": "<p><strong>BYRON LEVY:</strong> My career was of Tulane University. I went to work in a shipyard. Then I worked . . . I was in the [United States] Army Air Corps for about four years. Served . . . I was trained at Yale, then went to British Guiana, South America, then went to Guam. I was at Guam about the time of the Japanese surrender, and spent a year after the end of the war. So when I came back, I had to decide if . . . keep following engineering, or get in the family paper business. I decided that the paper business had better opportunities in New Orleans.</p><p><strong>INTERVIEWER:</strong> So is this . . . what year is this?</p><p><strong>LEVY:</strong> 1946.</p>"
             },
             {
@@ -284,12 +325,16 @@
         },
         {
           "type": "entry",
-          "title": "Peter A. Mayer",
+          "title": "Proving television, winning Popeyes",
           "anchor": "peter-a-mayer",
           "bio": "<p>Peter Mayer grew up in Germany and immigrated to the United States when he was six.</p><p>He graduated from Fauche High School when he was sixteen. His heroes were Walter Cronkite and Edward R. Murrow. He joined the Louisiana Air National Guard during the Korean War. While in the armed forces, he attended the Information School, which taught public relations, at Fort Slocum in New Rochelle, New York, and finished second in his class. While in New York, he interviewed with the <em>New York Times</em> but wasn’t hired. After he returned home, the <em>Picayune</em> hired him. In 1951 he entered the new field of television, where he worked with the likes of Mel Leavitt and Nash Roberts.</p><p>Mayer founded Peter A. Mayer Advertising in 1967. In 1985 he asked his son Mark, already working in the agency, to take over as president. His youngest son, Josh, also joined the agency and rose to creative director. According to their father, they are both excellent at their jobs.</p><p>In this 2012 interview, Mayer talks about being instrumental in the downfall of a primary competitor, the Fitzgerald Agency, and how he convinced a client that television was a powerful and compelling new medium.</p><p><a href=\"https://www.peteramayer.com/\">peteramayer.com</a></p>",
           "published": true,
           "source": "c10.html",
           "blocks": [
+            {
+              "type": "text",
+              "body": "<p>In these 2012 clips, Peter A. Mayer tells how he proved television to a doubtful client, and takes credit for the demise of the Fitzgerald Agency.</p>"
+            },
             {
               "type": "figure",
               "image": "peter.jpg",
@@ -301,14 +346,14 @@
               "type": "audio",
               "title": "Proving television",
               "file": "peter_a_meyer_soundbite_tv_story.m4a",
-              "credit": "Peter A. Mayer, 2012",
+              "credit": "Peter A. Mayer, interviewed in 2012",
               "transcript": "<p><strong>PETER A. MAYER:</strong> Regional managers says, “Why are we wasting all this time on television? What are we wasting all these dollars for?” And I said to him, “Can we prove it to him?” So we had, here’s Nancy Nation, for National Food. Betty Gaillard, I don’t know if you knew Betty. She used to be society editor of [Times-]Picayune. At any rate, we decided that . . . when she did the commercial, she held up a Domino Sugar five-pound bag.</p><p><strong>INTERVIEWER:</strong> Okay.</p><p><strong>MAYER:</strong> She said, “This will not be advertised on television or in the newspaper, but you must ask the cashier for this at twenty-nine cents.” Which was a bargain. You know, it was selling for sixty-nine or something like that. So, she did it. They ran out of, oh God, ran out of sugar. And the guy said, “Stop it, I’m convinced.” And that convinced him that television was a viable tool.</p>"
             },
             {
               "type": "audio",
               "title": "Winning Popeyes",
               "file": "peter_a_mayer_soundbite_destroyed_fitzgerald.m4a",
-              "credit": "Peter A. Mayer, 2012",
+              "credit": "Peter A. Mayer, interviewed in 2012",
               "transcript": "<p><strong>PETER A. MAYER:</strong> . . . believe, part of the destruction of Fitzgerald, I’m sorry to say, but Fitzgerald had . . . um . . . Popeyes.</p><p><strong>INTERVIEWER:</strong> Okay, that a big one.</p><p><strong>MAYER:</strong> And they were very unhappy with him, and Popeyes was very unhappy with that. So, they fired him, and there was a period where they had no agents. So I wrote a letter to the advertising director, who I didn’t know.</p><p><strong>MAYER:</strong> I said, “Can we talk?” That was the only—</p><p><strong>INTERVIEWER:</strong> “Can we talk.”</p><p><strong>MAYER:</strong> —thing in my letter, “Can we talk?” And he had an underling call and come visit us, and we pitched the account. How we did it was, I had a young lady who was . . . very ambitious, very sharp, who was going to be the account exec on this. I said, “Got to visit every Popeyes location in the area.” So she went out and I went out and talked to each manager of Popeyes, and played back their input at the presentation. “We’re not getting enough radio, we want more local newspaper.” All the things that they bitched about, or complimented, and we got the account.</p>"
             }
           ]
@@ -319,10 +364,10 @@
       "title": "About the Project",
       "anchor": "about",
       "category": "",
-      "lead": null,
+      "lead": "upton_guslevy_01.jpg",
       "display": "story",
       "focus": "center",
-      "lead_caption": "",
+      "lead_caption": "<p>Cover of <em>Upton’s Series of New Orleans Places and Things by New Orleans Graphic Artists</em>, E. S. Upton Printing Company, New Orleans, 1968.</p>",
       "blocks": [
         {
           "type": "text",
@@ -336,7 +381,9 @@
           "type": "text",
           "body": "<h3>Acknowledgments</h3><p>The content for the listening station was curated by stationer Nancy Sharon Collins. All collections are housed in the T. Harry Williams Center for Oral History and available to researchers. Oversight and content contributions by Jennifer A. Cramer, Director, T. Harry Williams Center for Oral History. Special thanks to Center staff Teresa Bergen, Dale Rhodies, and Allison Powell for their assistance. The gallery and online listening station interface was designed and installed by Kyle Tanglao, User Interface Designer, Technology Initiatives, LSU Libraries.</p><p>The project was made possible by the AIGA Katrina Relief Grant program, AIGA New Orleans, the Louisiana Cultural Economy Foundation, the T. Harry Williams Center for Oral History, and Loyola University New Orleans Special Collections and Archives. Special thanks to Paul Gruber, Metropolitan Opera Guild Inc., New York City; Seth B. Winner Sound Studios, Inc., Merrick, New York; and Rob Hudak, New Orleans. Additional thanks go to the History of Graphic Design in South Louisiana project’s post-Katrina advisory board, co-chair, committee members, and friends: the late William Drenttel, Stewart Becnel, Brianna George, Christie Hackenburg, Jessica Helfand, Steven Heller, Kathleen Joffrion, Amie Leicher, Daniela Marx, Wes McWhorter, Michelle Neuhoff, Lacy Picou, Elaine Smythe, Tom Varisco, Trish Nugent, Elizabeth Kelly, “L” (Lízbeth) Romero and Joshua Matthews, Kure Croker, and Adam Newman.</p>"
         }
-      ]
+      ],
+      "opener": "compact",
+      "whole": true
     }
   ],
   "alt": {

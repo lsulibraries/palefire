@@ -1406,6 +1406,58 @@ $pf-exhibit-wash-fade: clamp(14rem, 24vw, 30rem);
   }
 }
 
+// A framed cover ("Frame the cover", for a small or soft image): the image
+// whole, inset from the screen's edges, over a blurred wash of itself that
+// fills the cover, as in the object view. Both stay pinned like the cover:
+// the wash comes after the image and is pulled up over its place (a screen
+// tall, so one sits on the other) and drawn behind it. The wash is faded
+// rather than darkened, so it takes the page color in either theme. Below
+// lg the image sits high, clear of the text's wash at the foot.
+.pf-exhibit-cover--framed {
+  .pf-exhibit-cover__img {
+    z-index: 1;
+    box-sizing: border-box;
+    padding: clamp(1.5rem, 6vh, 4rem) clamp(1.25rem, 4vw, 4rem) max(55lvh, 100lvh - 28rem);
+    object-fit: contain;
+    object-position: center top;
+    filter: drop-shadow(0 1.5rem 2.5rem rgb(0 0 0 / .4));
+
+    @include media-breakpoint-up(lg) {
+      padding-bottom: clamp(1.5rem, 6vh, 4rem);
+      object-position: center;
+    }
+  }
+
+  .pf-exhibit-cover__wash {
+    position: sticky;
+    top: var(--pf-header-h);
+    display: block;
+    width: 100%;
+    height: calc(100lvh - #{$pf-header-bar-compact-h});
+    margin-top: calc(-100lvh + #{$pf-header-bar-compact-h});
+    object-fit: cover;
+    opacity: .5;
+    filter: blur(2.5rem) saturate(.7);
+    // Past the edges, so the blur doesn't fade them to the page color.
+    scale: 1.15;
+    translate: 0 calc(#{$pf-header-bar-compact-h} - var(--pf-header-h));
+
+    @include pf-exhibit-motion {
+      animation: pf-exhibit-wash-in 2.4s $pf-exhibit-ease both;
+    }
+  }
+}
+
+.pf-exhibit-deep .pf-exhibit-cover__wash {
+  display: none;
+}
+
+@keyframes pf-exhibit-wash-in {
+  from {
+    opacity: 0;
+  }
+}
+
 // A size container, so the title can fit itself to the column (below).
 .pf-exhibit-cover__text {
   display: grid;

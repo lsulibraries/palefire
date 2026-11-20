@@ -24,6 +24,8 @@
  *   the outlined style beside it.
  * - cover: image values (_palefire_exhibit_image()) or NULL. Decorative.
  *   Its focal point, when set, is where it stays in view when cropped.
+ *   cover.framed ("Frame the cover" ticked): shown whole over a blurred
+ *   wash of itself (.pf-exhibit-cover--framed), for a small or soft image.
  *
  * The parts come in one after another on load (_exhibition.scss):
  * image, title, subtitle, the prompt and buttons, intro, then credit. The galleries follow
@@ -35,17 +37,25 @@
  */
 #}
 {{ attach_library('palefire/exhibition') }}
-<div class="pf-exhibit-cover{{ head.cover ? ' has-image' }}">
+<div class="pf-exhibit-cover{{ head.cover ? ' has-image' }}{{ head.cover and head.cover.framed ? ' pf-exhibit-cover--framed' }}">
   {% if head.cover %}
     <div class="pf-exhibit-cover__media" aria-hidden="true">
       {# Lazy in the markup so an address for a gallery (#…) doesn't fetch
          it; otherwise a script in <head> preloads it as early as an eager
-         image (PalefireHooks::exhibitHead()). #}
+         image (PalefireHooks::exhibitHead()). Framed, it is shown whole (a
+         focal point has nothing to crop), and its wash after it: the same
+         image at a small size from the srcset, blurred behind it. After,
+         so js/exhibition.js still finds the cover as the first <img>. #}
       <img class="pf-exhibit-cover__img" src="{{ head.cover.src }}"
            {% if head.cover.srcset %}srcset="{{ head.cover.srcset }}" sizes="{{ head.cover.sizes }}"{% endif %}
            {% if head.cover.width %}width="{{ head.cover.width }}" height="{{ head.cover.height }}"{% endif %}
-           {% if head.cover.focus %}style="object-position: {{ head.cover.focus }}"{% endif %}
+           {% if head.cover.focus and not head.cover.framed %}style="object-position: {{ head.cover.focus }}"{% endif %}
            alt="" loading="lazy" fetchpriority="high" decoding="async">
+      {% if head.cover.framed %}
+        <img class="pf-exhibit-cover__wash" src="{{ head.cover.src }}"
+             {% if head.cover.srcset %}srcset="{{ head.cover.srcset }}" sizes="20vw"{% endif %}
+             alt="" loading="lazy" decoding="async">
+      {% endif %}
     </div>
   {% endif %}
   <div class="pf-exhibit-cover__text">

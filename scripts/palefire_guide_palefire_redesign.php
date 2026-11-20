@@ -957,6 +957,14 @@ HTML),
 <li>On phones, the AVES exhibition could be pushed sideways, and the bottom bar seemed to run off the screen. Two things caused it: web addresses typed out in full in the citations, and the word “Acknowledgments” at the big title size. Long addresses now wrap onto the next line, and a very long word in a gallery title breaks with a hyphen when it doesn’t fit, so on computers it no longer runs off its band onto the picture either.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Graphic Design says what each clip is', <<<'HTML'
+<ul>
+<li>On History of Graphic Design in South Louisiana, every tile on the wall showed the speaker’s name twice. Each now reads like Mossville’s: what the clip is about (“Failing every subject except art”) over who is speaking (Kenny Harrison).</li>
+<li>Each clip opens with the short summary the old site had in its menu, and the wall opens with two sentences on who the ten speakers are, in place of a blown-up, mostly blank letterhead.</li>
+<li>The Biography button now carries the speaker’s name, and About the Project gets a picture: the cover of a 1968 brochure of New Orleans graphic artists, shown whole at its own size.</li>
+<li>The cover photo, Don Smith painting by a window, is small, and blown up to fill the screen it looked blurry. A new “Frame the cover” checkbox on exhibitions shows the photo whole, at its own size, over a soft blurred wash of itself. It is off unless ticked, so it only changes Graphic Design for now.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------

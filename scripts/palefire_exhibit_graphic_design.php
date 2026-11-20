@@ -262,6 +262,8 @@ $block = function (array $b) use (&$block, $media, $audio_file, $ref, $keep, $ht
 // narrator opens in the object view.
 $has_caption = (bool) FieldConfig::loadByName('paragraph', 'exhibit_page', 'field_exhibit_lead_caption');
 $has_display = (bool) FieldConfig::loadByName('paragraph', 'exhibit_page', 'field_exhibit_display');
+$has_opener = (bool) FieldConfig::loadByName('paragraph', 'exhibit_page', 'field_exhibit_opener');
+$has_whole = (bool) FieldConfig::loadByName('paragraph', 'exhibit_page', 'field_exhibit_lead_whole');
 if (!$has_display) {
   $skipped[] = 'field_exhibit_display is not on Gallery; run palefire_exhibit_setup.php. The galleries read as stories.';
 }
@@ -275,6 +277,8 @@ foreach ($data['pages'] as $page) {
     'field_exhibit_lead_focus' => $page['focus'] ?? 'center',
     'field_exhibit_lead_caption' => !empty($page['lead_caption']) && $has_caption ? $html($page['lead_caption']) : NULL,
     'field_exhibit_display' => $has_display ? ($page['display'] ?? 'story') : NULL,
+    'field_exhibit_opener' => $has_opener && !empty($page['opener']) ? $page['opener'] : NULL,
+    'field_exhibit_lead_whole' => $has_whole && !empty($page['whole']) ? 1 : NULL,
     'field_guide_blocks' => array_values(array_filter(array_map($block, $page['blocks']))),
   ]));
   echo 'Built gallery: ' . $page['title'] . PHP_EOL;
@@ -291,6 +295,7 @@ $values = [
   'field_exhibit_subtitle' => $data['subtitle'] !== '' ? $data['subtitle'] : NULL,
   'field_exhibit_credit' => $html($data['credit']),
   'field_exhibit_cover' => $ref($media($data['cover'])),
+  'field_exhibit_cover_framed' => !empty($data['cover_framed']) ? 1 : NULL,
   'field_intro' => $html($data['intro']),
   'field_exhibit_year' => $data['year'],
   'field_exhibit_physical_note' => $data['physical_note'] !== '' ? $data['physical_note'] : NULL,
