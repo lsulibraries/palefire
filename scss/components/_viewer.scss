@@ -544,10 +544,12 @@ html.pf-viewer-open {
   text-wrap: balance;
 }
 
+// The caption under the title, ruled off from what follows; no rule
+// between it and the title, which it belongs to, as a wall label's lines.
 .pf-viewer__label {
-  padding-block: 0.9rem;
+  padding-bottom: 1.25rem;
   font-size: 0.875rem;
-  border-block: 1px solid $pf-hairline;
+  border-bottom: 1px solid $pf-hairline;
 
   > :last-child {
     margin-bottom: 0;

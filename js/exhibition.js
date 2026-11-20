@@ -1413,28 +1413,33 @@
    * A clip's biography
    *
    * In the object view a clip's biography would push its player and
-   * transcript far down the panel, so it waits behind a button where it
-   * stood: "Biography", the speaker's name, its length. The button opens a
+   * transcript far down the panel. Instead the speaker heads the clip's
+   * Listen block, their name over the rest of the credit ("Jessica Tilson"
+   * over "Interviewed by Thailandria Daniels, 2017"), and Biography + sits
+   * at the end of that row (its length said to screen readers). It opens a
    * second panel (.pf-viewer__bio, _exhibition.scss) with the name, Life
    * and Role and the summary when the entry has a biography card
-   * (js/exhibit-bio.js), and the biography. From lg it slides in over the
-   * stage beside the panel, so the transcript stays in view as the clip
-   * plays; below lg (and beside a side panel) it covers the view, with
-   * "Back to the clip". The clip plays on either way. Close, Back or Esc
-   * shuts it; stepping to another clip shows that one's speaker in it (or
-   * shuts it, a clip with no biography). The name comes from the clip's
-   * credit ("Name, interviewed by …"), else the biography's opening words
-   * ("Name was born …").
+   * (js/exhibit-bio.js), and the biography; the + turns to ×. From lg it
+   * slides in over the stage beside the panel, so the transcript stays in
+   * view as the clip plays; below lg (and beside a side panel) it covers
+   * the view, with "Back to the clip". The clip plays on either way.
+   * Close, Back or Esc shuts it; stepping to another clip shows that one's
+   * speaker in it (or shuts it, a clip with no biography). The name comes
+   * from the credit ("Name, interviewed by …"), else the biography's
+   * opening words ("Name was born …"). A clip with no biography still gets
+   * the name row when its credit names the speaker.
    * ------------------------------------------------------------------ */
 
   const bio = { aside: null, opener: null, timer: 0 };
 
-  function speakerOf(copy, text) {
-    const credit = copy.querySelector('.pf-exhibit-audio__credit');
-    const said = credit && credit.textContent.trim().match(/^(.{2,80}?),?\s+(?:is\s+)?interviewed\b/i);
-    if (said) {
-      return said[1].trim();
-    }
+  // "Name, interviewed by X, 2017" as {name, rest: "Interviewed by X, 2017"}.
+  function creditSaid(credit) {
+    const said = credit.match(/^(.{2,80}?),?\s+(?:is\s+)?(interviewed\b.*)$/i);
+    return said ? { name: said[1].trim(), rest: said[2].charAt(0).toUpperCase() + said[2].slice(1) } : null;
+  }
+
+  // "Name was born …": the biography's subject, or ''.
+  function bioSubject(text) {
     const opening = text.match(/^((?:\S+\s+){0,4}?\S+)\s+(?:was|is)\s/);
     return opening ? opening[1] : '';
   }
@@ -1536,20 +1541,50 @@
     }
   }
 
-  // The view's copy of an entry: a clip's biography (and its card) out,
-  // the button in their place.
+  // The view's copy of an entry: the clip's speaker over its credit, and
+  // its biography (and card) out, Biography + on the speaker's row.
   function clipBio(view, copy) {
+    const audio = copy.querySelector('.pf-exhibit-audio');
     const block = copy.querySelector('.pf-exhibit-bio');
-    const text = block && block.querySelector('.pf-exhibit-bio__text');
+    const text = audio && block && block.querySelector('.pf-exhibit-bio__text');
     const open = !!(bio.aside && !bio.aside.hidden && bio.aside.classList.contains('is-open'));
-    if (!text || !copy.querySelector('.pf-exhibit-audio')) {
+    if (!text) {
       closeBio(false);
+    }
+    if (!audio) {
+      return;
+    }
+    const credit = audio.querySelector('.pf-exhibit-audio__credit');
+    const said = credit ? creditSaid(credit.textContent.trim()) : null;
+    const name = said ? said.name : (text ? bioSubject(text.textContent.trim()) : '');
+    if (!name && !text) {
+      return;
+    }
+    const row = document.createElement('div');
+    row.className = 'pf-exhibit-speaker';
+    if (name) {
+      const who = document.createElement('p');
+      who.className = 'pf-exhibit-speaker__name';
+      who.textContent = name;
+      row.append(who);
+    }
+    if (said) {
+      credit.textContent = said.rest;
+    }
+    const kicker = audio.querySelector('.pf-exhibit-label__kicker');
+    if (kicker) {
+      kicker.after(row);
+    }
+    else {
+      audio.prepend(row);
+    }
+    if (!text) {
       return;
     }
     const card = copy.querySelector('[data-pf-bio-card]');
     const words = text.textContent.trim().split(/\s+/).length;
     const data = {
-      name: speakerOf(copy, text.textContent.trim()),
+      name: name,
       text: text,
       facts: card && card.querySelector('.pf-exhibit-card__facts'),
       summary: card && card.querySelector('.pf-exhibit-card__summary:not(.is-opening)'),
@@ -1559,11 +1594,10 @@
     button.className = 'pf-exhibit-bio-open';
     button.setAttribute('aria-expanded', 'false');
     button.setAttribute('aria-controls', 'pf-viewer-bio');
-    button.innerHTML = '<span class="pf-exhibit-bio-open__kicker">' + Drupal.t('Biography') + '</span>'
-      + '<span class="pf-exhibit-bio-open__name"></span>'
-      + '<span class="pf-exhibit-bio-open__time">' + Drupal.t('@words words · @minutes min', { '@words': words, '@minutes': Math.max(1, Math.round(words / 238)) }) + '</span>'
+    button.innerHTML = Drupal.t('Biography')
+      + '<span class="visually-hidden"></span>'
       + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M12 4.5v15M4.5 12h15"/></svg>';
-    button.querySelector('.pf-exhibit-bio-open__name').textContent = data.name || Drupal.t('About the speaker');
+    button.querySelector('.visually-hidden').textContent = (name ? ': ' + name : '') + Drupal.t(', @words words, @minutes min', { '@words': words, '@minutes': Math.max(1, Math.round(words / 238)) });
     button.addEventListener('click', () => {
       if (bio.opener === button) {
         closeBio(true);
@@ -1572,7 +1606,7 @@
         openBio(view, data, button, true);
       }
     });
-    block.before(button);
+    row.append(button);
     block.remove();
     if (card) {
       card.closest('.pf-exhibit-card').remove();
