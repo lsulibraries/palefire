@@ -984,6 +984,12 @@ HTML),
 <li>Any exhibition can do the same: galleries have a new optional Mark field for a one-color logo, shown where a gallery opens on its picture.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Audubon’s Suggested Reading hangs as a wall', <<<'HTML'
+<ul>
+<li>Suggested Reading on the Audubon exhibition now opens like the other walls: the white ibis full screen with the title, “20 books · 5 articles” and the note on the catalog, then the covers hung on the page color under Selected works and Fiction, each with its citation under it.</li>
+<li>Before, the covers sat over the ibis picture, where the citations faded into it. Any gallery made only of reading lists can be a wall the same way, by setting its Display to Wall.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------

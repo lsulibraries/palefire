@@ -5768,7 +5768,7 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
     $groups[array_key_last($groups)]['tiles'][] = end($tiles);
   }
   if (!$tiles) {
-    return NULL;
+    return _palefire_exhibit_reading_wall($page);
   }
   // Sub-galleries with no tiles drop out, and so does the untitled start
   // when the first sub-gallery heads the wall.
@@ -5853,6 +5853,49 @@ function palefire_preprocess_paragraph__exhibit_entry(array &$variables): void {
   $paragraph = $variables['paragraph'];
   $variables['title'] = trim((string) ($paragraph->get('field_block_title')->value ?? ''));
   $variables['anchor'] = _palefire_exhibit_entry_anchor($paragraph);
+/**
+ * A wall of readings: a gallery set to Display "wall" whose own blocks are
+ * reading lists (Image groups of exhibit_reading) and no entries, such as
+ * Audubon's Suggested Reading. The covers hang as the wall, each with its
+ * citation under it, and link out to their records; nothing opens in the
+ * object view. js/exhibition.js moves the lists into the wall.
+ *
+ * @return array|null
+ *   As _palefire_exhibit_wall() with readings TRUE, no tiles, and the
+ *   facts "20 books", "5 articles"; NULL when the gallery has no readings.
+ */
+function _palefire_exhibit_reading_wall(ParagraphInterface $page): ?array {
+  $kinds = ['book' => 0, 'article' => 0];
+  foreach ($page->get('field_guide_blocks')->referencedEntities() as $block) {
+    if ($block->bundle() !== 'exhibit_gallery' || !$block->isPublished()) {
+      continue;
+    }
+    foreach ($block->get('field_gallery_items')->referencedEntities() as $item) {
+      if ($item->bundle() === 'exhibit_reading' && $item->isPublished()) {
+        $kinds[$item->hasField('field_reading_kind') && $item->get('field_reading_kind')->value === 'article' ? 'article' : 'book']++;
+      }
+    }
+  }
+  if (!array_sum($kinds)) {
+    return NULL;
+  }
+  $stats = [];
+  if ($kinds['book']) {
+    $stats[] = (string) \Drupal::translation()->formatPlural($kinds['book'], '1 book', '@count books');
+  }
+  if ($kinds['article']) {
+    $stats[] = (string) \Drupal::translation()->formatPlural($kinds['article'], '1 article', '@count articles');
+  }
+  return [
+    'tiles' => [],
+    'groups' => [],
+    'readings' => TRUE,
+    'sortable' => FALSE,
+    'sheets' => [],
+    'stats' => $stats,
+  ];
+}
+
   $variables['date'] = $paragraph->hasField('field_entry_date') ? ExhibitTimeline::parse($paragraph->get('field_entry_date')->value) : NULL;
   $variables['bio_card'] = _palefire_exhibit_bio_card($paragraph, $variables['title']);
 }

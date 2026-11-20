@@ -4725,6 +4725,67 @@ $pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last
   }
 }
 
+// A wall of readings (_palefire_exhibit_reading_wall()): each reading list
+// hangs as a sub-gallery, its heading across the wall on a hairline as a
+// room's title, the Grid / List switch at its right; the covers keep their
+// citations under them. The first list opens the wall on the hairline the
+// other walls' tools row gives them.
+.pf-exhibit-wall--readings {
+  gap: 0;
+
+  > .pf-exhibit-group--readings {
+    row-gap: 1.75rem;
+    margin: 2.5rem 0 0;
+    padding-top: 1.25rem;
+    border-top: 1px solid $pf-hairline;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    @include media-breakpoint-up(md) {
+      margin-top: 4rem;
+    }
+  }
+
+  > .pf-exhibit-group--readings > .pf-guide-block__title {
+    @extend .pf-exhibit-wall__group-title;
+  }
+
+  .pf-exhibit-reading {
+    @include pf-exhibit-motion {
+      @supports (animation-timeline: view()) {
+        animation: pf-wall-rise linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 55%;
+      }
+    }
+  }
+
+  .pf-exhibit-figure__frame {
+    transition: opacity 0s linear .2s;
+
+    @include pf-exhibit-motion {
+      transition: translate .6s $pf-exhibit-ease, box-shadow .6s $pf-exhibit-ease, opacity .5s $pf-exhibit-ease .2s;
+    }
+  }
+
+  // Grid only: the cover under the pointer lifts, the others dim a little,
+  // as on every wall.
+  @media (hover: hover) {
+    [data-pf-view="grid"] .pf-exhibit-figure__out:hover .pf-exhibit-figure__frame {
+      translate: 0 -6px;
+      box-shadow: 0 1.25rem 2.5rem -1.25rem rgba(0, 0, 0, 0.45);
+      transition-delay: 0s;
+    }
+
+    [data-pf-view="grid"] .pf-exhibit-group__grid:has(.pf-exhibit-figure__out:hover) > .pf-exhibit-reading:not(:has(.pf-exhibit-figure__out:hover)) .pf-exhibit-figure__frame {
+      opacity: 0.55;
+      transition-delay: 0s;
+    }
+  }
+}
+
 .pf-exhibit-wall__group-title {
   margin: 0;
   color: var(--pf-g-heading, var(--bs-emphasis-color));

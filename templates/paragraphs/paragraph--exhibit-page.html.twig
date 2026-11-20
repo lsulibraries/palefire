@@ -46,7 +46,9 @@
  *   reads as a story. A dated entry with no picture or clip is a note
  *   (tile.note): a wall label read in place, not a link. A person with a
  *   long biography and no portrait is a name tile (tile.person): the name,
- *   life and role typeset on a 3:4 plate, opening like any tile.
+ *   life and role typeset on a 3:4 plate, opening like any tile. A
+ *   gallery of reading lists and no entries is a wall of readings
+ *   (wall.readings): its covers hang with their citations and link out.
  * - timeline: Display "timeline" (src/ExhibitTimeline.php), or NULL: every
  *   dated entry of the other galleries on one rail, printed after the
  *   gallery's own text (includes/exhibit-timeline.html.twig).
@@ -223,7 +225,12 @@
     {% if timeline %}
       {% include '@palefire/includes/exhibit-timeline.html.twig' with { timeline: timeline, dom_id: dom_id } only %}
     {% endif %}
-    {% if wall %}
+    {% if wall and wall.readings %}
+      {# A wall of readings (_palefire_exhibit_reading_wall()): js/exhibition.js
+         moves the gallery's reading lists in here, under their own
+         headings; each cover links to its record. #}
+      <div class="pf-exhibit-wall pf-exhibit-wall--readings" data-pf-wall data-pf-wall-readings hidden></div>
+    {% elseif wall %}
       <div class="pf-exhibit-wall" data-pf-wall hidden
            {% if wall.sheets %}data-pf-sheets="{{ wall.sheets|json_encode }}"{% endif %}>
         {% set grouped = wall.groups|length > 1 or (wall.groups|first).title %}

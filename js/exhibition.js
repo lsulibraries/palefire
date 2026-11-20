@@ -638,9 +638,14 @@
       }
       page.querySelector('.pf-gallery').classList.add('is-walled');
       wall.hidden = false;
+      const body = wall.parentElement;
+      // A wall of readings: the reading lists hang on the wall, and the
+      // text before them is its intro.
+      if (wall.hasAttribute('data-pf-wall-readings')) {
+        wall.append(...body.querySelectorAll(':scope > .pf-exhibit-group--readings'));
+      }
       // The gallery's own text (not its entries) as one block: the wall
       // text beside the title (_exhibition.scss), folded once shown.
-      const body = wall.parentElement;
       const blocks = Array.from(body.children).filter((el) => el !== wall && !el.matches('.pf-exhibit-entry, .pf-exhibit-body-title'));
       if (blocks.length) {
         // .pf-exhibit-wall__text holds the intro and, once folded, its
