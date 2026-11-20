@@ -960,6 +960,7 @@ HTML),
 HTML),
   $text('Fri Nov 20: Graphic Design says what each clip is', <<<'HTML'
 <ul>
+<li>At the end of every exhibition, the other exhibitions now appear the way they do on the Oral History page: one at a time with its summary, the next ones beside it, and arrows to browse. Under them, a “← Oral History” button goes back.</li>
 <li>The list of exhibitions under an exhibition’s title in the breadcrumb now looks like the table of contents: small capitals in the typewriter face, each with its year in gold, the one you are on in bold. A long title that wraps to two lines now keeps its room instead of crowding the row below.</li>
 <li>On History of Graphic Design in South Louisiana, every tile on the wall showed the speaker’s name twice. Each now reads like Mossville’s: what the clip is about (“Failing every subject except art”) over who is speaking (Kenny Harrison).</li>
 <li>Each clip opens with the short summary the old site had in its menu, and the wall opens with two sentences on who the ten speakers are, in place of a blown-up, mostly blank letterhead.</li>

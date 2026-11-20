@@ -2,56 +2,42 @@
 /**
  * @file
  * After an exhibition's last gallery: every other exhibition in its family
- * and the way back (PalefireHooks::exhibitEnd(), page.html.twig). An
- * edge-to-edge grid of covers, each one link, the title and year over the
- * photograph's foot on a soft wash; it starts with the next one and wraps
- * round. Then the family's home and, for Special Collections, every
- * exhibition. _exhibition.scss (.pf-exhibit-end).
+ * and the way back (PalefireHooks::exhibitEnd(), page.html.twig). The
+ * others in the exhibitions band of Oral History's Showcase
+ * (includes/exhibit-carousel.html.twig), starting with the next one and
+ * wrapping round, without its index rule: the band's title is the
+ * panel's (visually hidden) heading. Then a button back to the family's
+ * home and, for Special Collections, every exhibition. _exhibition.scss
+ * (.pf-exhibit-end), _exhibit-showcase.scss.
  *
- * - end.others: title, url, year (or NULL), image
- *   (_palefire_exhibit_image()) or NULL. Empty when the family has one.
+ * - end.others: PalefireHooks::exhibitionCard() arrays. Empty when the
+ *   family has one.
  * - end.parent: title, url. end.all: url or NULL.
  */
 #}
 <nav class="pf-exhibit-end" aria-labelledby="pf-exhibit-end-title">
+  <h2 class="visually-hidden" id="pf-exhibit-end-title">
+    {{- end.others ? 'More from @parent'|t({'@parent': end.parent.title}) : 'Keep exploring'|t -}}
+  </h2>
   {% if end.others %}
-    <h2 class="pf-exhibit-end__kicker" id="pf-exhibit-end-title">
-      {{ 'More from @parent'|t({'@parent': end.parent.title}) }}
-      <span class="pf-exhibit-end__count">{{ end.others|length == 1 ? '1 exhibition'|t : '@count exhibitions'|t({'@count': end.others|length}) }}</span>
-    </h2>
-    <ul class="pf-exhibit-end__grid">
-      {% for other in end.others %}
-        <li class="pf-exhibit-end__item">
-          <a class="pf-exhibit-end__tile" href="{{ other.url }}">
-            {% if other.image %}
-              <img class="pf-exhibit-end__img" src="{{ other.image.src }}"
-                   {% if other.image.srcset %}srcset="{{ other.image.srcset }}" sizes="{{ other.image.sizes }}"{% endif %}
-                   {% if other.image.width %}width="{{ other.image.width }}" height="{{ other.image.height }}"{% endif %}
-                   {% if other.image.focus %}style="object-position: {{ other.image.focus }}"{% endif %}
-                   alt="" loading="lazy" decoding="async">
-            {% endif %}
-            <span class="pf-exhibit-end__text">
-              {% if other.year %}
-                <span class="pf-exhibit-end__year">{{ other.year }}</span>
-              {% endif %}
-              <span class="pf-exhibit-end__title">{{ other.title }}</span>
-            </span>
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <h2 class="visually-hidden" id="pf-exhibit-end-title">{{ 'Keep exploring'|t }}</h2>
+    <div class="pf-showcase pf-exhibit-end__showcase" data-pf-showcase data-toc-skip>
+      {% include '@palefire/includes/exhibit-carousel.html.twig' with {
+        items: end.others,
+        id: 'pf-exhibit-end-band',
+        label: 'More from @parent'|t({'@parent': end.parent.title}),
+        heading: 'h3',
+      } only %}
+    </div>
   {% endif %}
   <ul class="pf-exhibit-end__back">
     <li>
-      <a class="pf-exhibit-end__home" href="{{ end.parent.url }}">
+      <a class="pf-exhibit-button pf-exhibit-end__home" href="{{ end.parent.url }}">
         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M13.5 8h-11M7 3.5 2.5 8 7 12.5"/></svg>
-        {{- 'Back to @parent'|t({'@parent': end.parent.title}) -}}
+        {{- end.parent.title -}}
       </a>
     </li>
     {% if end.all %}
-      <li><a class="pf-exhibit-end__home" href="{{ end.all }}">{{ 'All exhibitions'|t }}</a></li>
+      <li><a class="pf-exhibit-button pf-exhibit-end__home" href="{{ end.all }}">{{ 'All exhibitions'|t }}</a></li>
     {% endif %}
   </ul>
 </nav>
