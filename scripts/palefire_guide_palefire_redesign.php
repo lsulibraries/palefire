@@ -879,6 +879,11 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Gallery picture labels end where they should', <<<'HTML'
+<ul>
+<li>The small label on a gallery’s opening picture shows the caption’s first sentence. Where a caption had a line break after that sentence, the label ran on into the next line with no space (“1817.David Hunt Letters…”), and “No.” was taken for the end of a sentence (“Special Order No”). Both are fixed; the full captions were always right.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: Every exhibition in the Special Collections carousel', <<<'HTML'
 <ul>
 <li>The exhibitions carousel on the Special Collections page now shows every Special Collections exhibition on the new site, newest first, from Made in America (2026) back to Sugar at LSU (1995). Woven Louisiana History, shown in Hill Memorial Library, is the one Oral History exhibition in it.</li>

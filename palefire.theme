@@ -2092,8 +2092,12 @@ function _palefire_media_image_item(FieldItemInterface $item, CacheableMetadata 
 
 /**
  * Plain text from HTML, whitespace collapsed, cut at $max with an ellipsis.
+ *
+ * A line break or the end of a block leaves a space, so "<strong>A
+ * date.</strong><br>A credit" reads "A date. A credit", not "date.A".
  */
 function _palefire_plain_excerpt(string $html, int $max = 180): string {
+  $html = preg_replace('#<br\s*/?>|</(?:p|div|li|h[1-6]|blockquote|figcaption|dd|dt|tr|td|th)>#i', '$0 ', $html);
   $text = preg_replace('/\s+/u', ' ', trim(Html::decodeEntities(strip_tags($html))));
   return mb_strlen($text) > $max ? rtrim(mb_substr($text, 0, $max)) . '…' : $text;
 }
@@ -6039,12 +6043,12 @@ function _palefire_exhibit_loose(ParagraphInterface $page): array {
  * A caption's first sentence, as plain text, without its full stop.
  *
  * Up to the first full stop, ? or ! after 12 characters, past
- * abbreviations and initials ("ca. 1939–43", "vol. 31", "A. B."); cut at a
+ * abbreviations and initials ("ca. 1939–43", "vol. 31", "No. 4", "A. B."); cut at a
  * word with "…" when longer than $max characters. '' when there is no text.
  */
 function _palefire_exhibit_sentence(string $html, int $max = 90): string {
   $text = _palefire_plain_excerpt($html, 2000);
-  $text = preg_match('/^(.{12,}?)(?<!\bca)(?<!\bc)(?<!\bvol)(?<!\bno)(?<!\bpp)(?<!\bp)(?<!\bSt)(?<!\bDr)(?<!\bMr)(?<!\bMrs)(?<!\bMs)(?<!\bJr)(?<!\bSr)(?<!\be\.g)(?<!\bi\.e)(?<!\b\p{Lu})[.!?](?:\s|$)/u', $text, $m) ? $m[1] : rtrim($text, '.');
+  $text = preg_match('/^(.{12,}?)(?<!\bca)(?<!\bc)(?<!\bvol)(?<!\b[Nn]o)(?<!\bpp)(?<!\bp)(?<!\bSt)(?<!\bDr)(?<!\bMr)(?<!\bMrs)(?<!\bMs)(?<!\bJr)(?<!\bSr)(?<!\be\.g)(?<!\bi\.e)(?<!\b\p{Lu})[.!?](?:\s|$)/u', $text, $m) ? $m[1] : rtrim($text, '.');
   return mb_strlen($text) > $max ? rtrim(mb_substr($text, 0, mb_strrpos(mb_substr($text, 0, $max - 2), ' ') ?: $max - 2), ' ,;:') . '…' : $text;
 }
 
