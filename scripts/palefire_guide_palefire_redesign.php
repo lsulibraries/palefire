@@ -879,6 +879,13 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Free People of Color’s history chapters hang as walls', <<<'HTML'
+<ul>
+<li>Golden Age and Decline and Civil War are walls now: each chapter is cut into four text plates at the turns in Michael Taylor’s argument, with its documents hung between them. Open the first plate and press next to read the chapter in order, documents and all.</li>
+<li>Resources is a wall of four plates, one for each list: the bibliography, online records, subject guides and organizations.</li>
+<li>Taylor’s text is unchanged; only where it divides and the plate titles are new.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: A Lady in the South’s history, in six chapters', <<<'HTML'
 <ul>
 <li>The History gallery of A Lady in the South was one long essay with 21 photographs between its paragraphs. It is now a wall: six chapters, from Vocational education and the home to Living in the houses, each a text plate with a one-line summary, followed by its photographs.</li>

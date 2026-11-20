@@ -197,6 +197,8 @@ $block = function (array $b) use (&$block, $media, $ref, $keep, $html, &$skipped
         'type' => 'exhibit_entry',
         'field_block_title' => $b['title'],
         'field_section_anchor' => $b['anchor'],
+        // A text plate's words on a wall (palefire.theme, _palefire_exhibit_wall()).
+        'field_entry_summary' => !empty($b['summary']) && FieldConfig::loadByName('paragraph', 'exhibit_entry', 'field_entry_summary') ? $b['summary'] : NULL,
         'field_guide_blocks' => array_values(array_filter(array_map($block, $b['blocks']))),
       ]));
   }

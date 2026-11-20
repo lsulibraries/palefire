@@ -67,30 +67,87 @@
    "lead_caption": "<p><strong>Receipt for payment to Rose, a free woman of color, for a month as washerwoman in the hospital of General Coffee’s brigade, signed by Andrew Jackson, March 3, 1815.</strong><br>William C. Cook War of 1812 in the South Collection, MSS 557. The Historic New Orleans Collection. <a href=\"https://louisianadigitallibrary.org/islandora/object/fpoc-p16313coll51:38007\">Louisiana Digital Library</a></p>",
    "blocks": [
     {
-     "type": "text",
-     "body": "<p>Despite the restrictions imposed during the territorial period, the granting of statehood in 1812 coincided with the beginning of the “golden age” of free people of color in Louisiana. Though many left for Europe, the Caribbean, or Latin America, others stayed behind, lured by Louisiana’s booming economy (at the outbreak of the Civil War, the state was the richest in the Union and New Orleans the third largest city). Free colored men and women could own, inherit, and sell property, including slaves. Large plantations on the outskirts of New Orleans were sold off and subdivided to form new neighborhoods where free blacks purchased plots of land alongside whites. Many became involved in important New Orleans social and cultural institutions such as opera, theaters, balls, benevolent groups, and the church. Louisiana’s free black population rose from just under 11,000 in 1820 to about 25,000 in 1840, keeping pace with the rise of white and slave populations and representing about seven percent of the state’s total population.</p><p>Free people of color worked in many of the trades that white people worked in, ranging from shopkeeping and general unskilled labor to more specialized lines of work such as carpentry, stonecutting, and metalworking. Historian David Rankin determined from the 1850 census that of all American cities, New Orleans “had the highest percentage of free black males employed as artisans, professionals, and entrepreneurs, and the lowest in ‘low opportunity’ occupations like laborer, mariner, gardener, servant, and waiter. New Orleans also contained more than a quarter of all free men of color employed as professionals, managers, artists, clerks, and scientists in the fifteen largest cities in the United States.”</p>"
+     "type": "entry",
+     "title": "Statehood and a booming city",
+     "anchor": "statehood",
+     "bio": "",
+     "summary": "Despite the restrictions imposed during the territorial period, the granting of statehood in 1812 coincided with the beginning of the “golden age” of free people of color in Louisiana.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Despite the restrictions imposed during the territorial period, the granting of statehood in 1812 coincided with the beginning of the “golden age” of free people of color in Louisiana. Though many left for Europe, the Caribbean, or Latin America, others stayed behind, lured by Louisiana’s booming economy (at the outbreak of the Civil War, the state was the richest in the Union and New Orleans the third largest city). Free colored men and women could own, inherit, and sell property, including slaves. Large plantations on the outskirts of New Orleans were sold off and subdivided to form new neighborhoods where free blacks purchased plots of land alongside whites. Many became involved in important New Orleans social and cultural institutions such as opera, theaters, balls, benevolent groups, and the church. Louisiana’s free black population rose from just under 11,000 in 1820 to about 25,000 in 1840, keeping pace with the rise of white and slave populations and representing about seven percent of the state’s total population.</p><p>Free people of color worked in many of the trades that white people worked in, ranging from shopkeeping and general unskilled labor to more specialized lines of work such as carpentry, stonecutting, and metalworking. Historian David Rankin determined from the 1850 census that of all American cities, New Orleans “had the highest percentage of free black males employed as artisans, professionals, and entrepreneurs, and the lowest in ‘low opportunity’ occupations like laborer, mariner, gardener, servant, and waiter. New Orleans also contained more than a quarter of all free men of color employed as professionals, managers, artists, clerks, and scientists in the fifteen largest cities in the United States.”</p>"
+      }
+     ]
     },
     {
-     "type": "figure",
-     "image": "warburg-letter-1852.jpg",
-     "caption": "<p><strong>A. Sampson, letter introducing the sculptor Eugène Warburg to Monsieur Lafaure in Paris, November 23, 1852.</strong><br>The Historic New Orleans Collection (2008.0237.1). <a href=\"https://louisianadigitallibrary.org/islandora/object/fpoc-p16313coll51:32095\">Louisiana Digital Library</a></p>",
-     "layout": "side_end"
+     "type": "entry",
+     "title": "Authors, artists and musicians",
+     "anchor": "arts",
+     "bio": "",
+     "summary": "It is for their contributions to the arts that Louisiana’s free people of color have come to be best known.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>It is for their contributions to the arts that Louisiana’s free people of color have come to be best known. Many distinguished themselves as authors. Armand Lanusse published <em>Les Cenelles</em>, an anthology of poetry by free men of color, in 1845. One contributor to the work, Victor Séjour, is regarded as Louisiana’s greatest French-language playwright. Jules Lion, one of Louisiana’s first lithographers, was a native of France who came to New Orleans around 1830; he is thought to have introduced photography to the state. Eugène and Daniel Warburg, sons of a German-Jewish real estate speculator and his slave, became highly regarded sculptors and marble workers, carving many of the elaborate tombs for which New Orleans is so well known. Although the composers Basile Barès and Edmond Dédé would write their finest works after the Civil War, they grew up during the “golden age” of free people of color in New Orleans and were influenced by the city’s mixture of African, Caribbean, and European cultural traditions. Barès also published works as a slave, only gaining his freedom shortly before his master’s death, after which Barès continued to run the music business his former master had owned.</p>"
+      }
+     ]
     },
     {
-     "type": "text",
-     "body": "<p>It is for their contributions to the arts that Louisiana’s free people of color have come to be best known. Many distinguished themselves as authors. Armand Lanusse published <em>Les Cenelles</em>, an anthology of poetry by free men of color, in 1845. One contributor to the work, Victor Séjour, is regarded as Louisiana’s greatest French-language playwright. Jules Lion, one of Louisiana’s first lithographers, was a native of France who came to New Orleans around 1830; he is thought to have introduced photography to the state. Eugène and Daniel Warburg, sons of a German-Jewish real estate speculator and his slave, became highly regarded sculptors and marble workers, carving many of the elaborate tombs for which New Orleans is so well known. Although the composers Basile Barès and Edmond Dédé would write their finest works after the Civil War, they grew up during the “golden age” of free people of color in New Orleans and were influenced by the city’s mixture of African, Caribbean, and European cultural traditions. Barès also published works as a slave, only gaining his freedom shortly before his master’s death, after which Barès continued to run the music business his former master had owned.</p><p>A few free people of color were highly successful in business. The merchant and real estate broker Bernard Soulié doubled his capital from $50,000 to $100,000 in the 1850s. A decade earlier, Eulalie de Mandeville Macarty acquired her personal fortune of $150,000 through a combination of gifts from a white lover, her family’s wealth, and her own dry goods business. Pierre Casanave, the Haitian-born clerk of Jewish businessman and philanthropist Judah Touro, used the $10,000 legacy that his employer left him to set himself up as a commission merchant and undertaker. By 1864, he was said to be worth $100,000. Thomy Lafon amassed perhaps the greatest fortune of all—half a million dollars—through brokering and property speculation and was among Louisiana’s most prominent philanthropists, contributing to charities, schools, hospitals, and antislavery societies. Another philanthropist, Marie Couvent, the African-born widow of the wealthy black businessman Bernard Couvent, left money in her will when she died in 1837 that was used to found the Institute Catholique, one of the first schools in the United States to provide a free education to children of African descent. The daughter of one of the oldest families of free people of color in New Orleans, Henriette Delille, made a name for herself as the foundress of the Sisters of the Holy Family, the second oldest Catholic religious order for women of color. The Sisters worked with the poor, the sick, the elderly, and among slaves, founded a school for girls in 1850, and opened a hospital for needy black Orleanians.</p><p>Louis Charles Roudanez, trained as a doctor in France and New England, owned a successful medical practice in New Orleans in the 1850s, treating both white and black patients. In 1864, he began publishing the French-language <em>La Tribune de la Nouvelle Orleans</em>, the nation’s first African-American daily newspaper. Norbert Rillieux, though not a businessman, made an important contribution to the business life of Louisiana when he invented, in 1843, a new technique of sugar refining that revolutionized the industry.</p><p>In recent years, historians have begun to look beyond New Orleans at free black populations in other parts of Louisiana, where, by all accounts, they were just as successful. The first record of a free black living on the prairies of southwestern Louisiana is from 1766. The 1774 census of the Opelousas district indicates that this same man owned two slaves and fifty cattle, a notable fact at a time when, according to historian Carl Brasseaux, only 22 percent of households in this part of Louisiana owned slaves and only 18 percent of freeholders possessed fifty cattle. In 1810, white males in the area around Opelousas outnumbered white females by a margin of almost 500, resulting in liaisons with slaves that evolved into common-law marriages in which the female was eventually emancipated.</p>"
+     "type": "entry",
+     "title": "Letter introducing Eugène Warburg, 1852",
+     "anchor": "warburg-letter",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "warburg-letter-1852.jpg",
+       "caption": "<p><strong>A. Sampson, letter introducing the sculptor Eugène Warburg to Monsieur Lafaure in Paris, November 23, 1852.</strong><br>The Historic New Orleans Collection (2008.0237.1). <a href=\"https://louisianadigitallibrary.org/islandora/object/fpoc-p16313coll51:32095\">Louisiana Digital Library</a></p>",
+       "layout": "side_end"
+      }
+     ]
     },
     {
-     "type": "figure",
-     "image": "durnford-memorandum-book.jpg",
-     "caption": "<p><strong>Andrew Durnford’s memorandum book, 1855–1858, kept at St. Rosalie Plantation, Plaquemines Parish.</strong><br>Andrew Durnford Memorandum Book, MSS 485. The Historic New Orleans Collection. <a href=\"https://louisianadigitallibrary.org/islandora/object/fpoc-p16313coll51:42140\">Louisiana Digital Library</a></p>",
-     "layout": "side_start"
+     "type": "entry",
+     "title": "Fortunes in business",
+     "anchor": "business",
+     "bio": "",
+     "summary": "A few free people of color were highly successful in business.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>A few free people of color were highly successful in business. The merchant and real estate broker Bernard Soulié doubled his capital from $50,000 to $100,000 in the 1850s. A decade earlier, Eulalie de Mandeville Macarty acquired her personal fortune of $150,000 through a combination of gifts from a white lover, her family’s wealth, and her own dry goods business. Pierre Casanave, the Haitian-born clerk of Jewish businessman and philanthropist Judah Touro, used the $10,000 legacy that his employer left him to set himself up as a commission merchant and undertaker. By 1864, he was said to be worth $100,000. Thomy Lafon amassed perhaps the greatest fortune of all—half a million dollars—through brokering and property speculation and was among Louisiana’s most prominent philanthropists, contributing to charities, schools, hospitals, and antislavery societies. Another philanthropist, Marie Couvent, the African-born widow of the wealthy black businessman Bernard Couvent, left money in her will when she died in 1837 that was used to found the Institute Catholique, one of the first schools in the United States to provide a free education to children of African descent. The daughter of one of the oldest families of free people of color in New Orleans, Henriette Delille, made a name for herself as the foundress of the Sisters of the Holy Family, the second oldest Catholic religious order for women of color. The Sisters worked with the poor, the sick, the elderly, and among slaves, founded a school for girls in 1850, and opened a hospital for needy black Orleanians.</p><p>Louis Charles Roudanez, trained as a doctor in France and New England, owned a successful medical practice in New Orleans in the 1850s, treating both white and black patients. In 1864, he began publishing the French-language <em>La Tribune de la Nouvelle Orleans</em>, the nation’s first African-American daily newspaper. Norbert Rillieux, though not a businessman, made an important contribution to the business life of Louisiana when he invented, in 1843, a new technique of sugar refining that revolutionized the industry.</p>"
+      }
+     ]
     },
     {
-     "type": "text",
-     "body": "<p>Many free black households were controlled by matriarchs. Marie Simien, in 1818, owned nine slaves and more than 7,500 acres of land, including 1,400 acres of prime farmland in St. Landry Parish. The largest family of free black planters and merchants outside of New Orleans was the Metoyer family of Natchitoches Parish, which intermarried with other black planters. In 1830, the family owned nearly eight percent of the slaves in Natchitoches Parish. Some individuals owned no land or slaves but worked as plantation overseers. Aaron Griggs, for example, worked on Antonio Patrick Walsh’s plantation in West Feliciana Parish in the 1820s. Others lived in towns, typically working as builders. Free blacks were living in Baton Rouge at least as early as 1782. In 1850, eighty of the 159 free blacks in Lafayette Parish were living in Vermilionville (now Lafayette), and nearly half of the free black population of St. Martin Parish lived in the towns of St. Martinville and New Iberia. Much of the free black population of the “bayou country” fled in the 1850s as racial tensions mounted, and many of those who remained were driven out in 1859 by bands of white vigilantes.</p>"
+     "type": "entry",
+     "title": "Beyond New Orleans",
+     "anchor": "beyond-new-orleans",
+     "bio": "",
+     "summary": "In recent years, historians have begun to look beyond New Orleans at free black populations in other parts of Louisiana, where, by all accounts, they were just as successful.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>In recent years, historians have begun to look beyond New Orleans at free black populations in other parts of Louisiana, where, by all accounts, they were just as successful. The first record of a free black living on the prairies of southwestern Louisiana is from 1766. The 1774 census of the Opelousas district indicates that this same man owned two slaves and fifty cattle, a notable fact at a time when, according to historian Carl Brasseaux, only 22 percent of households in this part of Louisiana owned slaves and only 18 percent of freeholders possessed fifty cattle. In 1810, white males in the area around Opelousas outnumbered white females by a margin of almost 500, resulting in liaisons with slaves that evolved into common-law marriages in which the female was eventually emancipated.</p><p>Many free black households were controlled by matriarchs. Marie Simien, in 1818, owned nine slaves and more than 7,500 acres of land, including 1,400 acres of prime farmland in St. Landry Parish. The largest family of free black planters and merchants outside of New Orleans was the Metoyer family of Natchitoches Parish, which intermarried with other black planters. In 1830, the family owned nearly eight percent of the slaves in Natchitoches Parish. Some individuals owned no land or slaves but worked as plantation overseers. Aaron Griggs, for example, worked on Antonio Patrick Walsh’s plantation in West Feliciana Parish in the 1820s. Others lived in towns, typically working as builders. Free blacks were living in Baton Rouge at least as early as 1782. In 1850, eighty of the 159 free blacks in Lafayette Parish were living in Vermilionville (now Lafayette), and nearly half of the free black population of St. Martin Parish lived in the towns of St. Martinville and New Iberia. Much of the free black population of the “bayou country” fled in the 1850s as racial tensions mounted, and many of those who remained were driven out in 1859 by bands of white vigilantes.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Andrew Durnford’s memorandum book",
+     "anchor": "durnford-book",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "durnford-memorandum-book.jpg",
+       "caption": "<p><strong>Andrew Durnford’s memorandum book, 1855–1858, kept at St. Rosalie Plantation, Plaquemines Parish.</strong><br>Andrew Durnford Memorandum Book, MSS 485. The Historic New Orleans Collection. <a href=\"https://louisianadigitallibrary.org/islandora/object/fpoc-p16313coll51:42140\">Louisiana Digital Library</a></p>",
+       "layout": "side_start"
+      }
+     ]
     }
-   ]
+   ],
+   "display": "wall"
   },
   {
    "title": "Decline and Civil War, 1830–1865",
@@ -100,26 +157,87 @@
    "lead_caption": "<p><strong>Register of free colored persons entitled to remain in the state, volume 1, 1840–1856.</strong><br>New Orleans Office of the Mayor (AA 430). New Orleans Public Library, Louisiana Division. <a href=\"https://louisianadigitallibrary.org/islandora/object/fpoc-p16313coll51:41908\">Louisiana Digital Library</a></p>",
    "blocks": [
     {
-     "type": "figure",
-     "image": "register-free-colored-persons-page.jpg",
-     "caption": "<p><strong>A page of the register: each entry gives a name, color, age, birthplace, occupation and when the person was allowed to stay.</strong><br>New Orleans Office of the Mayor (AA 430). New Orleans Public Library, Louisiana Division. <a href=\"https://louisianadigitallibrary.org/islandora/object/fpoc-p16313coll51:41908\">Louisiana Digital Library</a></p>",
-     "layout": "wide"
+     "type": "entry",
+     "title": "The laws close in",
+     "anchor": "laws",
+     "bio": "",
+     "summary": "Many southerners, already on the defensive in regard to slavery, worried that free people of color would collaborate with abolitionists.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Many southerners, already on the defensive in regard to slavery, worried that free people of color would collaborate with abolitionists. In addition, with southerners’ perceived threat to slavery, race-based distinctions became more important than one’s legal status. As a result, Louisiana’s “golden age” of free people of color fell into decline around 1830, the beginning of an era of particularly harsh legislation regarding African Americans, both slave and free. It became a crime to publish anything criticizing white supremacy; masters wishing to free their slaves had to post a $1,000 bond guaranteeing that freed slaves would leave the state within thirty days; and all blacks were prohibited from testifying against whites in court. In 1855, free people of color were banned from assembling or forming any new organizations or societies. The emancipation of slaves was outlawed entirely in 1857, and, as during the territorial period, free persons of color were required to carry passes, observe curfews, and have their racial status designated in all public records. </p>"
+      }
+     ]
     },
     {
-     "type": "text",
-     "body": "<p>Many southerners, already on the defensive in regard to slavery, worried that free people of color would collaborate with abolitionists. In addition, with southerners’ perceived threat to slavery, race-based distinctions became more important than one’s legal status. As a result, Louisiana’s “golden age” of free people of color fell into decline around 1830, the beginning of an era of particularly harsh legislation regarding African Americans, both slave and free. It became a crime to publish anything criticizing white supremacy; masters wishing to free their slaves had to post a $1,000 bond guaranteeing that freed slaves would leave the state within thirty days; and all blacks were prohibited from testifying against whites in court. In 1855, free people of color were banned from assembling or forming any new organizations or societies. The emancipation of slaves was outlawed entirely in 1857, and, as during the territorial period, free persons of color were required to carry passes, observe curfews, and have their racial status designated in all public records. </p>"
+     "type": "entry",
+     "title": "A page of the Register of free colored persons",
+     "anchor": "register-page",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "register-free-colored-persons-page.jpg",
+       "caption": "<p><strong>A page of the register: each entry gives a name, color, age, birthplace, occupation and when the person was allowed to stay.</strong><br>New Orleans Office of the Mayor (AA 430). New Orleans Public Library, Louisiana Division. <a href=\"https://louisianadigitallibrary.org/islandora/object/fpoc-p16313coll51:41908\">Louisiana Digital Library</a></p>",
+       "layout": "wide"
+      }
+     ]
     },
     {
-     "type": "figure",
-     "image": "sheriffs-sale-taylor-1860.jpg",
-     "caption": "<p><strong>Sheriff’s sale of a lot of ground from the succession of John Taylor, a free man of color, at the City Hotel, November 7, 1860.</strong><br>Sheriff’s Sale Broadside Collection, MSS 176. The Historic New Orleans Collection. <a href=\"https://louisianadigitallibrary.org/islandora/object/fpoc-p16313coll51:38254\">Louisiana Digital Library</a></p>",
-     "layout": "side_end"
+     "type": "entry",
+     "title": "Leaving Louisiana",
+     "anchor": "leaving",
+     "bio": "",
+     "summary": "An influx of Irish and German immigrants, who displaced free black tradesmen and were willing to work at unskilled jobs for low wages, began in the 1830s.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Other factors also played a part in free blacks leaving Louisiana. An influx of Irish and German immigrants, who displaced free black tradesmen and were willing to work at unskilled jobs for low wages, began in the 1830s. The Panic of 1837 severely affected the state and pressured some wealthy blacks to sell property. Due to multiple factors, Louisiana’s free black population shrank over the next twenty years. Many left to seek a better life in the North, France, Haiti, and Latin America. Some, no doubt, were able to “pass” as white, and so no longer were counted among free people of color. Others still were resettled in Africa and Mexico by colonization societies. On the eve of the Civil War, free people of color represented just 2.6 percent of the population of Louisiana, a decline from 7.7 percent in 1830.</p>"
+      }
+     ]
     },
     {
-     "type": "text",
-     "body": "<p>Other factors also played a part in free blacks leaving Louisiana. An influx of Irish and German immigrants, who displaced free black tradesmen and were willing to work at unskilled jobs for low wages, began in the 1830s. The Panic of 1837 severely affected the state and pressured some wealthy blacks to sell property. Due to multiple factors, Louisiana’s free black population shrank over the next twenty years. Many left to seek a better life in the North, France, Haiti, and Latin America. Some, no doubt, were able to “pass” as white, and so no longer were counted among free people of color. Others still were resettled in Africa and Mexico by colonization societies. On the eve of the Civil War, free people of color represented just 2.6 percent of the population of Louisiana, a decline from 7.7 percent in 1830.</p><p>Those who remained faced divided loyalties when the Civil War broke out in 1861. In May of that year, about 1,500 free black New Orleanians responded to Confederate governor Thomas Overton Moore’s call for troops, forming the Louisiana Native Guard. Although its colonel was white, it was the first military unit in American history to have black officers. In the Cane River region of northwest Louisiana, two free black units were formed, the Augustin Guards and Monette’s Guards, but both were rejected for service. Why free people of color volunteered to defend the Confederacy is a matter of debate. Some may have seen it as a way to enhance their position in society. Others probably feared that they or their property would be harmed if they did not conform. After the fall of New Orleans, some Native Guard members formed a new unit as part of the Union Army. Swelled by runaway slaves, it was soon divided into three regiments, two of which participated in the siege of Port Hudson. Captain André Cailloux, a respected businessman before the war, was killed in the action. His death, widely reported in the press, became a rallying cry for African American recruitment.</p><p>For free people of color who owned plantations and slaves, the war was a mixed blessing, bringing greater freedom, but destroying the state’s economy and causing significant property loss. A string of droughts and crop failures, together with the need to grow food rather than cash crops during the Union blockade, contributed to the economic turmoil. Plantations owned by free people of color, moreover, were not spared the ravages of Union troops, who carried off livestock, crops, farm implements, and household items. With no capital, slaves, or money to hire workers, free black planters had to work their own fields. As historian Gary Mills has written, “Instead of elevation to a position of full citizenship and equality, the once influential families of color were now publicly submerged into the new mass of black freedmen—a class and a culture with which they had no identification and one that harbored much resentment toward them.”</p>"
+     "type": "entry",
+     "title": "Sheriff’s sale, 1860",
+     "anchor": "sheriffs-sale",
+     "bio": "",
+     "blocks": [
+      {
+       "type": "figure",
+       "image": "sheriffs-sale-taylor-1860.jpg",
+       "caption": "<p><strong>Sheriff’s sale of a lot of ground from the succession of John Taylor, a free man of color, at the City Hotel, November 7, 1860.</strong><br>Sheriff’s Sale Broadside Collection, MSS 176. The Historic New Orleans Collection. <a href=\"https://louisianadigitallibrary.org/islandora/object/fpoc-p16313coll51:38254\">Louisiana Digital Library</a></p>",
+       "layout": "side_end"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Divided loyalties",
+     "anchor": "divided-loyalties",
+     "bio": "",
+     "summary": "Those who remained faced divided loyalties when the Civil War broke out in 1861.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>Those who remained faced divided loyalties when the Civil War broke out in 1861. In May of that year, about 1,500 free black New Orleanians responded to Confederate governor Thomas Overton Moore’s call for troops, forming the Louisiana Native Guard. Although its colonel was white, it was the first military unit in American history to have black officers. In the Cane River region of northwest Louisiana, two free black units were formed, the Augustin Guards and Monette’s Guards, but both were rejected for service. Why free people of color volunteered to defend the Confederacy is a matter of debate. Some may have seen it as a way to enhance their position in society. Others probably feared that they or their property would be harmed if they did not conform. After the fall of New Orleans, some Native Guard members formed a new unit as part of the Union Army. Swelled by runaway slaves, it was soon divided into three regiments, two of which participated in the siege of Port Hudson. Captain André Cailloux, a respected businessman before the war, was killed in the action. His death, widely reported in the press, became a rallying cry for African American recruitment.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "A mixed blessing",
+     "anchor": "mixed-blessing",
+     "bio": "",
+     "summary": "For free people of color who owned plantations and slaves, the war was a mixed blessing, bringing greater freedom, but destroying the state’s economy and causing significant property loss.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p>For free people of color who owned plantations and slaves, the war was a mixed blessing, bringing greater freedom, but destroying the state’s economy and causing significant property loss. A string of droughts and crop failures, together with the need to grow food rather than cash crops during the Union blockade, contributed to the economic turmoil. Plantations owned by free people of color, moreover, were not spared the ravages of Union troops, who carried off livestock, crops, farm implements, and household items. With no capital, slaves, or money to hire workers, free black planters had to work their own fields. As historian Gary Mills has written, “Instead of elevation to a position of full citizenship and equality, the once influential families of color were now publicly submerged into the new mass of black freedmen—a class and a culture with which they had no identification and one that harbored much resentment toward them.”</p>"
+      }
+     ]
     }
-   ]
+   ],
+   "display": "wall"
   },
   {
    "title": "Legacies: Louisiana’s “Creoles of Color” after the Civil War",
@@ -266,15 +384,60 @@
    "lead_caption": "<p><strong>Basile Barès, Les Variétés du Carnaval, dedicated to Rex, King of Carnival (New Orleans: Louis Grunewald, 1875), cover. Barès, one of the composers in Golden Age, grew up in the years it describes; the old exhibition showed The Historic New Orleans Collection’s copy.</strong><br>Louisiana Sheet Music Collection, HJA-117, Hogan Archive of New Orleans Music and New Orleans Jazz. Tulane University Special Collections. <a href=\"https://library.search.tulane.edu/discovery/fulldisplay?docid=alma9945515204906326&amp;vid=01TUL_INST:Tulane\">Tulane University Digital Collections</a></p>",
    "blocks": [
     {
-     "type": "text",
-     "body": "<h3>Selected Bibliography</h3><ul><li>Anthony, Arthé A. <em>Picturing Black New Orleans: A Creole Photographer’s View of the Early Twentieth Century</em>. University of Florida Press, 2012.</li><li>Bell, Caryn. <em>Revolution, Romanticism, and the Afro-Creole Protest Tradition in Louisiana, 1718–1868</em>. Louisiana State University Press, 1997.</li><li>Brasseaux, Carl. <em>French, Cajun, Creole, Houma: A Primer on Francophone Louisiana</em>. Louisiana State University Press, 2005.</li><li>Buchanan, Thomas C. <em>Black Life on the Mississippi: Slaves, Free Blacks, and the Western Steamboat World</em>. University of North Carolina Press, 2004.</li><li>Burton, H. Sophie and F. Todd Smith. <em>Colonial Natchitoches: A Creole Community on the Louisiana-Texas Frontier</em>. Texas A&amp;M University Press, 1998.</li><li>Cassimere, Raphael. <em>African Americans in New Orleans Before the Civil War</em>. College of Urban and Public Affairs, University of New Orleans, 1995.</li><li>Childs, Matt. <em>Free People of Color</em><em>(Oxford Bibliographies).</em> Oxford University Press, 2011.</li><li>Christian, Marcus. <em>Negro Ironworkers of Louisiana, 1718–1900</em>. Pelican Publishing, 1972.</li><li>Clark, Emily. <em>The Strange History of the American Quadroon: Free Women of Color in the Revolutionary Atlantic World</em>. University of North Carolina Press, 2013.</li><li>Cohen, David W. and Jack P. Greene, eds. <em>Neither Slave nor Free: The Freedmen of African Descent in the Slave Societies of the New World. </em>Johns Hopkins University Press, 1972.</li><li>Desdunes, Rodolphe Lucien. <em>Our People and Our History: Fifty Creole Portraits</em>. Louisiana State University Press, 2001.</li><li>Dessens, Nathalie. <em>From Saint-Domingue to New Orleans: Migration and Influences</em>. 1st ed. University Press of Florida, 2007.</li><li>Dormon, James H. <em>Creoles of Color of the Gulf South</em>. University of Tennessee Press, 1996.</li><li>Emanuel, Rachel Lorraine. <em>A More Noble Cause: A. P. Tureaud and the Struggle for Civil Rights in Louisiana</em>. Louisiana State University Press, 2011.</li><li>Gaspar, David Barry and Darlene Clark Hine. <em>Beyond Bondage: Free Women of Color in the Americas</em>. University of Illinois Press, 2004.</li><li>Gehman, Mary. <em>The Free People of Color of New Orleans: An Introduction</em>. Margaret Media, 1994.</li><li>Gould, Virginia Meacham. <em>Chained to the Rock of Adversity: To be Free, Black, and Female in the Old South</em>. University of Georgia Press, 1998.</li><li>Guillory, Monique. <em>Some Enchanted Evening on the Auction Block the Cultural Legacy of the New Orleans Quadroon Balls</em>. New York: Guillory, 1999.</li><li>Hall, Gwendolyn Midlo. <em>Africans in Colonial Louisiana: The Development of Afro-Creole Culture in the Eighteenth Century</em>. Louisiana State University Press, 1995.</li><li>Hanger, Kimberly S. <em>Bounded Lives, Bounded Places: Free Black Society in Colonial New Orleans, 1769–1803</em>. Duke University Press, 1997.</li><li>Haskins, James. <em>The Creoles of Color of New Orleans</em>. (New York): Crowell, 1975.</li><li>Herrin, M. H. <em>The Creole Aristocracy</em>. (New York): Exposition Press, 1952.</li><li>Hirsch, Arnold R. <em>Dutch Morial: Old Creole in the New South</em>. New Orleans: College of Urban &amp; Public Affairs, University of New Orleans, 1990.</li><li>Hirsch, Arnold R., and Joseph Logsdon. <em>Creole New Orleans: Race and Americanization</em>. Louisiana State University Press, 1992.</li><li>Hobratsch, Ben Melvin. “Creole Angel: The Self Identification of the Free People of Color of Antebellum New Orleans.” University of North Texas, History, 2006.</li><li>Horton, James Oliver. <em>Free People of Color: Inside the African American Community</em>. Smithsonian Institution Press, 1993.</li><li>Ingersoll, Thomas. <em>Mammon and Manon in Early New Orleans: The First Slave Society in the Deep South, 1718–1819. </em>University of Tennessee Press, 1999.</li><li>Jones, Bernie D. <em>Fathers of Conscience: Mixed-Race Inheritance in the Antebellum South</em>. University of Georgia Press, 2009.</li><li>Kein, Sybil. <em>Creole: The History and Legacy of Louisiana’s Free People of Color</em>. Louisiana State University Press, 2000.</li><li>King, Stewart R. <em>The Encyclopedia of Free Blacks and People of Color in the Americas</em>. Facts on File, 2012.</li><li>Landers, Jane. <em>Against the Odds: Free Blacks in the Slave Societies of the Americas</em>. Routledge, 1996.</li><li>Landers, Jane. <em>Atlantic Creoles in the Age of Revolution.</em> Harvard University Press, 2010.</li><li>Marciacq, J. L, and J. L Sollée, eds. <em>L’Album Littéraire: Journal Des Jeunes Gens, Amateurs De Littérature</em>. Nouvelle-Orléans [La.]: J.L. Sollée, n.d.</li><li>McConnell, Roland C. <em>Negro Troops of Antebellum Louisiana: A History of the Battalion of Free Men of Color</em>. Louisiana State University studies no. 13. Baton Rouge: Louisiana State University Press, 1968.</li><li>Mills, Gary B. <em>The Forgotten People: Cane River’s Creoles of Color</em>. Louisiana State University Press, 2013.</li><li>Moscou, Margot. <em>New Orleans’ Free-Men-of-Color Cabinet Makers in the New Orleans Furniture Trade 1800–1850</em>. Xavier Review Press, 2008.</li><li>Rankin, David. <em>The Forgotten People: Free People of Color in New Orleans, 1850–1870.</em> Dissertation, Johns Hopkins University, 1976.</li><li>Scott, Rebecca J. and Jean M. Hébrard. <em>Freedom Papers: An Atlantic Odyssey in the Age of Emancipation</em>. Harvard University Press, 2012.</li><li>Smith, Johanna Lee Davis. <em>Mulatto Bend: Free People of Color in Louisiana, 1763–1865</em>. Dissertation, Tulane University, 2012.</li><li>Sterkx, H. E. <em>The Free Negro in Ante-Bellum Louisiana</em>. Associated University Press, 1972.</li><li>Thompson, Shirley Elizabeth. <em>Exiles at Home: The Struggle to Become American in Creole New Orleans</em>. Harvard University Press, 2009.</li><li>Thompson, Shirley Elizabeth. <em>The Passing of a People: Creoles of Color in Mid-Nineteenth Century New Orleans</em>. Dissertation, Harvard University, 2001.</li><li>Toledano, Roulhac, Sally Kittredge Evans, and Mary Louise Christovich. <em>New Orleans Architecture, Volume IV: The Creole Faubourgs</em>. New Orleans Architecture Series. New Orleans: Pelican Publishing Company, 1974.</li><li>West, Emily. <em>Family or Freedom: People of Color in the Antebellum South</em>. University of Kentucky Press, 2012.</li><li>Whitten, David O. <em>Andrew Durnford: A Black Sugar Planter in the Antebellum South</em>. Northwestern State University Press, 1981.</li><li>Wilson, Carol. <em>Freedom at Risk: The Kidnapping of Free Blacks in America, 1780–1865</em>. University Press of Kentucky, 2004.</li></ul>",
-     "style": "sources"
+     "type": "entry",
+     "title": "Selected Bibliography",
+     "anchor": "bibliography",
+     "bio": "",
+     "summary": "46 books, articles and dissertations on Louisiana’s free people of color, from the project’s reading list.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<ul><li>Anthony, Arthé A. <em>Picturing Black New Orleans: A Creole Photographer’s View of the Early Twentieth Century</em>. University of Florida Press, 2012.</li><li>Bell, Caryn. <em>Revolution, Romanticism, and the Afro-Creole Protest Tradition in Louisiana, 1718–1868</em>. Louisiana State University Press, 1997.</li><li>Brasseaux, Carl. <em>French, Cajun, Creole, Houma: A Primer on Francophone Louisiana</em>. Louisiana State University Press, 2005.</li><li>Buchanan, Thomas C. <em>Black Life on the Mississippi: Slaves, Free Blacks, and the Western Steamboat World</em>. University of North Carolina Press, 2004.</li><li>Burton, H. Sophie and F. Todd Smith. <em>Colonial Natchitoches: A Creole Community on the Louisiana-Texas Frontier</em>. Texas A&amp;M University Press, 1998.</li><li>Cassimere, Raphael. <em>African Americans in New Orleans Before the Civil War</em>. College of Urban and Public Affairs, University of New Orleans, 1995.</li><li>Childs, Matt. <em>Free People of Color</em><em>(Oxford Bibliographies).</em> Oxford University Press, 2011.</li><li>Christian, Marcus. <em>Negro Ironworkers of Louisiana, 1718–1900</em>. Pelican Publishing, 1972.</li><li>Clark, Emily. <em>The Strange History of the American Quadroon: Free Women of Color in the Revolutionary Atlantic World</em>. University of North Carolina Press, 2013.</li><li>Cohen, David W. and Jack P. Greene, eds. <em>Neither Slave nor Free: The Freedmen of African Descent in the Slave Societies of the New World. </em>Johns Hopkins University Press, 1972.</li><li>Desdunes, Rodolphe Lucien. <em>Our People and Our History: Fifty Creole Portraits</em>. Louisiana State University Press, 2001.</li><li>Dessens, Nathalie. <em>From Saint-Domingue to New Orleans: Migration and Influences</em>. 1st ed. University Press of Florida, 2007.</li><li>Dormon, James H. <em>Creoles of Color of the Gulf South</em>. University of Tennessee Press, 1996.</li><li>Emanuel, Rachel Lorraine. <em>A More Noble Cause: A. P. Tureaud and the Struggle for Civil Rights in Louisiana</em>. Louisiana State University Press, 2011.</li><li>Gaspar, David Barry and Darlene Clark Hine. <em>Beyond Bondage: Free Women of Color in the Americas</em>. University of Illinois Press, 2004.</li><li>Gehman, Mary. <em>The Free People of Color of New Orleans: An Introduction</em>. Margaret Media, 1994.</li><li>Gould, Virginia Meacham. <em>Chained to the Rock of Adversity: To be Free, Black, and Female in the Old South</em>. University of Georgia Press, 1998.</li><li>Guillory, Monique. <em>Some Enchanted Evening on the Auction Block the Cultural Legacy of the New Orleans Quadroon Balls</em>. New York: Guillory, 1999.</li><li>Hall, Gwendolyn Midlo. <em>Africans in Colonial Louisiana: The Development of Afro-Creole Culture in the Eighteenth Century</em>. Louisiana State University Press, 1995.</li><li>Hanger, Kimberly S. <em>Bounded Lives, Bounded Places: Free Black Society in Colonial New Orleans, 1769–1803</em>. Duke University Press, 1997.</li><li>Haskins, James. <em>The Creoles of Color of New Orleans</em>. (New York): Crowell, 1975.</li><li>Herrin, M. H. <em>The Creole Aristocracy</em>. (New York): Exposition Press, 1952.</li><li>Hirsch, Arnold R. <em>Dutch Morial: Old Creole in the New South</em>. New Orleans: College of Urban &amp; Public Affairs, University of New Orleans, 1990.</li><li>Hirsch, Arnold R., and Joseph Logsdon. <em>Creole New Orleans: Race and Americanization</em>. Louisiana State University Press, 1992.</li><li>Hobratsch, Ben Melvin. “Creole Angel: The Self Identification of the Free People of Color of Antebellum New Orleans.” University of North Texas, History, 2006.</li><li>Horton, James Oliver. <em>Free People of Color: Inside the African American Community</em>. Smithsonian Institution Press, 1993.</li><li>Ingersoll, Thomas. <em>Mammon and Manon in Early New Orleans: The First Slave Society in the Deep South, 1718–1819. </em>University of Tennessee Press, 1999.</li><li>Jones, Bernie D. <em>Fathers of Conscience: Mixed-Race Inheritance in the Antebellum South</em>. University of Georgia Press, 2009.</li><li>Kein, Sybil. <em>Creole: The History and Legacy of Louisiana’s Free People of Color</em>. Louisiana State University Press, 2000.</li><li>King, Stewart R. <em>The Encyclopedia of Free Blacks and People of Color in the Americas</em>. Facts on File, 2012.</li><li>Landers, Jane. <em>Against the Odds: Free Blacks in the Slave Societies of the Americas</em>. Routledge, 1996.</li><li>Landers, Jane. <em>Atlantic Creoles in the Age of Revolution.</em> Harvard University Press, 2010.</li><li>Marciacq, J. L, and J. L Sollée, eds. <em>L’Album Littéraire: Journal Des Jeunes Gens, Amateurs De Littérature</em>. Nouvelle-Orléans [La.]: J.L. Sollée, n.d.</li><li>McConnell, Roland C. <em>Negro Troops of Antebellum Louisiana: A History of the Battalion of Free Men of Color</em>. Louisiana State University studies no. 13. Baton Rouge: Louisiana State University Press, 1968.</li><li>Mills, Gary B. <em>The Forgotten People: Cane River’s Creoles of Color</em>. Louisiana State University Press, 2013.</li><li>Moscou, Margot. <em>New Orleans’ Free-Men-of-Color Cabinet Makers in the New Orleans Furniture Trade 1800–1850</em>. Xavier Review Press, 2008.</li><li>Rankin, David. <em>The Forgotten People: Free People of Color in New Orleans, 1850–1870.</em> Dissertation, Johns Hopkins University, 1976.</li><li>Scott, Rebecca J. and Jean M. Hébrard. <em>Freedom Papers: An Atlantic Odyssey in the Age of Emancipation</em>. Harvard University Press, 2012.</li><li>Smith, Johanna Lee Davis. <em>Mulatto Bend: Free People of Color in Louisiana, 1763–1865</em>. Dissertation, Tulane University, 2012.</li><li>Sterkx, H. E. <em>The Free Negro in Ante-Bellum Louisiana</em>. Associated University Press, 1972.</li><li>Thompson, Shirley Elizabeth. <em>Exiles at Home: The Struggle to Become American in Creole New Orleans</em>. Harvard University Press, 2009.</li><li>Thompson, Shirley Elizabeth. <em>The Passing of a People: Creoles of Color in Mid-Nineteenth Century New Orleans</em>. Dissertation, Harvard University, 2001.</li><li>Toledano, Roulhac, Sally Kittredge Evans, and Mary Louise Christovich. <em>New Orleans Architecture, Volume IV: The Creole Faubourgs</em>. New Orleans Architecture Series. New Orleans: Pelican Publishing Company, 1974.</li><li>West, Emily. <em>Family or Freedom: People of Color in the Antebellum South</em>. University of Kentucky Press, 2012.</li><li>Whitten, David O. <em>Andrew Durnford: A Black Sugar Planter in the Antebellum South</em>. Northwestern State University Press, 1981.</li><li>Wilson, Carol. <em>Freedom at Risk: The Kidnapping of Free Blacks in America, 1780–1865</em>. University Press of Kentucky, 2004.</li></ul>",
+       "style": "sources"
+      }
+     ]
     },
     {
-     "type": "text",
-     "body": "<h3>Online Records and Documents</h3><p><strong><a href=\"http://www.ibiblio.org/laslave/\">Afro-Louisiana History and Genealogy, 1718–1820</a></strong><br>Database of records pertaining to 100,000 slaves brought to Louisiana.</p><p><strong><a href=\"https://dlas.uncg.edu/\">Digital Library on American Slavery (University of North Carolina at Greensboro)</a></strong><br>This site contains detailed information on 150,000 individuals, including slaves, free people of color, and whites, drawn from a variety of legal documents.</p><p><strong><a href=\"http://neworleanspubliclibrary.org/guides/genguide/slavery.htm\">Records Relating to Slavery, Free People of Color, and Freedmen (New Orleans Public Library)</a></strong><br>Guide to genealogical materials in the library’s collections.</p><p><strong><a href=\"http://archives.arch-no.org/sfpc.php\">Slave and Free People of Color Baptismal Records (Archdiocese of New Orleans)</a></strong><br>Digital images of church records, mostly in Spanish, 1777–1812.</p><p><strong><a href=\"https://www.rootsweb.com/~lanatchi/Staugmel.htm\">St. Augustine Catholic Church Cemetery</a></strong><br>List of interments at this church founded by Augustin Metoyer, a free person of color.</p><p><strong><a href=\"https://slaveryimages.org/\">The Atlantic Slave Trade and Slave Life in the Americas: A Visual Record (University of Virginia)</a></strong><br>A collection of 1,280 images. Includes a section titled “Domestic Servants and Free People of Color.”</p><h3>Subject Guides and Exhibits</h3><p><strong><a href=\"http://neworleanspubliclibrary.org/~nopl/exhibits/fmc/fmc.htm\">African Americans in New Orleans: Les Gens de Couleur Libres</a></strong><br>An online exhibit created in 1999 by the Louisiana Division of the New Orleans Public Library in connection with the 300th anniversary of the French in Louisiana. Includes biographies of prominent free people of color and images of them, their works, and associated places in New Orleans.</p><p><strong><a href=\"https://blackpast.org/\">BlackPast.org</a></strong><br>An online reference guide to African American history.</p><p><strong><a href=\"https://web.archive.org/web/20160711002253/https://amistadresearchcenter.org/index.php/search-the-collections/204-creoles-and-free-people-of-color-subject-guide\">Creoles and Free People of Color Subject Guide (Amistad Research Center)</a></strong><br>Guide to research materials at the nation’s oldest, largest and most comprehensive independent archive specializing in the history of African Americans and other Ethnic Minorities.</p><h3>Organizations and Online Communities</h3><p><strong><a href=\"https://www.creolegen.org/\">CreoleGen</a></strong><br>Website of a group of family historians and genealogists focused on researching and documenting the lives of ethnically diverse Louisiana and Gulf Coast Creole families.</p><p><strong><a href=\"https://www.lacreole.org/\">La Creole</a></strong><br>Website of the Louisiana Creole Research Association, a New Orleans based non-profit family research organization dedicated to the study of the history and culture of the Creoles of Color of Louisiana through ancestral research, education, and celebration.</p><p><strong><a href=\"https://web.archive.org/web/20170522223956/https://www.lemuseedefpc.com/footsteps/\">Le Musée de f.p.c.</a></strong><br>Website of Le Musée de f.p.c., a historic house museum located on Esplanade Avenue in New Orleans. The museum is dedicated exclusively to preserving the material culture of and telling the story of free people of color.</p><p><strong><a href=\"https://creole.nsula.edu/\">Louisiana Creole Heritage Center (Northwestern State University)</a></strong><br>This website hosts the Creole Family History Database, a resource for researching free people of color in the Natchitoches area.</p>"
+     "type": "entry",
+     "title": "Online Records and Documents",
+     "anchor": "online-records",
+     "bio": "",
+     "summary": "6 online databases and record guides for tracing free people of color and the enslaved in Louisiana.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p><strong><a href=\"http://www.ibiblio.org/laslave/\">Afro-Louisiana History and Genealogy, 1718–1820</a></strong><br>Database of records pertaining to 100,000 slaves brought to Louisiana.</p><p><strong><a href=\"https://dlas.uncg.edu/\">Digital Library on American Slavery (University of North Carolina at Greensboro)</a></strong><br>This site contains detailed information on 150,000 individuals, including slaves, free people of color, and whites, drawn from a variety of legal documents.</p><p><strong><a href=\"http://neworleanspubliclibrary.org/guides/genguide/slavery.htm\">Records Relating to Slavery, Free People of Color, and Freedmen (New Orleans Public Library)</a></strong><br>Guide to genealogical materials in the library’s collections.</p><p><strong><a href=\"http://archives.arch-no.org/sfpc.php\">Slave and Free People of Color Baptismal Records (Archdiocese of New Orleans)</a></strong><br>Digital images of church records, mostly in Spanish, 1777–1812.</p><p><strong><a href=\"https://www.rootsweb.com/~lanatchi/Staugmel.htm\">St. Augustine Catholic Church Cemetery</a></strong><br>List of interments at this church founded by Augustin Metoyer, a free person of color.</p><p><strong><a href=\"https://slaveryimages.org/\">The Atlantic Slave Trade and Slave Life in the Americas: A Visual Record (University of Virginia)</a></strong><br>A collection of 1,280 images. Includes a section titled “Domestic Servants and Free People of Color.”</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Subject Guides and Exhibits",
+     "anchor": "subject-guides",
+     "bio": "",
+     "summary": "3 online exhibits and research guides.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p><strong><a href=\"http://neworleanspubliclibrary.org/~nopl/exhibits/fmc/fmc.htm\">African Americans in New Orleans: Les Gens de Couleur Libres</a></strong><br>An online exhibit created in 1999 by the Louisiana Division of the New Orleans Public Library in connection with the 300th anniversary of the French in Louisiana. Includes biographies of prominent free people of color and images of them, their works, and associated places in New Orleans.</p><p><strong><a href=\"https://blackpast.org/\">BlackPast.org</a></strong><br>An online reference guide to African American history.</p><p><strong><a href=\"https://web.archive.org/web/20160711002253/https://amistadresearchcenter.org/index.php/search-the-collections/204-creoles-and-free-people-of-color-subject-guide\">Creoles and Free People of Color Subject Guide (Amistad Research Center)</a></strong><br>Guide to research materials at the nation’s oldest, largest and most comprehensive independent archive specializing in the history of African Americans and other Ethnic Minorities.</p>"
+      }
+     ]
+    },
+    {
+     "type": "entry",
+     "title": "Organizations and Online Communities",
+     "anchor": "organizations",
+     "bio": "",
+     "summary": "4 family history groups, museums and heritage centers for Louisiana’s Creoles of color.",
+     "blocks": [
+      {
+       "type": "text",
+       "body": "<p><strong><a href=\"https://www.creolegen.org/\">CreoleGen</a></strong><br>Website of a group of family historians and genealogists focused on researching and documenting the lives of ethnically diverse Louisiana and Gulf Coast Creole families.</p><p><strong><a href=\"https://www.lacreole.org/\">La Creole</a></strong><br>Website of the Louisiana Creole Research Association, a New Orleans based non-profit family research organization dedicated to the study of the history and culture of the Creoles of Color of Louisiana through ancestral research, education, and celebration.</p><p><strong><a href=\"https://web.archive.org/web/20170522223956/https://www.lemuseedefpc.com/footsteps/\">Le Musée de f.p.c.</a></strong><br>Website of Le Musée de f.p.c., a historic house museum located on Esplanade Avenue in New Orleans. The museum is dedicated exclusively to preserving the material culture of and telling the story of free people of color.</p><p><strong><a href=\"https://creole.nsula.edu/\">Louisiana Creole Heritage Center (Northwestern State University)</a></strong><br>This website hosts the Creole Family History Database, a resource for researching free people of color in the Natchitoches area.</p>"
+      }
+     ]
     }
-   ]
+   ],
+   "display": "wall"
   },
   {
    "title": "About the Project",

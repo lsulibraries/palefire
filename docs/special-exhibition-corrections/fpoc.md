@@ -56,3 +56,5 @@ Left as written:
 
 - The Collections and Terminology are walls of text plates. Each partner’s plate opens its list of collections; its opening line now says how many collections it lists and their years (from the collection titles, e.g. “12 collections, 1776–1964”).
 - Terminology keeps its opening as the gallery’s text; “Creole”, Controlled Vocabularies and Historical Terminology for Racial Designations and Descriptive Terms are an entry each. The glossary of historical terms stays a single list inside the last one rather than a plate per word.
+- Golden Age and Decline and Civil War are walls (2026-11-20): each chapter is four text plates at turns in the argument (Statehood and a booming city; Authors, artists and musicians; Fortunes in business; Beyond New Orleans. The laws close in; Leaving Louisiana; Divided loyalties; A mixed blessing), each with one of Taylor’s own sentences as its summary, and the documents between them. The text is unchanged, only divided; the plate titles are new.
+- Resources is a wall of four plates, one per list.
