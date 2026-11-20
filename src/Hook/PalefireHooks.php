@@ -1349,8 +1349,8 @@ class PalefireHooks {
     $year = NULL;
     if ($post->hasField('field_exhibit_on_view') && !$post->get('field_exhibit_on_view')->isEmpty()) {
       $range = $post->get('field_exhibit_on_view')->first();
-      $from = DateTimeImmutable::createFromFormat('!Y-m-d', substr((string) $range->value, 0, 10));
-      $to = DateTimeImmutable::createFromFormat('!Y-m-d', substr((string) ($range->end_value ?: $range->value), 0, 10));
+      $from = \DateTimeImmutable::createFromFormat('!Y-m-d', substr((string) $range->value, 0, 10));
+      $to = \DateTimeImmutable::createFromFormat('!Y-m-d', substr((string) ($range->end_value ?: $range->value), 0, 10));
       if ($from && $to) {
         $year = (int) $from->format('Y');
         $dates = match (TRUE) {
