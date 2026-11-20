@@ -932,7 +932,7 @@ HTML),
 HTML),
   $text('Fri Nov 20: A clip’s biography behind a button', <<<'HTML'
 <ul>
-<li>When an oral history clip opens, the speaker’s biography no longer fills the space above the recording and its transcript. The minimized player now starts with Play, then the speaker’s name over the clip’s title, then the controls; the volume slider is left to the full view. The speaker’s name now heads the recording, over who interviewed them; click the name (it has a + after it) for their biography, and the + turns to × while it’s open. The panel has fewer lines, and the caption sits right under the title.</li>
+<li>When an oral history clip opens, the speaker’s biography no longer fills the space above the recording and its transcript. The minimized player now starts with Play, then the speaker’s name over the clip’s title, then the controls, with the button that opens the clip again right above Close; the volume slider is left to the full view. The speaker’s name now heads the recording, over who interviewed them; click the name (it has a + after it) for their biography, and the + turns to × while it’s open. The panel has fewer lines, and the caption sits right under the title.</li>
 <li>On computers, the biography opens in a second panel beside the transcript, so you can read about the speaker while the clip plays. On phones and tablets it takes the screen, with Back to the clip to return. Moving to the next clip shows its speaker’s biography.</li>
 </ul>
 HTML),

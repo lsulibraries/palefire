@@ -1225,13 +1225,14 @@
     // Its hidden style read first, so it slides in rather than appears.
     window.getComputedStyle(bar).opacity;
     bar.classList.add('is-shown');
-    bar.querySelector('.pf-listen__expand').focus({ preventScroll: true });
+    bar.querySelector('.pf-listen__open').focus({ preventScroll: true });
   }
 
   // The bar: Play first (the moved player's own, laid out in the bar's
   // grid), the speaker as the kicker ("Now playing" without one) over the
-  // clip's title with the expand icon after it, then seek, time, Mute,
-  // CC and Close.
+  // clip's title, then seek, time, Mute, CC and Close. Expand is a square
+  // like Close, in the caption band right above it (in the row beside
+  // Close when the band isn't showing).
   function buildBar(title, speaker) {
     const bar = document.createElement('section');
     bar.className = 'pf-listen pf-listen--clip';
@@ -1242,16 +1243,18 @@
       + '<p class="pf-listen__caption-text"></p>'
       + '</div>'
       + '<div class="pf-listen__inner">'
-      + '<button type="button" class="pf-listen__expand">'
+      + '<div class="pf-listen__about">'
       + '<span class="pf-listen__kicker"></span>'
-      + '<span class="pf-listen__title"><span class="pf-listen__title-text"></span>'
-      + '<svg class="pf-listen__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M9.5 2.5h4v4M13.5 2.5 8.5 7.5M6.5 13.5h-4v-4M2.5 13.5l5-5"/></svg></span>'
-      + '<span class="visually-hidden">' + Drupal.t(', open with its transcript') + '</span>'
-      + '</button>'
+      + '<span class="pf-listen__title"></span>'
+      + '</div>'
       + '<div class="pf-listen__player"></div>'
       + '<button type="button" class="pf-listen__cc" aria-pressed="true" hidden>'
       + '<span class="pf-listen__cc-mark" aria-hidden="true">CC</span>'
       + '<span class="visually-hidden">' + Drupal.t('Captions') + '</span>'
+      + '</button>'
+      + '<button type="button" class="pf-listen__open">'
+      + '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M9.5 2.5h4v4M13.5 2.5 8.5 7.5M6.5 13.5h-4v-4M2.5 13.5l5-5"/></svg>'
+      + '<span class="visually-hidden">' + Drupal.t('Open the clip with its transcript') + '</span>'
       + '</button>'
       + '<button type="button" class="pf-listen__close">'
       + '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M3.5 3.5l9 9m0-9-9 9"/></svg>'
@@ -1259,8 +1262,8 @@
       + '</button>'
       + '</div>';
     bar.querySelector('.pf-listen__kicker').textContent = speaker || Drupal.t('Now playing');
-    bar.querySelector('.pf-listen__title-text').textContent = title;
-    bar.querySelector('.pf-listen__expand').addEventListener('click', expandBar);
+    bar.querySelector('.pf-listen__title').textContent = title;
+    bar.querySelector('.pf-listen__open').addEventListener('click', expandBar);
     const cc = bar.querySelector('.pf-listen__cc');
     cc.setAttribute('aria-pressed', ccOn() ? 'true' : 'false');
     bar.classList.toggle('is-cc-off', !ccOn());

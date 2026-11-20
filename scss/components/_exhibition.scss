@@ -3082,7 +3082,8 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
   }
 }
 
-.pf-listen__close {
+.pf-listen__close,
+.pf-listen__open {
   grid-area: close;
   display: grid;
   place-items: center;
@@ -3127,26 +3128,65 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
   // are the bar's cells. Phones: Play, the speaker and title, Close; then
   // seek, time, Mute (and CC). From md one row. No volume slider here
   // (it's in the view; phones have their own buttons).
+  //
+  // Expand (.pf-listen__open) is a square like Close. While the caption
+  // band shows, it sits at the band's right edge right above Close, the
+  // band's words kept clear of it; otherwise (CC off, no captions, before
+  // the first words) it's in the row, left of Close.
   .pf-listen__inner {
-    grid-template-columns: auto minmax(0, 1fr) auto auto;
-    grid-template-areas: "play expand expand close" "seek seek time mute";
+    position: relative;
+    grid-template-columns: auto minmax(0, 1fr) auto auto auto;
+    grid-template-areas: "play expand expand open close" "seek seek seek time mute";
     column-gap: .75rem;
 
     @include media-breakpoint-up(md) {
-      grid-template-columns: auto minmax(0, 14rem) minmax(0, 1fr) auto auto auto;
-      grid-template-areas: "play expand seek time mute close";
+      grid-template-columns: auto minmax(0, 14rem) minmax(0, 1fr) auto auto auto auto;
+      grid-template-areas: "play expand seek time mute open close";
       column-gap: 1rem;
     }
   }
 
   &.has-captions .pf-listen__inner {
-    grid-template-columns: auto minmax(0, 1fr) auto auto auto;
-    grid-template-areas: "play expand expand expand close" "seek seek time mute cc";
+    grid-template-columns: auto minmax(0, 1fr) auto auto auto auto;
+    grid-template-areas: "play expand expand expand open close" "seek seek seek time mute cc";
 
     @include media-breakpoint-up(md) {
-      grid-template-columns: auto minmax(0, 14rem) minmax(0, 1fr) auto auto auto auto;
-      grid-template-areas: "play expand seek time mute cc close";
+      grid-template-columns: auto minmax(0, 14rem) minmax(0, 1fr) auto auto auto auto auto;
+      grid-template-areas: "play expand seek time mute cc open close";
     }
+  }
+
+  &.has-captions:not(.is-cc-off):has(.pf-listen__caption.is-shown) {
+    .pf-listen__inner {
+      grid-template-columns: auto minmax(0, 1fr) auto auto auto;
+      grid-template-areas: "play expand expand expand close" "seek seek time mute cc";
+
+      @include media-breakpoint-up(md) {
+        grid-template-columns: auto minmax(0, 14rem) minmax(0, 1fr) auto auto auto auto;
+        grid-template-areas: "play expand seek time mute cc close";
+      }
+    }
+
+    .pf-listen__caption {
+      min-height: 3.5rem;
+      padding-inline-end: 4.5rem;
+    }
+
+    .pf-listen__open {
+      position: absolute;
+      right: 1rem;
+      bottom: calc(100% + .375rem);
+    }
+  }
+
+  .pf-listen__open {
+    grid-area: open;
+  }
+
+  .pf-listen__about {
+    grid-area: expand;
+    display: grid;
+    min-width: 0;
   }
 
   .pf-listen__player,
@@ -3178,37 +3218,10 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
     display: none;
   }
 
-  // The expand icon follows the title's words; a long title ellipsizes
-  // before it.
-  .pf-listen__expand {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
   .pf-listen__kicker {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-  }
-
-  .pf-listen__title {
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-    min-width: 0;
-    overflow: visible;
-  }
-
-  .pf-listen__title-text {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .pf-listen__icon {
-    flex: none;
-    width: .875rem;
-    height: .875rem;
   }
 
   .pf-listen__cc {
