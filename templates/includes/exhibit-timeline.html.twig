@@ -10,8 +10,9 @@
  * event a filled dot (a picture or clip) or a ring (text only), its date,
  * title and gallery, and a small picture when it has one. An event with a
  * picture or clip is a link to its entry (js/exhibition.js opens that
- * gallery, or the entry in a wall's object view); a text-only event is not
- * a link, and its words are shown in place. From a 48rem container the
+ * gallery, or the entry in a wall's object view), and so is a life with a
+ * biography's card, its summary under its name; any other text-only event
+ * is not a link, and its words are shown in place. From a 48rem container the
  * decade stands in a column at the left and stays in view while its events
  * scroll past.
  *
@@ -31,9 +32,9 @@
           {% for e in decade.events %}
             <li class="pf-tl__event{{ e.media ? ' is-media' }}">
               {# A picture or clip opens its entry; text only is read here. #}
-              {% set tag = e.media ? 'a' : 'div' %}
-              {% set inner = e.media ? 'span' : 'div' %}
-              <{{ tag }} class="{{ e.media ? 'pf-tl__link' : 'pf-tl__item' }}"{% if e.media %} href="#{{ e.anchor }}"{% endif %}>
+              {% set tag = e.link ? 'a' : 'div' %}
+              {% set inner = e.link ? 'span' : 'div' %}
+              <{{ tag }} class="{{ e.link ? 'pf-tl__link' : 'pf-tl__item' }}"{% if e.link %} href="#{{ e.anchor }}"{% endif %}>
                 <span class="pf-tl__dot" aria-hidden="true"></span>
                 <{{ inner }} class="pf-tl__meta">
                   <time class="pf-tl__date" datetime="{{ e.iso }}">{{ e.label }}</time>
@@ -42,6 +43,7 @@
                     {{- e.strand -}}
                     {% if e.audio %}<span class="pf-tl__clip"><i class="fas fa-volume-up" aria-hidden="true"></i> {{ 'Clip'|t }}</span>{% endif %}
                   </span>
+                  {% if e.summary %}<span class="pf-tl__summary">{{ e.summary }}</span>{% endif %}
                   {% if e.text %}<div class="pf-tl__text">{{ e.text }}</div>{% endif %}
                 </{{ inner }}>
                 {% if e.thumb %}

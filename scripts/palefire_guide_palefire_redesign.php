@@ -922,6 +922,14 @@ HTML),
 <li>All 42 people in AVES now have their two-sentence summary and role on their card, drafted from their own biographies for curators to review. A missing space in Hernández’s biography is fixed.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: AVES hung as walls, long texts folded', <<<'HTML'
+<ul>
+<li>AVES was one very long scroll, every essay and biography open. Its four chapters of people (Collecting by Individuals, Museum Men, Collecting by Museums and Life Histories) are now walls: the chapter’s essay at the top, folded with Read more, then a tile for each person that opens their life full screen. People and Places and Modern Fieldwork are walls of their photographs, each with a short title.</li>
+<li>A person with no portrait gets a name tile: their name set large on a plain plate, with when they lived and their role, so every person has a place on the wall.</li>
+<li>In every exhibition, a long opening essay now folds at the foot of its first screen with Read more, and so does any long text in a gallery. Sources shows its first twelve, with Show all 177 sources; a citation still takes you straight to its source.</li>
+<li>Biographies, a typed list of names, is now a timeline of the lives in the order they were born, each name opening its biography. Life dates move out of the headings into each entry’s Date, so links to the old addresses still work.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: A clip’s biography behind a button', <<<'HTML'
 <ul>
 <li>When an oral history clip opens, the speaker’s biography no longer fills the space above the recording and its transcript. The minimized player now starts with Play, then the speaker’s name over the clip’s title, then the controls; the volume slider is left to the full view. The speaker’s name now heads the recording, over who interviewed them; click the name (it has a + after it) for their biography, and the + turns to × while it’s open. The panel has fewer lines, and the caption sits right under the title.</li>

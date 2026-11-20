@@ -2140,6 +2140,30 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
   }
 }
 
+// A long text block in a story gallery (over 250 words): its opening lines
+// with "Read more", as a long biography (js/exhibition.js foldText()). A long
+// Sources list shows its first twelve with "Show all … sources"
+// (foldSources(); the rest are [hidden]).
+.pf-exhibit-fold {
+  --pf-fold-clip: 13.5rem;
+  overflow: hidden;
+
+  @include pf-exhibit-motion {
+    transition: max-height .6s $pf-exhibit-ease;
+  }
+
+  &.is-folded {
+    max-height: var(--pf-fold-clip);
+    -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent);
+    mask-image: linear-gradient(to bottom, #000 55%, transparent);
+  }
+}
+
+.pf-exhibit-fold__toggle {
+  display: block;
+  margin-top: 0;
+}
+
 // Figures --------------------------------------------------------------------
 
 .pf-exhibit-figure {
@@ -3768,10 +3792,12 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
   display: contents;
 }
 
-// A cover's text is never folded (js/exhibition.js measureCover()): row 1
-// keeps the title low on the first screen however long the text, so the
-// image shows above it; the lines at the screen's foot are faded until
-// scrolling brings them up (--pf-read).
+// A cover's text (js/exhibition.js measureCover()): row 1 keeps the title
+// low on the first screen however long the text, so the image shows above
+// it; the lines at the screen's foot are faded until scrolling brings them
+// up (--pf-read). An essay over 1.3 times that room folds instead, with
+// "Read more" (.is-folded, as a wall's intro), and keeps the short cover's
+// reveal open or folded.
 #{$pf-covered} {
   --pf-cover-top: 30svh;
 
@@ -4868,6 +4894,83 @@ $pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last
   min-width: 0;
   white-space: normal;
   overflow-wrap: anywhere;
+}
+
+// A life with no portrait (tile.person, exhibit-page.html.twig): the name
+// typeset on the surface, a 3:4 plate like a portrait's, Swiss fashion: the
+// name set large and tight at the top, a short accent rule, the life dates
+// in mono and the role muted at the foot. Sized to the tile (cqw), so a
+// narrow column's plate reads as a wide one's. On the object view's stage
+// the same plate, as large as fits.
+.pf-exhibit-plate {
+  position: absolute;
+  inset: 0;
+  container-type: size;
+  display: flex;
+  flex-direction: column;
+  // In % of the tile's width (cqw here would be an outer container's).
+  gap: .75em;
+  padding: 10% 9%;
+  overflow: hidden;
+  color: var(--bs-heading-color, var(--bs-body-color));
+}
+
+.pf-exhibit-plate__name {
+  font-size: clamp(.875rem, 11.5cqw, 2.75rem);
+  font-weight: 500;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  hyphens: auto;
+  overflow-wrap: break-word;
+}
+
+.pf-exhibit-plate__life {
+  display: grid;
+  gap: 3cqw;
+  font: clamp(.6875rem, 5.5cqw, 1rem)/1.3 var(--pf-exhibit-mono);
+  letter-spacing: .06em;
+  font-variant-numeric: tabular-nums;
+
+  &::before {
+    content: "";
+    width: 2.25rem;
+    height: 2px;
+    background: var(--pf-exhibit-accent);
+
+    @include pf-exhibit-motion {
+      transition: width .6s $pf-exhibit-ease;
+    }
+  }
+}
+
+.pf-exhibit-plate__role {
+  margin-top: auto;
+  font-size: clamp(.6875rem, 5.5cqw, 1rem);
+  line-height: 1.35;
+  color: var(--pf-exhibit-muted);
+  // Long roles end on their third line.
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// On hover and focus the rule draws out, as a plate's image lifts.
+.pf-exhibit-wall__link:is(:hover, :focus-visible) .pf-exhibit-plate__life::before {
+  width: 4.5rem;
+}
+
+.pf-viewer__frame--plate {
+  container-type: size;
+
+  .pf-exhibit-plate {
+    position: relative;
+    inset: auto;
+    width: min(100cqw, 75cqh, 30rem);
+    aspect-ratio: .75;
+    background: var(--pf-exhibit-surface);
+  }
 }
 
 // A clip with no picture (exhibit-reel.html.twig): a reel in its box, drawn

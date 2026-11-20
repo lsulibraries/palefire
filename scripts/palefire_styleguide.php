@@ -358,9 +358,38 @@ HTML),
 HTML, 'sources'),
 ]);
 
+if (FieldConfig::loadByName('paragraph', 'exhibit_page', 'field_exhibit_display')) {
+  $gallery('Wall', 'wall', [
+    $note('<p><strong>Wall</strong>: a Gallery with Display set to Wall hangs its entries as tiles, each its first picture, opening full screen. The gallery’s own text is the wall’s intro, folded with Read more when long. A person with no picture and a biography of 150 words or more is a <strong>name tile</strong>: the name set large on a plain plate, with Life (the entry’s Date, 1930/2017) and Role. A wall of people only counts them and spans their lives (“9 people · Lives 1875–2004”).</p>'),
+    Paragraph::create([
+      'type' => 'exhibit_entry',
+      'field_block_title' => 'Karl Gerstner',
+      'field_section_anchor' => 'gerstner',
+    ] + $dated('1930/2017') + array_filter([
+      'field_entry_summary' => isset($bio_fields['field_entry_summary']) ? 'A Basel designer who argued that a designer should write the rules and let the solutions follow. He co-founded the agency GGK and later worked as a painter.' : NULL,
+      'field_entry_role' => isset($bio_fields['field_entry_role']) ? 'Graphic designer and painter' : NULL,
+    ]) + [
+      'field_entry_bio' => $html(<<<'HTML'
+<p>Karl Gerstner was born in Basel in 1930 and trained at the city’s school of design, where Emil Ruder and Armin Hofmann taught. In 1959 he founded an advertising agency with the writer Markus Kutter; when Paul Gredinger joined them it became GGK, one of the best-known agencies in Europe.</p>
+<p>His book <em>Designing Programmes</em> (1964) argued that a designer should not draw each solution by hand but write a program, a set of rules, and let the solutions follow from it. It is one of the first statements of what is now called systematic or generative design, and it reads as well to programmers as to designers.</p>
+<p>He was also a painter in the concrete art tradition, and his color works explore how hue and form can be ordered as a system. In <em>Kompendium für Alphabeten</em> (1972) he treated typography the same way, as a set of variables to be combined. He left advertising to give his time to art, and he died in Basel in 2017.</p>
+HTML),
+    ]),
+    Paragraph::create([
+      'type' => 'exhibit_entry',
+      'field_block_title' => 'A grid',
+      'field_section_anchor' => 'wall-grid',
+      'field_guide_blocks' => array_values(array_filter([
+        $figure('<p>A picture’s tile: the entry’s first image, its own shape.</p>', 'side_start'),
+      ])),
+    ]),
+  ]);
+  $sections[array_key_last($sections)]->set('field_exhibit_display', 'wall');
+}
+
 if ($date && FieldConfig::loadByName('paragraph', 'exhibit_page', 'field_exhibit_display')) {
   $gallery('Timeline', 'timeline', [
-    $note('<p><strong>Timeline</strong>: a Gallery with Display set to Timeline lists every entry with a Date in the exhibition’s other galleries, in date order, grouped by decade, each naming its gallery. A filled dot means the entry has a picture or clip, and opens it; an open ring is text only, shown right on the timeline. Write dates as 1953, 1953-06, 1953-06-20, or a range with a slash: 1941/1945. Below, the three designers from Exhibition blocks.</p>'),
+    $note('<p><strong>Timeline</strong>: a Gallery with Display set to Timeline lists every entry with a Date in the exhibition’s other galleries, in date order, grouped by decade, each naming its gallery. A filled dot means the entry has a picture or clip, and opens it; an open ring is text only, shown right on the timeline, except a life with a biography card, which shows its summary and opens the biography. Write dates as 1953, 1953-06, 1953-06-20, or a range with a slash: 1941/1945. Below, the designers from Exhibition blocks and the Wall.</p>'),
   ]);
   $sections[array_key_last($sections)]->set('field_exhibit_display', 'timeline');
 }

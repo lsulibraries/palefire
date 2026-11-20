@@ -42,7 +42,9 @@
  *   Its tiles come in wall.groups: a list each, under a sub-gallery heading
  *   when an imageless entry starts one. Without the script the gallery
  *   reads as a story. A dated entry with no picture or clip is a note
- *   (tile.note): a wall label read in place, not a link.
+ *   (tile.note): a wall label read in place, not a link. A person with a
+ *   long biography and no portrait is a name tile (tile.person): the name,
+ *   life and role typeset on a 3:4 plate, opening like any tile.
  * - timeline: Display "timeline" (src/ExhibitTimeline.php), or NULL: every
  *   dated entry of the other galleries on one rail, printed after the
  *   gallery's own text (includes/exhibit-timeline.html.twig).
@@ -259,11 +261,19 @@
                 </div>
               </li>
             {% else %}
-            <li class="pf-exhibit-wall__tile{{ not image ? ' pf-exhibit-wall__tile--reel' }}" style="--pf-r: {{ tile.ratio }}" data-pf-tile="{{ tile.anchor }}"
+            <li class="pf-exhibit-wall__tile{{ tile.person ? ' pf-exhibit-wall__tile--person' : (not image ? ' pf-exhibit-wall__tile--reel') }}" style="--pf-r: {{ tile.ratio }}" data-pf-tile="{{ tile.anchor }}"
                 {% if tile.plate %}data-plate="{{ tile.plate }}"{% endif %}>
               <a class="pf-exhibit-wall__link" href="#{{ tile.anchor }}">
                 <span class="pf-exhibit-wall__frame">
-                  {% if not image %}
+                  {% if tile.person %}
+                    {# A life with no portrait: the name typeset in its
+                       place. The label under it names the link. #}
+                    <span class="pf-exhibit-plate" aria-hidden="true">
+                      <span class="pf-exhibit-plate__name">{{ tile.person.name }}</span>
+                      {% if tile.person.life %}<span class="pf-exhibit-plate__life">{{ tile.person.life }}</span>{% endif %}
+                      {% if tile.person.role %}<span class="pf-exhibit-plate__role">{{ tile.person.role }}</span>{% endif %}
+                    </span>
+                  {% elseif not image %}
                     {# A clip with no picture. #}
                     {% include '@palefire/includes/exhibit-reel.html.twig' with { title: tile.title, year: tile.year, deck: file_url(directory) ~ '/images/exhibit-deck.svg' } only %}
                   {% else %}

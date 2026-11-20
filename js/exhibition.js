@@ -265,6 +265,8 @@
    *   The element to show (a gallery, an entry heading, the head...).
    */
   function go(target) {
+    // In a folded text or list: opened first, so the glide lands on it.
+    unfold(target);
     const note = noteFor(target);
     if (note) {
       // A wall's note (an event with no picture): read in place.
@@ -341,6 +343,8 @@
     }
     page.dataset.pfExhibitReady = '1';
     page.querySelectorAll('[data-pf-exhibit-bio]').forEach(initBio);
+    foldText(page);
+    foldSources(page);
     foldIntro(page);
     briefWash(page);
     sizeHero(page);
@@ -481,6 +485,7 @@
     // with an address for a gallery it is above, and loads lazily.
     ROOT.classList.remove('pf-exhibit-deep');
     const target = targetOf(location.hash);
+    unfold(target);
     const entry = wallEntry(target);
     const note = noteFor(target);
     if (note) {
@@ -721,6 +726,14 @@
       return;
     }
     intro.style.setProperty('--pf-intro-clip', Math.round(limit) + 'px');
+    addIntroToggle(page, intro, () => introLimit(page, intro), true);
+  }
+
+  // "Read more" under a folded intro (a wall's, or a cover's long essay):
+  // it opens to the whole text and folds back to limit(), the button
+  // keeping its place on screen. hold: a wall's title row keeps its height
+  // while open (holdWallTop()).
+  function addIntroToggle(page, intro, limit, hold) {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'pf-exhibit-bio__toggle pf-exhibit-wall__more';
@@ -731,11 +744,23 @@
       intro.classList.toggle('is-folded', !open);
     };
     sync(false);
+    // A link into the folded part (a citation in a cover's Sources): open
+    // at once, so the glide measures the opened page.
+    intro.dataset.pfFold = '';
+    folds.set(intro, () => {
+      if (intro.classList.contains('is-folded')) {
+        if (hold) {
+          holdWallTop(page, intro, true);
+        }
+        sync(true);
+        briefWash(page, true);
+      }
+    });
     button.addEventListener('click', () => {
       const open = intro.classList.contains('is-folded');
       const from = intro.getBoundingClientRect().height;
-      const to = open ? intro.scrollHeight : introLimit(page, intro);
-      if (open) {
+      const to = open ? intro.scrollHeight : limit();
+      if (open && hold) {
         holdWallTop(page, intro, true);
       }
       // The browser's own scroll anchoring would move the page as well.
@@ -756,7 +781,7 @@
       const done = () => {
         follow();
         ROOT.style.overflowAnchor = '';
-        if (!open) {
+        if (!open && hold) {
           holdWallTop(page, intro, false);
         }
       };
@@ -835,10 +860,13 @@
     intro.classList.toggle('is-folded', folded);
   }
 
-  // A cover's text is never folded: all of it is there, the lines at the
-  // first screen's foot faded (--pf-fold, in the intro's own coordinates)
-  // until scrolling brings them up to read (--pf-read, 0 to 1 over 40% of a
-  // screen; below lg it also veils the image under the text).
+  // A cover's text: all of it there, the lines at the first screen's foot
+  // faded (--pf-fold, in the intro's own coordinates) until scrolling
+  // brings them up to read (--pf-read, 0 to 1 over 40% of a screen; below
+  // lg it also veils the image under the text). An essay running well past
+  // the first screen (1.3 times the fold) folds there instead, whole lines
+  // ending above the image's foot with room for "Read more", so the
+  // gallery starts soon after and the essay is there to open.
   function measureCover(page, intro) {
     const hero = page.querySelector('.pf-gallery--cover > .pf-exhibit-wall-hero');
     const frame = hero && hero.querySelector('.pf-exhibit-wall-hero__frame');
@@ -849,7 +877,19 @@
     // above its place in the layout.
     const fold = frame.getBoundingClientRect().height - (layoutTop(intro) - layoutTop(hero) - revealOf(page));
     intro.style.setProperty('--pf-fold', Math.round(fold) + 'px');
-    intro.classList.toggle('is-long', intro.scrollHeight > fold);
+    const line = parseFloat(getComputedStyle(intro.querySelector('.pf-guide-prose') || intro).lineHeight) || 26;
+    const clip = Math.max(line * 4, Math.floor((fold - line * 2.5) / line) * line);
+    intro.style.setProperty('--pf-intro-clip', Math.round(clip) + 'px');
+    if (!intro.dataset.pfFoldReady) {
+      intro.dataset.pfFoldReady = '1';
+      if (intro.scrollHeight > fold * 1.3) {
+        addIntroToggle(page, intro, () => parseFloat(intro.style.getPropertyValue('--pf-intro-clip')) || clip, false);
+      }
+    }
+    // Folded or open, a folding essay keeps the short cover's reveal, so
+    // opening it never changes how the gallery came in.
+    const folds = !!intro.parentElement.querySelector(':scope > .pf-exhibit-wall__more');
+    intro.classList.toggle('is-long', !folds && intro.scrollHeight > fold);
     readCover();
   }
 
@@ -1945,6 +1985,12 @@
       }
       view.media.replaceChildren(frame);
     }
+    else if (tile.querySelector('.pf-exhibit-plate')) {
+      // A life with no portrait: its name plate, as large as fits.
+      frame.classList.add('pf-viewer__frame--plate');
+      frame.append(tile.querySelector('.pf-exhibit-plate').cloneNode(true));
+      view.media.replaceChildren(frame);
+    }
     else {
       view.media.replaceChildren();
     }
@@ -1966,7 +2012,11 @@
     }
     copy.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
     copy.querySelectorAll('.pf-exhibit-bio__toggle').forEach((el) => el.remove());
-    copy.querySelectorAll('.pf-exhibit-bio').forEach((el) => el.classList.remove('is-folded'));
+    copy.querySelectorAll('.pf-exhibit-bio, .pf-exhibit-fold').forEach((el) => el.classList.remove('is-folded'));
+    copy.querySelectorAll('.pf-exhibit-fold__toggle').forEach((el) => el.remove());
+    copy.querySelectorAll('[data-pf-fold] > li[hidden]').forEach((el) => {
+      el.hidden = false;
+    });
     clipBio(view, copy);
     stopAudio(view);
     view.body.replaceChildren(...Array.from(copy.childNodes));
@@ -2472,6 +2522,155 @@
       }
     });
     bio.append(button);
+  }
+
+  /* ---------------------------------------------------------------------
+   * Folds: a long text block in a story gallery shows its opening lines
+   * with "Read more" (as a long biography does), and a long Sources list
+   * its first SOURCES_SHOWN items with "Show all 177 sources". Each folded
+   * part is [data-pf-fold], its opener kept in `folds`: a link into it (a
+   * citation, the address) opens it first (unfold(), from go() and
+   * start()), so the glide lands on what it links to.
+   * ------------------------------------------------------------------ */
+
+  const folds = new WeakMap();
+  const SOURCES_SHOWN = 12;
+  const TEXT_WORDS = 250;
+
+  function unfold(target) {
+    let el = target instanceof Element ? target.closest('[data-pf-fold]') : null;
+    while (el) {
+      const open = folds.get(el);
+      if (open) {
+        open();
+      }
+      el = el.parentElement ? el.parentElement.closest('[data-pf-fold]') : null;
+    }
+  }
+
+  // Fold or open with the height eased between, then left to the content.
+  // to: the folded height in px.
+  function easeFold(el, open, to) {
+    el.style.maxHeight = el.getBoundingClientRect().height + 'px';
+    el.classList.toggle('is-folded', !open);
+    if (reduceMotion()) {
+      el.style.maxHeight = '';
+      return;
+    }
+    requestAnimationFrame(() => {
+      el.style.maxHeight = (open ? el.scrollHeight : to) + 'px';
+      const end = (event) => {
+        if (event.target === el) {
+          el.style.maxHeight = '';
+          el.removeEventListener('transitionend', end);
+        }
+      };
+      el.addEventListener('transitionend', end);
+    });
+  }
+
+  // Folding back: the start of what folded kept in view.
+  function keepInView(el) {
+    if (el.getBoundingClientRect().top < headerOffset()) {
+      glideTo(el, () => {});
+    }
+  }
+
+  function foldText(page) {
+    // A wall's text is its intro (folded there) and its entries open in
+    // the object view; a cover's opening text is folded as the cover.
+    if (page.querySelector('.pf-gallery.is-walled')) {
+      return;
+    }
+    page.querySelectorAll('.pf-guide-block--text:not(.pf-guide-callout, .pf-transcription) > .pf-guide-prose').forEach((prose, i) => {
+      if (prose.closest('.pf-exhibit-wall__intro, .pf-viewer') || prose.querySelector('li[id^="src-"]')) {
+        return;
+      }
+      const words = prose.textContent.trim().split(/\s+/).length;
+      if (words < TEXT_WORDS) {
+        return;
+      }
+      // The clip is the stylesheet's (--pf-fold-clip, in rem).
+      prose.classList.add('pf-exhibit-fold');
+      const style = getComputedStyle(prose);
+      const limit = (parseFloat(style.getPropertyValue('--pf-fold-clip')) || 0) * parseFloat(getComputedStyle(ROOT).fontSize);
+      const line = parseFloat(style.lineHeight) || 26;
+      // Worth folding only when at least four more lines hide.
+      if (!limit || prose.scrollHeight < limit + line * 4) {
+        prose.classList.remove('pf-exhibit-fold');
+        return;
+      }
+      prose.id = prose.id || page.id + '-text-' + i;
+      prose.dataset.pfFold = '';
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'pf-exhibit-bio__toggle pf-exhibit-fold__toggle';
+      button.setAttribute('aria-controls', prose.id);
+      const sync = (open) => {
+        button.setAttribute('aria-expanded', open ? 'true' : 'false');
+        button.textContent = open ? Drupal.t('Show less') : Drupal.t('Read more');
+      };
+      prose.classList.add('is-folded');
+      sync(false);
+      folds.set(prose, () => {
+        if (prose.classList.contains('is-folded')) {
+          prose.classList.remove('is-folded');
+          sync(true);
+        }
+      });
+      button.addEventListener('click', () => {
+        const open = prose.classList.contains('is-folded');
+        easeFold(prose, open, limit);
+        sync(open);
+        if (!open) {
+          keepInView(prose);
+        }
+      });
+      prose.after(button);
+    });
+  }
+
+  function foldSources(page) {
+    page.querySelectorAll('.pf-guide-prose :is(ul, ol)').forEach((list, i) => {
+      const items = list.querySelectorAll(':scope > li[id^="src-"]');
+      if (items.length < SOURCES_SHOWN + 6 || list.closest('.pf-viewer')) {
+        return;
+      }
+      const rest = Array.from(list.children).slice(SOURCES_SHOWN);
+      list.id = list.id || page.id + '-sources-' + i;
+      list.dataset.pfFold = '';
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'pf-exhibit-bio__toggle pf-exhibit-fold__toggle';
+      button.setAttribute('aria-controls', list.id);
+      const sync = (open) => {
+        button.setAttribute('aria-expanded', open ? 'true' : 'false');
+        button.textContent = open ? Drupal.t('Show fewer sources') : Drupal.t('Show all @count sources', { '@count': items.length });
+        rest.forEach((li) => {
+          li.hidden = !open;
+        });
+      };
+      sync(false);
+      folds.set(list, () => {
+        if (rest[0] && rest[0].hidden) {
+          sync(true);
+        }
+      });
+      button.addEventListener('click', () => {
+        const open = rest[0].hidden;
+        sync(open);
+        if (open) {
+          // The first newly shown source, for keyboard and screen readers'
+          // place in the list (its own focus, not a jump).
+          rest[0].setAttribute('tabindex', '-1');
+          rest[0].focus({ preventScroll: true });
+        }
+        else {
+          keepInView(list);
+        }
+      });
+      list.after(button);
+    });
   }
 
   /* ---------------------------------------------------------------------

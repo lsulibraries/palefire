@@ -121,8 +121,10 @@ final class ExhibitTimeline {
    *   - events: in date order, each ['anchor', 'title', 'label', 'iso',
    *     'strand' (the gallery's title), 'row' (its index in strands),
    *     'media' (a picture or clip), 'audio', 'thumb'
-   *     (_palefire_exhibit_image() values or NULL), 'text' (an entry with
-   *     no picture or clip: its biography and text blocks as a render
+   *     (_palefire_exhibit_image() values or NULL), 'link' (a picture,
+   *     clip or biography's card: the event links to its entry), 'summary'
+   *     (a card's summary or opening sentence), 'text' (an entry with no
+   *     picture, clip or card: its biography and text blocks as a render
    *     array, shown in place; it has no link), 'index'].
    *   - decades: ['label' ("1950s"), 'events'].
    */
@@ -154,9 +156,15 @@ final class ExhibitTimeline {
           $strands[] = ['title' => $title, 'anchor' => $anchor];
         }
         [$media, $audio, $thumb, $text] = self::media($entry, $cache);
+        $title = trim((string) $entry->get('field_block_title')->value);
+        // A life with a biography's card: a link to it, its name and summary
+        // (or opening sentence) here, the life read in its gallery.
+        $card = _palefire_exhibit_bio_card($entry, $title);
         $events[] = [
           'anchor' => _palefire_exhibit_entry_anchor($entry),
-          'title' => trim((string) $entry->get('field_block_title')->value),
+          'title' => $card ? $card['name'] : $title,
+          'link' => $media || $card,
+          'summary' => $card ? ($card['summary'] ?: $card['opening']) : '',
           'label' => $date['label'],
           'iso' => $date['iso'],
           'strand' => $strands[$row]['title'],
@@ -166,7 +174,7 @@ final class ExhibitTimeline {
           'audio' => $audio,
           'thumb' => $thumb,
           // Text only: read on the timeline itself, not opened.
-          'text' => $media ? NULL : $text,
+          'text' => $media || $card ? NULL : $text,
         ];
       }
     }

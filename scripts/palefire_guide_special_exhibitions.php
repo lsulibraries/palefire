@@ -175,7 +175,8 @@ $section('How the exhibitions were moved', [
 <ul>
 <li><strong>Galleries</strong> take the place of the old pages, each with a lead image and a number in the contents.</li>
 <li><strong>Entries</strong> are the people, books, birds and shows inside a gallery, each with its own heading and anchor, so other pages can link to it.</li>
-<li><strong>Walls</strong> show a gallery’s images side by side at their own proportions, each opening full screen with its caption and text (Audubon’s editions and drawings, all of the Union Art Gallery).</li>
+<li><strong>Walls</strong> show a gallery’s images side by side at their own proportions, each opening full screen with its caption and text (Audubon’s editions and drawings, all of the Union Art Gallery, Occult’s books, and AVES’s people and photographs). A person with no portrait is a name tile.</li>
+<li><strong>Folds</strong>: a long opening essay or text shows its first lines with Read more, and a long Sources list its first twelve.</li>
 <li><strong>Catalog records</strong> are set apart from the text, and readings are typeset as covers linked to the catalog.</li>
 </ul>
 <h3>Images</h3>
@@ -193,7 +194,8 @@ $section('AVES', [
 <h3>Changed on the page</h3>
 <ul><li>The 20 pages are 19 galleries on one page. Each person or book is an entry with its own heading and anchor, so a link such as <code>#schauensee</code> lands on it.
 </li><li>Each pop-up’s full biography replaces the shortened lead the gallery showed. The “Image:” and “Biography:” labels became the figure and the biography themselves. 43 entries have one, from 118 to 1,293 words. See Biographies, below.
-</li><li>Links between pages point at the new anchors. The Biographies gallery keeps its hand-written list of names.
+</li><li>Links between pages point at the new anchors. The Biographies gallery is now a timeline of the lives in the order born, each opening its biography (2026-11-20), in place of its hand-written list of names; Humboldt’s life, told in Opening Scientific Exploration, is linked from its intro.
+</li><li>Six galleries hang as walls (2026-11-20): Collecting by Individuals, Museum Men, Collecting by Museums and Life Histories, each chapter’s essay as the wall’s intro and a tile for each person (a name tile where there is no portrait), and People and Places and Modern Fieldwork, each photograph an entry with a short title. Life dates moved from the headings into each entry’s Date; the anchors stay as they were.
 </li><li>Entry names written in capitals use Capital Case (Francisco Hernández, Georg Markgraf, Juan Ignacio Molina and others).
 </li><li>16 of the 17 images the 2012 site showed without a 4K file were added from “Section 4 (additions)”, made from the catalog’s TIFFs.
 </li><li>Unused 4K plates and photographs became the galleries’ lead images.
@@ -241,9 +243,11 @@ $section('AVES', [
 <h3>To verify</h3>
 <ul><li>Schomburgk’s <em>Twelve Views</em> has no file in any of the image folders, so its figure has no image. Is there a scan?
 </li><li>The lead images’ captions are taken from the print catalog’s illustration lists. Seven leads (Greenfield, Red-capped Manakin, the Andes, Buenaventura, Chubb paddling, the ongoing expedition and the Solitary Eagle) have no source and are decorative, with no caption.
+</li><li>Modern Fieldwork, “Transportation on the Rio Shesha”: the caption ends with “Unfortunately, the lush scenery and abundant wildlife experienced by Weid are gone; today the Rio Doce valley is almost completely deforested.”, the last sentence of the Wied caption in People and Places, and opens a quotation from Stap it never closes. Both as on the 2012 site. Remove the sentence?
 </li></ul>
 <h3>New wording to check</h3>
-<ul><li>The 42 biography cards’ Summary and Role (<code>scripts/palefire_exhibit_aves_bio_cards.php</code>, 2026-11-20): two sentences each, drafted only from that entry’s own biography. Change any on the entry’s edit form; the script never overwrites a filled field.
+<ul><li>The 16 titles for the photographs on the People and Places and Modern Fieldwork walls (2026-11-20), each written from its caption: People and Places: The interior of Guiana, Wied on the Rio Doce, Spix and a ritual drink, Bates mobbed by aracaris, Camp in British Guiana, The Beebes at the barranca, Blair Beebe’s tent, Two castles, Field research today, Candles and computers. Modern Fieldwork: John O’Neill on the Rio Heath, 1977; On the Rio Shesha, 1987; Condor Expedition, 2006; Life in the Condor camp; Preparing Jocotoco antpittas; Tumbes, 2009. And the Biographies timeline’s intro.
+</li><li>The 42 biography cards’ Summary and Role (<code>scripts/palefire_exhibit_aves_bio_cards.php</code>, 2026-11-20): two sentences each, drafted only from that entry’s own biography. Change any on the entry’s edit form; the script never overwrites a filled field.
 </li><li>The 16 gallery lead captions, the credit line and alt text for every image.
 </li></ul>
 HTML),

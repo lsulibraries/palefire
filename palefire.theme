@@ -5653,9 +5653,19 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
     // a note: its date, heading and words on the wall, read in place, so
     // nothing opens for a few lines of text (exhibit-page.html.twig).
     $date = $entry->hasField('field_entry_date') ? ExhibitTimeline::parse($entry->get('field_entry_date')->value) : NULL;
+    $bio = _palefire_exhibit_bio_card($entry, trim((string) $entry->get('field_block_title')->value));
+    // A person with a long biography and no portrait hangs as a name tile:
+    // the name typeset in a plate's place, opening the life in the object
+    // view like any tile (exhibit-page.html.twig).
+    // A pair's plate names both, their dates left to the label.
+    $person = !$images && $speaker === NULL && $bio ? [
+      'name' => $bio['life'] === '' ? trim((string) preg_replace('/\s*\([^()]*\d{3,4}[^()]*\)/u', '', $bio['name'])) : $bio['name'],
+      'life' => $bio['life'],
+      'role' => $bio['role'],
+    ] : NULL;
     $card = NULL;
     $words = 0;
-    if (!$images && $speaker === NULL && $date) {
+    if (!$images && $speaker === NULL && $date && !$person) {
       $note_text = [];
       $fields = $entry->hasField('field_entry_bio') ? [$entry->get('field_entry_bio')] : [];
       foreach ($entry->get('field_guide_blocks')->referencedEntities() as $block) {
@@ -5673,8 +5683,8 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
     }
     // No image, no clip and no date: nothing to hang. With a heading it
     // starts a sub-gallery, its text blocks under the heading.
-    if (!$images && $speaker === NULL && !$card) {
-      $heading = trim((string) $entry->get('field_block_title')->value);
+    if (!$images && $speaker === NULL && !$card && !$person) {
+      $heading =trim((string) $entry->get('field_block_title')->value);
       if ($heading !== '') {
         $text_blocks = [];
         foreach ($entry->get('field_guide_blocks')->referencedEntities() as $block) {
@@ -5701,15 +5711,22 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
       'anchor' => _palefire_exhibit_entry_anchor($entry),
       'title' => trim((string) $entry->get('field_block_title')->value),
       'plate' => preg_match('/\bplate\s+(\d+)/i', $caption, $m) ? (int) $m[1] : NULL,
-      'tag' => $pages ? (string) \Drupal::translation()->formatPlural($pages, '1 page', '@count pages') : (count($tags) === 2 ? implode(' · ', $tags) : (string) $speaker),
+      // A portrait of a person with a card: their life dates (a name tile
+      // has them on its plate).
+      'tag' => $pages ? (string) \Drupal::translation()->formatPlural($pages, '1 page', '@count pages') : (count($tags) === 2 ? implode(' · ', $tags) : (string) ($speaker ?? ($bio && !$person ? $bio['life'] : ''))),
       'audio' => $speaker !== NULL,
+      'person' => $person,
+      'life' => $bio ? $bio['life'] : '',
+      // The years a life spans, for a wall of lives' facts.
+      'years' => $bio ? ($bio['life'] ?: trim((string) $entry->get('field_block_title')->value)) : '',
       'year' => $year,
       'pages' => $pages,
       // A clip with no picture: its reel and box (exhibit-reel.html.twig),
       // 1.5 boxes wide, so the box is as tall as the row's photographs.
       // A note (a dated event with no picture) is as wide as its words
       // need beside the row's photographs: 1 to 3 rows' heights.
-      'ratio' => $first ? ($first['width'] && $first['height'] ? round($first['width'] / $first['height'], 4) : 1) : ($card ? round(max(1, min(3, $words / 170)), 2) : 1.5),
+      // A name tile is a portrait plate's 3:4.
+      'ratio' => $first ? ($first['width'] && $first['height'] ? round($first['width'] / $first['height'], 4) : 1) : ($person ? 0.75 : ($card ? round(max(1, min(3, $words / 170)), 2) : 1.5)),
       'images' => $images,
       'note' => $card,
     ];
@@ -5746,11 +5763,19 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
   // The opening's line of facts, in place of a story's entry links: how
   // many entries, the plate range, compared pairs, the sheet size.
   $plates = array_filter(array_column($tiles, 'plate'));
-  $tags = array_filter(array_column(array_filter($tiles, fn ($tile) => !$tile['audio'] && !$tile['pages']), 'tag'));
-  // A wall of oral history clips counts clips.
-  $stats = [count(array_filter(array_column($tiles, 'audio'))) === count($tiles)
-    ? (string) \Drupal::translation()->formatPlural(count($tiles), '1 clip', '@count clips')
-    : (string) \Drupal::translation()->formatPlural(count($tiles), '1 entry', '@count entries')];
+  $tags = array_filter(array_column(array_filter($tiles, fn ($tile) => !$tile['audio'] && !$tile['pages'] && !$tile['life']), 'tag'));
+  // A wall of oral history clips counts clips; a wall of lives (every
+  // tile a biography's card) counts people, and spans their years.
+  $lives = array_filter(array_column($tiles, 'years'));
+  $people = count($lives) === count($tiles);
+  $stats = [match (TRUE) {
+    count(array_filter(array_column($tiles, 'audio'))) === count($tiles) => (string) \Drupal::translation()->formatPlural(count($tiles), '1 clip', '@count clips'),
+    $people => (string) \Drupal::translation()->formatPlural(count($tiles), '1 person', '@count people'),
+    default => (string) \Drupal::translation()->formatPlural(count($tiles), '1 entry', '@count entries'),
+  }];
+  if ($people && preg_match_all('/\d{3,4}/', implode(' ', $lives), $m) && count(array_unique($m[0])) >= 2) {
+    $stats[] = (string) t('Lives @first–@last', ['@first' => min($m[0]), '@last' => max($m[0])]);
+  }
   if (count($plates) >= 2) {
     $stats[] = (string) t('Plates @first–@last', ['@first' => min($plates), '@last' => max($plates)]);
   }
@@ -5804,7 +5829,8 @@ function palefire_preprocess_paragraph__exhibit_entry(array &$variables): void {
  * - name: the heading without a trailing "(1901-1984)", which is life.
  *   A pair ("Robert Schomburgk (1804-1865) & Richard Schomburgk (…)")
  *   keeps its whole heading and has no Life.
- * - life: "1901–1984", "b. 1925" or '' from that trailing pair.
+ * - life: "1901–1984", "b. 1925" or '' from that trailing pair; failing
+ *   that, for one person, from field_entry_date ("1901/1984").
  * - role, summary: field_entry_role and field_entry_summary
  *   (palefire_exhibit_bio_setup.php), '' when empty or not there yet.
  * - opening: the biography's first sentence, which stands in for an empty
@@ -5825,6 +5851,11 @@ function _palefire_exhibit_bio_card(ParagraphInterface $paragraph, string $title
   if (preg_match('/^(.*\S)\s*\(\s*(?:b\.\s*)?(\d{3,4})\s*(?:[-–—]\s*(\d{3,4})?)?\s*\)$/u', $title, $m) && !str_contains($m[1], '(')) {
     $name = $m[1];
     $life = !empty($m[3]) ? $m[2] . '–' . $m[3] : 'b. ' . $m[2];
+  }
+  // Otherwise one person's dates from field_entry_date ("1901/1984"), which
+  // also places them on a timeline. A pair's heading keeps its own dates.
+  elseif (!str_contains($title, '(') && $paragraph->hasField('field_entry_date') && ($date = ExhibitTimeline::parse($paragraph->get('field_entry_date')->value))) {
+    $life = $date['end'] ? $date['start'][0] . '–' . $date['end'][0] : (string) $date['start'][0];
   }
   $value = fn (string $field) => $paragraph->hasField($field) ? trim((string) ($paragraph->get($field)->value ?? '')) : '';
   // The first sentence: up to a full stop, ? or ! before a capital, past

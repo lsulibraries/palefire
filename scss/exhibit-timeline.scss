@@ -219,6 +219,16 @@
   }
 }
 
+// A life's summary under its name (an event linking to a biography's card).
+.pf-tl__summary {
+  display: block;
+  max-width: 40rem;
+  margin-top: .375rem;
+  font-size: .9375rem;
+  line-height: 1.55;
+  color: var(--bs-body-color);
+}
+
 .pf-tl__strand {
   font-size: .875rem;
   color: var(--pf-exhibit-muted, var(--bs-secondary-color));
