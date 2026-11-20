@@ -617,6 +617,42 @@ $section('From Red Stick to River Capital: Three Centuries of Baton Rouge Histor
 HTML),
 ]);
 
+$section('British Voices from South Asia', [
+  $text(NULL, <<<'HTML'
+<p>Built at <a href="/v2/special/exhibitions/british-voices">/v2/special/exhibitions/british-voices</a>, not published yet.</p>
+<p>Exhibition: British Voices from South Asia, held in Hill Memorial Library, April 8 to August 6, 1996, curated and edited by Rosan Augusta Jordan and Frank de Caro, marking the T. Harry Williams Center for Oral History’s acquisition of their interviews with British people who lived and worked in India before Independence.<br>Old site: the 1996 web version at /special/exhibits/india/, copied to thirteen Showcase pages under /BritishVoices: an Introduction, six history sections and six pages of interview excerpts.</p>
+<h3>Changed on the page</h3>
+<ul><li>Thirteen galleries, all walls with a lead picture. Each history section is followed by its own interview excerpts (the old site kept them as six pages at the end).
+</li><li>History sections: the interviewees’ quotations open each gallery; the essay is a text plate; every picture is an entry with its 1996 caption and the words that followed it. Pictures that shared a caption are one entry each, as an image group.
+</li><li>Interview galleries: 42 text plates, each a few speakers’ excerpts in the old order, under the old pages’ own topic headings as sub-galleries.
+</li><li>Pictures: the 103 JPEGs of the 1996 site, up to 600 px. No larger scans on the R: drive, in the Louisiana Digital Library or in the Wayback Machine; most of the objects were anonymous loans in 1996.
+</li></ul>
+<h3>Corrected</h3>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>on July 10, 1947</del></td><td><ins>on August 14 and 15, 1947</ins></td></tr>
+<tr><td><del>Samuel Hewitt, Samuel Hewett</del></td><td><ins>Samuel Howitt</ins></td></tr>
+<tr><td><del>Mortimer Menpe7s</del></td><td><ins>Mortimer Menpes</ins></td></tr>
+<tr><td><del>19xx</del></td><td><ins>1924</ins> <em>the British Empire Exhibition, Wembley</em></td></tr>
+<tr><td><del>Byderabad</del></td><td><ins>Hyderabad</ins></td></tr>
+</tbody>
+</table>
+<ul><li>The Benares and Calcutta burning ghat postcards had each other’s captions, and one caption held two pictures; both are fixed.
+</li><li>Left out: the second half of the old No India to Go To interviews page, which repeated The Lure of the East word for word, and a caption for a picture that isn’t there.
+</li><li>The full list, with small typos, is in the theme’s docs/special-exhibition-corrections/british-voices.md.
+</li></ul>
+<h3>To verify</h3>
+<ul><li>“Barely more than fifty years ago” (written in 1996).
+</li><li>“Sir Robert Baden-Powell, Bart.” as the author of Pig-Sticking or Hog-Hunting, and “J. Hedway” as an engraver.
+</li><li>The interviewees’ names and ranks as the old pages give them.
+</li></ul>
+<h3>New wording to check</h3>
+<ul><li>The credit line and subtitle, the six essay plate headings, the interview plate headings and the 51 summaries, the cover’s object label and the alt text.
+</li></ul>
+HTML),
+]);
+
 $section('Biographies', [
   $text(NULL, <<<'HTML'
 <p><strong>Status: proposed, not decided.</strong> AVES is the only Special Collections exhibition with biographies so far: 43 of them, 118 to 1,293 words (about 400 on average), three of them for two people (Godman and Salvin, the Schomburgks, the Phelpses). Together they are most of the exhibition’s 48,000 words. Today each one sits in its entry under a “Biography” label, folded after about ten lines with a “Read the full biography” button, and the Biographies gallery is a hand-written list of links.</p>

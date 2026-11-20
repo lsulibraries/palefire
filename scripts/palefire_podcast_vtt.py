@@ -240,6 +240,42 @@ def build(words, items):
     return out, len(placed), len(items or [])
 
 
+def load_corrections(path):
+    """Proofread fixes to Whisper's text: {track: [(seconds, wrong, right)]}.
+
+    One per line in a TSV (track, MM:SS or H:MM:SS, wrong, right; # starts
+    a comment), from reading the captions against their context: sound-
+    alike words that don't fit the sentence, garbled names."""
+    fixes = {}
+    if not path or not path.exists():
+        return fixes
+    for line in path.read_text(encoding='utf-8').splitlines():
+        if not line.strip() or line.startswith('#'):
+            continue
+        track, at, wrong, right = line.split('	')[:4]
+        seconds = sum(float(part) * 60 ** i for i, part in enumerate(reversed(at.split(':'))))
+        fixes.setdefault(track, []).append((seconds, wrong, right))
+    return fixes
+
+
+def correct(cues, fixes, track):
+    """Apply a track's fixes to the automatic cues near each fix's time.
+
+    The published excerpts (a speaker's cues) are left as written."""
+    out, unused = list(cues), []
+    for at, wrong, right in fixes.get(track, []):
+        for i, (s, e, text, who) in enumerate(out):
+            if who is None and s - 3 <= at <= e + 3 and wrong in text:
+                out[i] = (s, e, text.replace(wrong, right, 1), who)
+                break
+        else:
+            unused.append(f'{at:.0f}s {wrong!r}')
+    for miss in unused:
+        print(f'  unused fix {track} {miss}', file=sys.stderr)
+    # A word split over two cues is fixed in the first; the second may be left empty.
+    return [(s, e, ' '.join(text.split()), who) for s, e, text, who in out if text.strip()]
+
+
 def vtt(cues, title, source):
     esc = lambda t: t.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
     # Each NOTE a block of its own; js/podcast.js shows the second.
@@ -260,12 +296,14 @@ def main():
     parser.add_argument('--download', action='store_true', help='Fetch missing MP3s from the feed.')
     parser.add_argument('--transcribe-only', action='store_true', help='Only cache Whisper\'s words.')
     parser.add_argument('--only', help='Only this track ID.')
+    parser.add_argument('--fixes', type=Path, default=Path(__file__).parent / 'data' / 'podcast-vtt-fixes.tsv', help='Proofread corrections (TSV).')
     args = parser.parse_args()
 
     feed = args.feed.read_text(encoding='utf-8')
     posts = [excerpts(p.read_text(encoding='utf-8', errors='replace')) for p in sorted(args.posts.glob('*.htm*'))] if args.posts else []
     args.audio.mkdir(parents=True, exist_ok=True)
     model = None
+    fixes = load_corrections(args.fixes)
     for track, number, title, seconds, mp3, about in episodes(feed):
         if args.only and track != args.only:
             continue
@@ -284,6 +322,7 @@ def main():
             continue
         items = match_post(posts, number, title)
         cues, placed, total = build(words, items)
+        cues = correct(cues, fixes, track)
         source = f'Interview excerpts as published on the Oral History blog ({placed} of {total}); the rest transcribed automatically.' if items else 'Transcribed automatically.'
         args.out.mkdir(parents=True, exist_ok=True)
         (args.out / f'{track}.vtt').write_text(vtt(cues, title, source), encoding='utf-8', newline='\n')

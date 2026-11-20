@@ -1,0 +1,499 @@
+# What Endures caption corrections (scripts/palefire_podcast_vtt.py --fixes).
+# Whisper's sound-alikes and garbled names, found by reading each episode's
+# captions against their context, the SoundCloud descriptions and the blog's
+# published excerpts (which are never changed). One per line, tab-separated:
+# track	time of the caption (M:SS or H:MM:SS)	wrong	right	why
+# An empty "right" drops the rest of a word split onto the next caption.
+2095060791	00:55	Dr. Pachinac	Dr. Pitchenik	guest name
+2095060791	01:12	Dr. Pachinac	Dr. Pitchenik	guest name
+2095060791	01:57	she became curious	she became furious	scolding the gangsters
+2095060791	02:24	Dr. Pachinik	Dr. Pitchenik	guest name
+2095060791	02:50	Dr. Brachenic	Dr. Pitchenik	guest name
+2095060791	03:21	unintentional destigmatization of Haitian	unintentional stigmatization of Haitian	the clip is about stigma
+2095060791	03:26	Dr. Brichenach	Dr. Pitchenik	guest name
+2095060791	04:44	Dr. Pachinik	Dr. Pitchenik	guest name
+2095060791	05:17	Dr. Pratinik	Dr. Pitchenik	guest name
+2095060791	05:36	pheasema	emphysema	lung disease
+2095060791	07:31	Dr. Pacinnock	Dr. Pitchenik	guest name
+2095060791	07:48	Dr. Pacinnock	Dr. Pitchenik	guest name
+1534439155	00:25	LSU Agen Honors College	LSU Ogden Honors College	Ogden Honors College
+1534439155	04:58	Jen Crammer	Jen Cramer	producer
+1544571460	00:47	Odess Patterson	Odesse Patterson	guest name
+1544571460	01:36	Odus Patterson	Odesse Patterson	guest name
+1544571460	04:43	LDBA	LDVA	Louisiana Department of Veterans Affairs
+182261620	00:51	Jennifer Abraham Kramer	Jennifer Abraham Cramer	host
+182261620	01:01	by you, LaFouche.	Bayou Lafourche.	place
+182261620	03:44	well Abraham Kramer	well Abraham Cramer	host
+182261620	03:58	class fish year.	class this year.	context
+182261620	04:26	was damned	was dammed	the bayou was dammed
+182261620	05:34	The Homa Indians	The Houma Indians	Houma
+182261620	09:45	Biola -Lafuz	Bayou Lafourche	place
+182261620	15:27	Texacoat oil worker	Texaco oil worker	Texaco
+182261620	16:45	Bayou Lafouche	Bayou Lafourche	place
+182261620	25:46	Dr. Pasquet	Dr. Pasquier	guest
+182261620	25:51	gaining a project like this together	getting a project like this together	idiom
+182261620	26:20	T. Harold Williams	T. Harry Williams	Center
+182261620	27:50	at Downbody Lafourche	down Bayou Lafourche	place
+182261620	30:26	those legs	those lines	idiom
+182261620	31:58	sing a little voice	sing a little verse	the reply says verse
+182256292	00:53	Storm Story's part two	Storm Stories part two	series title
+182256292	03:36	Hurricane Bessie	Hurricane Betsy	1965 storm
+182256292	03:41	Bessie was eerily	Betsy was eerily	Betsy
+182256292	03:44	Hurricane Bessie haunted	Hurricane Betsy haunted	Betsy
+182256292	03:52	stories of Bessie	stories of Betsy	Betsy
+182256292	06:59	at a new road to Louisiana	in New Roads, Louisiana	New Roads
+182256292	07:03	Julian Poydres Museum Arts Council	Julien Poydras Museum and Arts Council	organization
+182256292	07:03	Poincapie Parish	Pointe Coupee Parish	parish
+182256292	07:33	Dr. Frank Menyard	Dr. Frank Minyard	coroner
+182256292	07:52	DeMort's	DMORT's	DMORT
+182256292	09:35	they wrote out the storm	they rode out the storm	idiom
+182256292	10:14	DMART site	DMORT site	DMORT
+182256292	10:46	Tammy, not many.	Tammany, not many.	St. Tammany
+182256292	12:01	I was hard.	It was hard.	context
+182256292	12:05	Angel Oakwin	Angel O'Quinn	named O'Quinn later
+182256292	12:29	rider truck	Ryder truck	brand
+182256292	18:46	Too Land.	Tulane.	Tulane
+182256292	18:46	at Too Land in	at Tulane in	Tulane
+182256292	18:53	to New Road.	to New Roads.	town
+182256292	19:15	going to New Road.	going to New Roads.	town
+182256292	19:25	to New Rose.	to New Roads.	town
+182256292	22:03	the Chilly Boulevard	the Gentilly Boulevard	Gentilly
+182256292	22:49	with her walk	with her walker	context
+182256292	22:52	to a daisy	to a Days Inn	motel
+182256292	22:55	walk the daisy	walk to the Days Inn	motel
+182256292	27:00	T. Karen Williams	T. Harry Williams	Center
+182256292	27:09	blobs .lrd	blogs .lib	blog address
+182256292	27:23	back in Rouge	Baton Rouge	city
+182287396	00:49	Abraham Kramer	Abraham Cramer	host
+182287396	02:11	Fred B. Niffen	Fred B. Kniffen	blog spelling
+182287396	02:43	the Anthropologist Project	the Anthropologist's Project	book title
+182287396	04:15	was a revolution for me	was a revelation for me	context
+182287396	04:44	trip to Columbia	trip to Colombia	country
+182287396	07:18	porpoise horse	purpose horse	dual-purpose horse
+182287396	09:46	that's happened to Thummel Cross	that I happened to stumble across	idiom
+182287396	10:06	suddenly done on me	suddenly dawned on me	idiom
+182287396	10:19	it got down on me	it dawned on me	idiom
+182287396	13:01	department as Stephen	department at Stephen	context
+182287396	13:09	Dr. Fred Niffen	Dr. Fred Kniffen	blog spelling
+182287396	17:18	Fred Niffen and William Haig	Fred Kniffen and William Haag	blog spelling
+182287396	20:23	Dr. Monroe Edmondson	Dr. Munro Edmonson	Tulane anthropologist
+182287396	21:41	Dr. Edmondson, Monroe Edmondson	Dr. Edmonson, Munro Edmonson	Tulane anthropologist
+182287396	26:59	Dr. Forrest of the Ollette	Dr. Forrest LaViolette	blog spelling
+182287396	27:12	sent to Colley	sent to Cali	blog: Cali, Colombia
+182287396	30:38	fieldwork in Columbia	fieldwork in Colombia	country
+182287396	30:55	Dr. William Haig	Dr. William Haag	blog spelling
+182287396	35:58	Enlightened Dantha Percentrism	Enlightened anthropocentrism	topic
+182287396	37:40	going too were from	going to and from	context
+182255958	00:51	and one endures	on What Endures	show name
+182255958	01:11	had this hole	had this hall	field house
+182255958	01:19	hand all courts	handball courts	field house
+182255958	01:30	Abe Michael	Abe Mickal	description
+182255958	01:55	Confederacy of Denses	Confederacy of Dunces	LSU Press book
+182255958	02:34	Jerry Brasso	Jared Brasso	introduces himself later
+182255958	04:09	Churro	Tureaud	A. P. Tureaud
+182255958	04:57	Richard Lesh	Richard Leche	governor
+182255958	05:59	post -year -long era	post-Huey Long era	context
+182255958	06:14	futures march	futures market	wheat futures
+182255958	06:48	heavily murdered	heavily burdened	context
+182255958	07:32	Simi and Alexander Box	Simeon Alexander Box	Alex Box
+182255958	08:05	Faraday, Louisiana	Ferriday, Louisiana	town
+182255958	17:31	Quinn M. Cocco	Quinn M. Coco	description
+182255958	20:11	Steele Burton	Steele Burden	description
+182255958	20:15	landscaped architect	landscape architect	profession
+182255958	20:28	Burton mentions	Burden mentions	Steele Burden
+182255958	21:18	Alfred Gazzell	Alfred Glassell	Glassell, as in episode 7
+182255958	23:27	Godshaw to somewhere	Godchaux's or somewhere	blog line
+182255958	23:30	Tarot Hall	Tureaud Hall	A. P. Tureaud Hall
+182255958	23:37	Alexander P. Tarot Sr.	Alexander P. Tureaud Sr.	blog spelling
+182255958	23:42	Toreau, Jr.	Tureaud, Jr.	Tureaud
+182255958	23:47	Toreau, Jr.	Tureaud, Jr.	Tureaud
+182255958	23:51	how Toreau was	how Tureaud was	Tureaud
+182255958	24:04	Here, Toreau,	Here, Tureaud,	Tureaud
+182255958	29:45	Wilbur Joffrean	Wilbur Joffrion	description
+182255958	30:04	General Joffrean	General Joffrion	description
+182255958	31:02	Abe Michael	Abe Mickal	description
+182255958	31:10	UEP long	Huey P. Long	name
+182255958	31:12	Sterling College	stellar college	he played at LSU
+182255958	31:16	A. Michael	Abe Mickal	description
+182255958	31:26	Michael recalls the Huey P. Longfield House	Mickal recalls the Huey P. Long Field House	name
+182255958	32:44	Handel Court	handball court	field house
+182255958	35:12	Aaron Hess	Erin Hess	staff name
+182255958	35:16	Aaron Hess	Erin Hess	staff name
+182255958	35:47	choralhistory	oralhistory	blog address
+182255958	36:01	back in Rouge	Baton Rouge	city
+2094606702	00:40	Bagot McCall	Baggett McCall	description
+2094606702	04:13	and a head -on collision	in a head -on collision	context
+2094606702	04:58	off to delivery	off to deliberate	jury
+2094606702	05:49	trotter of fact	trier of fact	legal term
+2172212511	00:05	at Division of	a division of	standard intro
+2172212511	00:44	through our histories	through oral histories	description
+2172212511	00:50	Oltoffa and Ruch	Old South Baton Rouge	description
+2172212511	01:01	Dr. Petra Henry	Dr. Petra Hendry	description
+2172212511	01:05	telegram theory	curriculum theory	description
+2172212511	01:20	telegram theory, or histories	curriculum theory, oral history	description
+2172212511	01:30	old softback and new civil right	Old South Baton Rouge civil rights	description
+2172212511	01:50	Dr. Henry spoke	Dr. Hendry spoke	guest name
+2172212511	02:58	Cold South Baton Rouge	Old South Baton Rouge	neighborhood
+2172212511	03:03	Dr. Pedro Hendry	Dr. Petra Hendry	guest name
+2172212511	03:08	saved canvas history	shaped campus history	context
+2172212511	03:15	Dr. Henry also	Dr. Hendry also	guest name
+2172212511	03:45	refrains how	reframes how	context
+2172212511	03:50	and yeah	and yet	context
+2172212511	03:55	border narrative	broader narrative	context
+2172212511	04:02	Dr. Henry reminded	Dr. Hendry reminded	guest name
+2172212511	04:48	our history is not	oral history is not	context
+2172212511	04:52	Dr. Henry's	Dr. Hendry's	guest name
+2172212511	05:26	What Indoors	What Endures	show name
+2172212511	05:38	Jen Creamer	Jen Cramer	producer
+2172212511	05:41	are disposed at	are deposited at	archive
+2172212511	05:41	for our History	for Oral History	Center
+1096386091	00:17	Alison Powell	Allison Powell	description
+1096386091	01:40	Charmaine Casiope	Charmaine Caccioppi	description
+1096386091	01:40	Mary Landry	Mary Landrieu	senator
+1096386091	02:00	with Glass waiting	with glass waiting	common noun
+1096386091	04:43	Louisianaians	Louisianians	spelling
+1096386091	04:49	Charmaine Cassiope	Charmaine Caccioppi	description
+1096386091	04:53	J. Bennett Johnson	J. Bennett Johnston	senator
+1096386091	05:31	Calleggero	Calogero	Chief Justice Calogero
+1096386091	05:34	Calleggero	Calogero	Chief Justice Calogero
+1096386091	10:18	First, why gender	First, while gender	context
+1096386091	14:31	Charmaine Casiope	Charmaine Caccioppi	description
+182255642	01:41	the old war school	the Ole War Skule	description
+182255642	01:44	integration and the American experience	integration and the African American experience	description
+182255642	02:26	hosting co -producer	host and co -producer	context
+182255642	02:30	the old war school	the Ole War Skule	description
+182255642	02:38	defense her use	defends her use	context
+182255642	03:27	the old war skull	the Ole War Skule	description
+182255642	07:39	Marion Meyer Burkett	Marian Mayer Berkett	Gumbo editor
+182255642	07:57	Birkett	Berkett	Berkett
+182255642	12:34	Marion Meyer Burkett	Marian Mayer Berkett	Berkett
+182255642	12:41	Thoreau, Jr.	Tureaud, Jr.	A. P. Tureaud Jr.
+182255642	12:50	Thoreau, Jr.	Tureaud, Jr.	A. P. Tureaud Jr.
+182255642	13:01	Thoreau was admitted	Tureaud was admitted	A. P. Tureaud Jr.
+182255642	13:17	Thoreau withdrew	Tureaud withdrew	A. P. Tureaud Jr.
+182255642	13:26	Toreau	Tureaud	A. P. Tureaud Jr.
+182255642	13:26	Rachel Immanuel	Rachel Emanuel	co-author
+182255642	13:38	Back the car	Packed the car	context
+182255642	14:51	Tarot Jr.	Tureaud Jr.	A. P. Tureaud Jr.
+182255642	15:06	Laura Hinton	Lora Hinton	Lora Hinton
+182255642	18:13	LSU library's special collections	LSU Libraries Special Collections	unit name
+181796609	01:32	Richard Loesch	Richard Leche	governor
+181796609	01:41	LSU Library's	LSU Libraries	unit name
+181796609	02:13	for nine tents	for nine-tenths	Long speech
+181796609	02:19	the barrels of people	the balance of the people	Long speech
+181796609	02:22	some backdrop	some of that grub	Long speech
+181796609	03:10	Louisiana is new not only	Louisiana is known not only	context
+181796609	04:45	Studs Turkel	Studs Terkel	Studs Terkel
+181796609	04:58	Turkel	Terkel	Studs Terkel
+181796609	07:18	Winnie Burr	Winnie Byrd	description
+181796609	07:30	Estelle Schofield Williams	Estelle Skolfield Williams	description
+181796609	07:44	his book on long	his book on Long	Huey Long
+181796609	09:41	pick any lits	pick any nits	idiom
+181796609	09:45	Estelle Schofield Williams	Estelle Skolfield Williams	description
+181796609	10:11	Richard Loesch	Richard Leche	governor
+181796609	10:52	sharp interval	short interval	context
+181796609	12:19	Richard Loesch	Richard Leche	governor
+181796609	12:27	Loesch's	Leche's	governor
+181796609	12:29	Lesh did win	Leche did win	governor
+181796609	12:48	Aaron McMinniman Hess	Erin McMinniman Hess	staff name
+181796609	12:53	Blake Renfrow	Blake Renfro	description
+181796609	14:17	LSU Library's	LSU Libraries	unit name
+181796609	14:21	oralhistory .globs	oralhistory .blogs	blog address
+182304234	00:38	Jennifer Abraham Kramer	Jennifer Abraham Cramer	host
+182304234	01:41	Inherited Foundation	and Heritage Foundation	Jazz and Heritage Foundation
+182304234	02:05	Claudia Dumas Street	Claudia Dumestres	description
+182304234	02:10	proling vendor	praline vendor	description
+182304234	02:18	Claudia Dumas Street	Claudia Dumestres	description
+182304234	02:56	Alan Fontenot	Allen Fontenot	description
+182304234	03:06	broccada's Italian ice	Brocato's Italian ice	Angelo Brocato's
+182304234	03:26	the prolines	the pralines	pralines
+182304234	04:18	the president,	the President,	the steamboat President
+182304234	04:57	Claudia Dumestri's	Claudia Dumestres's	description
+182304234	05:29	Vance Vokerson	Vance Vaucresson	Vaucresson sausage
+182304234	05:49	Claudia Dumestri	Claudia Dumestres	description
+182304234	06:00	John Leihan	John Lehon	description
+182304234	07:38	John Leehan.	John Lehon.	description
+182304234	07:41	John Leehan's	John Lehon's	description
+182304234	08:16	John Lee Hahn	John Lehon	description
+182304234	09:33	weeny van	weeny bed	the story is about her bed
+182304234	10:39	John Lihan's	John Lehon's	description
+203173118	01:06	joining NASA Student Assistants	joining us as student assistants	context
+203173118	01:20	you sit correspondence	you sent correspondence	context
+203173118	02:05	Duane Breshears	Dwayne Breashears	WWOZ, spelled Dwayne later
+203173118	02:10	Duane is	Dwayne is	Dwayne Breashears
+203173118	02:30	www .oz .org	wwoz .org	WWOZ address
+203173118	03:37	for shore	for sure	context
+203173118	07:07	Tippetinas	Tipitina's	blog spelling
+203173118	08:23	having us, Jim.	having us, Jen.	host
+203173118	09:58	Dr. Shauna Walton of Nickel State University	Dr. Shana Walton of Nicholls State University	description
+203173118	10:14	When Endures	What Endures	show name
+203173118	10:17	Kyle Tanglau is the center of sound engineer	Kyle Tanglao is the center's sound engineer	staff name
+181980024	00:59	People Road Free	People Rode Free	episode title
+181980024	01:29	deeply Anderson	Dupuy Anderson	named later
+181980024	07:19	McKethan	McKeithen	blog spelling
+181980024	10:34	the citizens' African -American	the city's African -American	context
+181980024	14:18	separate be equal	separate but equal	set phrase
+181980024	15:28	Jimison	Jemison	blog spelling
+181980024	18:09	West boycott	bus boycott	bus boycott
+181980024	19:48	Here Jimison	Here Jemison	Jemison
+181980024	20:48	Jimison and	Jemison and	Jemison
+181980024	21:12	Jonny Jones	Johnnie Jones	blog spelling
+181980024	22:26	rabble -roughed.	rabble -rousers.	blog wording
+181980024	23:31	Jimison went	Jemison went	Jemison
+181980024	23:36	Jonny Jones	Johnnie Jones	blog spelling
+181980024	25:51	intro -altro music	intro -outro music	context
+182260990	00:52	Abraham Kramer	Abraham Cramer	host
+182260990	00:55	Aaron Hess	Erin Hess	staff name
+182260990	01:08	went up so hard	went up so high	blog wording
+182260990	01:13	I like to used to be	I like the used to be	blog wording
+182260990	01:17	fishing nuts	fishing nets	net knitting
+182260990	01:31	the Chafalaya Basin	the Atchafalaya Basin	place
+182260990	01:31	with Homa	with Houma	description
+182260990	01:46	the Homa Indians	the Houma Indians	description
+182260990	01:49	Sue Abert	Sue Hebert	description
+182260990	02:17	Aaron Hess	Erin Hess	staff name
+182260990	02:22	Aaron Hess	Erin Hess	staff name
+182260990	02:53	Echafalaya Basin	Atchafalaya Basin	place
+182260990	03:51	the Homa Indian series	the Houma Indian series	description
+182260990	03:51	Rock Nachan	Roch Naquin	description
+182260990	04:00	Kirby Verrett	Kirby Verret	description
+182260990	04:07	Reed and Howard	Rita and Howard	description
+182260990	04:17	Sue Abare	Sue Hebert	description
+182260990	04:27	Edward Cusu	Edward Coussou	description
+182260990	04:34	canoe or pea	canoe or pirogue.	pirogue, split over two lines
+182260990	04:38	rogue.		rest of pirogue
+182260990	04:41	The Homa Indians series	The Houma Indians series	description
+182260990	04:50	were Homa Indians	were Houma Indians	description
+182260990	04:55	United Homa Nation	United Houma Nation	tribe
+182260990	04:57	the Homa community	the Houma community	tribe
+182260990	05:01	The Homa population	The Houma population	tribe
+182260990	05:07	city of Homa	city of Houma	city
+182260990	05:18	the Homa tribe	the Houma tribe	tribe
+182260990	05:25	The Homa filed	The Houma filed	tribe
+182260990	05:33	Rock Nachan	Roch Naquin	description
+182260990	05:33	Ille de Jean Charles	Isle de Jean Charles	place
+182260990	05:40	Rock attended	Roch attended	description
+182260990	05:56	Knockhand	Naquin	description
+182260990	06:12	Natkan	Naquin	description
+182260990	06:27	Homa tribe.	Houma tribe.	tribe
+182260990	09:12	Natkan	Naquin	description
+182260990	10:27	When Nakan	When Naquin	description
+182260990	10:37	Nakan recalls	Naquin recalls	description
+182260990	11:08	But Ed had	But it had	context
+182260990	11:47	Kirby Verrett	Kirby Verret	description
+182260990	14:01	Verrett talks	Verret talks	description
+182260990	14:46	the Homa Tribe	the Houma Tribe	tribe
+182260990	15:11	Reid and Howard	Rita and Howard	description
+182260990	15:44	so he proved vegetables	so he grew vegetables	context
+182260990	15:59	as the HOMA began	as the Houma began	tribe
+182260990	16:03	the HOMA tribe	the Houma tribe	tribe
+182260990	16:11	block Homa recognition	block Houma recognition	tribe
+182260990	16:16	the Homa cause	the Houma cause	tribe
+182260990	17:45	Sue Abert	Sue Hebert	description
+182260990	17:49	Echafalaya Basin	Atchafalaya Basin	place
+182260990	17:54	Bayou -Shane	Bayou Chene	place
+182260990	17:56	Sue Abert	Sue Hebert	description
+182260990	18:23	Biosaural Baptist Church	Bayou Sorrel Baptist Church	place
+182260990	18:27	Sue Abert	Sue Hebert	description
+182260990	20:14	touring his nets	tarring his nets	context
+182260990	20:42	a massive fish	a mess of fish	idiom
+182260990	20:46	touring with us	tarring with us	context
+182260990	21:26	Edward Koussou	Edward Coussou	description
+182260990	21:37	Atchafalaya Basin Levy	Atchafalaya Basin Levee	levee
+182260990	21:46	Kuzu discusses	Coussou discusses	description
+182260990	23:15	Kuzu remembered	Coussou remembered	description
+182260990	24:18	Sue Abert	Sue Hebert	description
+182260990	24:32	pierogues	pirogues	description
+182260990	25:46	doge house.	dugout.	blog wording
+182260990	25:50	Abraham Kramer	Abraham Cramer	host
+182260990	26:05	LaFouche Parish Histories	Lafourche Parish histories	parish
+182260990	26:12	Aaron Hess -Rent produced	Erin Hess wrote and produced	credit
+182260990	26:13	Jermaine Bienvenue	Germain Bienvenu	staff name
+182260990	26:17	The intro to our music	The intro -outro music	context
+182275085	00:52	Abraham Kramer	Abraham Cramer	host
+182275085	00:55	Aaron Hess	Erin Hess	staff name
+182275085	01:37	Home of Indians	Houma Indians	description
+182275085	01:37	Sioux A -Bear series	Sue Hebert series	description
+182275085	02:08	Mayda Owens	Maida Owens	description
+182275085	02:12	Teresa Parker Farris	Teresa Parker Ferris	description
+182275085	02:20	Aaron Hess	Erin Hess	staff name
+182275085	02:24	Aaron is	Erin is	staff name
+182275085	02:39	Bayou Sarra	Bayou Sara	place
+182275085	02:51	West Louisiana Parish	West Feliciana Parish	parish
+182275085	03:08	Rose down plantations	Rosedown plantations	Rosedown
+182275085	03:12	West Fleishiana	West Feliciana	parish
+182275085	03:30	West Fleishiana	West Feliciana	parish
+182275085	03:35	West Felicianna	West Feliciana	parish
+182275085	03:40	West Felicianna	West Feliciana	parish
+182275085	08:52	something like a book	something like a buggy	repeated as buggy
+182275085	15:24	A whole meat.	Hog meat.	blog wording
+182275085	19:43	oralhistory .blogspot .lib	oralhistory .blogs .lib	blog address
+182305951	00:18	One Endures	What Endures	show name
+182305951	00:21	Abraham Kramer	Abraham Cramer	host
+182305951	00:26	Kyle Ting Lau	Kyle Tanglao	co-host
+182305951	00:41	Home Memorial Library's	Hill Memorial Library's	Hill Memorial Library
+182305951	01:39	Jesse Jesse graduated	Jesse Coates graduated	blog line
+182305951	05:31	aspect?	Oscar?	blog wording
+182305951	07:31	10 or 25 pounds.	225 pounds.	blog wording
+182305951	07:52	Struma High School	Istrouma High School	blog spelling
+182305951	08:01	kills the Struma	kills Istrouma	Istrouma
+182305951	08:05	The strumma starts	Istrouma starts	Istrouma
+182305951	08:09	The strumma kills	Istrouma kills	Istrouma
+182305951	08:48	Aaron Hess	Erin Hess	staff name
+182305951	08:53	Jermaine Bienvenu	Germain Bienvenu	staff name
+182305951	09:11	oralhistory .blogspot .lib	oralhistory .blogs .lib	blog address
+182255759	00:55	LSU Library's Special Collections	LSU Libraries Special Collections	unit name
+182255759	01:15	hanging around a mulch.	hanging around a malt shop.	repeated as malt shop
+182255759	03:09	Alfred C. Glacell Jr.	Alfred C. Glassell Jr.	Glassell
+182255759	03:16	Alfred Glacell	Alfred Glassell	Glassell
+182255759	03:32	Glacell later	Glassell later	Glassell
+182255759	03:39	Houston Museum of National Science	Houston Museum of Natural Science	museum
+182255759	03:43	Glacell School of Art	Glassell School of Art	Glassell
+182255759	05:01	except him as part	accept them as part	context
+182255759	05:15	Mary and Myra Brickett	Marian Mayer Berkett	Gumbo editor
+182255759	05:15	contemporary of Glacell	contemporary of Glassell	Glassell
+182255759	05:31	Hortmann's Compensation Law	Workmen's Compensation Law	thesis topic
+182255759	10:30	wealth -rounded education	well -rounded education	context
+182255759	10:43	Marion Bequette	Marian Berkett	Berkett
+182255759	11:06	switched vacations	switched vocations	context
+182255759	11:23	under Albrezio	under Albrizio	Albrizio
+182255759	11:40	Conrad Elbrusio	Conrad Albrizio	Albrizio
+182255759	12:00	studied pastoral painting	studied fresco painting	frescoes
+182255759	13:02	the poor, an educated man	the poor, uneducated man	context
+182255759	13:53	Francis Greer	Frances Greer	Frances Greer
+182255759	16:16	hands like hands	hands like hams	idiom
+182255759	17:23	AP to	A.P. Tureaud	split over two lines
+182255759	17:29	Roe Jr. You	Jr. You	rest of Tureaud
+182255759	18:20	Duke Lee Anderson	Dupuy Anderson	Freya Anderson Rivers's father
+182255759	18:50	from Lehigh	from Lee High	Lee High
+182255759	18:58	at Lehigh	at Lee High	Lee High
+182255759	19:05	survive Lehigh	survive Lee High	Lee High
+182255759	19:19	send him anyway	send them anywhere	context
+182255759	19:50	Marin Gwyn, Louisiana	Maringouin, Louisiana	town
+182255759	22:44	I'm having a mop.	I'm having a malt.	malt story
+182255759	24:48	invitations to joint sororities	invitations to join sororities	context
+182255759	26:09	two panelitic councils	two Panhellenic councils	councils
+182255759	26:34	Raya Rivers	Freya Rivers	Freya Anderson Rivers
+182255759	27:02	They weren't full -worn	They weren't forewarned	context
+182255759	29:37	Jermaine Bienvenue, and Aaron Hess	Germain Bienvenu, and Erin Hess	staff names
+182255759	29:56	oralhistory .glogs	oralhistory .blogs	blog address
+182255759	30:13	Louisiana Digital for libraries	Louisiana Digital Library	resource name
+181979489	03:44	Delta Planner Society	Delta planter society	planters
+181979489	04:00	Harvard Hoover	Herbert Hoover	president
+181979489	06:09	their blow places	their low places	context
+181979489	08:14	gloating dirt and sack	toting dirt in a sack	sandbags
+181979489	08:45	Plaquemine Parishes East	Plaquemines Parish's East	parish
+181979489	12:00	to Baltimoreville	to Moreauville	blog names Moreauville
+181979489	12:30	Monte Carre	Bonnet Carré	spillway
+181979489	14:18	Washington River to Bayle Louis	Ouachita River to Bayou Louis	Ouachita
+181979489	14:24	where the gents were	where the tents were	refugee tents
+181979489	15:26	Toro Infirmary	Touro Infirmary	hospital
+181979489	17:25	Wendo focuses	Mwendo focuses	Nelima Mwendo
+181979489	17:42	Araby,	Arabi,	St. Bernard community
+181979489	19:11	very foreign in between	very few and far between	idiom
+181979489	19:32	on the breeze	on the bridge	context
+181979489	19:36	could have rolled it out	could have rode it out	ride out the storm
+181979489	22:24	like a dite just	like a dike just	levee
+181979489	22:56	bring us all with	bring a saw with	saw for the roof
+181979489	25:44	Jermaine Bienvenue	Germain Bienvenu	staff name
+181979489	25:46	intro -altro music	intro -outro music	context
+2080705554	00:04	Kylie Burgess	Kylee Burgess	description
+2080705554	00:13	LSU Discovers	LSU Discover	program name
+2080705554	02:20	Bin Laden in Al -Qaeda	Bin Laden and Al -Qaeda	context
+2080705554	03:13	Osama been long	Osama bin Laden	name
+2080705554	03:13	he wasn't paying	he wasn't painting	painting a picture
+2080705554	06:18	a draw from Afghanistan	the withdrawal from Afghanistan	2021 withdrawal
+2080705554	06:24	Center for World History	Center for Oral History	Center
+182303049	00:27	Jennifer Abraham Kramer along with Aaron Hess	Jennifer Abraham Cramer along with Erin Hess	description
+182303049	01:48	amazing world history projects	amazing oral history projects	context
+182303049	02:16	Louisianaan	Louisianan	spelling
+182303049	05:18	Vermillion	Vermilion	Vermilion Bay
+182303049	07:23	What Indoors	What Endures	show name
+182303049	07:28	Jen Teiggs	Jenn Tiegs	description
+1325303458	00:54	Leroy Poygers	Leroy Poydras	description
+1325303458	01:00	Dale Roodies	Dale Rhodies	description
+1325303458	02:35	Darryl Rhodes	Darrell Rhodies	description
+1325303458	02:40	USS Canistio	USS Canisteo	description
+1325303458	02:51	the Canistio	the Canisteo	description
+1325303458	08:36	raddest holes	rabbit holes	jackrabbit holes
+1325303458	10:23	Leroy Poydrus	Leroy Poydras	description
+1325303458	10:34	Michelle Mellon -Kahn	Michelle Melancon	description
+1325303458	11:05	shared light	shed light	description
+1325303458	11:51	the captain's corner	the captain's quarters	context
+1325303458	11:54	I could block navigation	I could plot navigation	context
+1325303458	15:17	Darryl Rhodes	Darrell Rhodies	description
+181979604	00:49	Wood Endures	What Endures	show name
+181979604	03:42	Cabana -Tuan Prison	Cabanatuan Prison	POW camp
+181979604	03:46	Aaron Hess	Erin Hess	staff name
+181979604	06:54	Mary Fry Eaton talks	Mary Frey Eaton talks	Dean Fred Frey
+181979604	07:02	Major Fred Fry	Major Fred Frey	Dean Fred Frey
+181979604	07:05	Mary Fry Eaton virtually	Mary Frey Eaton virtually	Frey
+181979604	09:11	Mary Fry Eaton, remembering	Mary Frey Eaton, remembering	Frey
+181979604	09:25	born in Plaquemines,	born in Plaquemine,	the town, in Iberville Parish
+181979604	09:52	Cabana Tuan	Cabanatuan	POW camp
+181979604	10:03	Cabana Chihuahuan Prison	Cabanatuan Prison	POW camp
+181979604	11:38	they went in so much pain	they were in so much pain	context
+181979604	13:44	at Oder	at Ohrdruf	blog names Ohrdruf
+181979604	15:59	in amphibious attack	an amphibious attack	context
+181979604	19:18	and here all kind	and hear all kind	context
+181979604	19:22	Then we're here pounding	Then we hear pounding	context
+181979604	20:27	Aaron Hess	Erin Hess	staff name
+181979604	20:36	Jermaine Bienvenue	Germain Bienvenu	staff name
+182305505	00:37	the boards knowing	the board knowing	repeated as board
+182305505	01:20	we'll probably be elected	he'll probably be elected	McClendon
+182305505	01:40	Abraham Kramer	Abraham Cramer	host
+182305505	04:38	David Brown Dyke	David Browndyke	kicker
+182305505	04:44	earthquake game in 1998	earthquake game in 1988	Earthquake Game, 1988
+182305505	05:42	Jim Carpet	Jim Corbett	athletic director
+182305505	05:56	than anything	in anything	context
+182305505	06:21	Deetzel	Dietzel	Paul Dietzel
+182305505	06:25	Charlie McLendon	Charlie McClendon	coach
+182305505	07:42	we'll probably be elected	he'll probably be elected	McClendon
+182305505	09:28	pull the board	poll the board	context
+182305505	09:39	jim carver	Jim Corbett	athletic director
+182305505	09:43	charlotte mack	Charlie Mack	McClendon
+182305505	14:27	Brown Dyke kicked	Browndyke kicked	kicker
+182305505	15:59	continue the chair.	continued to cheer.	blog wording
+182305505	16:11	They do it again	Let's do it again	context
+182305505	16:17	Wooden Doors	What Endures	show name
+182305505	16:48	Kyle Tang Lau	Kyle Tanglao	staff name
+182305505	16:50	Aaron Hess	Erin Hess	staff name
+182305505	16:54	Jermaine Bienvenue	Germain Bienvenu	staff name
+181978477	00:51	Send and Smoke	Sin and Smoke	episode title
+181978477	01:30	Oil History	Oral History	Center
+181978477	05:20	Chicksaw	Chickasaw	tribe
+181978477	05:42	getting the reach	getting the ridge	blog wording
+181978477	08:10	It was all new	It was all mule	mules, no tractor
+181978477	08:13	All new, everything was new.	All mule, everything was mule.	mules
+181978477	09:38	Yamra Ann Martin	Barbara Ann Martin	named just before
+181978477	10:09	pre -tobacco farming	Perique tobacco farming	Perique series
+181978477	10:21	Charmaine Cole	Chermaine Cole	description
+181978477	10:25	Charmaine Cole	Chermaine Cole	description
+181978477	13:06	African -American life	African -American lifeways	lifeways, split over two lines
+181978477	13:10	waves in the state.	in the state.	rest of lifeways
+181978477	13:16	who will cause what she can	who will recall what she can	context
+181978477	13:35	The filing clip	The following clip	context
+181978477	15:58	Blake Renfrow	Blake Renfro	description
+181978477	16:08	Jermaine Bienvenu	Germain Bienvenu	staff name
+182304963	00:52	Abe Michael	Abe Mickal	player
+182304963	03:17	Abe Michael	Abe Mickal	player
+182304963	06:02	leather cleaves	leather cleats	football shoes
+182304963	06:29	Abe Michael's	Abe Mickal's	player
+182304963	06:29	Gainell Tinsley	Gaynell Tinsley	player
+182304963	08:42	Merle Schneksneider	Merle Schexnaildre	player
+182304963	08:49	fullback in defensive end	fullback and defensive end	context
+182304963	10:38	Saturdays and Baton Rouge	Saturdays in Baton Rouge	context
+182304963	14:45	Kyle Tanglau	Kyle Tanglao	staff name
+182304963	14:47	Aaron Hess	Erin Hess	staff name
+182304963	14:52	Michelle Malloncon	Michelle Melancon	staff name
+182304963	14:52	Jermaine Bienvenu	Germain Bienvenu	staff name
+182304963	14:59	Aaron Julian	Eric Julian	staff name
+182304858	00:48	Abraham Kramer	Abraham Cramer	host
+182304858	01:11	Home Memorial Library's	Hill Memorial Library's	Hill Memorial Library
+182304858	01:38	Aaron, you chose	Erin, you chose	co-host
+182304858	05:49	Priscilla Andoni Museum	Priscilla Andonie Museum	Andonie Museum
+182304858	05:53	perfect seasons LSU Magic Gear	Perfect Season: LSU's Magic Year	book title
+182304858	05:57	Emily Nimins	Emily Nimmons	staff name
+182304858	08:50	Kyle Tanglau	Kyle Tanglao	staff name
+182304858	08:59	Michelle Malloncon	Michelle Melancon	staff name
+182304858	08:59	Jermaine Bienvenue	Germain Bienvenu	staff name

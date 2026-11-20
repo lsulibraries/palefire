@@ -879,6 +879,13 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: British Voices from South Asia comes to v2', <<<'HTML'
+<ul>
+<li>The 1996 Hill Memorial Library exhibition British Voices from South Asia, about British life in India before Independence, is rebuilt as a v2 exhibition, not published yet: thirteen galleries, every one a wall with a picture to open it.</li>
+<li>Each of the six history sections hangs its essay as a text plate beside its postcards, prints and photographs, then gives way to its own interview excerpts, which the old site kept as six pages at the end. The excerpts, from Frank de Caro and Rosan Augusta Jordan’s interviews for the T. Harry Williams Center, hang as 42 plates of a few voices each, under the old pages’ topics.</li>
+<li>The old pages had two pictures’ captions swapped and one interview page that repeated another; both are fixed. No sharper scans of the 1996 pictures turned up, so they keep their original size.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: Framed gallery pictures beside the title', <<<'HTML'
 <ul>
 <li>On wider screens a framed gallery picture now sits to the right of the gallery’s title and text instead of in the middle of the screen, so the two no longer overlap.</li>
