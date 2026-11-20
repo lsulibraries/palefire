@@ -189,6 +189,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-20:** Exhibition end band: the first canvas (`.is-active` on load) is the current exhibition, then the family in order from the next one; no style change.
 - **2026-11-20:** Exhibition end (`.pf-exhibit-end`): the grid (`__grid`, `__item`, `__tile`, `__img`, `__text`, `__year`, `__title`, `__kicker`, `__count`) is gone. In its place `.pf-showcase.pf-exhibit-end__showcase` holding the exhibitions band (`.pf-showcase__carousel`, no `.pf-showcase__rule`), its foot `clamp(2rem, 4vw, 3rem)`; then `__back`, a row of `.pf-exhibit-button` links (“← Oral History”, 1rem arrow first) on the band’s column (`max(--pf-section-pad-inline, (100% - 1280px) / 2)`). The panel is `position: relative; isolation: isolate` for the band’s plate, no top rule.
 - **2026-11-20:** `.pf-exhibit-family .pf-exhibit-family__link` (was `.pf-exhibit-family__link`): `margin: 0` and `background-image: none` added, and the descendant selector outranks `.pf-breadcrumb--modular a` (its 2px bottom padding, −2px margin and growing 2px underline), so every row keeps .75rem above and below its text.
 - **2026-11-20:** Gallery Contents (`.pf-exhibit-contents`) is no longer in a wall’s facts: `.pf-exhibit-wall__contents` removed; story galleries keep it in `.pf-exhibit-opener__head`.

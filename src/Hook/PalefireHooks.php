@@ -1013,19 +1013,19 @@ class PalefireHooks {
   /**
    * The closing panel after an exhibition's last gallery.
    *
-   * Every other exhibition in its family (exhibitFamily()) in the
-   * exhibitions band Oral History's Showcase uses
-   * (includes/exhibit-carousel.html.twig, exhibitionCard() items), starting
-   * with the one after it and wrapping round, so reading straight through
-   * still works; then the way back to the family's home
-   * (includes/exhibit-end.html.twig).
+   * Its family's exhibitions (exhibitFamily()) in the exhibitions band
+   * Oral History's Showcase uses (includes/exhibit-carousel.html.twig,
+   * exhibitionCard() items): this one shown first, where the reader is,
+   * then the one after it and on round, so Next reads straight through;
+   * then the way back to the family's home (includes/exhibit-end.html.twig).
+   * Empty for a family of one.
    */
   private function exhibitEnd(NodeInterface $node): array {
     $cache = CacheableMetadata::createFromObject($node);
     $family = self::exhibitFamily($node, $cache);
     $count = count($family['items']);
     $others = [];
-    for ($step = 1; $step < $count; $step++) {
+    for ($step = 0; $count > 1 && $step < $count; $step++) {
       $item = $family['items'][($family['index'] + $step) % $count];
       $others[] = self::exhibitionCard($item['node'], $cache);
     }

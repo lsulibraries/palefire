@@ -1,17 +1,17 @@
 {#
 /**
  * @file
- * After an exhibition's last gallery: every other exhibition in its family
- * and the way back (PalefireHooks::exhibitEnd(), page.html.twig). The
- * others in the exhibitions band of Oral History's Showcase
- * (includes/exhibit-carousel.html.twig), starting with the next one and
- * wrapping round, without its index rule: the band's title is the
+ * After an exhibition's last gallery: its family's exhibitions and the
+ * way back (PalefireHooks::exhibitEnd(), page.html.twig). They are in the
+ * exhibitions band of Oral History's Showcase
+ * (includes/exhibit-carousel.html.twig), this one shown first, then the
+ * next and on round, without its index rule: the band's title is the
  * panel's (visually hidden) heading. Then a button back to the family's
  * home and, for Special Collections, every exhibition. _exhibition.scss
  * (.pf-exhibit-end), _exhibit-showcase.scss.
  *
- * - end.others: PalefireHooks::exhibitionCard() arrays. Empty when the
- *   family has one.
+ * - end.others: PalefireHooks::exhibitionCard() arrays, this exhibition
+ *   first. Empty when the family has one.
  * - end.parent: title, url. end.all: url or NULL.
  */
 #}
