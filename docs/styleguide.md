@@ -187,6 +187,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-20:** Wall object view: a two-image group is a comparison (`.pf-exhibit-compare`) only when its first link has `data-pf-align`; otherwise it is turned with `.pf-exhibit-pages` like three or more, and the tile is tagged “2 pages”. A turned group with no group figcaption puts the shown page’s own figcaption in `.pf-viewer__label`, updated on each turn.
 - **2026-11-20:** Exhibitions band facts: one value per slot. `.pf-showcase__facts dt` (mono label) over `dd` (1.25rem, 500, 1.3, tabular figures) in all four slots, the Press link included (inherits the `dd` type, underlined 1px at .2em, accent underline on hover). No notes: `.pf-showcase__fact-note` and `.pf-showcase__fact--place dd` are removed. A qualifier goes in the label (“Est. reading”, with a visually hidden “Estimated reading time”).
 - **2026-11-20:** Exhibitions band facts: the fourth `.pf-showcase__fact--place` slot is **Press**: `.pf-showcase__fact-place` holds only the link (“Read the release”, underlined, accent underline on hover), with `.pf-showcase__fact-note` “Shown Jan–Mar 2010” under it. `.pf-showcase__chest` is removed.
 - **2026-11-20:** `.pf-pn__status--kept` on the slab: `color-mix(in srgb, var(--bs-emphasis-color) 9%, transparent)`, no ring, words and equals sign in `--bs-emphasis-color` (14.9:1), the secondary button’s plate, so the closed statuses (Changed, Kept as is) are filled and the open ones (Open, Waiting on someone) are ringed.

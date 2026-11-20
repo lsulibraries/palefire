@@ -325,7 +325,7 @@ $section('Occult Science and Philosophy in the Renaissance', [
 <p>Now at <a href="/v2/special/exhibitions/occult">/v2/special/exhibitions/occult</a>.</p>
 <p>Exhibition: Occult Science and Philosophy in the Renaissance (Hill Online Exhibitions, 2011; shown in Hill Memorial Library in 2010), drawn from the Rare Book, McIlhenny and Rhoades Collections, curated by Michael Taylor.<br>Old site: the Wayback Machine’s copy of exhibitions.blogs.lib.lsu.edu/?p=1257&amp;all=1. The students’ copy at /occult was not used, because its text has encoding errors.</p>
 <h3>Changed on the page</h3>
-<ul><li>Eleven galleries on one page, one entry per book, each with its catalog record.
+<ul><li>Eleven galleries on one page at first, one entry per book, each with its catalog record. Since 2026-11-20 the eight themed galleries are one wall, The Objects: the 22 books side by side under their eight themes, each opening full screen with its record and commentary (<code>scripts/palefire_exhibit_occult_wall.php</code>).
 </li><li>40 images from the “Occult Science 4K” folder.
 </li><li>Links point at the new anchors, and the Index links to each book.
 </li></ul>

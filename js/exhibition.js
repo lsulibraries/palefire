@@ -1300,7 +1300,8 @@
   }
 
   // The entry's first figure (or image group): its images and its caption.
-  // A group of two is compared; of three or more, its pages are turned.
+  // An aligned group of two is compared; any other group, its pages are
+  // turned (fillObject()).
   function entryMedia(entry) {
     const block = entry.querySelector('.pf-exhibit-group, .pf-exhibit-figure');
     if (!block) {
@@ -1342,8 +1343,9 @@
   // A manuscript's pages, one at a time in the frame, with Previous page /
   // Next page under them (the viewer's own arrows and keys still step
   // through the wall). Each turn crossfades and leaves any zoom; shown: the
-  // tile's loaded image, for the first page.
-  function pageControls(view, frame, links, shown) {
+  // tile's loaded image, for the first page; onTurn(index), if given, is
+  // told of each turn.
+  function pageControls(view, frame, links, shown, onTurn) {
     const n = links.length;
     const control = document.createElement('div');
     control.className = 'pf-exhibit-pages';
@@ -1396,6 +1398,9 @@
       status.textContent = Drupal.t('Page @n of @total', { '@n': to + 1, '@total': n });
       prev.disabled = to === 0;
       next.disabled = to === n - 1;
+      if (onTurn) {
+        onTurn(to);
+      }
       // The next page's stage size, ready for the next turn.
       const after = links[to + 1] && links[to + 1].querySelector('img');
       if (after && after.getAttribute('srcset')) {
@@ -1447,10 +1452,24 @@
     const media = entryMedia(entry);
     const shown = tile.querySelectorAll('.pf-exhibit-wall__img');
 
-    // The image, or the first two as a comparison.
+    // The image, or the first two as a comparison: a pair is compared only
+    // when its first image is aligned over the second (Audubon's drawing
+    // over its proof); any other pair (a title page and a plate) is turned
+    // like a manuscript's pages.
     const frame = document.createElement('div');
     frame.className = 'pf-viewer__frame';
-    if (media.links.length === 2) {
+    const turned = media.links.length > 2 || (media.links.length === 2 && !media.links[0].dataset.pfAlign);
+    // Turned pages without a caption for the group: the label under the
+    // image is the shown page's own caption (Occult's "Title page.").
+    const pageLabel = (to) => {
+      if (media.caption) {
+        return;
+      }
+      const own = media.links[to].closest('figure').querySelector(':scope > figcaption');
+      view.label.replaceChildren(...(own ? Array.from(own.cloneNode(true).childNodes) : []));
+      view.label.hidden = !own;
+    };
+    if (media.links.length === 2 && !turned) {
       const [a, b] = media.links;
       const names = media.links.map((link) => {
         const caption = link.closest('figure').querySelector('figcaption');
@@ -1545,8 +1564,8 @@
       fit.append(frame);
       view.media.replaceChildren(fit, control);
     }
-    else if (media.links.length > 2) {
-      view.media.replaceChildren(...pageControls(view, frame, media.links, shown[0]));
+    else if (turned) {
+      view.media.replaceChildren(...pageControls(view, frame, media.links, shown[0], pageLabel));
     }
     else if (media.links.length) {
       const img = mediaImg(media.links[0], 'pf-viewer__img pf-viewer__zoomable', shown[0]);
@@ -1576,6 +1595,9 @@
     view.title.textContent = heading.textContent.trim();
     view.label.replaceChildren(...(media.caption ? Array.from(media.caption.cloneNode(true).childNodes) : []));
     view.label.hidden = !media.caption;
+    if (turned) {
+      pageLabel(0);
+    }
     const copy = entry.cloneNode(true);
     copy.querySelector('.pf-exhibit-entry__title').remove();
     if (media.block) {
@@ -1589,7 +1611,7 @@
     copy.querySelectorAll('.pf-exhibit-bio').forEach((el) => el.classList.remove('is-folded'));
     stopAudio(view);
     view.body.replaceChildren(...Array.from(copy.childNodes));
-    if (media.links.length > 2) {
+    if (turned) {
       markPage(view, 0, media.links.length, false);
     }
     panelAudio(view);

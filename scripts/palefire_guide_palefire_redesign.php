@@ -901,6 +901,12 @@ HTML),
 <li>Audubon’s label named the wrong plate. It now reads Carolina Parrot, plate 26, which is the picture actually shown.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Occult Science as one wall of books', <<<'HTML'
+<ul>
+<li>Occult Science’s eight short themed galleries are now one wall, The Objects: all 22 books side by side, grouped under their themes. Each opens full screen with its catalog record and commentary.</li>
+<li>Books shown with two pictures, such as a title page and a plate, now turn like pages instead of being laid over each other, and each page keeps its own caption.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------

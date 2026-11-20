@@ -5629,7 +5629,11 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
       }
       if ($block->bundle() === 'exhibit_gallery') {
         $figures = array_values(array_filter($block->get('field_gallery_items')->referencedEntities(), fn ($f) => !$f->get('field_figure_image')->isEmpty()));
-        $pages = count($figures) > 2 ? count($figures) : 0;
+        // Two are compared only when the first is aligned over the second
+        // (a drawing over its proof); otherwise they are pages, like three
+        // or more (a title page and a plate). js/exhibition.js agrees.
+        $aligned = count($figures) === 2 && $figures[0]->hasField('field_figure_align') && !$figures[0]->get('field_figure_align')->isEmpty();
+        $pages = count($figures) > 2 || (count($figures) === 2 && !$aligned) ? count($figures) : 0;
         $figures = array_slice($figures, 0, 2);
         $caption = $text($block->get('field_figure_caption')) ?: ($figures ? $text($figures[0]->get('field_figure_caption')) : '');
         if ($figures) {

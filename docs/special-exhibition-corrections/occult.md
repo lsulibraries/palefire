@@ -6,7 +6,7 @@ New page: `/v2/special/exhibitions/occult`, built by `scripts/palefire_exhibit_o
 
 ## Changed on the page
 
-- Eleven galleries on one page, one entry per book, each with its catalog record.
+- Eleven galleries on one page at first, one entry per book, each with its catalog record. Since 2026-11-20 the eight themed galleries are one wall, The Objects: the 22 books side by side under their eight themes, each opening full screen with its record and commentary (`scripts/palefire_exhibit_occult_wall.php`).
 - 40 images from the “Occult Science 4K” folder.
 - Links point at the new anchors, and the Index links to each book.
 
