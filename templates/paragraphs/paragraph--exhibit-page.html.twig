@@ -202,20 +202,25 @@
        over its lower left on a wash (_exhibition.scss). With a caption it
        is a figure that opens in the lightbox. #}
     {# The frame stays on screen (with its wash) while the text over it
-       scrolls, however long the intro once opened. #}
+       scrolls, however long the intro once opened. With "Show whole image"
+       (lead_whole), as "Frame the cover": the picture whole, inset, over a
+       blurred copy of itself that fills the frame (decorative). #}
     {% set wall_img %}
       <span class="pf-exhibit-wall-hero__frame">
+        {% if lead_whole %}
+          <img class="pf-exhibit-wall-hero__wash{{ lead_mirror ? ' pf-exhibit-mirror' }}" src="{{ wall_lead.src }}" alt="" aria-hidden="true" loading="lazy" decoding="async">
+        {% endif %}
         <img class="pf-exhibit-wall-hero__img{{ lead_mirror ? ' pf-exhibit-mirror' }}" id="{{ dom_id }}-lead-img" src="{{ wall_lead.src }}"
              {% if wall_lead.srcset %}srcset="{{ wall_lead.srcset }}" sizes="{{ wall_lead.sizes }}"{% endif %}
              {% if wall_lead.width %}width="{{ wall_lead.width }}" height="{{ wall_lead.height }}"{% endif %}
-             style="object-position: {{ focus }}" alt="{{ wall_lead_caption ? wall_lead.alt }}" loading="lazy" decoding="async">
+             {% if not lead_whole %}style="object-position: {{ focus }}" {% endif %}alt="{{ wall_lead_caption ? wall_lead.alt }}" loading="lazy" decoding="async">
         {# In the frame, so it stays on screen with the picture. #}
         {% if wall_lead_caption %}
           {{ pf.lead_label(wall_lead, lead_label, dom_id ~ '-caption', dom_id ~ '-lead-img') }}
         {% endif %}
       </span>
     {% endset %}
-    <div class="pf-exhibit-wall-hero" data-pf-wall-hero
+    <div class="pf-exhibit-wall-hero{{ lead_whole ? ' pf-exhibit-wall-hero--whole' }}" data-pf-wall-hero
          {% if wall_lead_caption %}role="figure" aria-labelledby="{{ dom_id }}-caption"{% else %}aria-hidden="true"{% endif %}>
       {{ wall_img }}
       {% if wall_lead_caption %}

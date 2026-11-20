@@ -4722,6 +4722,47 @@ $pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last
   }
 }
 
+// "Show whole image" on a wall's (or a cover opening's) lead, for a picture
+// too small or soft to fill the screen: framed as "Frame the cover" frames
+// the exhibition's cover (.pf-exhibit-cover--framed). The picture whole,
+// inset from the screen's edges with a shadow, over a blurred copy of
+// itself that fills the frame, faded rather than darkened so it takes the
+// page color in either theme. Below lg the picture sits high, clear of the
+// text's wash at the foot.
+.pf-exhibit-wall-hero--whole {
+  .pf-exhibit-wall-hero__img {
+    z-index: 0;
+    box-sizing: border-box;
+    padding: clamp(1.5rem, 6vh, 4rem) clamp(1.25rem, 4vw, 4rem) max(55lvh, 100lvh - 28rem);
+    object-fit: contain;
+    object-position: center top;
+    filter: drop-shadow(0 1.5rem 2.5rem rgb(0 0 0 / .4));
+
+    @include media-breakpoint-up(lg) {
+      padding-bottom: clamp(1.5rem, 6vh, 4rem);
+      object-position: center;
+    }
+  }
+
+  .pf-exhibit-wall-hero__wash {
+    position: absolute;
+    top: var(--pf-cover-shift);
+    left: 0;
+    display: block;
+    width: 100%;
+    height: max(22rem, var(--pf-cover-img-h));
+    object-fit: cover;
+    opacity: .5;
+    filter: blur(2.5rem) saturate(.7);
+    // Past the edges, so the blur doesn't fade them to the page color.
+    scale: 1.15;
+
+    @include pf-exhibit-motion {
+      animation: pf-exhibit-wash-in 2.4s $pf-exhibit-ease both;
+    }
+  }
+}
+
 .pf-exhibit-wall__intro {
   overflow: hidden;
 

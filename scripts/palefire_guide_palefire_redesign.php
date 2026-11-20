@@ -879,6 +879,12 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Small gallery pictures framed like the cover', <<<'HTML'
+<ul>
+<li>When a gallery’s opening picture is too small to fill the screen, “Show whole image” now shows it whole, set in from the edges with a soft shadow over a blurred copy of itself, the way “Frame the cover” shows a small cover. Before, a gallery shown as a wall ignored the box and enlarged the picture.</li>
+<li>Free People of Color in Louisiana had the box ticked on every gallery by default; it is unticked there, so its full-size pictures still fill the screen.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: Gallery pictures open from their label', <<<'HTML'
 <ul>
 <li>The big picture that opens a gallery no longer opens full screen wherever you click it, which happened by accident while reading. A small label in its top corner names the picture, and its View button opens it.</li>
