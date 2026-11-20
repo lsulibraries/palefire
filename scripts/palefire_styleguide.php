@@ -384,6 +384,13 @@ HTML),
         $figure('<p>A picture’s tile: the entry’s first image, its own shape.</p>', 'side_start'),
       ])),
     ]),
+    isset($bio_fields['field_entry_summary']) ? Paragraph::create([
+      'type' => 'exhibit_entry',
+      'field_block_title' => 'Objective design',
+      'field_section_anchor' => 'wall-objective',
+      'field_entry_summary' => 'A text plate between the pictures: an entry with no picture and a Summary, in the same frame as its row.',
+      'field_guide_blocks' => [$text('<p>Swiss designers spoke of objective design: work that serves its content and its reader rather than the designer’s taste. On a wall, an entry like this one, with no picture, hangs as a text plate when it has a Summary, and opens in reading view.</p>')],
+    ]) : NULL,
     Paragraph::create([
       'type' => 'exhibit_entry',
       'field_block_title' => 'Josef Müller-Brockmann',
@@ -395,6 +402,37 @@ HTML),
       'field_guide_blocks' => array_values(array_filter([
         $figure('<p>A page from <em>Grid Systems in Graphic Design</em> (Niggli, 1981).</p>', 'side_start'),
       ])),
+    ]),
+  ]);
+  $sections[array_key_last($sections)]->set('field_exhibit_display', 'wall');
+
+  $gallery('Text wall', 'text-wall', [
+    $note('<p><strong>Text plate</strong>: an entry with no picture and a <strong>Summary</strong> hangs on any Wall as a text plate, between the pictures and the same height as them: its number and the Summary set large, like a pull quote, with the heading and its reading time (“3 min”) under it like any tile’s label (see “Objective design” in the Wall above). On a <strong>text wall</strong>, where no entry has a picture or a clip, every entry is a plate; one without a Summary shows the first paragraph of its text (up to about 200 characters, ending on a whole sentence where one fits), so write that paragraph as a summary. A plate opens in reading view: the plate dims, and the text gets a wide column in larger type. A long biography on a name tile opens the same way. On a wall that has pictures, an entry with no picture and no Summary still heads a sub-gallery, as before.</p>'),
+    Paragraph::create([
+      'type' => 'exhibit_entry',
+      'field_block_title' => 'The grid',
+      'field_section_anchor' => 'text-wall-grid',
+      'field_guide_blocks' => [$text(<<<'HTML'
+<p>A grid divides the page into columns and rows, and every element takes its place in them.</p>
+<p>Müller-Brockmann held that the grid is an expression of an attitude: that a designer’s work should be clear, objective and functional. Its spaces are measured, not guessed, so that the page reads as one ordered whole.</p>
+HTML)],
+    ]),
+    Paragraph::create([
+      'type' => 'exhibit_entry',
+      'field_block_title' => 'Sans serif',
+      'field_section_anchor' => 'text-wall-sans',
+      'field_guide_blocks' => [$text(<<<'HTML'
+<p>Swiss typography set its text in sans serif faces, Akzidenz-Grotesk first and then Helvetica and Univers, ranged left and ragged right.</p>
+<p>The faces were chosen for their neutrality: a letter without ornament lets the words and their order carry the meaning.</p>
+HTML)],
+    ]),
+    Paragraph::create([
+      'type' => 'exhibit_entry',
+      'field_block_title' => 'White space',
+      'field_section_anchor' => 'text-wall-space',
+      'field_guide_blocks' => [$text(<<<'HTML'
+<p>The empty parts of a page are part of its design: space groups what belongs together and separates what does not.</p>
+HTML)],
     ]),
   ]);
   $sections[array_key_last($sections)]->set('field_exhibit_display', 'wall');

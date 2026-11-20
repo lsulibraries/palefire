@@ -47,3 +47,8 @@ Left as written:
 - The credit line.
 - The twelve captions and alt texts, written from each item’s LDL record.
 - The cover’s object label (A. Sampson, Letter introducing the sculptor Eugène Warburg, 1852).
+
+## Walls (2026-11-20)
+
+- The Collections and Terminology are walls of text plates. Each partner’s plate opens its list of collections; its opening line now says how many collections it lists and their years (from the collection titles, e.g. “12 collections, 1776–1964”).
+- Terminology keeps its opening as the gallery’s text; “Creole”, Controlled Vocabularies and Historical Terminology for Racial Designations and Descriptive Terms are an entry each. The glossary of historical terms stays a single list inside the last one rather than a plate per word.

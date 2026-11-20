@@ -2013,6 +2013,11 @@
       view.media.replaceChildren();
     }
 
+    // No picture, only a plate (a text plate or a name tile): the text is
+    // the thing. The plate dims back and the panel widens to a reading
+    // column (.is-reading, _exhibition.scss).
+    view.dialog.classList.toggle('is-reading', !media.links.length && !!tile.querySelector('.pf-exhibit-plate'));
+
     // The entry's heading, caption and the rest of its content.
     view.title.textContent = heading.textContent.trim();
     view.label.replaceChildren(...(media.caption ? Array.from(media.caption.cloneNode(true).childNodes) : []));

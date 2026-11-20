@@ -5088,6 +5088,51 @@ $pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last
   width: 4.5rem;
 }
 
+// A text plate (tile.text, exhibit-page.html.twig): an entry with no
+// picture, typeset in a picture's place on the same 3:4 plate as a name, in
+// the same frame as the pictures of its row (its height is the frame's,
+// never its words'). Its number small in mono at the top over a short
+// accent rule that draws out on hover and focus, then its opening words
+// set large, a pull quote, in the heading color, ending on their seventh
+// line. The label under it, as under any tile, is its heading and reading
+// time.
+.pf-exhibit-plate__number {
+  display: grid;
+  gap: 4cqw;
+  font: clamp(.6875rem, 5cqw, .9375rem)/1 var(--pf-exhibit-mono);
+  letter-spacing: .08em;
+  font-variant-numeric: tabular-nums;
+  color: var(--pf-exhibit-muted);
+
+  &::after {
+    content: "";
+    width: 2.25rem;
+    height: 2px;
+    background: var(--pf-exhibit-accent);
+
+    @include pf-exhibit-motion {
+      transition: width .6s $pf-exhibit-ease;
+    }
+  }
+}
+
+.pf-exhibit-plate__quote {
+  font-size: clamp(.875rem, 7.5cqw, 1.75rem);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  text-wrap: pretty;
+  hyphens: auto;
+  overflow-wrap: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 7;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pf-exhibit-wall__link:is(:hover, :focus-visible) .pf-exhibit-plate__number::after {
+  width: 4.5rem;
+}
+
 .pf-viewer__frame--plate {
   container-type: size;
 
@@ -5097,6 +5142,43 @@ $pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last
     width: min(100cqw, 75cqh, 30rem);
     aspect-ratio: .75;
     background: var(--pf-exhibit-surface);
+  }
+}
+
+// Reading: an entry with no picture opened in the object view (a text
+// plate or a name tile; js/exhibition.js sets .is-reading). The text is the
+// thing, so the plate dims back on its stage and the panel widens to a
+// reading column, reader-view fashion: from lg up to 46rem (as much as
+// 56% of the screen) beside the plate; below lg the stage gives up most of
+// its height. The words are set larger and looser, at most 66 characters
+// to the line. Folded away (.is-full), the viewer is as before.
+.pf-viewer--exhibit.is-reading {
+  @include media-breakpoint-up(lg) {
+    --pf-panel-w: max(20rem, min(46rem, 56vw));
+  }
+
+  &[open]:not(.is-full) {
+    @include media-breakpoint-down(lg) {
+      grid-template-rows: minmax(0, 30%) minmax(0, 1fr);
+    }
+  }
+
+  .pf-viewer__frame--plate .pf-exhibit-plate {
+    opacity: .4;
+
+    @include pf-exhibit-motion {
+      transition: opacity .6s $pf-exhibit-ease;
+    }
+  }
+
+  .pf-viewer__body {
+    max-width: 66ch;
+    font-size: 1.125rem;
+    line-height: 1.7;
+
+    @include media-breakpoint-up(xl) {
+      font-size: 1.1875rem;
+    }
   }
 }
 

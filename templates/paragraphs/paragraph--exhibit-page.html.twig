@@ -46,7 +46,12 @@
  *   reads as a story. A dated entry with no picture or clip is a note
  *   (tile.note): a wall label read in place, not a link. A person with a
  *   long biography and no portrait is a name tile (tile.person): the name,
- *   life and role typeset on a 3:4 plate, opening like any tile. A
+ *   life and role typeset on a 3:4 plate, opening like any tile. An
+ *   undated entry with a Summary (on a wall with no pictures, any undated
+ *   entry) is a text plate (tile.text): its number and summary, set as a
+ *   pull quote, on the plate, in the same frame as the pictures of its
+ *   row; its heading and reading time are the label under it, as any
+ *   tile's; it opens like a name tile. A
  *   gallery of reading lists and no entries is a wall of readings
  *   (wall.readings): its covers hang with their citations and link out.
  * - timeline: Display "timeline" (src/ExhibitTimeline.php), or NULL: every
@@ -276,7 +281,7 @@
                 </div>
               </li>
             {% else %}
-            <li class="pf-exhibit-wall__tile{{ tile.person ? ' pf-exhibit-wall__tile--person' : (not image ? ' pf-exhibit-wall__tile--reel') }}" style="--pf-r: {{ tile.ratio }}" data-pf-tile="{{ tile.anchor }}"
+            <li class="pf-exhibit-wall__tile{{ tile.person ? ' pf-exhibit-wall__tile--person' : (tile.text ? ' pf-exhibit-wall__tile--text' : (not image ? ' pf-exhibit-wall__tile--reel')) }}" style="--pf-r: {{ tile.ratio }}" data-pf-tile="{{ tile.anchor }}"
                 {% if tile.plate %}data-plate="{{ tile.plate }}"{% endif %}>
               <a class="pf-exhibit-wall__link" href="#{{ tile.anchor }}">
                 <span class="pf-exhibit-wall__frame">
@@ -287,6 +292,14 @@
                       <span class="pf-exhibit-plate__name">{{ tile.person.name }}</span>
                       {% if tile.person.life %}<span class="pf-exhibit-plate__life">{{ tile.person.life }}</span>{% endif %}
                       {% if tile.person.role %}<span class="pf-exhibit-plate__role">{{ tile.person.role }}</span>{% endif %}
+                    </span>
+                  {% elseif tile.text %}
+                    {# An entry with no picture: its number and opening
+                       words typeset in a picture's place. The label under
+                       it names the link. #}
+                    <span class="pf-exhibit-plate pf-exhibit-plate--text" aria-hidden="true">
+                      <span class="pf-exhibit-plate__number">{{ tile.text.number }}</span>
+                      <span class="pf-exhibit-plate__quote">{{ tile.text.summary }}</span>
                     </span>
                   {% elseif not image %}
                     {# A clip with no picture. #}

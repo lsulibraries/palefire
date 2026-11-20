@@ -5603,6 +5603,15 @@ function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
  * that follow (the Union Art Gallery's shows). A wall with sub-galleries
  * keeps its order (no sorting).
  *
+ * Such an entry with a Summary (field_entry_summary) hangs instead as a
+ * text plate, on any wall, between the pictures: its number and summary
+ * typeset in a picture's place, its heading and reading time ("3 min") as
+ * the label under it, opening its text in the object view like a name
+ * tile. On a wall of text, where no entry has an image or
+ * a clip (Free People of Color's partners and terms), every such entry is
+ * a plate, its summary the opening words when it has none
+ * (_palefire_exhibit_summary()).
+ *
  * @return array{tiles: array, groups: array, sortable: bool, sheets: array}|null
  *   tiles: ['anchor', 'title', 'plate' (from "plate 40" in the caption, or
  *   NULL), 'tag' (the two figures' captions, "Drawing · Proof", or an
@@ -5613,7 +5622,9 @@ function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
  *   'pages' (a manuscript's page count, or 0), 'ratio',
  *   'images' (_palefire_exhibit_image() values; none for a reel),
  *   'note' (a dated entry with no picture or clip, read in place, or
- *   NULL)]. groups:
+ *   NULL), 'text' (a text plate: ['number' ("01"), 'summary'], its
+ *   reading time the tag, or NULL)].
+ *   groups:
  *   the tiles in order under their sub-galleries, ['title', 'anchor',
  *   'text' (render arrays), 'tiles'] each; the first has no title when
  *   tiles come before any sub-gallery. sortable: two or more tiles have a
@@ -5630,6 +5641,22 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
   $text = fn ($field) => trim(preg_replace('/\s+/', ' ', strip_tags((string) $field->value)));
   $tiles = [];
   $groups = [['title' => '', 'anchor' => '', 'text' => [], 'tiles' => []]];
+  // A wall of text: no entry has a figure, an image group or a clip. Only
+  // here do undated entries hang as text plates, so no wall made before
+  // them changes.
+  $text_wall = TRUE;
+  foreach ($page->get('field_guide_blocks')->referencedEntities() as $entry) {
+    if ($entry->bundle() !== 'exhibit_entry' || !$entry->isPublished()) {
+      continue;
+    }
+    foreach ($entry->get('field_guide_blocks')->referencedEntities() as $block) {
+      if (in_array($block->bundle(), ['exhibit_figure', 'exhibit_gallery', 'exhibit_audio'], TRUE)) {
+        $text_wall = FALSE;
+        break 2;
+      }
+    }
+  }
+  $number = 0;
   foreach ($page->get('field_guide_blocks')->referencedEntities() as $entry) {
     if ($entry->bundle() !== 'exhibit_entry' || !$entry->isPublished()) {
       continue;
@@ -5713,9 +5740,31 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
       }
       $card = ['label' => $date['label'], 'iso' => $date['iso'], 'text' => $note_text];
     }
+    // An undated entry with a heading, no picture or clip and a Summary
+    // hangs as a text plate (exhibit-page.html.twig), numbered in order;
+    // on a wall of text, one without a Summary too, on its opening words.
+    $plate = NULL;
+    $own = $entry->hasField('field_entry_summary') ? _palefire_plain_excerpt((string) $entry->get('field_entry_summary')->value, 240) : '';
+    if (($text_wall || $own !== '') && !$images && $speaker === NULL && !$card && !$person && trim((string) $entry->get('field_block_title')->value) !== '') {
+      $summary = $own !== '' ? $own : _palefire_exhibit_summary($entry);
+      if ($summary !== '') {
+        // Its reading time, at 200 words a minute, at least one.
+        $words = 0;
+        foreach ($entry->get('field_guide_blocks')->referencedEntities() as $block) {
+          if ($block->bundle() === 'guide_text' && $block->isPublished()) {
+            $words += str_word_count(strip_tags((string) $block->get('field_block_body')->value));
+          }
+        }
+        $plate = [
+          'number' => sprintf('%02d', ++$number),
+          'summary' => $summary,
+          'time' => (string) t('@n min', ['@n' => max(1, (int) round($words / 200))]),
+        ];
+      }
+    }
     // No image, no clip and no date: nothing to hang. With a heading it
     // starts a sub-gallery, its text blocks under the heading.
-    if (!$images && $speaker === NULL && !$card && !$person) {
+    if (!$images && $speaker === NULL && !$card && !$person && !$plate) {
       $heading =trim((string) $entry->get('field_block_title')->value);
       if ($heading !== '') {
         $text_blocks = [];
@@ -5745,7 +5794,7 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
       'plate' => preg_match('/\bplate\s+(\d+)/i', $caption, $m) ? (int) $m[1] : NULL,
       // A portrait of a person with a card: their life dates (a name tile
       // has them on its plate).
-      'tag' => $pages ? (string) \Drupal::translation()->formatPlural($pages, '1 page', '@count pages') : (count($tags) === 2 ? implode(' · ', $tags) : (string) ($speaker ?? ($bio && !$person ? $bio['life'] : ''))),
+      'tag' => $plate ? $plate['time'] : ($pages ? (string) \Drupal::translation()->formatPlural($pages, '1 page', '@count pages') : (count($tags) === 2 ? implode(' · ', $tags) : (string) ($speaker ?? ($bio && !$person ? $bio['life'] : '')))),
       'audio' => $speaker !== NULL,
       'person' => $person,
       // A person's picture is a plate or page from their own book: the
@@ -5760,10 +5809,11 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
       // 1.5 boxes wide, so the box is as tall as the row's photographs.
       // A note (a dated event with no picture) is as wide as its words
       // need beside the row's photographs: 1 to 3 rows' heights.
-      // A name tile is a portrait plate's 3:4.
-      'ratio' => $first ? ($first['width'] && $first['height'] ? round($first['width'] / $first['height'], 4) : 1) : ($person ? 0.75 : ($card ? round(max(1, min(3, $words / 170)), 2) : 1.5)),
+      // A name tile or a text plate is a portrait plate's 3:4.
+      'ratio' => $first ? ($first['width'] && $first['height'] ? round($first['width'] / $first['height'], 4) : 1) : ($person || $plate ? 0.75 : ($card ? round(max(1, min(3, $words / 170)), 2) : 1.5)),
       'images' => $images,
       'note' => $card,
+      'text' => $plate,
     ];
     $groups[array_key_last($groups)]['tiles'][] = end($tiles);
   }
@@ -5798,7 +5848,7 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
   // The opening's line of facts, in place of a story's entry links: how
   // many entries, the plate range, compared pairs, the sheet size.
   $plates = array_filter(array_column($tiles, 'plate'));
-  $tags = array_filter(array_column(array_filter($tiles, fn ($tile) => !$tile['audio'] && !$tile['pages'] && !$tile['life']), 'tag'));
+  $tags = array_filter(array_column(array_filter($tiles, fn ($tile) => !$tile['audio'] && !$tile['pages'] && !$tile['life'] && !$tile['text']), 'tag'));
   // A wall of oral history clips counts clips; a wall of lives (every
   // tile a biography's card) counts people, and spans their years.
   $lives = array_filter(array_column($tiles, 'years'));
@@ -5828,6 +5878,44 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
     'sheets' => $sheets,
     'stats' => $stats,
   ];
+}
+
+/**
+ * A text plate's summary: an entry's opening words.
+ *
+ * The first paragraph of its first text block, whole when it is 200
+ * characters or less, else cut after its last whole sentence within them,
+ * else at a word with "…". '' when the entry has no text.
+ */
+function _palefire_exhibit_summary(ParagraphInterface $entry): string {
+  $plain = fn (string $html) => preg_replace('/\s+/u', ' ', trim(Html::decodeEntities(strip_tags($html))));
+  foreach ($entry->get('field_guide_blocks')->referencedEntities() as $block) {
+    if ($block->bundle() !== 'guide_text' || !$block->isPublished() || $block->get('field_block_body')->isEmpty()) {
+      continue;
+    }
+    $html = (string) $block->get('field_block_body')->value;
+    $text = '';
+    if (preg_match_all('#<p\b[^>]*>(.*?)</p>#is', $html, $m)) {
+      foreach ($m[1] as $paragraph) {
+        if (($text = $plain($paragraph)) !== '') {
+          break;
+        }
+      }
+    }
+    $text = $text !== '' ? $text : $plain($html);
+    if ($text === '') {
+      continue;
+    }
+    if (mb_strlen($text) <= 200) {
+      return $text;
+    }
+    $cut = mb_substr($text, 0, 200);
+    if (preg_match('/^.*[.!?][”’"]?(?=\s)/su', $cut, $s) && mb_strlen($s[0]) >= 60) {
+      return $s[0];
+    }
+    return preg_replace('/[\s,;:]+\S*$/u', '', $cut) . '…';
+  }
+  return '';
 }
 
 /**

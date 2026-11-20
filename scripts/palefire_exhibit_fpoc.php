@@ -217,7 +217,7 @@ foreach ($data['pages'] as $page) {
     'field_exhibit_lead_focus' => $lead ? ($page['focus'] ?? 'center') : NULL,
     'field_exhibit_lead_whole' => $lead && $has('field_exhibit_lead_whole') ? 1 : NULL,
     'field_exhibit_lead_caption' => $lead && !empty($page['lead_caption']) && $has('field_exhibit_lead_caption') ? $html($page['lead_caption']) : NULL,
-    'field_exhibit_display' => $has('field_exhibit_display') ? 'story' : NULL,
+    'field_exhibit_display' => $has('field_exhibit_display') ? ($page['display'] ?? 'story') : NULL,
     'field_guide_blocks' => array_values(array_filter(array_map($block, $page['blocks']))),
   ]));
   echo 'Built gallery: ' . $page['title'] . PHP_EOL;
