@@ -892,6 +892,13 @@ HTML),
 <li>Taylor’s text is unchanged; only where it divides and the plate titles are new.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Seven more faces among the Tiger Stadium narrators', <<<'HTML'
+<ul>
+<li>On Saturday Night in Tiger Stadium, The Narrators now shows portraits of David Browndyke, John Hunter, Margaret Jameson, Roger Ogden, Thomas Ruffin and Cecil Taylor. They were on the old biography pages but had been left out, so these narrators showed only their names.</li>
+<li>No photo of Jesse Coates turned up in the old exhibition or the Louisiana Digital Library, so his entry shows the Chemical Engineering Building, now Jesse Coates Hall, from the University Archives, with a caption that says so.</li>
+<li>Nine narrators still have no picture. The old exhibition showed a tiger in their place; the Gumbo yearbooks are the likeliest place to find them.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: A Lady in the South’s history, in six chapters', <<<'HTML'
 <ul>
 <li>The History gallery of A Lady in the South was one long essay with 21 photographs between its paragraphs. It is now a wall: six chapters, from Vocational education and the home to Living in the houses, each a text plate with a one-line summary, followed by its photographs.</li>

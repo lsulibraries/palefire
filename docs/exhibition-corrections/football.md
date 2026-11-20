@@ -185,6 +185,9 @@ These transcript edits changed what the speaker said, so the old wording is back
 - Physical exhibition note: “First shown in LSU Libraries Special Collections with a touchscreen listening station.” The old site gives no venue or dates.
 - 17 clip photos had no citation in the old exhibition: Charles Barney, Bud Johnson, Alfred Glassell, Kerry Pourciau, Moore with Coates (?), Martin Broussard, the 1936 aerial, Mike’s keeper, the second Alvin Roy ad, Huey Long with the band, the night-game crowd, the 1958 champions, Mike II arriving, the placekick, game-day attire, the homecoming display, Margaret Jameson. The 14 Lagniappe photos had no captions or sources either.
 - Merle Schexnaildre’s cited portrait (schexnaildre_dream, Gumbo 1959) is only 302 px; a better scan would help.
+- The Narrators / Jesse Coates: no portrait of him in the old exhibition or the LSU collections of the Louisiana Digital Library, so his entry shows the Chemical Engineering Building (LDL lsu-ua-uap:2261, catalogued under “Jesse Coates Hall (Baton Rouge, La.)”, dated 1940–1960). Confirm the caption’s “now Jesse Coates Hall”.
+- The Narrators: the old biography portraits of David Browndyke, John Hunter, Roger Ogden, Thomas Ruffin and Cecil Taylor had no citation; shown without captions, like the other narrators’ portraits.
+- The Narrators: still no picture for Sheryl Campbell, Jack Gremillion, Billy Heroman, Oliver Mack, Bautista Martinez, Oscar Richard, Roger & Carrie Richardson, Ray Roy and Albert St. Dizier (the old exhibition showed a tiger graphic; the Louisiana Digital Library has only Daily Reveille mentions). The Gumbo yearbooks are the likeliest source for the alumni and former players.
 
 ## 3. New wording to check
 
@@ -548,7 +551,14 @@ Old “-- Name, interviewed by …” lines → “Name, interviewed by …” (
 
 ### The Narrators
 
-- Each biography now starts with the name as a heading and the role from the old page header in bold, e.g. “Former Voice of the Tigers”. The old pages’ portrait images are not repeated here.
+- Each biography now starts with the name as a heading and the role from the old page header in bold, e.g. “Former Voice of the Tigers”. Each narrator with a portrait from the old biography page shows it beside the life (alt text as for that photo above, where it is also a clip photo).
+- New alt text for the portraits used only here:
+  - davidbrowndyke.jpg: “David Browndyke, number 4, kicks as a kneeling teammate holds the ball.”
+  - johnhunter.jpg: “John Hunter smiles on the telephone at his desk, a small football helmet beside his pen stand.”
+  - rogerogden.jpg: “Roger Ogden as a student, smiling, in a white shirt and tie.”
+  - thomasruffin.jpg: “Portrait of Thomas Ruffin in glasses, a dark suit and tie.”
+  - ceciltaylor.jpg: “Cecil Taylor, in a light suit and bow tie, talks with two students sitting on a low wall.”
+- Jesse Coates (new picture, not in the old exhibition): coateshall.jpg, alt “A two-story building with a tile roof behind a wide lawn, framed by live oak branches.”; caption “The Chemical Engineering Building, now Jesse Coates Hall, between 1940 and 1960. LSU Photograph Collection, RG #A5000, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA.”
 
 ### About the Exhibition
 
