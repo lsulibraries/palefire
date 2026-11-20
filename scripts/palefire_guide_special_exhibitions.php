@@ -164,6 +164,7 @@ $section('How the exhibitions were moved', [
 <li><strong>New from Old Natchez</strong> (2002) was a set of Showcase pages under /natchez, whose Image and Transcript links go to the 2002 files. Its text comes from the Showcase pages.</li>
 <li><strong>Made in America: Selected Imprints from 1776–1826</strong> (2026) had only an announcement at /260908/madeinamerica. Its text comes from the exhibition’s own panels.</li>
 <li><strong>From Red Stick to River Capital</strong> (1999) was a set of static pages at /sites/all/files/sc/exhibitions/e-exhibits/redstick, later copied to Showcase pages under /brhistory. Its text comes from the Showcase pages, checked against the static pages.</li>
+<li><strong>The Baton Rouge Bus Boycott</strong> (1998, revised 2002) was a set of Showcase pages under /boycott, linking to the 2002 static site for its clips and interviews. Its text comes from the Showcase pages, checked against the static pages. It is an oral history exhibition, so it lives at /v2/oralhistory/exhibitions/boycott.</li>
 <li><strong>Blue and Gray for Boys and Girls</strong> (2012) was fifteen pages under /BlueandGrey. Five of them no longer open, so their text comes from the exhibition’s own 2012 label files, which match the pages that still open.</li>
 </ul>
 <p>Each now lives at /v2/special/exhibitions/&lt;name&gt;, as one page of galleries. Each is built by a script from a data file in the theme (scripts/data/&lt;name&gt;.json), so it can be rebuilt, and every correction is made in the data file as well as on the page.</p>
@@ -738,6 +739,51 @@ $section('Blue and Gray for Boys and Girls', [
 </li></ul>
 <h3>New wording to check</h3>
 <ul><li>The subtitle, credit line, cover label, plate headings, the Introduction’s closing sentence, the “Also in the case” plates, captions and the 86 alt texts.
+</li></ul>
+HTML),
+]);
+
+$section('The Baton Rouge Bus Boycott', [
+  $text(NULL, <<<'HTML'
+<p>Built at <a href="/v2/oralhistory/exhibitions/boycott">/v2/oralhistory/exhibitions/boycott</a> (/v2/special/exhibitions/boycott redirects there), not published yet.</p>
+<p>Exhibition: The Baton Rouge Bus Boycott, an online exhibition of the T. Harry Williams Center for Oral History, made in summer 1998 by McKinley High School students (guided by LaVada U. Taylor) and the LSU class EDCI 5880 (Petra Munro and Pamela Dean), revised in 2002 by Mary Price and Matt Mullenix.<br>Old site: the Showcase pages /boycott/introduction and nodes 284–287, linking to the 2002 static site for the clips, Rev. Jemison’s story and three student interviews. The text is from the Showcase pages, checked against the static pages.</p>
+<h3>Changed on the page</h3>
+<ul><li>Four galleries, all walls with a lead picture: Chronology, 1950–1955 (19 dated wall labels and the strike’s newspaper headline); Background (Mary Price’s essay as five text plates between the eleven free ride photographs and three gas stations); The People (eight narrators, each a portrait, clip, transcript, role and biography; Johnnie A. Jones’s portrait and biography; the three student interviews as text plates); Our Thanks.
+</li><li>Clips: the eight .wav excerpts as .m4a at −16 LUFS, each transcript checked against its recording, with read-along timings. Rev. Jemison’s story page and its two excerpts are part of his entry.
+</li><li>Pictures: no larger copies were found on the R: drive or in the Louisiana Digital Library (the LDL has the interviews, not the photographs), so each is the old image, cropped to the photograph. The cover is the clean “Free Ride” original of the faded banner the Background page used. The strike headline and McKinley High School come from Integrating LSU.
+</li><li>Six biographies link to the full interviews in the Louisiana Digital Library.
+</li><li>The photo copyright warning and the dead interview abstract link are gone.
+</li></ul>
+<h3>Corrected</h3>
+<table>
+<thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+<tbody>
+<tr><td><del>married since 19100</del></td><td><ins>married since 1950</ins> <em>Isadore Tansil, from the 2002 page</em></td></tr>
+<tr><td><del>What lead me to get involved</del></td><td><ins>What led me to get involved</ins> <em>Willis Reed, as he says it</em></td></tr>
+<tr><td><del>what became know as the Baton Rouge Buss Boycott</del></td><td><ins>what became known as the Baton Rouge Bus Boycott</ins></td></tr>
+<tr><td><del>Reverend Jemison said told the policeman</del></td><td><ins>Reverend Jemison told the policeman</ins></td></tr>
+<tr><td><del>gaurd · bodygaurd · Reverened</del></td><td><ins>guard · bodyguard · Reverend</ins></td></tr>
+<tr><td><del>a footsoldier patroling</del></td><td><ins>a foot soldier patrolling</ins></td></tr>
+<tr><td><del>Bus driver “man handles” black woman rider</del></td><td><ins>A bus driver manhandles a black woman rider</ins></td></tr>
+<tr><td><del>Jessie Webb</del></td><td><ins>Jesse Webb</ins></td></tr>
+<tr><td><del>Mr. Jonnie A. Jones</del></td><td><ins>Johnnie A. Jones</ins></td></tr>
+<tr><td><del>Erin Porch · Rahshada Jenkins</del></td><td><ins>Erin Porche · Rashada Jenkins</ins> <em>as in the LDL</em></td></tr>
+<tr><td><del>On 19 June 1953</del></td><td><ins>On June 19, 1953</ins></td></tr>
+</tbody>
+</table>
+<ul><li>About 40 small fixes in the three student transcripts (Scotlandville, Rougon, picket, Piccadilly and others), and curly quotes, dashes and spaced ellipses.
+</li><li>The full list is in the theme’s docs/special-exhibition-corrections/boycott.md.
+</li></ul>
+<h3>To verify</h3>
+<p>Left as written:</p>
+<ul><li>When the boycott ended: called off June 23 with Ordinance 251 on June 24 (Chronology), ended June 24 (Background), June 26 (Integrating LSU).
+</li><li>Who announced it on WLCS: Raymond Scott alone, Jemison and Scott, or Reed and Scott, depending on the page.
+</li><li>Ernest Ritchie or Richie (Integrating LSU), and whether the gas station photographs are his or Horatio Thompson’s.
+</li><li>The years of the interviews other than Jemison’s (1995) and Anderson’s (1998).
+</li><li>Laborde’s “Dr. Jemison [sic]”; Robinson’s and Batiste’s mothers’ names, which differ from the LDL; a question missing from Robinson’s interview; Batiste’s “Julius Bond”; Courtney Zachary or Zachery.
+</li></ul>
+<h3>New wording to check</h3>
+<ul><li>The subtitle (“A Recaptured Past”) and credit line, the Chronology headings, the plate titles and Summaries, the picture titles and captions, the clip titles and introductions, the narrators’ roles, the lead captions and the alt text for every picture.
 </li></ul>
 HTML),
 ]);

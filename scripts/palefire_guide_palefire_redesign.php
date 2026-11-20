@@ -886,6 +886,13 @@ HTML),
 <li>The old pages had two pictures’ captions swapped and one interview page that repeated another; both are fixed. No sharper scans of the 1996 pictures turned up, so they keep their original size.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: The Baton Rouge Bus Boycott comes to v2', <<<'HTML'
+<ul>
+<li>The 1998 oral history exhibition on the 1953 Baton Rouge bus boycott, made by McKinley High School students and an LSU class, is rebuilt as a v2 exhibition with the other oral history exhibitions, not published yet: four galleries, every one a wall with a picture to open it.</li>
+<li>The chronology hangs as dated wall labels; Mary Price’s history hangs as text plates between the photographs of the free ride system; the people who made the boycott work each have their portrait, their recorded words with a transcript that lights up as they speak, and their story.</li>
+<li>No sharper copies of the photographs turned up on the R: drive or in the Louisiana Digital Library, which holds the full interviews instead, so six biographies now link to them.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: Framed gallery pictures beside the title', <<<'HTML'
 <ul>
 <li>On wider screens a framed gallery picture now sits to the right of the gallery’s title and text instead of in the middle of the screen, so the two no longer overlap.</li>
