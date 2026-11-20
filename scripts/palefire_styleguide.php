@@ -403,6 +403,9 @@ HTML),
         $figure('<p>A page from <em>Grid Systems in Graphic Design</em> (Niggli, 1981).</p>', 'side_start'),
       ])),
     ]),
+    // A loose picture: an image block outside any entry hangs as its own
+    // tile (_palefire_exhibit_loose()).
+    $figure('<p>A loose picture. An image block outside any entry hangs on a Wall as its own tile, titled from its caption’s first sentence, and opens in the object view like an entry.</p>', 'center'),
   ]);
   $sections[array_key_last($sections)]->set('field_exhibit_display', 'wall');
 

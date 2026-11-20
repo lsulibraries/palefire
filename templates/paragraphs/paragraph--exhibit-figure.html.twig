@@ -19,6 +19,11 @@
  * whole figure is the link (its caption names it) and an arrow shows in
  * the corner. Another site opens in a new tab, like the exhibition's other
  * outside links.
+ *
+ * - loose: ['anchor', 'title'] for a picture hanging on its own on a wall
+ *   (_palefire_exhibit_loose()), or NULL. It is then wrapped as an entry,
+ *   its title the <h3>, so the wall's tile opens it in the object view
+ *   and the wall folds it away like the entries (js/exhibition.js).
  */
 #}
 {% set caption = content.field_figure_caption|render|trim %}
@@ -33,6 +38,10 @@
     ]
   %}
   {% set caption_id = 'pf-figure-' ~ paragraph.id() ~ '-caption' %}
+  {% if loose and image %}
+  <article class="pf-exhibit-entry pf-exhibit-entry--picture" aria-labelledby="{{ loose.anchor }}">
+    <h3 id="{{ loose.anchor }}" class="pf-exhibit-entry__title">{{ loose.title }}</h3>
+  {% endif %}
   <figure{{ attributes.addClass(classes) }}>
     {% if image and link %}
       {% set note_id = 'pf-figure-' ~ paragraph.id() ~ '-note' %}
@@ -70,4 +79,7 @@
       <figcaption class="pf-exhibit-figure__caption pf-guide-prose"{% if image and link %} id="{{ caption_id }}"{% endif %}>{{ content.field_figure_caption }}</figcaption>
     {% endif %}
   </figure>
+  {% if loose and image %}
+  </article>
+  {% endif %}
 {% endif %}

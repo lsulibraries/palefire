@@ -879,6 +879,14 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: More walls, and a picture for every gallery', <<<'HTML'
+<ul>
+<li>Every exhibition gallery now opens on a picture. Where none was chosen, the first picture inside the gallery opens it; the eight galleries with no picture of their own, such as AVES’s Sources and Occult’s Index, were given one from their exhibition.</li>
+<li>More galleries hang as walls you can browse at a glance: six of AVES’s, Cooperative Extension’s Narrators, Integrating LSU’s The Nation, Lady in the South’s scrapbook and Tiger Stadium’s Lagniappe. Pictures that stand on their own in a gallery now hang on the wall too, each opening full screen.</li>
+<li>Tiger Stadium’s 33 narrators, one long page of text, are now a wall of portraits; each opens their life story. Narrators without a portrait hang as their name.</li>
+<li>Georgetown 272 and Cooperative Extension now open each speaker’s biography beside the clip, as Graphic Design does.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: Free People of Color links back to its collections', <<<'HTML'
 <ul>
 <li>Each of the 60 collections in The Collections had a “View the collection online” link in 2015, lost when the old digital collection host shut down. 58 now have “In the Louisiana Digital Library”, which finds that collection’s scans in the project’s LDL collection; two items were never put online.</li>

@@ -5483,6 +5483,12 @@ function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
     $item = _palefire_media_image_item($paragraph->get('field_exhibit_lead')->first(), $cache);
     $variables['lead'] = $item ? _palefire_exhibit_image($item, '100vw', $cache) : NULL;
   }
+  // No lead chosen: the gallery's first picture opens it, decorative (it
+  // is shown again below, with its caption), so every gallery has one.
+  if (!$variables['lead'] && ($picture = _palefire_exhibit_first_picture($paragraph))) {
+    $item = _palefire_media_image_item($picture, $cache);
+    $variables['lead'] = $item ? _palefire_exhibit_image($item, '100vw', $cache) : NULL;
+  }
   $focus = $paragraph->hasField('field_exhibit_lead_focus') ? (string) $paragraph->get('field_exhibit_lead_focus')->value : '';
   $variables['focus'] = in_array($focus, ['top', 'bottom', 'left', 'right'], TRUE) ? $focus : 'center';
   $variables['lead_x'] = ['left' => '0%', 'right' => '100%'][$variables['focus']] ?? '50%';
@@ -5612,6 +5618,12 @@ function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
  * a plate, its summary the opening words when it has none
  * (_palefire_exhibit_summary()).
  *
+ * The gallery's own pictures, outside any entry, hang too, each a tile
+ * titled from its caption (_palefire_exhibit_loose()), and open in the
+ * object view like an entry. A wall of nothing else counts "14 pictures".
+ * A person with a short biography (no card) and no portrait, undated, is
+ * a name tile like a long one.
+ *
  * @return array{tiles: array, groups: array, sortable: bool, sheets: array}|null
  *   tiles: ['anchor', 'title', 'plate' (from "plate 40" in the caption, or
  *   NULL), 'tag' (the two figures' captions, "Drawing · Proof", or an
@@ -5645,6 +5657,12 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
   // here do undated entries hang as text plates, so no wall made before
   // them changes.
   $text_wall = TRUE;
+  // The gallery's own pictures, outside any entry (Tiger Stadium's
+  // Lagniappe): each hangs as a tile of its own.
+  $loose = _palefire_exhibit_loose($page);
+  if ($loose) {
+    $text_wall = FALSE;
+  }
   foreach ($page->get('field_guide_blocks')->referencedEntities() as $entry) {
     if ($entry->bundle() !== 'exhibit_entry' || !$entry->isPublished()) {
       continue;
@@ -5658,6 +5676,35 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
   }
   $number = 0;
   foreach ($page->get('field_guide_blocks')->referencedEntities() as $entry) {
+    if (isset($loose[$entry->id()])) {
+      // A loose picture: its image, its title from its caption (or alt
+      // text), opening in the object view like an entry's
+      // (paragraph--exhibit-figure.html.twig wraps it as one).
+      $item = _palefire_media_image_item($entry->get('field_figure_image')->first(), $cache);
+      $image = $item ? _palefire_exhibit_image($item, $sizes, $cache) : NULL;
+      if ($image) {
+        $tiles[] = [
+          'anchor' => $loose[$entry->id()]['anchor'],
+          'title' => $loose[$entry->id()]['title'],
+          'plate' => NULL,
+          'tag' => '',
+          'audio' => FALSE,
+          'person' => NULL,
+          'book' => '',
+          'life' => '',
+          'years' => '',
+          'year' => NULL,
+          'pages' => 0,
+          'ratio' => $image['width'] && $image['height'] ? round($image['width'] / $image['height'], 4) : 1,
+          'images' => [$image],
+          'note' => NULL,
+          'text' => NULL,
+          'loose' => TRUE,
+        ];
+        $groups[array_key_last($groups)]['tiles'][] = end($tiles);
+      }
+      continue;
+    }
     if ($entry->bundle() !== 'exhibit_entry' || !$entry->isPublished()) {
       continue;
     }
@@ -5717,10 +5764,18 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
     // the name typeset in a plate's place, opening the life in the object
     // view like any tile (exhibit-page.html.twig).
     // A pair's plate names both, their dates left to the label.
-    $person = !$images && $speaker === NULL && $bio ? [
-      'name' => $bio['life'] === '' ? trim((string) preg_replace('/\s*\([^()]*\d{3,4}[^()]*\)/u', '', $bio['name'])) : $bio['name'],
-      'life' => $bio['life'],
-      'role' => $bio['role'],
+    // A short biography (under 150 words, no card) on an undated entry is
+    // a life too: its heading the name, its Role the role (Tiger
+    // Stadium's narrators).
+    $life = $bio ?: (!$date && $entry->hasField('field_entry_bio') && trim(strip_tags((string) $entry->get('field_entry_bio')->value)) !== '' ? [
+      'name' => trim((string) $entry->get('field_block_title')->value),
+      'life' => '',
+      'role' => $entry->hasField('field_entry_role') ? trim((string) ($entry->get('field_entry_role')->value ?? '')) : '',
+    ] : NULL);
+    $person = !$images && $speaker === NULL && $life ? [
+      'name' => $life['life'] === '' ? trim((string) preg_replace('/\s*\([^()]*\d{3,4}[^()]*\)/u', '', $life['name'])) : $life['name'],
+      'life' => $life['life'],
+      'role' => $life['role'],
     ] : NULL;
     $card = NULL;
     $words = 0;
@@ -5802,7 +5857,7 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
       'book' => $bio && $images && $speaker === NULL ? _palefire_exhibit_book($caption_html) : '',
       'life' => $bio ? $bio['life'] : '',
       // The years a life spans, for a wall of lives' facts.
-      'years' => $bio ? ($bio['life'] ?: trim((string) $entry->get('field_block_title')->value)) : '',
+      'years' => $life ? ($life['life'] ?: trim((string) $entry->get('field_block_title')->value)) : '',
       'year' => $year,
       'pages' => $pages,
       // A clip with no picture: its reel and box (exhibit-reel.html.twig),
@@ -5814,6 +5869,7 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
       'images' => $images,
       'note' => $card,
       'text' => $plate,
+      'loose' => FALSE,
     ];
     $groups[array_key_last($groups)]['tiles'][] = end($tiles);
   }
@@ -5856,6 +5912,7 @@ function _palefire_exhibit_wall(ParagraphInterface $page, CacheableMetadata $cac
   $stats = [match (TRUE) {
     count(array_filter(array_column($tiles, 'audio'))) === count($tiles) => (string) \Drupal::translation()->formatPlural(count($tiles), '1 clip', '@count clips'),
     $people => (string) \Drupal::translation()->formatPlural(count($tiles), '1 person', '@count people'),
+    count(array_filter(array_column($tiles, 'loose'))) === count($tiles) => (string) \Drupal::translation()->formatPlural(count($tiles), '1 picture', '@count pictures'),
     default => (string) \Drupal::translation()->formatPlural(count($tiles), '1 entry', '@count entries'),
   }];
   if ($people && preg_match_all('/\d{3,4}/', implode(' ', $lives), $m) && count(array_unique($m[0])) >= 2) {
@@ -5927,6 +5984,86 @@ function _palefire_exhibit_entry_anchor(ParagraphInterface $entry): string {
   $anchor = $entry->hasField('field_section_anchor') ? trim((string) $entry->get('field_section_anchor')->value) : '';
   $anchor = Html::getClass($anchor !== '' ? $anchor : $title);
   return $anchor !== '' ? $anchor : 'entry-' . $entry->id();
+}
+
+/**
+ * A wall's loose pictures: its own published image blocks, outside entries.
+ *
+ * Only on a gallery with Display "wall"; a book cover (a figure with a
+ * link) stays where it is. The title is the caption's first sentence; where
+ * captions repeat (Lady in the South's scrapbook, "Scrapbook photo courtesy
+ * of…") or there is none, the image's alt text, at most about 90
+ * characters; failing both, "Picture 3".
+ *
+ * @return array<int|string, array{anchor: string, title: string}>
+ *   Keyed by the figure paragraph's id; anchor "picture-<id>".
+ */
+function _palefire_exhibit_loose(ParagraphInterface $page): array {
+  static $built = [];
+  $key = $page->id() . ':' . $page->getRevisionId();
+  if (isset($built[$key])) {
+    return $built[$key];
+  }
+  if (!$page->hasField('field_exhibit_display') || (string) $page->get('field_exhibit_display')->value !== 'wall' || !$page->hasField('field_guide_blocks')) {
+    return $built[$key] = [];
+  }
+  $figures = array_filter($page->get('field_guide_blocks')->referencedEntities(), fn ($block) => $block->bundle() === 'exhibit_figure'
+    && $block->isPublished()
+    && !$block->get('field_figure_image')->isEmpty()
+    && !($block->hasField('field_figure_link') && !$block->get('field_figure_link')->isEmpty()));
+  // Up to the first full stop, ? or ! after 12 characters, without it.
+  $sentence = function (string $html): string {
+    $text = _palefire_plain_excerpt($html, 2000);
+    $text = preg_match('/^(.{12,}?)[.!?](?:\s|$)/u', $text, $m) ? $m[1] : rtrim($text, '.');
+    return mb_strlen($text) > 90 ? rtrim(mb_substr($text, 0, mb_strrpos(mb_substr($text, 0, 88), ' ') ?: 88), ' ,;:') . '…' : $text;
+  };
+  $captions = [];
+  foreach ($figures as $figure) {
+    $captions[$figure->id()] = $sentence((string) $figure->get('field_figure_caption')->value);
+  }
+  $repeats = array_count_values(array_filter($captions));
+  $built[$key] = [];
+  $n = 0;
+  foreach ($figures as $figure) {
+    $n++;
+    $title = $captions[$figure->id()];
+    if ($title === '' || $repeats[$title] > 1) {
+      $item = _palefire_media_image_item($figure->get('field_figure_image')->first(), new CacheableMetadata());
+      $alt = $item ? $sentence(htmlspecialchars((string) ($item->alt ?? ''))) : '';
+      $title = $alt !== '' ? $alt : (string) t('Picture @n', ['@n' => $n]);
+    }
+    $built[$key][$figure->id()] = ['anchor' => 'picture-' . $figure->id(), 'title' => $title];
+  }
+  return $built[$key];
+}
+
+/**
+ * A gallery's first picture: its first published figure, image group or
+ * entry's picture, in order (a book cover, with its link, is skipped).
+ *
+ * @return \Drupal\Core\Field\FieldItemInterface|null
+ *   The figure's field_figure_image item, or NULL.
+ */
+function _palefire_exhibit_first_picture(ParagraphInterface $parent, int $depth = 0): ?FieldItemInterface {
+  $field = $parent->bundle() === 'exhibit_gallery' ? 'field_gallery_items' : 'field_guide_blocks';
+  if ($depth > 2 || !$parent->hasField($field)) {
+    return NULL;
+  }
+  foreach ($parent->get($field)->referencedEntities() as $block) {
+    if (!$block instanceof ParagraphInterface || !$block->isPublished()) {
+      continue;
+    }
+    if ($block->bundle() === 'exhibit_figure') {
+      if (!$block->get('field_figure_image')->isEmpty() && !($block->hasField('field_figure_link') && !$block->get('field_figure_link')->isEmpty())) {
+        return $block->get('field_figure_image')->first();
+      }
+      continue;
+    }
+    if (in_array($block->bundle(), ['exhibit_gallery', 'exhibit_entry'], TRUE) && ($found = _palefire_exhibit_first_picture($block, $depth + 1))) {
+      return $found;
+    }
+  }
+  return NULL;
 }
 
 /**
@@ -6091,6 +6228,8 @@ function _palefire_exhibit_book(string $html): string {
  * link: ['url', 'external'] from field_figure_link (a book cover's catalog
  * record), or NULL. The image then links there instead of the lightbox;
  * inside an image group it is shown as a cover (2:3).
+ * loose: ['anchor', 'title'] when the figure hangs on its gallery's wall
+ * on its own (_palefire_exhibit_loose()), else NULL.
  */
 function palefire_preprocess_paragraph__exhibit_figure(array &$variables): void {
   $paragraph = $variables['paragraph'];
@@ -6122,6 +6261,14 @@ function palefire_preprocess_paragraph__exhibit_figure(array &$variables): void 
   // "k rot tx ty": four numbers, else nothing.
   $align = $paragraph->hasField('field_figure_align') ? trim((string) $paragraph->get('field_figure_align')->value) : '';
   $variables['align'] = preg_match('/^-?[\d.]+(\s+-?[\d.]+){3}$/', $align) ? preg_replace('/\s+/', ' ', $align) : '';
+  // A loose picture on a wall (_palefire_exhibit_loose()): ['anchor',
+  // 'title'], so the template wraps it as an entry the wall's tile opens.
+  $variables['loose'] = NULL;
+  $parent = $paragraph->getParentEntity();
+  if ($parent instanceof ParagraphInterface && $parent->bundle() === 'exhibit_page') {
+    $cache->addCacheableDependency($parent);
+    $variables['loose'] = _palefire_exhibit_loose($parent)[$paragraph->id()] ?? NULL;
+  }
   $access = $paragraph->access('update', NULL, TRUE);
   $variables['can_edit'] = $access->isAllowed();
   $cache->addCacheableDependency($access)->applyTo($variables);
