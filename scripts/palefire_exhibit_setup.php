@@ -42,7 +42,9 @@
  *     timeline added 2026-11-16: every dated entry of the other galleries
  *     in date order on a vertical line, src/ExhibitTimeline.php)
  *     and a sheet size for the wall's "Actual size" (field_exhibit_sheet;
- *     both added 2026-10-21), and field_guide_blocks.
+ *     both added 2026-10-21), a mark over the title of a cover or wall
+ *     opening (field_exhibit_mark, an SVG or PNG logo; added 2026-11-20),
+ *     and field_guide_blocks.
  *   - exhibit_entry: a person or book inside a gallery: heading (a TOC
  *     sub-link), anchor, biography, and its own blocks. Date (optional,
  *     field_entry_date, added 2026-11-16): "1953", "1953-06", "1953-06-20"
@@ -291,6 +293,8 @@ if ($display_storage->getSetting('allowed_values') !== $display_values) {
   echo 'Updated the Display options (Story, Wall, Timeline)' . PHP_EOL;
 }
 $storage('paragraph', 'field_exhibit_sheet', 'string', ['max_length' => 64]);
+// Added 2026-11-20: a gallery's mark (e.g. a radio station's call-sign logo).
+$storage('paragraph', 'field_exhibit_mark', 'file', ['uri_scheme' => 'public']);
 $storage('paragraph', 'field_entry_bio', 'text_long');
 $storage('paragraph', 'field_entry_date', 'string', ['max_length' => 64]);
 $storage('paragraph', 'field_figure_image', 'entity_reference', ['target_type' => 'media']);
@@ -466,6 +470,11 @@ $field('paragraph', 'exhibit_page', 'field_exhibit_sheet', [
   'label' => 'Sheet size (wall only, optional)',
   'description' => 'Height × width in inches, e.g. "40 × 27". Galleries with one show "Actual size": this gallery\'s sheet drawn to scale beside the other galleries\' sheets.',
 ]);
+$field('paragraph', 'exhibit_page', 'field_exhibit_mark', [
+  'label' => 'Mark (optional)',
+  'description' => 'A logo shown over the gallery’s title where it opens on its lead image (cover or wall), e.g. a radio station’s call sign. One color on transparent: SVG (best) or PNG; it is drawn in the heading color, so its own colors don’t show. Decorative: say what it is in the title.',
+  'settings' => ['file_extensions' => 'svg png', 'file_directory' => 'exhibitions/marks', 'max_filesize' => '512 KB', 'description_field' => FALSE],
+]);
 $field('paragraph', 'exhibit_page', 'field_guide_blocks', [
   'label' => 'Content',
   'description' => 'Entries, images, catalog records, audio and text, in order.',
@@ -479,6 +488,7 @@ $section_form['field_exhibit_lead_mirror'] = ['type' => 'boolean_checkbox', 'wei
 $section_form['field_exhibit_lead_caption'] = $wysiwyg(13, 3);
 $section_form['field_exhibit_display'] = ['type' => 'options_buttons', 'weight' => 14];
 $section_form['field_exhibit_sheet'] = ['type' => 'string_textfield', 'weight' => 15];
+$section_form['field_exhibit_mark'] = ['type' => 'file_generic', 'weight' => 16, 'settings' => ['progress_indicator' => 'throbber']];
 $section_form['field_guide_blocks'] = $paragraphs_widget(20, 'Block', 'Blocks', 'exhibit_entry');
 $form('paragraph', 'exhibit_page', $section_form);
 $view('paragraph', 'exhibit_page', [

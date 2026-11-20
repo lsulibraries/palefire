@@ -30,7 +30,10 @@
  * three slides without an image (1931, September 1994, March 2015) folded
  * into the entry beside them, since a wall entry needs an image. The old
  * November 27, 1924 slide showed a clip from another exhibition; its
- * clippings are restored here with a line written from them.
+ * clippings are restored here with a line written from them. Each call
+ * sign's gallery is titled with the years on its logo, and the logo
+ * (data/klsu-marks, redrawn without the dates) shows over its title.
+ * For a page already built: palefire_exhibit_klsu_marks.php.
  *
  * Images: each JPEG is imported once as an Image media item (named
  * "KLSU: <file name>", reused on a re-run) under public://exhibitions/klsu.
@@ -202,6 +205,35 @@ $audio_file = function (string $relative) use (&$file_ids, $audio_dir, $fs, $aud
   return $file_ids[$relative] = (int) $file->id();
 };
 
+// Marks: each call sign's logo, redrawn without its dates (data/klsu-marks),
+// copied once to public://exhibitions/marks as klsu-<call sign>.svg and set
+// on the gallery's Mark (field_exhibit_mark), over its title.
+$has_mark = (bool) FieldConfig::loadByName('paragraph', 'exhibit_page', 'field_exhibit_mark');
+$mark = function (?string $relative) use ($fs, $has_mark, &$skipped): ?array {
+  if (!$relative) {
+    return NULL;
+  }
+  if (!$has_mark) {
+    $skipped[] = 'field_exhibit_mark is not on Gallery; run palefire_exhibit_setup.php. The galleries open without their logos.';
+    return NULL;
+  }
+  $source = __DIR__ . '/data/' . $relative;
+  if (!is_file($source)) {
+    $skipped[] = "Mark not found: $source";
+    return NULL;
+  }
+  $destination = 'public://exhibitions/marks';
+  $uri = $destination . '/klsu-' . basename($source);
+  $existing = \Drupal::entityQuery('file')->accessCheck(FALSE)->condition('uri', $uri)->range(0, 1)->execute();
+  if ($existing) {
+    return ['target_id' => (int) reset($existing)];
+  }
+  $fs->prepareDirectory($destination, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
+  $file = File::create(['uri' => $fs->copy($source, $uri, FileExists::Replace), 'status' => 1, 'filemime' => 'image/svg+xml']);
+  $file->save();
+  return ['target_id' => (int) $file->id()];
+};
+
 // Blocks. --------------------------------------------------------------------
 
 $ref = fn (?int $id) => $id ? ['target_id' => $id] : NULL;
@@ -277,6 +309,7 @@ foreach ($data['pages'] as $page) {
     'field_exhibit_lead_focus' => $page['focus'] ?? 'center',
     'field_exhibit_lead_caption' => !empty($page['lead_caption']) && $has_caption ? $html($page['lead_caption']) : NULL,
     'field_exhibit_display' => $has_display ? ($page['display'] ?? 'story') : NULL,
+    'field_exhibit_mark' => $mark($page['mark'] ?? NULL),
     'field_guide_blocks' => array_values(array_filter(array_map($block, $page['blocks']))),
   ]));
   echo 'Built gallery: ' . $page['title'] . PHP_EOL;

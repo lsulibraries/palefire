@@ -966,6 +966,13 @@ HTML),
 <li>Most of these clips run a minute or two, so each one now opens with its speaker’s biography beside the transcript. A new “Open biographies with each clip” checkbox on exhibitions turns this on. It only happens on a computer screen; on a phone the biography would cover the clip, so it stays behind the speaker’s name. Close it once and it stays closed.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: History of KLSU, a logo for each call sign', <<<'HTML'
+<ul>
+<li>On History of KLSU, each of the five galleries now opens with its station’s logo over its title, as the old exhibition did: KFGC’s typewriter letters, WJBO, the dot-matrix WLSU, WPRG’s “fm 107 stereo” and the boxed 91.1 KLSU. Each was redrawn from the old site’s small images, without the dates printed on them, so it stays sharp at any size and takes the page’s colors.</li>
+<li>The gallery titles now use the years on those logos: KFGC, 1915–1926; WJBO, 1936–1947; WLSU, 1947–1957, 1965–1979; WPRG, 1979–1983; KLSU, 1983–present.</li>
+<li>Any exhibition can do the same: galleries have a new optional Mark field for a one-color logo, shown where a gallery opens on its picture.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------

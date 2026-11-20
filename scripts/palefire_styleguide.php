@@ -361,6 +361,7 @@ HTML, 'sources'),
 if (FieldConfig::loadByName('paragraph', 'exhibit_page', 'field_exhibit_display')) {
   $gallery('Wall', 'wall', [
     $note('<p><strong>Wall</strong>: a Gallery with Display set to Wall hangs its entries as tiles, each its first picture, opening full screen. The gallery’s own text is the wall’s intro, folded with Read more when long. A person with no picture and a biography of 150 words or more is a <strong>name tile</strong>: the name set large on a plain plate, with Life (the entry’s Date, 1930/2017) and Role. A wall of people only counts them and spans their lives (“9 people · Lives 1875–2004”).</p>'),
+    $note('<p><strong>Mark</strong> (optional): a logo over the gallery’s title where it opens on its lead image, as a cover or a wall, e.g. a radio station’s call sign on History of KLSU. Upload one color on transparent, SVG best; it is drawn in the heading color of every reading theme, so its own colors don’t show. It is decorative: the title says what it is.</p>'),
     Paragraph::create([
       'type' => 'exhibit_entry',
       'field_block_title' => 'Karl Gerstner',

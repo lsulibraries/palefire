@@ -9,8 +9,9 @@
   "source": "https://lib.lsu.edu/sites/all/files/oralhistory/presentations/KLSU/home.html",
   "pages": [
     {
-      "title": "KFGC, 1915–1934",
+      "title": "KFGC, 1915–1926",
       "anchor": "kfgc",
+      "mark": "klsu-marks/kfgc.svg",
       "category": "",
       "lead": "fall1915_1.jpg",
       "display": "wall",
@@ -370,8 +371,9 @@
       ]
     },
     {
-      "title": "WJBO, 1934–1947",
+      "title": "WJBO, 1936–1947",
       "anchor": "wjbo",
+      "mark": "klsu-marks/wjbo.svg",
       "category": "",
       "lead": "c26_1.jpg",
       "display": "wall",
@@ -885,8 +887,9 @@
       ]
     },
     {
-      "title": "WLSU, 1947–1973",
+      "title": "WLSU, 1947–1957, 1965–1979",
       "anchor": "wlsu",
+      "mark": "klsu-marks/wlsu.svg",
       "category": "",
       "lead": "c39_2.jpg",
       "display": "wall",
@@ -1442,8 +1445,9 @@
       ]
     },
     {
-      "title": "WPRG, 1979–1982",
+      "title": "WPRG, 1979–1983",
       "anchor": "wprg",
+      "mark": "klsu-marks/wprg.svg",
       "category": "",
       "lead": "c64_1.jpg",
       "display": "wall",
@@ -1537,8 +1541,9 @@
       ]
     },
     {
-      "title": "KLSU, 1983–2015",
+      "title": "KLSU, 1983–present",
       "anchor": "klsu",
+      "mark": "klsu-marks/klsu.svg",
       "category": "",
       "lead": "c77_1.jpg",
       "display": "wall",

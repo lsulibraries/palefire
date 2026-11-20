@@ -5554,6 +5554,31 @@ function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
     $variables['entries_more'] = array_slice($variables['entries'], 6);
     $variables['entries'] = array_slice($variables['entries'], 0, 6);
   }
+  // The gallery's mark (field_exhibit_mark, an SVG or PNG logo): drawn
+  // over the title of a cover or wall opening as a mask in the heading
+  // color, at its own proportions (an SVG's viewBox, a PNG's pixels).
+  $variables['mark'] = NULL;
+  if ($paragraph->hasField('field_exhibit_mark') && ($file = $paragraph->get('field_exhibit_mark')->entity)) {
+    $cache->addCacheableDependency($file);
+    $uri = $file->getFileUri();
+    $ratio = 0;
+    if (str_ends_with(strtolower($uri), '.svg')) {
+      $head = (string) @file_get_contents($uri, FALSE, NULL, 0, 2048);
+      if (preg_match('/viewBox="\s*[-\d.]+[\s,]+[-\d.]+[\s,]+([\d.]+)[\s,]+([\d.]+)/', $head, $m) && (float) $m[2] > 0) {
+        $ratio = (float) $m[1] / (float) $m[2];
+      }
+    }
+    elseif (($size = @getimagesize($uri)) && $size[1] > 0) {
+      $ratio = $size[0] / $size[1];
+    }
+    if ($ratio > 0) {
+      $variables['mark'] = [
+        'url' => \Drupal::service('file_url_generator')->generateString($uri),
+        'ratio' => round($ratio, 4),
+      ];
+    }
+  }
+
   $variables['dom_id'] = 'gallery-' . $paragraph->id();
   $cache->applyTo($variables);
 }

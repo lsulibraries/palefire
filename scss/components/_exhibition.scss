@@ -4161,6 +4161,35 @@ $pf-bare-fade: 8rem;
   }
 }
 
+// A gallery's mark (field_exhibit_mark, e.g. a station's call-sign logo):
+// over the number and title in the title's cell, so the foot's wash under
+// the title covers it too, at the title's layer, revealed with it ($pf-
+// reveal-text). A mask in the heading color, so one file reads in every
+// reading theme; its proportions (--pf-mark-r) set the width, held to the
+// column. Decorative (aria-hidden): the title says what it is.
+#{$pf-walled}:has(.pf-exhibit-wall-hero),
+#{$pf-covered} {
+  --pf-mark-h: clamp(2.75rem, 2rem + 2.5vw, 4.25rem);
+
+  .pf-exhibit-mark {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: start;
+    position: relative;
+    z-index: 2;
+    width: min(calc(var(--pf-mark-h) * var(--pf-mark-r, 2)), 100%);
+    height: var(--pf-mark-h);
+    background-color: var(--pf-g-heading, var(--bs-emphasis-color));
+    -webkit-mask: var(--pf-mark) left bottom / contain no-repeat;
+    mask: var(--pf-mark) left bottom / contain no-repeat;
+    pointer-events: none;
+  }
+
+  &:has(> .pf-gallery > .pf-exhibit-mark) > .pf-section__title {
+    padding-top: calc(var(--pf-mark-h) + clamp(1rem, 2vw, 1.5rem));
+  }
+}
+
 // A wall that opens on its title and facts alone (no intro to hold the
 // image up). Its small labels, the number and the facts, take the heading
 // color, as text over a hero's video does (_reading-themes.scss): the
@@ -4373,7 +4402,7 @@ $pf-reveal-long: 56svh;
 $pf-reveal-slide: -50%;
 $pf-reveal-slide-ease: cubic-bezier(.4, 0, .2, 1);
 $pf-reveal-section: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-sections > .pf-section:has(> .pf-section__inner > .pf-gallery:is(.pf-gallery--cover, .is-walled) .pf-exhibit-wall-hero)';
-$pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-wall__stats, .pf-exhibit-cover__nav, .pf-exhibit-wall__text';
+$pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-mark, .pf-exhibit-wall__stats, .pf-exhibit-cover__nav, .pf-exhibit-wall__text';
 // A wall with no intro (as $pf-wall-photo, at the section).
 $pf-reveal-bare: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-sections > .pf-section:has(> .pf-section__inner > .pf-gallery.is-walled .pf-exhibit-wall-hero):not(:has(.pf-exhibit-wall__text))';
 

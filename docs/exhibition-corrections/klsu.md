@@ -15,6 +15,7 @@ Where: *Gallery / Entry (old slide file)*. Galleries are the call signs; entries
 
 ### Structure
 
+- Gallery titles take the years printed on the old exhibition’s call-sign logos (KFGC 1915–1926, WJBO 1936–1947, WLSU 1947–1957 and 1965–1979, WPRG 1979–1983, KLSU 1983–present), and each gallery shows its logo, redrawn without the dates, over its title. Please confirm the years, which differ from the first draft’s (1915–1934, 1934–1947, 1947–1973, 1979–1982, 1983–2015).
 - KFGC / November 27, 1924 (C11): the old slide (also live) showed a Jazz Fest clip (Jim Olander, “by Joey O’Keefe, 2015,” audio/jim.mp3), not KLSU material. Replaced with the slide’s three KLSU clippings from the Pictures page (c11_1, c11_2, c11_3) and a new line of text (see section 3). The Jazz Fest clip is not carried over.
 - Three slides had text but no image, and a wall entry needs an image, so each is folded into its neighbor as a dated paragraph:
   - KFGC / 1926–1931: “January 15, 1926” (C14) + “1931” (C15).
@@ -25,94 +26,94 @@ Where: *Gallery / Entry (old slide file)*. Galleries are the call signs; entries
 
 ### Entry titles (dates)
 
-- KFGC, 1915–1934 / Fall 1915 (C1.html): entry title "FALL 1915" → "Fall 1915"
-- KFGC, 1915–1934 / January 4, 1924, 8:15 p.m. (C8.html): entry title "January 4, 1924 8:15 PM" → "January 4, 1924, 8:15 p.m."
-- KFGC, 1915–1934 / November 27, 1924 (C11.html): entry title "Jim Olander" → "November 27, 1924"
-- KFGC, 1915–1934 / 1926–1931 (C14.html): entry title "January 15, 1926" → "1926–1931"
-- WJBO, 1934–1947 / November 5, 1941–May 6, 1942 (C29.html): entry title "November 5, 1941 - May 6, 1942" → "November 5, 1941–May 6, 1942"
-- WLSU, 1947–1973 / Winter 1947–1948 (C42.html): entry title "Winter 1947-1948" → "Winter 1947–1948"
-- WLSU, 1947–1973 / November 15, 1965, 3:00 p.m. (C55.html): entry title "November 15, 1965 3:00PM" → "November 15, 1965, 3:00 p.m."
-- KLSU, 1983–2015 / 2015 (C86.html): entry title "October 2015" → "2015"
+- KFGC, 1915–1926 / Fall 1915 (C1.html): entry title "FALL 1915" → "Fall 1915"
+- KFGC, 1915–1926 / January 4, 1924, 8:15 p.m. (C8.html): entry title "January 4, 1924 8:15 PM" → "January 4, 1924, 8:15 p.m."
+- KFGC, 1915–1926 / November 27, 1924 (C11.html): entry title "Jim Olander" → "November 27, 1924"
+- KFGC, 1915–1926 / 1926–1931 (C14.html): entry title "January 15, 1926" → "1926–1931"
+- WJBO, 1936–1947 / November 5, 1941–May 6, 1942 (C29.html): entry title "November 5, 1941 - May 6, 1942" → "November 5, 1941–May 6, 1942"
+- WLSU, 1947–1957, 1965–1979 / Winter 1947–1948 (C42.html): entry title "Winter 1947-1948" → "Winter 1947–1948"
+- WLSU, 1947–1957, 1965–1979 / November 15, 1965, 3:00 p.m. (C55.html): entry title "November 15, 1965 3:00PM" → "November 15, 1965, 3:00 p.m."
+- KLSU, 1983–present / 2015 (C86.html): entry title "October 2015" → "2015"
 
 ### Event text
 
-- KFGC, 1915–1934 / July 19, 1923 (C7.html): "KFGC granted a" → "KFGC is granted a"
-- KFGC, 1915–1934 / July 19, 1923 (C7.html): "from Department of" → "from the Department of"
-- KFGC, 1915–1934 / February 1924 (C10.html): "KFGC broadcasts the election of governor Hewitt Bouanchaud, who ran against Henry Fuqua and Huey P. Long." → "KFGC broadcasts the returns of the governor’s race between Hewitt Bouanchaud, Henry Fuqua and Huey P. Long."
-- KFGC, 1915–1934 / March 15, 1934 (C16.html): "lead by" → "led by"
-- WJBO, 1934–1947 / February 15, 1937 (C20.html): "broadcast first show" → "broadcast their first show"
-- WJBO, 1934–1947 / November 6, 1939 (C26.html): "newscasts began" → "newscasts begin"
-- WJBO, 1934–1947 / November 6, 1939 (C26.html): "Sponsored by Daily Reveille" → "Sponsored by the Daily Reveille"
-- WJBO, 1934–1947 / July 1, 1942 (C30.html): "Completion of two" → "LSU completes two"
-- WJBO, 1934–1947 / Fall 1946 (C36.html): "Lucille Ruby Woodard" → "Lucile Ruby Woodard"
-- WLSU, 1947–1973 / October 16, 1947 (C39.html): "WLSU on air at 91.7 megacycles with 1,000 watt frequency." → "WLSU goes on the air at 91.7 megacycles with 1,000 watts of power."
-- WLSU, 1947–1973 / October 18, 1947 (C40.html): "WLSU staff raised" → "WLSU staff raise"
-- WLSU, 1947–1973 / October 18, 1947 (C40.html): "which was delayed" → "which is delayed"
-- WLSU, 1947–1973 / March 15, 1948 (C43.html): "WLSU first college FM station" → "WLSU becomes the first college FM station"
-- WLSU, 1947–1973 / September 17, 1950 (C46.html): "Weekly program "WLSU speaks" and daily programs" → "The programs are the weekly "WLSU Speaks" and the daily"
-- WLSU, 1947–1973 / Fall 1955 (C51.html): "By this time WLSU had many more student workers and broadcasting hours had doubled." → "By this time WLSU has many more student workers, and its broadcasting hours have doubled."
-- WLSU, 1947–1973 / November 15, 1965, 3:00 p.m. (C55.html): "donated equipment which allowed" → "donated the equipment that allowed"
-- WLSU, 1947–1973 / November 15, 1965, 3:00 p.m. (C55.html): "closed circuit" → "closed-circuit"
-- WLSU, 1947–1973 / 1973 (C61.html): "Edwards and the Louisiana Educational Television Authority (LETA) requesting" → "Edwards and the Louisiana Educational Television Authority (LETA), requesting"
-- WLSU, 1947–1973 / 1973 (C61.html): "denies university funding and support citing" → "denies university funding and support, citing"
-- KLSU, 1983–2015 / October 24, 1983 (C70.html): "Power increases from 8 watts to 5,000 watts and changed from 107.3 FM to 91.1 FM." → "Power increases from 8 watts to 5,000 watts, and the station moves from 107.3 FM to 91.1 FM."
-- KLSU, 1983–2015 / November 29, 1984 (C72.html): "to The Manship School" → "to the Manship School"
-- KLSU, 1983–2015 / Fall 1994 (C80.html): "controversial format change" → "a controversial format change"
-- KLSU, 1983–2015 / 1997 (C83.html): "reel-to-reel technology" → "reel-to-reel technology."
+- KFGC, 1915–1926 / July 19, 1923 (C7.html): "KFGC granted a" → "KFGC is granted a"
+- KFGC, 1915–1926 / July 19, 1923 (C7.html): "from Department of" → "from the Department of"
+- KFGC, 1915–1926 / February 1924 (C10.html): "KFGC broadcasts the election of governor Hewitt Bouanchaud, who ran against Henry Fuqua and Huey P. Long." → "KFGC broadcasts the returns of the governor’s race between Hewitt Bouanchaud, Henry Fuqua and Huey P. Long."
+- KFGC, 1915–1926 / March 15, 1934 (C16.html): "lead by" → "led by"
+- WJBO, 1936–1947 / February 15, 1937 (C20.html): "broadcast first show" → "broadcast their first show"
+- WJBO, 1936–1947 / November 6, 1939 (C26.html): "newscasts began" → "newscasts begin"
+- WJBO, 1936–1947 / November 6, 1939 (C26.html): "Sponsored by Daily Reveille" → "Sponsored by the Daily Reveille"
+- WJBO, 1936–1947 / July 1, 1942 (C30.html): "Completion of two" → "LSU completes two"
+- WJBO, 1936–1947 / Fall 1946 (C36.html): "Lucille Ruby Woodard" → "Lucile Ruby Woodard"
+- WLSU, 1947–1957, 1965–1979 / October 16, 1947 (C39.html): "WLSU on air at 91.7 megacycles with 1,000 watt frequency." → "WLSU goes on the air at 91.7 megacycles with 1,000 watts of power."
+- WLSU, 1947–1957, 1965–1979 / October 18, 1947 (C40.html): "WLSU staff raised" → "WLSU staff raise"
+- WLSU, 1947–1957, 1965–1979 / October 18, 1947 (C40.html): "which was delayed" → "which is delayed"
+- WLSU, 1947–1957, 1965–1979 / March 15, 1948 (C43.html): "WLSU first college FM station" → "WLSU becomes the first college FM station"
+- WLSU, 1947–1957, 1965–1979 / September 17, 1950 (C46.html): "Weekly program "WLSU speaks" and daily programs" → "The programs are the weekly "WLSU Speaks" and the daily"
+- WLSU, 1947–1957, 1965–1979 / Fall 1955 (C51.html): "By this time WLSU had many more student workers and broadcasting hours had doubled." → "By this time WLSU has many more student workers, and its broadcasting hours have doubled."
+- WLSU, 1947–1957, 1965–1979 / November 15, 1965, 3:00 p.m. (C55.html): "donated equipment which allowed" → "donated the equipment that allowed"
+- WLSU, 1947–1957, 1965–1979 / November 15, 1965, 3:00 p.m. (C55.html): "closed circuit" → "closed-circuit"
+- WLSU, 1947–1957, 1965–1979 / 1973 (C61.html): "Edwards and the Louisiana Educational Television Authority (LETA) requesting" → "Edwards and the Louisiana Educational Television Authority (LETA), requesting"
+- WLSU, 1947–1957, 1965–1979 / 1973 (C61.html): "denies university funding and support citing" → "denies university funding and support, citing"
+- KLSU, 1983–present / October 24, 1983 (C70.html): "Power increases from 8 watts to 5,000 watts and changed from 107.3 FM to 91.1 FM." → "Power increases from 8 watts to 5,000 watts, and the station moves from 107.3 FM to 91.1 FM."
+- KLSU, 1983–present / November 29, 1984 (C72.html): "to The Manship School" → "to the Manship School"
+- KLSU, 1983–present / Fall 1994 (C80.html): "controversial format change" → "a controversial format change"
+- KLSU, 1983–present / 1997 (C83.html): "reel-to-reel technology" → "reel-to-reel technology."
 
 ### Clip descriptions
 
-- WJBO, 1934–1947 / Fall 1946 (C36.html), clip "Lucile Ruby Woodard on the beginnings of LSU radio" description: "LSU Professor Emeritus of Speech" → "LSU Professor Emerita of Speech"
-- WLSU, 1947–1973 / December 1947 (C41.html), clip "Lucile Ruby Woodard on WLSU’s programming" description: "Program Director details" → "Program Director, details"
-- WLSU, 1947–1973 / December 1947 (C41.html), clip "Lucile Ruby Woodard on WLSU’s programming" description: "LSU Professor Emeritus of Speech" → "LSU Professor Emerita of Speech"
-- WLSU, 1947–1973 / June 1957 (C52.html), clip "Lucile Ruby Woodard on the end of WLSU" description: "Lucille Ruby" → "Lucile Ruby"
-- KLSU, 1983–2015 / Fall 1983 (C69.html), clip "Dez Crawford on building the tower" description: "she and and a" → "she and a"
-- KLSU, 1983–2015 / Fall 1994 (C80.html), clip "Andrew Nackley on the shift to alternative programming" description: "a KLSU alumni" → "a KLSU alumnus"
-- KLSU, 1983–2015 / February 8, 2008 (C84.html), clip "Jenni Lawson on Dr. Jules d’Hemecourt" description: "Christmas,"and" → "Christmas," and"
+- WJBO, 1936–1947 / Fall 1946 (C36.html), clip "Lucile Ruby Woodard on the beginnings of LSU radio" description: "LSU Professor Emeritus of Speech" → "LSU Professor Emerita of Speech"
+- WLSU, 1947–1957, 1965–1979 / December 1947 (C41.html), clip "Lucile Ruby Woodard on WLSU’s programming" description: "Program Director details" → "Program Director, details"
+- WLSU, 1947–1957, 1965–1979 / December 1947 (C41.html), clip "Lucile Ruby Woodard on WLSU’s programming" description: "LSU Professor Emeritus of Speech" → "LSU Professor Emerita of Speech"
+- WLSU, 1947–1957, 1965–1979 / June 1957 (C52.html), clip "Lucile Ruby Woodard on the end of WLSU" description: "Lucille Ruby" → "Lucile Ruby"
+- KLSU, 1983–present / Fall 1983 (C69.html), clip "Dez Crawford on building the tower" description: "she and and a" → "she and a"
+- KLSU, 1983–present / Fall 1994 (C80.html), clip "Andrew Nackley on the shift to alternative programming" description: "a KLSU alumni" → "a KLSU alumnus"
+- KLSU, 1983–present / February 8, 2008 (C84.html), clip "Jenni Lawson on Dr. Jules d’Hemecourt" description: "Christmas,"and" → "Christmas," and"
 
 ### Transcripts
 
 - WJBO / May 1947 (C38), clip "Ralph Steetle on building WLSU" transcript: "So the building is gone,or the station?" → "So the building is gone, or the station?" (fixed 2026-11-19)
-- WJBO, 1934–1947 / Fall 1938 (C22.html), clip "Ralph Steetle on his early influences" transcript: "'What's the purpose of this?''" → "'What's the purpose of this?'"
-- WJBO, 1934–1947 / Fall 1938 (C22.html), clip "Ralph Steetle on his early influences" transcript: "a lot easier to do.""" → "a lot easier to do.""
-- WJBO, 1934–1947 / Fall 1938 (C22.html), clip "Ralph Steetle on his early influences" transcript: "Music and Dramatics Arts building" → "Music and Dramatic Arts building"
-- WLSU, 1947–1973 / Summer 1949 (C45.html), clip "Lucile Ruby Woodard on discs and magnetic tape" transcript: "fifteen-inch wax disks" → "fifteen-inch wax discs"
-- KLSU, 1983–2015 / May 31, 1983 (C68.html), clip "Dez Crawford on winning back the KLSU call letters" transcript: "Lacrosse" → "La Crosse"
-- KLSU, 1983–2015 / December 1987 (C77.html), clip "Jenni Lawson on the move to Hodges Hall" transcript: "to-do built around the," → "to-do built around the"
-- KLSU, 1983–2015 / December 1987 (C77.html), clip "Jenni Lawson on the move to Hodges Hall" transcript: "bullet proof" → "bulletproof"
-- KLSU, 1983–2015 / Fall 1994 (C80.html), clip "Andrew Nackley on the shift to alternative programming" transcript: "school of Journalism" → "School of Journalism"
-- KLSU, 1983–2015 / Fall 1994 (C80.html), clip "Andrew Nackley on the shift to alternative programming" transcript: "from the 80s" → "from the ’80s"
-- KLSU, 1983–2015 / Fall 1994 (C80.html), clip "Laura Blereau on the format change and the backlash" transcript: ""I'm sitting right in it"." → ""I'm sitting right in it.""
-- KLSU, 1983–2015 / February 8, 2008 (C84.html), clip "Jenni Lawson on Dr. Jules d’Hemecourt" transcript: "Night before Christmas" → "Night Before Christmas"
-- KLSU, 1983–2015 / February 8, 2008 (C84.html), clip "Dez Crawford on Dr. d’Hemecourt’s mentorship" transcript: "when you hit the. . . .when" → "when you hit the . . . when"
-- KLSU, 1983–2015 / February 8, 2008 (C84.html), clip "Dez Crawford on Dr. d’Hemecourt’s mentorship" transcript: "barbeque" → "barbecue"
-- KLSU, 1983–2015 / February 8, 2008 (C84.html), clip "Dez Crawford on Dr. d’Hemecourt’s mentorship" transcript: "Youtube" → "YouTube"
+- WJBO, 1936–1947 / Fall 1938 (C22.html), clip "Ralph Steetle on his early influences" transcript: "'What's the purpose of this?''" → "'What's the purpose of this?'"
+- WJBO, 1936–1947 / Fall 1938 (C22.html), clip "Ralph Steetle on his early influences" transcript: "a lot easier to do.""" → "a lot easier to do.""
+- WJBO, 1936–1947 / Fall 1938 (C22.html), clip "Ralph Steetle on his early influences" transcript: "Music and Dramatics Arts building" → "Music and Dramatic Arts building"
+- WLSU, 1947–1957, 1965–1979 / Summer 1949 (C45.html), clip "Lucile Ruby Woodard on discs and magnetic tape" transcript: "fifteen-inch wax disks" → "fifteen-inch wax discs"
+- KLSU, 1983–present / May 31, 1983 (C68.html), clip "Dez Crawford on winning back the KLSU call letters" transcript: "Lacrosse" → "La Crosse"
+- KLSU, 1983–present / December 1987 (C77.html), clip "Jenni Lawson on the move to Hodges Hall" transcript: "to-do built around the," → "to-do built around the"
+- KLSU, 1983–present / December 1987 (C77.html), clip "Jenni Lawson on the move to Hodges Hall" transcript: "bullet proof" → "bulletproof"
+- KLSU, 1983–present / Fall 1994 (C80.html), clip "Andrew Nackley on the shift to alternative programming" transcript: "school of Journalism" → "School of Journalism"
+- KLSU, 1983–present / Fall 1994 (C80.html), clip "Andrew Nackley on the shift to alternative programming" transcript: "from the 80s" → "from the ’80s"
+- KLSU, 1983–present / Fall 1994 (C80.html), clip "Laura Blereau on the format change and the backlash" transcript: ""I'm sitting right in it"." → ""I'm sitting right in it.""
+- KLSU, 1983–present / February 8, 2008 (C84.html), clip "Jenni Lawson on Dr. Jules d’Hemecourt" transcript: "Night before Christmas" → "Night Before Christmas"
+- KLSU, 1983–present / February 8, 2008 (C84.html), clip "Dez Crawford on Dr. d’Hemecourt’s mentorship" transcript: "when you hit the. . . .when" → "when you hit the . . . when"
+- KLSU, 1983–present / February 8, 2008 (C84.html), clip "Dez Crawford on Dr. d’Hemecourt’s mentorship" transcript: "barbeque" → "barbecue"
+- KLSU, 1983–present / February 8, 2008 (C84.html), clip "Dez Crawford on Dr. d’Hemecourt’s mentorship" transcript: "Youtube" → "YouTube"
 
 ### Captions
 
 Old = the label under the image on the slide (or the lightbox title where the slide had none).
 
-- KFGC, 1915–1934 / Fall 1915 (C1.html), fall1915_1.jpg: "Dr. David Vance Guthrie" → "David Vance Guthrie, M.A., Ph.D., a50000186, LSU Photograph Collection, 1886–1926, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA."
-- KFGC, 1915–1934 / Fall 1915 (C1.html), fall1915_2.jpg: "Reveille Oct 6, 1915." → "“Wireless Station to Be Erected at L.S.U.,” The Reveille, October 6, 1915. Louisiana and Lower Mississippi Valley Collections, LSU Libraries, Baton Rouge, LA."
-- KFGC, 1915–1934 / February 1916 (C2.html), c2_1.jpg: "The first chemistry building 1899" → "The first chemistry building, L.S.U., old campus, 1899, a50000007, LSU Photograph Collection, 1886–1926, LSU Archives, LSU Libraries."
-- KFGC, 1915–1934 / February 1916 (C2.html), c2_2.jpg: "Physics Laboratory Heard Hall 1903" → "Physics Laboratory, Heard Hall, 1903, a50000030, LSU Photograph Collection, 1886–1926, LSU Archives, LSU Libraries."
-- KFGC, 1915–1934 / March 1916 (C3.html), c3_1.jpg: "Wireless Station Receives Messages From New Orleans. The Reveille, March 2, 1916. LLMVC, LSU Libraries." → "“Wireless Station Receives Messages From New Orleans,” The Reveille, March 2, 1916. LLMVC, LSU Libraries."
-- KFGC, 1915–1934 / April 1917 (C4.html), c4_1.jpg: "The Reveille, March 31, 1938." → "“First Campus Radio Station Forgotten in Current Growth,” The Reveille, March 31, 1938. LLMVC, LSU Libraries."
-- KFGC, 1915–1934 / 1923 (C5.html), c5_1.jpg: "The Reveille, March 31, 1938." → "“First Campus Radio Station Forgotten in Current Growth,” The Reveille, March 31, 1938. LLMVC, LSU Libraries."
-- KFGC, 1915–1934 / April 20, 1923 (C6.html), c6_1.jpg: "The Reveille, March 31, 1938." → "“First Campus Radio Station Forgotten in Current Growth,” The Reveille, March 31, 1938. LLMVC, LSU Libraries."
-- KFGC, 1915–1934 / January 4, 1924, 8:15 p.m. (C8.html), c8_1.jpg: "Radio Station KFGC, Box 53, Folder 909, Louisiana State University Office of the Chancellor Records, A0001, LSUA, LSU Libraries." → "Radio Station KFGC, Box 53, Folder 909, Louisiana State University Office of the Chancellor Records, A0001, LSU Archives, LSU Libraries."
-- WJBO, 1934–1947 / 1936 (C19.html), c19_1.jpg: ""L.S.U. Goes on the Air With Expanded Program," Louisiana Leader, October 1938. Louisiana Vertical File: Radio. LLMVC, LSU Libraries." → "“First Campus Radio Station Forgotten in Current Growth,” The Reveille, March 31, 1938. LLMVC, LSU Libraries." **(different source)**
-- WJBO, 1934–1947 / August 1, 1937 (C21.html), c21_2.jpg: "Colbert Thesis page with Program Schedule" → "Program schedule. Nellie Graham Colbert, “A History of Radio Station WJBO, Baton Rouge, Louisiana, with Emphasis on Programming Policies and Practices, 1934–1952,” thesis, Louisiana State University, 1960. LSU Libraries."
-- WJBO, 1934–1947 / August 1, 1937 (C21.html), c21_3.jpg: "Program schedule from Wednesday Nov. 3, 1937" → "Program schedule for Wednesday, November 3, 1937. Nellie Graham Colbert, “A History of Radio Station WJBO, Baton Rouge, Louisiana, with Emphasis on Programming Policies and Practices, 1934–1952,” thesis, Louisiana State University, 1960. LSU Libraries."
-- WJBO, 1934–1947 / November 6, 1939 (C26.html), c26_1.jpg: ""Making an Aerial Deadline,"" The Reveille, November 3, 1939. LLMVC, LSU Libraries." → "“Making an Aerial Deadline,” The Reveille, November 3, 1939. LLMVC, LSU Libraries."
-- WLSU, 1947–1973 / March 15, 1948 (C43.html), c43_2.jpg: "Tales of Hoffman: Gumbo, 1948. LSU Archives, LSU Libraries." → "“Tales of Hoffmann,” Gumbo, 1948. LSU Archives, LSU Libraries."
-- WLSU, 1947–1973 / January 1966 (C56.html), c56_1.jpg: "LSU Radio Station Now On Air 24 Hours a Day," State Times, January 4, 1966. Louisiana Vertical File: Radio. LLMVC, LSU Libraries." → "“LSU Radio Station Now On Air 24 Hours a Day,” State Times, January 4, 1966. Louisiana Vertical File: Radio. LLMVC, LSU Libraries."
-- WLSU, 1947–1973 / 1973 (C61.html), c61_2.jpg: "Louisiana Educational Television Authority Louisiana Educational Television Authority to George Waldroup, 14 March 1973, Correspondence, unpublished data." → "Louisiana Educational Television Authority to George Waldroup, 14 March 1973, Correspondence, unpublished data."
-- KLSU, 1983–2015 / October 21, 1988 (C79.html), c78_1.jpg: ""LSU students record firm promotes La. musicians," Advocate, Nov 12, 1989. LSU Libraries" → "“LSU Students’ Record Firm Promotes La. Musicians,” Advocate, November 12, 1989. LSU Libraries."
-- KLSU, 1983–2015 / December 1994 (C82.html), c82_1.jpg: "Free KLSU [part 1 of 2]" → "Free KLSU, December 1994 (page 1 of 2)."
-- KLSU, 1983–2015 / December 1994 (C82.html), c82_2.jpg: "Free KLSU [part 2 of 2]" → "Free KLSU, December 1994 (page 2 of 2)."
-- KLSU, 1983–2015 / 2015 (C86.html), c86_1.jpg: "Transmitter in box. Photo courtesy of John Friscia." → "The new transmitter in its crate, 2015. Photo courtesy of John Friscia."
-- KLSU, 1983–2015 / 2015 (C86.html), c86_2.jpg: "Transmitter out of box. Photo courtesy of John Friscia." → "The new transmitter unpacked, 2015. Photo courtesy of John Friscia."
+- KFGC, 1915–1926 / Fall 1915 (C1.html), fall1915_1.jpg: "Dr. David Vance Guthrie" → "David Vance Guthrie, M.A., Ph.D., a50000186, LSU Photograph Collection, 1886–1926, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA."
+- KFGC, 1915–1926 / Fall 1915 (C1.html), fall1915_2.jpg: "Reveille Oct 6, 1915." → "“Wireless Station to Be Erected at L.S.U.,” The Reveille, October 6, 1915. Louisiana and Lower Mississippi Valley Collections, LSU Libraries, Baton Rouge, LA."
+- KFGC, 1915–1926 / February 1916 (C2.html), c2_1.jpg: "The first chemistry building 1899" → "The first chemistry building, L.S.U., old campus, 1899, a50000007, LSU Photograph Collection, 1886–1926, LSU Archives, LSU Libraries."
+- KFGC, 1915–1926 / February 1916 (C2.html), c2_2.jpg: "Physics Laboratory Heard Hall 1903" → "Physics Laboratory, Heard Hall, 1903, a50000030, LSU Photograph Collection, 1886–1926, LSU Archives, LSU Libraries."
+- KFGC, 1915–1926 / March 1916 (C3.html), c3_1.jpg: "Wireless Station Receives Messages From New Orleans. The Reveille, March 2, 1916. LLMVC, LSU Libraries." → "“Wireless Station Receives Messages From New Orleans,” The Reveille, March 2, 1916. LLMVC, LSU Libraries."
+- KFGC, 1915–1926 / April 1917 (C4.html), c4_1.jpg: "The Reveille, March 31, 1938." → "“First Campus Radio Station Forgotten in Current Growth,” The Reveille, March 31, 1938. LLMVC, LSU Libraries."
+- KFGC, 1915–1926 / 1923 (C5.html), c5_1.jpg: "The Reveille, March 31, 1938." → "“First Campus Radio Station Forgotten in Current Growth,” The Reveille, March 31, 1938. LLMVC, LSU Libraries."
+- KFGC, 1915–1926 / April 20, 1923 (C6.html), c6_1.jpg: "The Reveille, March 31, 1938." → "“First Campus Radio Station Forgotten in Current Growth,” The Reveille, March 31, 1938. LLMVC, LSU Libraries."
+- KFGC, 1915–1926 / January 4, 1924, 8:15 p.m. (C8.html), c8_1.jpg: "Radio Station KFGC, Box 53, Folder 909, Louisiana State University Office of the Chancellor Records, A0001, LSUA, LSU Libraries." → "Radio Station KFGC, Box 53, Folder 909, Louisiana State University Office of the Chancellor Records, A0001, LSU Archives, LSU Libraries."
+- WJBO, 1936–1947 / 1936 (C19.html), c19_1.jpg: ""L.S.U. Goes on the Air With Expanded Program," Louisiana Leader, October 1938. Louisiana Vertical File: Radio. LLMVC, LSU Libraries." → "“First Campus Radio Station Forgotten in Current Growth,” The Reveille, March 31, 1938. LLMVC, LSU Libraries." **(different source)**
+- WJBO, 1936–1947 / August 1, 1937 (C21.html), c21_2.jpg: "Colbert Thesis page with Program Schedule" → "Program schedule. Nellie Graham Colbert, “A History of Radio Station WJBO, Baton Rouge, Louisiana, with Emphasis on Programming Policies and Practices, 1934–1952,” thesis, Louisiana State University, 1960. LSU Libraries."
+- WJBO, 1936–1947 / August 1, 1937 (C21.html), c21_3.jpg: "Program schedule from Wednesday Nov. 3, 1937" → "Program schedule for Wednesday, November 3, 1937. Nellie Graham Colbert, “A History of Radio Station WJBO, Baton Rouge, Louisiana, with Emphasis on Programming Policies and Practices, 1934–1952,” thesis, Louisiana State University, 1960. LSU Libraries."
+- WJBO, 1936–1947 / November 6, 1939 (C26.html), c26_1.jpg: ""Making an Aerial Deadline,"" The Reveille, November 3, 1939. LLMVC, LSU Libraries." → "“Making an Aerial Deadline,” The Reveille, November 3, 1939. LLMVC, LSU Libraries."
+- WLSU, 1947–1957, 1965–1979 / March 15, 1948 (C43.html), c43_2.jpg: "Tales of Hoffman: Gumbo, 1948. LSU Archives, LSU Libraries." → "“Tales of Hoffmann,” Gumbo, 1948. LSU Archives, LSU Libraries."
+- WLSU, 1947–1957, 1965–1979 / January 1966 (C56.html), c56_1.jpg: "LSU Radio Station Now On Air 24 Hours a Day," State Times, January 4, 1966. Louisiana Vertical File: Radio. LLMVC, LSU Libraries." → "“LSU Radio Station Now On Air 24 Hours a Day,” State Times, January 4, 1966. Louisiana Vertical File: Radio. LLMVC, LSU Libraries."
+- WLSU, 1947–1957, 1965–1979 / 1973 (C61.html), c61_2.jpg: "Louisiana Educational Television Authority Louisiana Educational Television Authority to George Waldroup, 14 March 1973, Correspondence, unpublished data." → "Louisiana Educational Television Authority to George Waldroup, 14 March 1973, Correspondence, unpublished data."
+- KLSU, 1983–present / October 21, 1988 (C79.html), c78_1.jpg: ""LSU students record firm promotes La. musicians," Advocate, Nov 12, 1989. LSU Libraries" → "“LSU Students’ Record Firm Promotes La. Musicians,” Advocate, November 12, 1989. LSU Libraries."
+- KLSU, 1983–present / December 1994 (C82.html), c82_1.jpg: "Free KLSU [part 1 of 2]" → "Free KLSU, December 1994 (page 1 of 2)."
+- KLSU, 1983–present / December 1994 (C82.html), c82_2.jpg: "Free KLSU [part 2 of 2]" → "Free KLSU, December 1994 (page 2 of 2)."
+- KLSU, 1983–present / 2015 (C86.html), c86_1.jpg: "Transmitter in box. Photo courtesy of John Friscia." → "The new transmitter in its crate, 2015. Photo courtesy of John Friscia."
+- KLSU, 1983–present / 2015 (C86.html), c86_2.jpg: "Transmitter out of box. Photo courtesy of John Friscia." → "The new transmitter unpacked, 2015. Photo courtesy of John Friscia."
 
 ### About the Exhibition (from about.html)
 
@@ -161,7 +162,7 @@ Text written for the new page, with no counterpart on the old site:
 - Subtitle: "A century of campus radio at LSU, 1915–2015"
 - Credit line: "T. Harry Williams Center for Oral History, LSU Libraries. Curated by Charlotte Willcox."
 - Introduction: "In 1915, LSU physics professor David Vance Guthrie and his students began building a wireless station from spare parts. It became KFGC, the university’s first broadcast station, and the start of a century of campus radio: programs over WJBO, the FM station WLSU, WPRG and, from 1983, KLSU. Told in newspaper clippings, university records, yearbook pages and the voices of the people who ran the stations, the exhibition follows each call sign in turn." (the old home page had only the KLSU logo; the About text is kept in About the Exhibition)
-- Gallery titles: the call signs with their years: "KFGC, 1915–1934", "WJBO, 1934–1947", "WLSU, 1947–1973", "WPRG, 1979–1982", "KLSU, 1983–2015", and "About the Exhibition". The years are the first and last slide in each group.
+- Gallery titles: the call signs with their years: "KFGC, 1915–1926", "WJBO, 1936–1947", "WLSU, 1947–1957, 1965–1979", "WPRG, 1979–1983", "KLSU, 1983–present", and "About the Exhibition". The years are the first and last slide in each group.
 - About the Exhibition: an "Acknowledgments" heading over the curator and credit paragraph.
 
 ### Entry text
@@ -273,27 +274,27 @@ Text written for the new page, with no counterpart on the old site:
 
 The old slides had no clip titles; credits were the citation at the end of each description. Format: “Speaker, interviewed by Interviewer, Mss. number, year” (the wall reads the speaker and year from it).
 
-- WJBO, 1934–1947 / Fall 1938: **Ralph Steetle on his early influences**. Credit: Ralph Steetle, interviewed by Ron Ross, Mss. 4700.0660, 1996
-- WJBO, 1934–1947 / November 6, 1939: **Sig Mickelson on teaching radio journalism**. Credit: Sig Mickelson, interviewed by Melisse Campbell, Mss. 4700.0220, 1993
-- WJBO, 1934–1947 / Fall 1946: **Lucile Ruby Woodard on the beginnings of LSU radio**. Credit: Lucile Ruby Woodard, interviewed by John W. “Jack” Fiser, Mss. 4700.0826, 1997
-- WJBO, 1934–1947 / May 1947: **Ralph Steetle on building WLSU**. Credit: Ralph Steetle, interviewed by Ron Ross, Mss. 4700.0660, 1996
-- WLSU, 1947–1973 / December 1947: **Lucile Ruby Woodard on WLSU’s programming**. Credit: Lucile Ruby Woodard, interviewed by John W. “Jack” Fiser, Mss. 4700.0826, 1997
-- WLSU, 1947–1973 / Summer 1949: **Lucile Ruby Woodard on discs and magnetic tape**. Credit: Lucile Ruby Woodard, interviewed by John W. “Jack” Fiser, Mss. 4700.0826, 1997
-- WLSU, 1947–1973 / June 1957: **Lucile Ruby Woodard on the end of WLSU**. Credit: Lucile Ruby Woodard, interviewed by John W. “Jack” Fiser, Mss. 4700.0826, 1997
-- KLSU, 1983–2015 / May 31, 1983: **Dez Crawford on winning back the KLSU call letters**. Credit: Dez Crawford, interviewed for Mss. 4700.2593
-- KLSU, 1983–2015 / Fall 1983: **Dez Crawford on building the tower**. Credit: Dez Crawford, interviewed for Mss. 4700.2593
-- KLSU, 1983–2015 / December 1987: **Jenni Lawson on the move to Hodges Hall**. Credit: Jennifer “Jenni” Lawson, interviewed by Charlotte Willcox, Mss. 4700.2591
-- KLSU, 1983–2015 / Fall 1994: **Andrew Nackley on the shift to alternative programming**. Credit: Andrew Nackley, interviewed for Mss. 4700.2592
-- KLSU, 1983–2015 / Fall 1994: **Laura Blereau on the format change and the backlash**. Credit: Laura Blereau, interviewed for Mss. 4700.2594
-- KLSU, 1983–2015 / 1997: **Laura Blereau on moving from reel-to-reel to SAW**. Credit: Laura Blereau, interviewed for Mss. 4700.2594
-- KLSU, 1983–2015 / February 8, 2008: **Jenni Lawson on Dr. Jules d’Hemecourt**. Credit: Jennifer “Jenni” Lawson, interviewed by Charlotte Willcox, Mss. 4700.2591
-- KLSU, 1983–2015 / February 8, 2008: **Dez Crawford on Dr. d’Hemecourt’s mentorship**. Credit: Dez Crawford, interviewed for Mss. 4700.2593
+- WJBO, 1936–1947 / Fall 1938: **Ralph Steetle on his early influences**. Credit: Ralph Steetle, interviewed by Ron Ross, Mss. 4700.0660, 1996
+- WJBO, 1936–1947 / November 6, 1939: **Sig Mickelson on teaching radio journalism**. Credit: Sig Mickelson, interviewed by Melisse Campbell, Mss. 4700.0220, 1993
+- WJBO, 1936–1947 / Fall 1946: **Lucile Ruby Woodard on the beginnings of LSU radio**. Credit: Lucile Ruby Woodard, interviewed by John W. “Jack” Fiser, Mss. 4700.0826, 1997
+- WJBO, 1936–1947 / May 1947: **Ralph Steetle on building WLSU**. Credit: Ralph Steetle, interviewed by Ron Ross, Mss. 4700.0660, 1996
+- WLSU, 1947–1957, 1965–1979 / December 1947: **Lucile Ruby Woodard on WLSU’s programming**. Credit: Lucile Ruby Woodard, interviewed by John W. “Jack” Fiser, Mss. 4700.0826, 1997
+- WLSU, 1947–1957, 1965–1979 / Summer 1949: **Lucile Ruby Woodard on discs and magnetic tape**. Credit: Lucile Ruby Woodard, interviewed by John W. “Jack” Fiser, Mss. 4700.0826, 1997
+- WLSU, 1947–1957, 1965–1979 / June 1957: **Lucile Ruby Woodard on the end of WLSU**. Credit: Lucile Ruby Woodard, interviewed by John W. “Jack” Fiser, Mss. 4700.0826, 1997
+- KLSU, 1983–present / May 31, 1983: **Dez Crawford on winning back the KLSU call letters**. Credit: Dez Crawford, interviewed for Mss. 4700.2593
+- KLSU, 1983–present / Fall 1983: **Dez Crawford on building the tower**. Credit: Dez Crawford, interviewed for Mss. 4700.2593
+- KLSU, 1983–present / December 1987: **Jenni Lawson on the move to Hodges Hall**. Credit: Jennifer “Jenni” Lawson, interviewed by Charlotte Willcox, Mss. 4700.2591
+- KLSU, 1983–present / Fall 1994: **Andrew Nackley on the shift to alternative programming**. Credit: Andrew Nackley, interviewed for Mss. 4700.2592
+- KLSU, 1983–present / Fall 1994: **Laura Blereau on the format change and the backlash**. Credit: Laura Blereau, interviewed for Mss. 4700.2594
+- KLSU, 1983–present / 1997: **Laura Blereau on moving from reel-to-reel to SAW**. Credit: Laura Blereau, interviewed for Mss. 4700.2594
+- KLSU, 1983–present / February 8, 2008: **Jenni Lawson on Dr. Jules d’Hemecourt**. Credit: Jennifer “Jenni” Lawson, interviewed by Charlotte Willcox, Mss. 4700.2591
+- KLSU, 1983–present / February 8, 2008: **Dez Crawford on Dr. d’Hemecourt’s mentorship**. Credit: Dez Crawford, interviewed for Mss. 4700.2593
 
 ### Gallery lead images and captions
 
-- KFGC, 1915–1934: fall1915_1.jpg, caption "David Vance Guthrie, M.A., Ph.D., a50000186, LSU Photograph Collection, 1886–1926, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA."
-- WJBO, 1934–1947: c26_1.jpg, caption "“Making an Aerial Deadline,” The Reveille, November 3, 1939. LLMVC, LSU Libraries."
-- WLSU, 1947–1973: c39_2.jpg, caption "“Station WLSU,” L.S.U. Alumni News, September 1947. Louisiana Vertical File: Radio. LLMVC, LSU Libraries."
-- WPRG, 1979–1982: c64_1.jpg, caption "“WPRG Begins Broadcasting,” Advocate, January 16, 1980. LSU Libraries."
-- KLSU, 1983–2015: c77_1.jpg, caption "KLSU: Gumbo 1988. LSU Archives, LSU Libraries."
+- KFGC, 1915–1926: fall1915_1.jpg, caption "David Vance Guthrie, M.A., Ph.D., a50000186, LSU Photograph Collection, 1886–1926, Louisiana State University Archives, LSU Libraries, Baton Rouge, LA."
+- WJBO, 1936–1947: c26_1.jpg, caption "“Making an Aerial Deadline,” The Reveille, November 3, 1939. LLMVC, LSU Libraries."
+- WLSU, 1947–1957, 1965–1979: c39_2.jpg, caption "“Station WLSU,” L.S.U. Alumni News, September 1947. Louisiana Vertical File: Radio. LLMVC, LSU Libraries."
+- WPRG, 1979–1983: c64_1.jpg, caption "“WPRG Begins Broadcasting,” Advocate, January 16, 1980. LSU Libraries."
+- KLSU, 1983–present: c77_1.jpg, caption "KLSU: Gumbo 1988. LSU Archives, LSU Libraries."
 - Cover image: c69_1.jpg (KLSU antenna, Gumbo 1984).
