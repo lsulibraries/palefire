@@ -928,6 +928,11 @@ HTML),
 <li>On computers, the biography opens in a second panel beside the transcript, so you can read about the speaker while the clip plays. On phones and tablets it takes the screen, with Back to the clip to return. Moving to the next clip shows its speaker’s biography.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: No sideways scrolling on exhibition pages', <<<'HTML'
+<ul>
+<li>On phones, the AVES exhibition could be pushed sideways, and the bottom bar seemed to run off the screen. Two things caused it: web addresses typed out in full in the citations, and the word “Acknowledgments” at the big title size. Long addresses now wrap onto the next line, and a very long word in a gallery title breaks with a hyphen when it doesn’t fit, so on computers it no longer runs off its band onto the picture either.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------

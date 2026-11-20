@@ -2480,7 +2480,14 @@
     tail.className = 'pf-exhibit-out-tail';
     if (text) {
       const words = text.textContent.replace(/\s+$/, '');
-      const cut = words.search(/\S+$/);
+      let cut = words.search(/\S+$/);
+      // A long last word (a bare URL in a citation) would be one unbreakable
+      // run wider than a phone: only its last few characters stay with the
+      // arrow, and the rest may break anywhere.
+      if (words.length - cut > 16) {
+        cut = words.length - 4;
+        link.classList.add('pf-exhibit-out-wrap');
+      }
       text.textContent = words.slice(0, cut);
       tail.textContent = words.slice(cut);
       text.after(tail);

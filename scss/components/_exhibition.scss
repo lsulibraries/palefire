@@ -166,6 +166,16 @@ html[data-pf-mode="exhibition"] .pf-section__title {
   }
 }
 
+// A long word at the hero size can be wider than its column
+// ("Acknowledgments": 387px in 335px on a phone, 685px in the opener's
+// 524px washed half at 1024px). Only words of 12 letters or more hyphenate,
+// and a word with no hyphenation point still breaks rather than overflow.
+html[data-pf-mode="exhibition"] .pf-section__title {
+  overflow-wrap: break-word;
+  hyphens: auto;
+  hyphenate-limit-chars: 12 5 5;
+}
+
 html[data-pf-mode="exhibition"] .pf-section:not([style*="--pf-gallery-index"]) .pf-section__title::before {
   content: none;
 }
@@ -3469,6 +3479,12 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
 // this arrow, kept on its last word's line.
 .pf-exhibit-out-tail {
   white-space: nowrap;
+}
+
+// A bare URL as the link's text: it breaks anywhere rather than run past
+// a phone's edge (only its last four characters ride with the arrow).
+.pf-exhibit-out-wrap {
+  overflow-wrap: anywhere;
 }
 
 .pf-exhibit-out {
