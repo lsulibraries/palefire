@@ -879,6 +879,11 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Framed gallery pictures beside the title', <<<'HTML'
+<ul>
+<li>On wider screens a framed gallery picture now sits to the right of the gallery’s title and text instead of in the middle of the screen, so the two no longer overlap.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: Small gallery pictures framed like the cover', <<<'HTML'
 <ul>
 <li>When a gallery’s opening picture is too small to fill the screen, “Show whole image” now shows it whole, set in from the edges with a soft shadow over a blurred copy of itself, the way “Frame the cover” shows a small cover. Before, a gallery shown as a wall ignored the box and enlarged the picture.</li>

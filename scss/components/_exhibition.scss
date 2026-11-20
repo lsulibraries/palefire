@@ -4728,7 +4728,9 @@ $pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last
 // inset from the screen's edges with a shadow, over a blurred copy of
 // itself that fills the frame, faded rather than darkened so it takes the
 // page color in either theme. Below lg the picture sits high, clear of the
-// text's wash at the foot.
+// text's wash at the foot. From lg it stands clear of the text column at
+// the left (its edge as the side wash's, below), so the title and the
+// picture don't overlap.
 .pf-exhibit-wall-hero--whole {
   .pf-exhibit-wall-hero__img {
     z-index: 0;
@@ -4739,7 +4741,9 @@ $pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last
     filter: drop-shadow(0 1.5rem 2.5rem rgb(0 0 0 / .4));
 
     @include media-breakpoint-up(lg) {
+      $pad: var(--pf-section-pad-inline, 1.25rem);
       padding-bottom: clamp(1.5rem, 6vh, 4rem);
+      padding-inline-start: calc(#{$pad} + min(36rem, (100% - 2 * #{$pad}) * .46) + clamp(1.5rem, 3vw, 3rem));
       object-position: center;
     }
   }
