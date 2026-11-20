@@ -52,7 +52,15 @@ final class NewsletterReview {
    */
   public const MARKER = '#<p>\s*\[newsletter-review:(\d{6,15})/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\]\s*</p>#i';
 
-  private const PREVIEW = 'https://campaignlp.constantcontact.com/em/%s/%s';
+  public const PREVIEW = 'https://campaignlp.constantcontact.com/em/%s/%s';
+
+  /**
+   * The site’s own copy of a sent issue: issue.html and its images, in a
+   * folder named by its campaign id (scripts/palefire_newsletter_snapshot.php).
+   */
+  public const SNAPSHOT_DIR = 'public://newsletters/%s';
+
+  public const SNAPSHOT_FILE = 'issue.html';
 
   /**
    * The query argument that opens a past issue on the page (?read=<id>).
@@ -324,8 +332,9 @@ final class NewsletterReview {
   /**
    * The past issue ?read=<id> names, from the list, to read on the page.
    *
-   * Fetched from its Constant Contact preview and kept a day like the other
-   * sent issues, with its links made plain text (unlink()): a past issue's
+   * The site’s own copy when one is kept (snapshot()), else fetched from its
+   * Constant Contact preview and kept a day like the other sent issues; with
+   * its links made plain text (unlink()): a past issue's
    * links go stale, and the site shouldn't offer them. js/newsletter-review.js
    * reads it from this page into the archive's dialog; without the script
    * the page shows it above the issues.
@@ -341,12 +350,14 @@ final class NewsletterReview {
     }
     foreach ($items as $item) {
       if ($item['id'] === $id) {
-        $draft = self::draft($item['preview'], self::SENT_MAX_AGE);
+        // The site’s own copy when there is one (snapshot()), else the
+        // preview, kept a day.
+        $html = self::snapshot($id) ?? (self::draft($item['preview'], self::SENT_MAX_AGE)['html'] ?? NULL);
         return [
           'id' => $id,
           'name' => $item['name'],
           'line' => $item['line'] ?? '',
-          'html' => $draft ? self::unlink($draft['html']) : NULL,
+          'html' => $html !== NULL ? self::unlink($html) : NULL,
         ];
       }
     }
@@ -421,11 +432,34 @@ final class NewsletterReview {
     $sides = [];
     foreach (array_slice(array_values($issues), 0, 2) as $issue) {
       $preview = sprintf(self::PREVIEW, $issue['account'], $issue['id']);
-      $draft = self::draft($preview);
+      // A sent issue’s own copy when kept (snapshot()); a draft never is.
+      $html = self::snapshot($issue['id']) ?? (self::draft($preview)['html'] ?? NULL);
       // Shown on the site: no links to follow (unlink()).
-      $sides[] = ['name' => $issue['name'], 'line' => $issue['line'], 'preview' => $preview, 'html' => isset($draft['html']) ? self::unlink($draft['html']) : NULL];
+      $sides[] = ['name' => $issue['name'], 'line' => $issue['line'], 'preview' => $preview, 'html' => $html !== NULL ? self::unlink($html) : NULL];
     }
     return ['before' => $sides[0], 'after' => $sides[1]];
+  }
+
+  /**
+   * A sent issue as the site keeps it, made safe to show; NULL if not kept.
+   *
+   * Saved by scripts/palefire_newsletter_snapshot.php: the email with its
+   * images pointing at copies in the same folder, written as public://
+   * addresses and made web addresses here, so the copy outlives a move of
+   * the files folder. Read from disk on each use; the page around it is
+   * cached.
+   */
+  private static function snapshot(string $id): ?string {
+    if (!preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/', $id)) {
+      return NULL;
+    }
+    $file = sprintf(self::SNAPSHOT_DIR, $id) . '/' . self::SNAPSHOT_FILE;
+    $html = is_file($file) ? file_get_contents($file) : FALSE;
+    if ($html === FALSE || stripos($html, '<html') === FALSE) {
+      return NULL;
+    }
+    $base = \Drupal::service('file_url_generator')->generateString('public://newsletters/');
+    return self::clean(str_replace('public://newsletters/', $base, $html));
   }
 
   /**
