@@ -6966,9 +6966,9 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
     // The easter egg (js/series-deck.js): double-clicked, the deck is drawn
     // across both columns, centered and up to 60rem wide, with the series
     // under it; it scrolls with the page, unfaded. Restore (at its top
-    // right), another double-click or Escape puts it back.
+    // right), another double-click or Escape puts it back. A secret: no
+    // cursor gives it away.
     .pf-series__machine {
-      cursor: zoom-in;
       user-select: none;
     }
 
@@ -6995,7 +6995,6 @@ html.pf-a11y-motion .pf-series__item.is-unfolding {
       }
 
       .pf-series__machine {
-        cursor: zoom-out;
         -webkit-mask-image: none;
         mask-image: none;
       }
