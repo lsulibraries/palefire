@@ -93,9 +93,9 @@ $form->save();
 // The Audubon exhibition's label, from scripts/data/audubon.json.
 $values = [
   'field_exhibit_cover_maker' => 'John James Audubon (1785–1851)',
-  'field_exhibit_cover_title' => 'Mocking Birds and rattlesnake, detail',
+  'field_exhibit_cover_title' => 'Carolina Parrot',
   'field_exhibit_cover_date' => '1827–1838',
-  'field_exhibit_cover_medium' => 'Folio edition, plate 21',
+  'field_exhibit_cover_medium' => 'Folio edition, plate 26',
 ];
 $nodes = \Drupal::entityTypeManager()->getStorage('node')->loadByProperties([
   'type' => $bundle,

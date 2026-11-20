@@ -895,6 +895,12 @@ HTML),
 <li>The facts row is tidier: every fact is now one small label over one value, all set the same way, with no smaller line underneath. Reading is labeled Est. reading, and Listening shows only the total.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Every exhibition cover gets its label', <<<'HTML'
+<ul>
+<li>Fourteen more exhibition covers now have the small museum-style label under their picture in the exhibitions band: who made it, what it is, when, and where it is held, taken from each exhibition’s own captions.</li>
+<li>Audubon’s label named the wrong plate. It now reads Carolina Parrot, plate 26, which is the picture actually shown.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------
