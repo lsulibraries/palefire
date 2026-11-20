@@ -1307,9 +1307,32 @@ $pf-exhibit-wash-fade: clamp(14rem, 24vw, 30rem);
   }
 }
 
+// The wash behind a framed cover or a whole lead, as the exhibitions
+// carousel's plate (.pf-showcase__plate, _exhibit-showcase.scss): the same
+// picture, faint and a little soft, a touch past the edges, fading to the page
+// color at the top and foot (a mask: what shows through is the page). The
+// text's own washes cover its side. Gone with more contrast, as the
+// plate is.
+@mixin pf-exhibit-plate {
+  opacity: .14;
+  // The carousel's plate is its 640px size, soft at a band's width.
+  filter: blur(3px);
+  scale: 1.06;
+  -webkit-mask-image: linear-gradient(transparent, #000 18%, #000 72%, transparent);
+  mask-image: linear-gradient(transparent, #000 18%, #000 72%, transparent);
+
+  @media (prefers-contrast: more), (forced-colors: active) {
+    display: none;
+  }
+
+  .pf-a11y-contrast & {
+    display: none;
+  }
+}
+
 // A framed cover ("Frame the cover", for a small or soft image): the image
-// whole, inset from the screen's edges, over a blurred wash of itself that
-// fills the cover, as in the object view. Both stay pinned like the cover:
+// whole, inset from the screen's edges, over a faint wash of itself that
+// fills the cover, as the exhibitions carousel's plate. Both stay pinned like the cover:
 // the wash comes after the image and is pulled up over its place (a screen
 // tall, so one sits on the other) and drawn behind it. The wash is faded
 // rather than darkened, so it takes the page color in either theme. Below
@@ -1337,10 +1360,7 @@ $pf-exhibit-wash-fade: clamp(14rem, 24vw, 30rem);
     height: calc(100lvh - #{$pf-header-bar-compact-h});
     margin-top: calc(-100lvh + #{$pf-header-bar-compact-h});
     object-fit: cover;
-    opacity: .5;
-    filter: blur(2.5rem) saturate(.7);
-    // Past the edges, so the blur doesn't fade them to the page color.
-    scale: 1.15;
+    @include pf-exhibit-plate;
     translate: 0 calc(#{$pf-header-bar-compact-h} - var(--pf-header-h));
 
     @include pf-exhibit-motion {
@@ -4663,9 +4683,10 @@ $pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last
 // "Show whole image" on a wall's (or a cover opening's) lead, for a picture
 // too small or soft to fill the screen: framed as "Frame the cover" frames
 // the exhibition's cover (.pf-exhibit-cover--framed). The picture whole,
-// inset from the screen's edges with a shadow, over a blurred copy of
-// itself that fills the frame, faded rather than darkened so it takes the
-// page color in either theme. Below lg the picture sits high, clear of the
+// inset from the screen's edges with a shadow, over a faint copy of
+// itself that fills the frame (pf-exhibit-plate, as the exhibitions
+// carousel's plate), faded rather than darkened so it takes the page color
+// in either theme. Below lg the picture sits high, clear of the
 // text's wash at the foot. From lg it stands clear of the text column at
 // the left (its edge as the side wash's, below), so the title and the
 // picture don't overlap.
@@ -4694,10 +4715,7 @@ $pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last
     width: 100%;
     height: max(22rem, var(--pf-cover-img-h));
     object-fit: cover;
-    opacity: .5;
-    filter: blur(2.5rem) saturate(.7);
-    // Past the edges, so the blur doesn't fade them to the page color.
-    scale: 1.15;
+    @include pf-exhibit-plate;
 
     @include pf-exhibit-motion {
       animation: pf-exhibit-wash-in 2.4s $pf-exhibit-ease both;

@@ -879,6 +879,11 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Framed pictures over a faint backdrop', <<<'HTML'
+<ul>
+<li>Behind a framed cover or a gallery picture shown whole, the copy of the picture that fills the screen is now faint and fades out at the top and bottom, as the picture behind the exhibitions carousel does, instead of a heavy blur.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: Gallery picture labels end where they should', <<<'HTML'
 <ul>
 <li>The small label on a gallery’s opening picture shows the caption’s first sentence. Where a caption had a line break after that sentence, the label ran on into the next line with no space (“1817.David Hunt Letters…”), and “No.” was taken for the end of a sentence (“Special Order No”). Both are fixed; the full captions were always right.</li>

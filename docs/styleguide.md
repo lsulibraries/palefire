@@ -189,6 +189,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-20:** Framed cover and whole lead washes (`pf-exhibit-plate`): `opacity: .14`, `filter: blur(3px)`, `scale: 1.06`, `mask-image: linear-gradient(transparent, #000 18%, #000 72%, transparent)`; hidden with more contrast. Matches `.pf-showcase__plate`.
 - **2026-11-20:** Exhibition cover: the bar’s zoom button (`.pf-exhibit-zoom`) is gone; the cover has a museum label instead (`.pf-exhibit-lead-label.pf-exhibit-cover__label`, View only), top right under the bar, the same component as a full-screen gallery lead’s.
 - **2026-11-20:** Whole wall lead from lg: `padding-inline-start: calc(var(--pf-section-pad-inline) + min(36rem, (100% - 2 * pad) * .46) + clamp(1.5rem, 3vw, 3rem))`, so the picture sits right of the text column.
 - **2026-11-20:** Whole wall lead (`.pf-exhibit-wall-hero--whole`, `lead_whole` on a `wall_lead`): `.pf-exhibit-wall-hero__img` `object-fit: contain`, padding `clamp(1.5rem, 6vh, 4rem) clamp(1.25rem, 4vw, 4rem)` (below lg the foot `max(55lvh, 100lvh - 28rem)`, picture at the top), `drop-shadow(0 1.5rem 2.5rem rgb(0 0 0 / .4))`, no focus point; `.pf-exhibit-wall-hero__wash` the same picture covering the frame at .5 opacity, `blur(2.5rem) saturate(.7)`, scale 1.15, fading in over 2.4s. The same values as `.pf-exhibit-cover--framed`.
