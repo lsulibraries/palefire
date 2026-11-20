@@ -602,6 +602,17 @@ class PalefireHooks {
         }
       }
     }
+    // A News and events with nothing to show hides itself
+    // (\_palefire_news_has_lead()): its link would go nowhere.
+    $quiet_news = $node && !$drawn_news ? \_palefire_page_news_section($node) : NULL;
+    if ($quiet_news) {
+      $news_cache = CacheableMetadata::createFromRenderArray($variables);
+      if (!\_palefire_news_has_lead($quiet_news, $news_cache) && !empty($variables['items'])) {
+        $gone_news = \_palefire_section_id($node, $quiet_news);
+        $variables['items'] = array_values(array_filter($variables['items'], static fn ($item): bool => !is_array($item) || ($item['id'] ?? '') !== $gone_news));
+      }
+      $news_cache->applyTo($variables);
+    }
     $extra = [];
     if (!empty($ids['home'])) {
       $extra[] = ['id' => $ids['home'], 'label' => $this->t('Home')];

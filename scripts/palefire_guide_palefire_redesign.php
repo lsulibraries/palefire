@@ -875,6 +875,12 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: News and events steps aside when there is no news', <<<'HTML'
+<ul>
+<li>When nothing is scheduled at Hill, no blog post is from the last 30 days and no exhibition is on view, News and events now disappears from Special Collections instead of showing one lonely card. The opening screen’s numbers close up behind it.</li>
+<li>It comes back by itself within an hour of an event appearing in LibCal, a new blog post, or an exhibition’s On view dates starting. Nothing to switch on or off.</li>
+</ul>
+HTML),
 ]);
 
 // End of sections. ---------------------------------------------------------

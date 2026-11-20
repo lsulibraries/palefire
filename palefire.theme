@@ -515,7 +515,7 @@ function _palefire_hero_tabs(ParagraphInterface $hero): ?ParagraphInterface {
 /**
  * The first published News and events section on a page, or NULL.
  */
-function _palefire_page_news(NodeInterface $host): ?ParagraphInterface {
+function _palefire_page_news_section(NodeInterface $host): ?ParagraphInterface {
   if (!$host->hasField('field_scroll_section')) {
     return NULL;
   }
@@ -525,6 +525,40 @@ function _palefire_page_news(NodeInterface $host): ?ParagraphInterface {
     }
   }
   return NULL;
+}
+
+/**
+ * The page's News and events when it has something large to show, or NULL.
+ *
+ * _palefire_page_news_section() with a lead (_palefire_news_has_lead()):
+ * with none, the section hides itself. $cache, when given, takes its cache
+ * tags either way, so the page redraws when an event or post comes.
+ */
+function _palefire_page_news(NodeInterface $host, ?CacheableMetadata $cache = NULL): ?ParagraphInterface {
+  $section = _palefire_page_news_section($host);
+  if (!$section) {
+    return NULL;
+  }
+  $probe = new CacheableMetadata();
+  $lead = _palefire_news_has_lead($section, $probe);
+  $cache?->addCacheableDependency($probe);
+  return $lead ? $section : NULL;
+}
+
+/**
+ * Whether a News and events section has something large to show.
+ *
+ * An event, else a feature (a post from the last PALEFIRE_NEWS_POST_DAYS
+ * days, or the exhibition on view at Hill). Without one the section would
+ * be a card or two, so it is left out of the page, the hero and both
+ * contents lists until one comes (within the hour: libcal_gantt's pull
+ * clears libcal_gantt:news; a new post clears node_list:article). Should
+ * every event end while the page is cached, js/news-events.js shows the
+ * cards alone until then.
+ */
+function _palefire_news_has_lead(ParagraphInterface $section, CacheableMetadata $cache): bool {
+  $news = _palefire_news_events($section, $cache);
+  return !empty($news['events']) || !empty($news['feature']);
 }
 
 /**
@@ -714,6 +748,13 @@ function palefire_preprocess_paragraph__landing_hero(array &$variables): void {
     $variables['oral_history_series'] = isset($variables['hero_index']['series']) ? _palefire_oral_history_series($variables) : [];
     // Part 02: the page's News and events (_palefire_hero_news_part()).
     $variables['hero_news'] = isset($variables['hero_index']['news']) ? _palefire_hero_news_part($paragraph, $variables) : NULL;
+    // Hidden or not, its cache tags, so the hero redraws when it has
+    // something to show (_palefire_page_news()).
+    if ($host instanceof NodeInterface) {
+      $news_cache = CacheableMetadata::createFromRenderArray($variables);
+      _palefire_page_news($host, $news_cache);
+      $news_cache->applyTo($variables);
+    }
     // Contents in the column (field_hero_toc,
     // scripts/palefire_hero_toc_setup.php): the page's sections in place of
     // the Highlights. Until the field exists, Oral History has them.
@@ -859,6 +900,10 @@ function _palefire_hero_toc(ParagraphInterface $hero, array &$variables): array 
     if (in_array($section->id(), $drawn, TRUE)) {
       continue;
     }
+    // News and events with nothing to show is hidden: no row, no number.
+    if ($section->bundle() === 'news_events' && !_palefire_news_has_lead($section, $cache)) {
+      continue;
+    }
     $cache->addCacheableDependency($section);
     $num = '';
     $label = '';
@@ -961,10 +1006,17 @@ function _palefire_news_next(ParagraphInterface $section, CacheableMetadata $cac
 function _palefire_news_events(ParagraphInterface $paragraph, CacheableMetadata $cache): array {
   $built = &drupal_static(__FUNCTION__, []);
   $key = $paragraph->id() ?: spl_object_id($paragraph);
-  $cache->addCacheTags(['libcal_gantt', 'libcal_gantt:news', 'libcal_gantt:instagram']);
+  // Built once, and every caller (the hero, its column, the page's sections,
+  // the side contents) gets the same cache metadata with it.
   if (isset($built[$key])) {
-    return $built[$key];
+    $cache->addCacheableDependency($built[$key]['cache']);
+    return $built[$key]['data'];
   }
+  $outer = $cache;
+  $cache = new CacheableMetadata();
+  // An event, post or exhibition coming or going redraws the page, also
+  // while the section is hidden (_palefire_news_has_lead()).
+  $cache->addCacheTags(['libcal_gantt', 'libcal_gantt:news', 'libcal_gantt:instagram', 'node_list:article']);
   $data = ['events' => [], 'blog' => NULL, 'instagram' => NULL];
 
   if (\Drupal::hasService('libcal_gantt.news_events')) {
@@ -1072,7 +1124,9 @@ function _palefire_news_events(ParagraphInterface $paragraph, CacheableMetadata 
     }
   }
 
-  return $built[$key] = $data;
+  $built[$key] = ['data' => $data, 'cache' => $cache];
+  $outer->addCacheableDependency($cache);
+  return $data;
 }
 
 /**
@@ -4605,6 +4659,12 @@ function palefire_preprocess_field(array &$variables): void {
     // The hero draws the page's Section tabs (in its Quick Start) and its
     // News and events (part 02): not again here.
     if (in_array($paragraph->id(), $drawn, TRUE)) {
+      $hide[] = $key;
+      continue;
+    }
+    // News and events with no event, recent post or exhibition hides
+    // itself (_palefire_news_has_lead()), and takes no number.
+    if ($paragraph->bundle() === 'news_events' && !_palefire_news_has_lead($paragraph, $cache)) {
       $hide[] = $key;
       continue;
     }
