@@ -45,7 +45,7 @@
    * Galleries
    * ------------------------------------------------------------------ */
 
-  const state = { head: null, pages: [], zoom: null };
+  const state = { head: null, pages: [] };
 
   // The gallery that holds an element (null: the title page, or neither).
   function galleryOf(el) {
@@ -62,90 +62,6 @@
     catch (e) {
       return null;
     }
-  }
-
-  /* ---------------------------------------------------------------------
-   * Zoom button: at the end of the breadcrumb bar, opens the title page's
-   * cover full screen in the lightbox. It shows while the cover is in sight
-   * under the bar and fades once it has scrolled away.
-   * ------------------------------------------------------------------ */
-
-  function initZoom() {
-    const row = state.head.querySelector('.pf-landing__bar-inner');
-    if (!row || state.zoom) {
-      return;
-    }
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'pf-exhibit-zoom';
-    button.innerHTML = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M9.5 2.5h4v4M13.5 2.5 9 7M6.5 13.5h-4v-4M2.5 13.5 7 9"/></svg>'
-      + '<span class="visually-hidden">' + Drupal.t('View the image full screen') + '</span>';
-    button.addEventListener('click', () => {
-      const source = zoomSource();
-      if (source) {
-        openPictures(source.link, source.group, button);
-      }
-    });
-    row.append(button);
-    state.zoom = button;
-    window.addEventListener('scroll', queueZoom, { passive: true });
-  }
-
-  // The cover: [the element to watch, its <img>].
-  function openingImage() {
-    const frame = state.head.querySelector('.pf-exhibit-cover__media');
-    const img = frame ? frame.querySelector('img') : null;
-    return img ? [frame, img] : null;
-  }
-
-  // A lightbox link for the cover, made for the purpose, with the largest
-  // size in its srcset, on its own (no images to step through).
-  function zoomSource() {
-    const found = openingImage();
-    if (!found) {
-      return null;
-    }
-    const img = found[1];
-    const link = document.createElement('a');
-    const sizes = (img.getAttribute('srcset') || '').split(',').map((part) => part.trim().split(/\s+/));
-    const largest = sizes.reduce((best, part) => (parseInt(part[1], 10) || 0) > (parseInt(best[1], 10) || 0) ? part : best, [img.currentSrc || img.src, '0w']);
-    link.href = largest[0];
-    if (img.getAttribute('width')) {
-      link.dataset.width = img.getAttribute('width');
-      link.dataset.height = img.getAttribute('height');
-    }
-    link.append(img.cloneNode(false));
-    return { link: link, group: [link] };
-  }
-
-  let zoomQueued = false;
-  function queueZoom() {
-    if (zoomQueued) {
-      return;
-    }
-    zoomQueued = true;
-    requestAnimationFrame(() => {
-      zoomQueued = false;
-      updateZoom();
-    });
-  }
-
-  // In sight: more than about two lines' worth of the cover shows between
-  // the bar and the head's foot (the cover runs past it, the head clips it).
-  function updateZoom() {
-    const button = state.zoom;
-    if (!button) {
-      return;
-    }
-    const found = openingImage();
-    let shown = false;
-    if (found && found[0].getClientRects().length) {
-      const bar = button.closest('.pf-landing__bar').getBoundingClientRect().bottom;
-      const bottom = Math.min(found[0].getBoundingClientRect().bottom, window.innerHeight, state.head.getBoundingClientRect().bottom);
-      shown = bottom - bar > 96;
-    }
-    button.classList.toggle('is-shown', shown);
-    button.tabIndex = shown ? 0 : -1;
   }
 
   // The full-screen opening's pan (_exhibition.scss): how far the page
@@ -180,7 +96,6 @@
       foldIntro(page);
       briefWash(page);
     });
-    queueZoom();
   }
 
   function headerOffset() {
@@ -475,12 +390,10 @@
       page.style.setProperty('--pf-gallery-index', String(i + 1));
       page.style.setProperty('--pf-gallery-total', String(state.pages.length));
     });
-    initZoom();
     initWalls();
     initCovers();
     initEntryLinks();
     state.pages.forEach(prepareGallery);
-    queueZoom();
     // The title page's cover waited for this (exhibit-cover.html.twig):
     // with an address for a gallery it is above, and loads lazily.
     ROOT.classList.remove('pf-exhibit-deep');
@@ -2291,17 +2204,19 @@
 
   /* ---------------------------------------------------------------------
    * Pictures: images in the text (a figure, a group, a gallery's lead, the
-   * bar's zoom button) open in the same view, each with its caption in the
+   * title page's cover) open in the same view, each with its caption in the
    * panel, and step through the gallery's images. Opened from an entry in
    * the view, Close goes back to that entry.
    * ------------------------------------------------------------------ */
 
-  // group: the images to step through (default: the link's gallery's);
-  // opener: where focus returns (default: the link).
+  // group: the images to step through (default: the link's gallery's; the
+  // title page's cover on its own); opener: where focus returns (default:
+  // the link).
   function openPictures(link, group, opener) {
     objectView();
     const scope = galleryOf(link) || document;
-    const links = group || Array.from(scope.querySelectorAll('a[data-pf-lightbox]'));
+    const cover = state.head && state.head.contains(link);
+    const links = group || (cover ? [link] : Array.from(scope.querySelectorAll('a[data-pf-lightbox]')));
     if (!links.includes(link)) {
       links.unshift(link);
     }
@@ -3433,10 +3348,6 @@
       }
       state.head = null;
       state.pages = [];
-      if (state.zoom) {
-        window.removeEventListener('scroll', queueZoom);
-        state.zoom = null;
-      }
     },
   };
 })(Drupal, once);

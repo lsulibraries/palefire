@@ -26,6 +26,9 @@
  *   Its focal point, when set, is where it stays in view when cropped.
  *   cover.framed ("Frame the cover" ticked): shown whole over a blurred
  *   wash of itself (.pf-exhibit-cover--framed), for a small or soft image.
+ *   Its label (.pf-exhibit-lead-label, as on a gallery's full-screen lead):
+ *   View in the top right corner opens it full screen, on its own, in the
+ *   viewer (js/exhibition.js).
  * - bios_open ("Open biographies with each clip" ticked): the
  *   data-pf-exhibit-bios-open flag js/exhibition.js reads to open a clip's
  *   biography with it in the object view.
@@ -49,7 +52,7 @@
          focal point has nothing to crop), and its wash after it: the same
          image at a small size from the srcset, blurred behind it. After,
          so js/exhibition.js still finds the cover as the first <img>. #}
-      <img class="pf-exhibit-cover__img" src="{{ head.cover.src }}"
+      <img class="pf-exhibit-cover__img" id="pf-exhibit-cover-img" src="{{ head.cover.src }}"
            {% if head.cover.srcset %}srcset="{{ head.cover.srcset }}" sizes="{{ head.cover.sizes }}"{% endif %}
            {% if head.cover.width %}width="{{ head.cover.width }}" height="{{ head.cover.height }}"{% endif %}
            {% if head.cover.focus and not head.cover.framed %}style="object-position: {{ head.cover.focus }}"{% endif %}
@@ -60,6 +63,14 @@
              alt="" loading="lazy" decoding="async">
       {% endif %}
     </div>
+    {# Outside the media, which is hidden from screen readers. #}
+    <span class="pf-exhibit-lead-label pf-exhibit-cover__label">
+      <a class="pf-exhibit-lead-label__view" href="{{ head.cover.full }}" data-pf-lightbox data-pf-img="pf-exhibit-cover-img"
+         {% if head.cover.width %}data-width="{{ head.cover.width }}" data-height="{{ head.cover.height }}"{% endif %}>
+        {{- 'View'|t }}<span class="visually-hidden"> {{ 'the cover image full screen'|t }}</span>
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M9.5 2.5h4v4M13.5 2.5 9 7M6.5 13.5h-4v-4M2.5 13.5 7 9"/></svg>
+      </a>
+    </span>
   {% endif %}
   <div class="pf-exhibit-cover__text">
     <p class="pf-exhibit-cover__kicker pf-exhibit-cover__step" style="--pf-step: 1">{{ head.kicker }}</p>

@@ -879,6 +879,11 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: The cover’s View label', <<<'HTML'
+<ul>
+<li>An exhibition’s opening picture now has the same small “View” label in its top right corner that the gallery pictures have. It replaces the square enlarge button at the end of the breadcrumb bar, and opens the picture full screen.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: British Voices from South Asia comes to v2', <<<'HTML'
 <ul>
 <li>The 1996 Hill Memorial Library exhibition British Voices from South Asia, about British life in India before Independence, is rebuilt as a v2 exhibition, not published yet: thirteen galleries, every one a wall with a picture to open it.</li>
