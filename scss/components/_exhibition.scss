@@ -3504,8 +3504,20 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
   }
 }
 
-// lg, the biography open: the stage's tools and Next move in beside it.
+// lg, the biography open: the stage's tools and Next move in beside it,
+// and the stage gives up the biography's width, so the picture sits whole
+// in what is left instead of under it (the wash still fills the stage).
 @include media-breakpoint-up(lg) {
+  .pf-viewer:not(.is-side) .pf-viewer__stage {
+    @include pf-exhibit-motion {
+      transition: padding-right .5s $pf-exhibit-ease;
+    }
+  }
+
+  .pf-viewer:not(.is-side):has(> .pf-viewer__bio.is-open) .pf-viewer__stage {
+    padding-right: calc(min(var(--pf-panel-w), 100vw - 2 * var(--pf-panel-w)) + 4rem);
+  }
+
   .pf-viewer:not(.is-side, .is-full):has(> .pf-viewer__bio.is-open) {
     --pf-bio-w: min(var(--pf-panel-w), calc(100vw - 2 * var(--pf-panel-w)));
 
@@ -3519,12 +3531,17 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
   }
 }
 
+// As tall as the panel's top row (.pf-viewer__top: .75rem under its
+// 2.75rem buttons and a 1px rule), so the name and the clip's title start
+// on one line across the two columns.
 .pf-viewer__bio-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
   min-height: 2.75rem;
+  padding-bottom: .75rem;
+  border-bottom: 1px solid transparent;
 }
 
 .pf-viewer__bio-kicker {
@@ -3590,12 +3607,14 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
   }
 }
 
+// The clip title's type (.pf-viewer__title), so the two read as a pair.
 .pf-viewer__bio-name {
   margin: 0;
   font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
-  font-weight: 700;
-  line-height: 1.1;
-  letter-spacing: -.02em;
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -.025em;
+  text-wrap: balance;
   color: var(--bs-heading-color, var(--bs-body-color));
 
   &:focus {
@@ -3833,10 +3852,14 @@ $pf-walled: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-se
       display: contents;
     }
 
+    // At the wall's right edge, its foot on the facts' line, so on a wide
+    // screen it squares with the wall rather than floating mid-page.
     .pf-exhibit-wall__text {
       grid-column: 2;
       grid-row: 1 / span 2;
-      padding-top: 1.85rem;
+      align-self: end;
+      justify-self: end;
+      width: min(100%, 42rem);
     }
 
     .pf-exhibit-wall {

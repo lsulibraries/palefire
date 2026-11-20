@@ -964,6 +964,7 @@ HTML),
 <li>The Biography button now carries the speaker’s name, and About the Project gets a picture: the cover of a 1968 brochure of New Orleans graphic artists, shown whole at its own size.</li>
 <li>The cover photo, Don Smith painting by a window, is small, and blown up to fill the screen it looked blurry. A new “Frame the cover” checkbox on exhibitions shows the photo whole, at its own size, over a soft blurred wash of itself. It is off unless ticked, so it only changes Graphic Design for now.</li>
 <li>Most of these clips run a minute or two, so each one now opens with its speaker’s biography beside the transcript. A new “Open biographies with each clip” checkbox on exhibitions turns this on. It only happens on a computer screen; on a phone the biography would cover the clip, so it stays behind the speaker’s name. Close it once and it stays closed.</li>
+<li>About the Project now opens on the 1968 brochure cover as a full-screen background behind its heading, and the poster at the end of the page is gone, since it is already the exhibition’s cover. With a biography open, the clip’s picture now moves aside to sit whole beside it instead of under it; the speaker’s name in the biography lines up with the clip’s title beside it, in the same type; and the opening text over the wall of interviews lines up with the wall’s right edge on wide screens.</li>
 </ul>
 HTML),
   $text('Fri Nov 20: History of KLSU, a logo for each call sign', <<<'HTML'

@@ -19,8 +19,12 @@
  *   paper, blown up full screen: a wall always opens its lead full
  *   screen), so it opens on its title, the opening text and the tiles.
  * - About the Project’s lead (it had none): the cover of Upton’s Series of
- *   New Orleans Places and Things, 1968, a small scan, so it opens compact
- *   with the whole image at its own size (Show whole image).
+ *   New Orleans Places and Things, 1968, as its cover art: Opening “Cover”,
+ *   full screen behind the heading (not Show whole image).
+ * - About the Project loses the poster at its end (“The exhibition’s
+ *   poster.”, palefire_oral_history_exhibit_cards.php): the poster is the
+ *   exhibition’s cover. That script won’t put it back: the card picture
+ *   it read the poster from is empty now.
  *
  * - The cover (the poster, a small photograph) is framed: shown whole over
  *   a blurred wash of itself (Frame the cover; run
@@ -185,7 +189,7 @@ foreach ($node->get('field_scroll_section') as $section) {
     $format = 'wysiwyg';
   }
 
-  // The lead, compact and whole.
+  // The leads.
   if ($anchor === 'interviews' && !$gallery->get('field_exhibit_lead')->isEmpty()) {
     $gallery->set('field_exhibit_lead', NULL);
     if ($gallery->hasField('field_exhibit_lead_caption')) {
@@ -202,7 +206,7 @@ foreach ($node->get('field_scroll_section') as $section) {
     }
     else {
       $changed($gallery, 'field_exhibit_lead', ['target_id' => $id], "Lead of “{$gallery->get('field_section_title')->value}”: $name");
-      foreach (['field_exhibit_lead_caption' => ['value' => $caption, 'format' => $format], 'field_exhibit_opener' => 'compact', 'field_exhibit_lead_whole' => 1] as $field => $value) {
+      foreach (['field_exhibit_lead_caption' => ['value' => $caption, 'format' => $format], 'field_exhibit_opener' => 'full', 'field_exhibit_lead_whole' => 0] as $field => $value) {
         if ($gallery->hasField($field)) {
           $changed($gallery, $field, $value, "  $field");
         }
@@ -210,6 +214,23 @@ foreach ($node->get('field_scroll_section') as $section) {
           $log[] = "Skipped: $field is not on Gallery (run palefire_exhibit_setup.php).";
         }
       }
+    }
+  }
+
+  // No poster at the end of About: it is the exhibition’s cover.
+  if ($anchor === 'about') {
+    $keep = [];
+    foreach ($gallery->get('field_guide_blocks') as $item) {
+      $block = $item->entity;
+      if ($block && $block->bundle() === 'exhibit_figure' && $text_of((string) $block->get('field_figure_caption')->value) === 'The exhibition’s poster.') {
+        $log[] = 'About the Project: the poster at its end removed (it is the cover).';
+        continue;
+      }
+      $keep[] = $item->getValue();
+    }
+    if (count($keep) !== $gallery->get('field_guide_blocks')->count()) {
+      $gallery->set('field_guide_blocks', $keep);
+      $gallery->setNeedsSave(TRUE);
     }
   }
 
@@ -291,7 +312,7 @@ if (!$log) {
 }
 elseif ($apply) {
   $node->setNewRevision(TRUE);
-  $node->setRevisionLogMessage('Graphic Design: clip headlines and summaries, credits, no wall lead, About lead, framed cover, biographies open (palefire_exhibit_graphic_design_layout.php).');
+  $node->setRevisionLogMessage('Graphic Design: clip headlines and summaries, credits, no wall lead, About lead as cover art, no poster at the end, framed cover, biographies open (palefire_exhibit_graphic_design_layout.php).');
   $node->save();
   echo 'Saved node/' . $node->id() . '. Run: drush cr' . PHP_EOL;
 }
