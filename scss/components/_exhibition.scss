@@ -3098,15 +3098,93 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
     max-width: 50rem;
   }
 
-  &.has-captions .pf-listen__inner {
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas: "expand close" "player cc";
+  // Play first, as on the podcast's bar: the moved player has no box of
+  // its own here (display: contents), so its Play, seek, time and Mute
+  // are the bar's cells. Phones: Play, the speaker and title, Close; then
+  // seek, time, Mute (and CC). From md one row. No volume slider here
+  // (it's in the view; phones have their own buttons).
+  .pf-listen__inner {
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    grid-template-areas: "play expand expand close" "seek seek time mute";
+    column-gap: .75rem;
 
     @include media-breakpoint-up(md) {
-      grid-template-columns: minmax(0, 15rem) minmax(0, 1fr) auto auto;
-      grid-template-areas: "expand player cc close";
+      grid-template-columns: auto minmax(0, 14rem) minmax(0, 1fr) auto auto auto;
+      grid-template-areas: "play expand seek time mute close";
       column-gap: 1rem;
     }
+  }
+
+  &.has-captions .pf-listen__inner {
+    grid-template-columns: auto minmax(0, 1fr) auto auto auto;
+    grid-template-areas: "play expand expand expand close" "seek seek time mute cc";
+
+    @include media-breakpoint-up(md) {
+      grid-template-columns: auto minmax(0, 14rem) minmax(0, 1fr) auto auto auto auto;
+      grid-template-areas: "play expand seek time mute cc close";
+    }
+  }
+
+  .pf-listen__player,
+  .pf-listen__player .pf-audio {
+    display: contents;
+  }
+
+  .pf-audio__play {
+    grid-area: play;
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  .pf-audio__seek:not(.pf-audio__volume) {
+    grid-area: seek;
+    min-width: 0;
+  }
+
+  .pf-audio__time {
+    grid-area: time;
+  }
+
+  .pf-audio__mute {
+    grid-area: mute;
+  }
+
+  .pf-audio__volume,
+  .pf-audio__now {
+    display: none;
+  }
+
+  // The expand icon follows the title's words; a long title ellipsizes
+  // before it.
+  .pf-listen__expand {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pf-listen__kicker {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .pf-listen__title {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    min-width: 0;
+    overflow: visible;
+  }
+
+  .pf-listen__title-text {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .pf-listen__icon {
+    flex: none;
+    width: .875rem;
+    height: .875rem;
   }
 
   .pf-listen__cc {

@@ -1160,7 +1160,9 @@
       return;
     }
     dismissBar();
-    const credit = wrap.parentElement && wrap.parentElement.querySelector('.pf-exhibit-audio__credit');
+    // The speaker (the clip's name row, clipBio()) heads the bar.
+    const clip = wrap.closest('.pf-exhibit-audio');
+    const speaker = clip && clip.querySelector('.pf-exhibit-speaker__name, .pf-exhibit-bio-open__name');
     // Where the player sat in the view's text, to put it back on Expand.
     const mark = document.createComment('pf-listen');
     wrap.before(mark);
@@ -1169,7 +1171,7 @@
       nodes: Array.from(view.body.childNodes),
       mark: mark,
     };
-    const bar = buildBar(view.title.textContent.trim(), credit ? credit.textContent.trim() : '');
+    const bar = buildBar(view.title.textContent.trim(), speaker ? speaker.textContent.trim() : '');
     bar.querySelector('.pf-listen__player').append(wrap);
     listen.bar = bar;
     listen.wrap = wrap;
@@ -1186,7 +1188,11 @@
     bar.querySelector('.pf-listen__expand').focus({ preventScroll: true });
   }
 
-  function buildBar(title, credit) {
+  // The bar: Play first (the moved player's own, laid out in the bar's
+  // grid), the speaker as the kicker ("Now playing" without one) over the
+  // clip's title with the expand icon after it, then seek, time, Mute,
+  // CC and Close.
+  function buildBar(title, speaker) {
     const bar = document.createElement('section');
     bar.className = 'pf-listen pf-listen--clip';
     bar.setAttribute('aria-label', Drupal.t('Now playing'));
@@ -1197,10 +1203,10 @@
       + '</div>'
       + '<div class="pf-listen__inner">'
       + '<button type="button" class="pf-listen__expand">'
-      + '<span class="pf-listen__kicker">' + Drupal.t('Now playing') + '</span>'
-      + '<span class="pf-listen__title"></span>'
+      + '<span class="pf-listen__kicker"></span>'
+      + '<span class="pf-listen__title"><span class="pf-listen__title-text"></span>'
+      + '<svg class="pf-listen__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M9.5 2.5h4v4M13.5 2.5 8.5 7.5M6.5 13.5h-4v-4M2.5 13.5l5-5"/></svg></span>'
       + '<span class="visually-hidden">' + Drupal.t(', open with its transcript') + '</span>'
-      + '<svg class="pf-listen__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M9.5 2.5h4v4M13.5 2.5 8.5 7.5M6.5 13.5h-4v-4M2.5 13.5l5-5"/></svg>'
       + '</button>'
       + '<div class="pf-listen__player"></div>'
       + '<button type="button" class="pf-listen__cc" aria-pressed="true" hidden>'
@@ -1212,7 +1218,8 @@
       + '<span class="visually-hidden">' + Drupal.t('Stop and close the player') + '</span>'
       + '</button>'
       + '</div>';
-    bar.querySelector('.pf-listen__title').textContent = credit ? title + ' · ' + credit : title;
+    bar.querySelector('.pf-listen__kicker').textContent = speaker || Drupal.t('Now playing');
+    bar.querySelector('.pf-listen__title-text').textContent = title;
     bar.querySelector('.pf-listen__expand').addEventListener('click', expandBar);
     const cc = bar.querySelector('.pf-listen__cc');
     cc.setAttribute('aria-pressed', ccOn() ? 'true' : 'false');
