@@ -5853,6 +5853,10 @@ function palefire_preprocess_paragraph__exhibit_entry(array &$variables): void {
   $paragraph = $variables['paragraph'];
   $variables['title'] = trim((string) ($paragraph->get('field_block_title')->value ?? ''));
   $variables['anchor'] = _palefire_exhibit_entry_anchor($paragraph);
+  $variables['date'] = $paragraph->hasField('field_entry_date') ? ExhibitTimeline::parse($paragraph->get('field_entry_date')->value) : NULL;
+  $variables['bio_card'] = _palefire_exhibit_bio_card($paragraph, $variables['title']);
+}
+
 /**
  * A wall of readings: a gallery set to Display "wall" whose own blocks are
  * reading lists (Image groups of exhibit_reading) and no entries, such as
@@ -5894,10 +5898,6 @@ function _palefire_exhibit_reading_wall(ParagraphInterface $page): ?array {
     'sheets' => [],
     'stats' => $stats,
   ];
-}
-
-  $variables['date'] = $paragraph->hasField('field_entry_date') ? ExhibitTimeline::parse($paragraph->get('field_entry_date')->value) : NULL;
-  $variables['bio_card'] = _palefire_exhibit_bio_card($paragraph, $variables['title']);
 }
 
 /**
