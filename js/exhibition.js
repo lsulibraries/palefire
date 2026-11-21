@@ -2123,6 +2123,10 @@
     Object.keys(ways).forEach((way) => {
       const band = view[ways[way].el];
       band.hidden = !on;
+      // Measured for the last entry: back to nothing, or it would hang
+      // past a shorter entry's end and lengthen its scroll.
+      band.firstElementChild.style.removeProperty('top');
+      band.firstElementChild.style.removeProperty('height');
       window.clearTimeout(view.pulls[way + 'Timer']);
       setPull(view, way, 0);
     });
@@ -2221,11 +2225,23 @@
   // the other (html.pf-exhibit-stepping, _exhibition.scss). Those stay
   // off until a tile opens the view again (.pf-exhibit-stepped, cleared
   // in openObject()): turned back on, they would play over the entry.
-  function stepFade(step) {
+  function stepFade(view, step) {
     const html = document.documentElement;
     html.classList.add('pf-exhibit-stepping', 'pf-exhibit-stepped');
-    const fade = document.startViewTransition(() => step.click());
+    const fade = document.startViewTransition(() => stepOn(view, step));
     fade.finished.finally(() => html.classList.remove('pf-exhibit-stepping'));
+  }
+
+  // The step itself. Focus left on Close (where opening put it) goes to
+  // the panel: the reader scrolled on to read, and Close focused after a
+  // scroll shows its ring, as if it were chosen.
+  function stepOn(view, step) {
+    step.click();
+    const now = document.activeElement;
+    if (now && now.matches('.pf-viewer__close, .pf-viewer__shut')) {
+      view.panel.tabIndex = -1;
+      view.panel.focus({ preventScroll: true });
+    }
   }
 
   function setPull(view, way, progress) {
@@ -2265,10 +2281,10 @@
     view.wayBusy = true;
     const step = view.steps[ways[way].step];
     if (!viewer.canMorph()) {
-      step.click();
+      stepOn(view, step);
       return;
     }
-    view.wayTimer = window.setTimeout(() => stepFade(step), 220);
+    view.wayTimer = window.setTimeout(() => stepFade(view, step), 220);
   }
 
   /* ---------------------------------------------------------------------

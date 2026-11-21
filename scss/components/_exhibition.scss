@@ -6392,9 +6392,14 @@ html.pf-reading-dark .pf-viewer--exhibit {
   margin-bottom: -1.25rem;
 }
 
+// No size until a pull measures it (fitBand()): left to its words' own
+// height it would hang past the text's end and lengthen the panel's scroll.
 .pf-exhibit-onward__band,
 .pf-exhibit-rewind__band {
   position: absolute;
+  top: 0;
+  height: 0;
+  overflow: clip;
   right: calc(-1 * var(--pf-pad-end));
   left: calc(-1 * var(--pf-pad-start));
   display: flex;
@@ -6414,7 +6419,6 @@ html.pf-reading-dark .pf-viewer--exhibit {
 // panel's foot, and anything below would lengthen the panel's scroll as
 // it fades in (scrolling counts only while the panel stands still).
 .pf-exhibit-onward__band {
-  overflow: clip;
   opacity: min(1, calc(var(--pf-next, 0) * 2.5));
 
   @include pf-viewer-motion {
@@ -6547,6 +6551,13 @@ html.pf-exhibit-stepping::view-transition-group(pf-exhibit-panel) {
   from {
     opacity: 0;
   }
+}
+
+// Focused when a step switches between a picture's entry and a text's
+// side panel (js/viewer.js show()): the panel is a place to read from,
+// not a control, so it takes no ring.
+.pf-viewer__panel:focus {
+  outline: none;
 }
 
 // Scrolling up at the panel's top stays in the panel (the way back reads

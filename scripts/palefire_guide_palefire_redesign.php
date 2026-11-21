@@ -879,6 +879,12 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: No blank space under text items, Close no longer looks selected', <<<'HTML'
+<ul>
+<li>Text-only items no longer end with a stretch of empty space you can scroll into (it grew after moving on from a picture item).</li>
+<li>After scrolling on to the next item, the Close button no longer shows its focus outline as if it had been selected.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: Dates on their own line, and framed pictures on every gallery', <<<'HTML'
 <ul>
 <li>A gallery title’s dates now sit on their own small line under the subtitle, like the date line on a museum label.</li>

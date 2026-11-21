@@ -189,6 +189,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-20:** Object view: cue `__band`s default to `top: 0; height: 0; overflow: clip` (sized only by `fitBand()`, reset per entry). `.pf-viewer__panel:focus { outline: none }`: a mode switch or a cue step focuses the panel (tabindex -1) instead of Close.
 - **2026-11-20:** `.pf-section__title-date` (exhibitions): block, `500 max(.875rem, .17em)/1.4` mono, `.14em` tracking, tabular figures, muted (heading color on a bare wall), 1rem above. Bare wall with a whole lead from lg: its ::before wash masked to the text column; the image keeps `$pf-bare-peek` + 1.5rem + `--pf-label-room` under it. Placed label `max-width: min(max(--pf-pic-w, 24rem), …)`.
 - **2026-11-20:** Object view cues: wheel scrolling counts once the panel has stood still 350ms at that end (500ms after a step); `.pf-exhibit-onward__band` has `overflow: clip` and its children, not the band, take the .75rem rise.
 - **2026-11-20:** Object view cues: `__band` covers the panel under its top row (top and height set by `fitBand()`), content centered, padding 1.5rem, no rules; title 1.375rem/1.3, max 24ch; line 2px × 4.5rem; full pull 55% of the panel, min 240px. A cue’s step: `html.pf-exhibit-stepping` (panel `view-transition-name: pf-exhibit-panel`, root old `pf-vt-out` .45s, new `pf-exhibit-fade-in` .45s, panel group .5s) and `html.pf-exhibit-stepped` (no side slide or text rise until reopened).

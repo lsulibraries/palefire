@@ -399,8 +399,14 @@
     parts.kind = kind;
     handler = next || {};
     // Open the other way: closed quietly (shown cleared first, so the
-    // handler hears no close) and opened again in this mode below.
+    // handler hears no close) and opened again in this mode below. Focus
+    // goes back where it was if that is still to be seen (an arrow), or
+    // else to the panel, not to Close: the reader is stepping on, not
+    // leaving, and a ring on Close after a scroll reads as a selection.
+    let keep = null;
     if (parts.dialog.open && !!parts.side !== side) {
+      const was = document.activeElement;
+      keep = parts.dialog.contains(was) && !was.matches('.pf-viewer__close, .pf-viewer__shut') ? was : parts.panel;
       shown = false;
       ROOT.classList.remove('pf-viewer-open');
       parts.dialog.close();
@@ -419,7 +425,16 @@
           parts.dialog.showModal();
         }
         shown = true;
-        focusClose();
+        if (!keep) {
+          focusClose();
+        }
+        else if (keep !== parts.panel && keep.isConnected && keep.getClientRects().length) {
+          keep.focus({ preventScroll: true });
+        }
+        else {
+          parts.panel.tabIndex = -1;
+          parts.panel.focus({ preventScroll: true });
+        }
       }
     };
     if (parts.dialog.open || side || !canMorph() || !inSight(from)) {
