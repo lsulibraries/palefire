@@ -6422,7 +6422,9 @@ html.pf-reading-dark .pf-viewer--exhibit {
   justify-content: center;
   align-items: center;
   gap: .9rem;
-  padding: 1.5rem var(--pf-pad-end) 1.5rem var(--pf-pad-start);
+  // Its 1.5rem above and below come with its size (fitBand()): before,
+  // padding alone would give it height past the text's end.
+  padding: 0 var(--pf-pad-end) 0 var(--pf-pad-start);
   color: var(--pf-viewer-muted);
   text-align: center;
   // The panel's glass twice (99%): the text it hangs over must not read

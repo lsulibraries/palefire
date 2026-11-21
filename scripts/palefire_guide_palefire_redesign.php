@@ -879,6 +879,11 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Scrolling through text items no longer moves the page', <<<'HTML'
+<ul>
+<li>When you keep scrolling through an exhibition’s items and reach a text-only item, the page behind it no longer scrolls. Scrolling over the page itself, beside the text panel, still scrolls the page.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: Captions beside tall pictures', <<<'HTML'
 <ul>
 <li>A tall framed picture now has its caption beside it, lined up with the bottom of the picture, like a label on a gallery wall, so the picture can be larger and the caption shows in full.</li>

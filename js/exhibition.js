@@ -2098,7 +2098,7 @@
   // its mirror, back to the previous entry. Neither takes room (a box of
   // no height, its band hung over the text, fitBand()), so the scrollbar
   // is the text's own. Scrolling counts toward it only once the panel
-  // has stood still at that end a moment (a third of a second; just after a
+  // has stood still at that end a moment (450ms; just after a
   // step, longer), so a scroll's momentum, running into the end or on
   // into the next entry, spends itself there and one flick never steps
   // twice, while a wheel or a touchpad that keeps going fills the cue. A band lets
@@ -2154,6 +2154,7 @@
       // past a shorter entry's end and lengthen its scroll.
       band.firstElementChild.style.removeProperty('top');
       band.firstElementChild.style.removeProperty('height');
+      band.firstElementChild.style.removeProperty('padding-block');
       window.clearTimeout(view.pulls[way + 'Timer']);
       setPull(view, way, 0);
     });
@@ -2192,19 +2193,36 @@
       }
     }, { passive: true });
     panel.addEventListener('wheel', (event) => {
+      const dy = event.deltaY * (event.deltaMode === 1 ? 16 : 1);
+      view.fall = Math.abs(dy) < (view.lastMag || 0) ? (view.fall || 0) + 1 : 0;
+      view.lastMag = Math.abs(dy);
+      // At an end, or with nothing to scroll, the scroll is the cues', not
+      // the page's: a side panel is no modal, and the browser would pass it
+      // on to the page behind (overscroll-behavior only holds a panel that
+      // can scroll). Not when something inside can still take it.
+      if ((dy > 0 && atEnd()) || (dy < 0 && atTop())) {
+        if (!innerScroll(event.target, panel, dy)) {
+          event.preventDefault();
+        }
+      }
       // Still at an end a moment: not just carried there. (The event's own
       // time: a step's redraw can hold events back.)
-      if (event.timeStamp - Math.max(view.movedAt || 0, view.arrivedAt || 0) < 350) {
+      if (event.timeStamp - Math.max(view.movedAt || 0, view.arrivedAt || 0) < 450) {
         return;
       }
-      const dy = event.deltaY * (event.deltaMode === 1 ? 16 : 1);
+      // A flick's momentum: each scroll smaller than the last. It spends
+      // itself at the end, filling no cue; a wheel's notches and a steady
+      // touchpad scroll do not shrink so.
+      if (view.fall >= 3) {
+        return;
+      }
       if (atEnd()) {
         pull(view, 'on', dy);
       }
       if (atTop()) {
         pull(view, 'back', -dy);
       }
-    }, { passive: true });
+    }, { passive: false });
     panel.addEventListener('touchstart', (event) => {
       view.fresh = { back: atTop(), on: atEnd() };
       view.touchY = event.touches[0].clientY;
@@ -2213,13 +2231,17 @@
       const y = event.touches[0].clientY;
       const dy = y - view.touchY;
       view.touchY = y;
+      // As the wheel: a drag past an end stays in the panel.
+      if (event.cancelable && ((dy < 0 && atEnd()) || (dy > 0 && atTop())) && !innerScroll(event.target, panel, -dy)) {
+        event.preventDefault();
+      }
       if (view.fresh.on) {
         pull(view, 'on', -dy);
       }
       if (view.fresh.back) {
         pull(view, 'back', dy);
       }
-    }, { passive: true });
+    }, { passive: false });
     panel.addEventListener('touchend', () => {
       if (!view.wayBusy) {
         Object.keys(ways).forEach((way) => {
@@ -2243,6 +2265,7 @@
     const to = panel.top + view.panel.clientTop + view.panel.clientHeight;
     inner.style.top = Math.round(from - box.top) + 'px';
     inner.style.height = Math.max(0, Math.floor(to - from)) + 'px';
+    inner.style.paddingBlock = '1.5rem';
   }
 
   // A step by a cue: the panel holds its place while its text cross-fades
@@ -2255,14 +2278,71 @@
   function stepFade(view, step) {
     const html = document.documentElement;
     html.classList.add('pf-exhibit-stepping', 'pf-exhibit-stepped');
+    // Held from now: the fade's update runs a frame later.
+    holdPage(view);
     const fade = document.startViewTransition(() => stepOn(view, step));
-    fade.finished.finally(() => html.classList.remove('pf-exhibit-stepping'));
+    fade.finished.finally(() => {
+      html.classList.remove('pf-exhibit-stepping');
+      if (view.holdFor) {
+        view.holdFor(400);
+      }
+    });
+  }
+
+  // Holds the page behind still while the scroll that made a step keeps
+  // going: while the step fades its events land on the fade, and where
+  // the next entry's panel sits elsewhere (a picture's panel and a text's
+  // side panel), on the page. Let go once the wheel has rested 400ms (at
+  // least 1.2s from the step, past the fade); over the panel, the panel
+  // and its cues have the wheel as ever.
+  function holdPage(view) {
+    if (view.holdFor) {
+      view.holdFor(1200);
+      return;
+    }
+    let timer = 0;
+    const hold = (event) => {
+      view.holdFor(400);
+      if (event.defaultPrevented) {
+        return;
+      }
+      event.preventDefault();
+      // Over the panel it scrolls the panel, by hand: the browser keeps a
+      // scroll going where it started, and the last panel could not take
+      // it, so left alone it would go on scrolling the page.
+      if (event.target instanceof Element && event.target.closest('.pf-viewer__panel') === view.panel) {
+        view.panel.scrollTop += event.deltaY * (event.deltaMode === 1 ? 16 : 1);
+      }
+    };
+    view.holdFor = (ms) => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        window.removeEventListener('wheel', hold);
+        view.holdFor = null;
+      }, ms);
+    };
+    window.addEventListener('wheel', hold, { passive: false });
+    view.holdFor(1200);
+  }
+
+  // Whether something scrollable between the target and the panel can still move
+  // dy (down positive).
+  function innerScroll(el, panel, dy) {
+    for (let node = el; node && node !== panel; node = node.parentElement) {
+      if (node.scrollHeight > node.clientHeight + 1 && /auto|scroll/.test(getComputedStyle(node).overflowY)) {
+        if (dy > 0 ? node.scrollTop < node.scrollHeight - node.clientHeight - 1 : node.scrollTop > 0) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   // The step itself. Focus left on Close (where opening put it) goes to
   // the panel: the reader scrolled on to read, and Close focused after a
   // scroll shows its ring, as if it were chosen.
   function stepOn(view, step) {
+    holdPage(view);
     step.click();
     const now = document.activeElement;
     if (now && now.matches('.pf-viewer__close, .pf-viewer__shut')) {
