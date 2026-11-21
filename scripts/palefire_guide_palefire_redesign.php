@@ -879,6 +879,11 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Framed pictures stay in focus', <<<'HTML'
+<ul>
+<li>When a gallery shows its opening picture whole, in a frame, the picture now stays sharp and bright as the text comes in; only the faint copy behind it is veiled, softened and drawn in.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: Keep scrolling shows it is working', <<<'HTML'
 <ul>
 <li>At the end of a gallery item, the “Keep scrolling” prompt now stays in the middle of the panel as you scroll, and its line fills in gold to show how far you have to go. The next item’s title brightens and rises as you get closer.</li>

@@ -4483,8 +4483,16 @@ $pf-reveal-bare: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-secti
         // thrown. Only scale (composited), added to the load's settle
         // (pf-exhibit-cover-in), and never back out: zooming out again
         // reads as a camera move.
-        > .pf-section__inner:has(.pf-exhibit-wall__text) .pf-exhibit-wall-hero__img {
+        // A whole lead's framed picture holds still; its backdrop pushes in.
+        > .pf-section__inner:has(.pf-exhibit-wall__text) .pf-exhibit-wall-hero:not(.pf-exhibit-wall-hero--whole) .pf-exhibit-wall-hero__img {
           animation: pf-exhibit-cover-in 2.4s $pf-exhibit-ease both, pf-exhibit-focus-pull ease-in-out both;
+          animation-timeline: auto, --pf-open;
+          animation-range: normal, contain 0svh contain 56svh;
+          animation-composition: replace, add;
+        }
+
+        > .pf-section__inner:has(.pf-exhibit-wall__text) .pf-exhibit-wall-hero__wash {
+          animation: pf-exhibit-wash-in 2.4s $pf-exhibit-ease both, pf-exhibit-focus-pull ease-in-out both;
           animation-timeline: auto, --pf-open;
           animation-range: normal, contain 0svh contain 56svh;
           animation-composition: replace, add;
@@ -4538,7 +4546,7 @@ $pf-reveal-bare: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-secti
             animation-range: contain 0svh contain 30svh;
           }
 
-          > .pf-section__inner .pf-exhibit-wall-hero__img {
+          > .pf-section__inner :is(.pf-exhibit-wall-hero__img, .pf-exhibit-wall-hero__wash) {
             animation-range: normal, contain 0svh contain 30svh;
           }
 
@@ -4717,8 +4725,12 @@ $pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last
     object-position: center top;
     filter: drop-shadow(0 1.5rem 2.5rem rgb(0 0 0 / .4));
 
+    // From lg the picture is the subject: over the veil (the frame's
+    // ::after), sharp and at full strength, clear of the text column; only
+    // the backdrop copy under it takes the veil and its blur.
     @include media-breakpoint-up(lg) {
       $pad: var(--pf-section-pad-inline, 1.25rem);
+      z-index: 2;
       padding-bottom: clamp(1.5rem, 6vh, 4rem);
       padding-inline-start: calc(#{$pad} + min(36rem, (100% - 2 * #{$pad}) * .46) + clamp(1.5rem, 3vw, 3rem));
       object-position: center;
