@@ -879,6 +879,16 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Full captions under framed pictures', <<<'HTML'
+<ul>
+<li>The label under a framed opening picture now shows the whole caption, including the collection and credit, instead of a shortened first sentence.</li>
+</ul>
+HTML),
+  $text('Fri Nov 20: Titles and subtitles in exhibitions', <<<'HTML'
+<ul>
+<li>A gallery title with a colon now shows the part before the colon large and the rest underneath as a subtitle, for example “Contexts” over “Free People of Color in the Americas, 1492–1830.” A title ending in a year or range, such as “Decline and Civil War, 1830–1865,” puts the dates underneath. Editors keep typing the title as one line.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: The keep-scrolling cue as an overlay', <<<'HTML'
 <ul>
 <li>At the end of an item, the “Keep scrolling for the next page” prompt no longer adds empty space below the text, so the scroll bar ends where the text does. Keep scrolling once you are at the end and the prompt fades in over the bottom of the panel, with the next item’s title; keep going to move on, or stop and it fades away. It works just like the scroll-up prompt at the top.</li>

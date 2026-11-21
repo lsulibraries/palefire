@@ -26,6 +26,16 @@
  * exhibition describes itself, so the heading is visually hidden (still
  * the h2 over the band's h3 titles, and the "On this page" target) and
  * the Lede is left out.
+ *
+ * A two-part heading (title_parts below) prints as its main part, the
+ * separator and the rest, each in a span: "Contexts: Free People of Color
+ * in the Americas, 1492–1830" at its first ": " (the part before it 40
+ * characters at most), else "Name, 1803–1812" at a closing year or range.
+ * The heading's text is unchanged, so its name, the TOC and the scripts
+ * that read it see the whole title. Only exhibitions draw the rest as a
+ * subtitle under the main part, the separator unseen (_exhibition.scss);
+ * elsewhere the spans run inline as before. A label with markup or
+ * entities prints whole.
  */
 #}
 {% import '@palefire/includes/landing.html.twig' as pf %}
@@ -93,10 +103,25 @@
               </div>
             </div>
           {% elseif item.section.label %}
+            {% set title_text = item.section.label ~ '' %}
+            {% set title_parts = [] %}
+            {% if '<' not in title_text and '&' not in title_text %}
+              {% set colon = title_text|split(': ', 2) %}
+              {% if colon|length == 2 and colon[0]|trim and colon[0]|length <= 40 and colon[1]|trim %}
+                {% set title_parts = [colon[0], ': ', colon[1]] %}
+              {% elseif title_text matches '/^.*[^ ], [0-9]{4}( ?[–-] ?[0-9]{4})?$/u' %}
+                {% set title_date = title_text|split(', ')|last %}
+                {% set title_parts = [title_text|slice(0, title_text|length - title_date|length - 2), ', ', title_date] %}
+              {% endif %}
+            {% endif %}
             <h2 id="{{ item.section.title_id }}"
                 class="pf-section__title{{ item.section.title_hidden or band ? ' visually-hidden' }}"
                 tabindex="-1">
-              {{- item.section.label -}}
+              {%- if title_parts -%}
+                <span class="pf-section__title-main">{{ title_parts[0] }}</span><span class="pf-section__title-sep">{{ title_parts[1] }}</span><span class="pf-section__title-sub">{{ title_parts[2] }}</span>
+              {%- else -%}
+                {{- item.section.label -}}
+              {%- endif -%}
             </h2>
           {% endif %}
           {% if index.lede and not mark and not band %}

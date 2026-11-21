@@ -100,9 +100,13 @@
   // keyboard and screen readers) passes a click to View. Only from lg,
   // where the picture stands clear of the text column, and only with an
   // intro (a bare wall's tiles rise over the foot) and a caption line to
-  // show (placed, the label is that line alone); otherwise, and without
-  // this, the label stays in the corner.
-  function placeLabel(page) {
+  // show; otherwise, and without this, the label stays in the corner.
+  // Placed, it shows the whole caption rather than the corner's first
+  // sentence: a copy of the figure's caption (inert and aria-hidden: the
+  // figure is already labelled by it), and the room under the picture is
+  // the label's own height (--pf-label-room), the picture fitted again
+  // until they agree (pass).
+  function placeLabel(page, pass = 0) {
     const frame = page.querySelector('.pf-exhibit-wall-hero--whole .pf-exhibit-wall-hero__frame');
     const img = frame && frame.querySelector('.pf-exhibit-wall-hero__img');
     const view = frame && frame.querySelector('.pf-exhibit-lead-label__view');
@@ -149,7 +153,26 @@
       layer.addEventListener('click', () => view.click());
       frame.appendChild(layer);
     }
+    const label = view.closest('.pf-exhibit-lead-label');
+    const caption = view.dataset.pfCaption && document.getElementById(view.dataset.pfCaption);
+    if (caption && !label.querySelector('.pf-exhibit-lead-label__full')) {
+      const full = document.createElement('span');
+      full.className = 'pf-exhibit-lead-label__full';
+      full.setAttribute('aria-hidden', 'true');
+      full.inert = true;
+      caption.childNodes.forEach((node) => {
+        if (node.nodeType !== Node.COMMENT_NODE) {
+          full.appendChild(node.cloneNode(true));
+        }
+      });
+      label.insertBefore(full, view);
+    }
     frame.classList.add('is-placed');
+    const room = Math.ceil(label.offsetHeight + 12);
+    if (Math.abs(room - (parseFloat(frame.style.getPropertyValue('--pf-label-room')) || 0)) > 1 && pass < 3) {
+      frame.style.setProperty('--pf-label-room', room + 'px');
+      placeLabel(page, pass + 1);
+    }
   }
 
   function onResize() {

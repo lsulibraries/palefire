@@ -159,6 +159,36 @@ html[data-pf-mode="exhibition"] .pf-section__title {
   hyphenate-limit-chars: 12 5 5;
 }
 
+// A two-part title (field--node--field-scroll-section--modular-page.html.twig):
+// the main part at the title's size, the rest under it as a subtitle, a
+// third of the size (1.125rem at least), regular, in the text color, as a
+// museum's room name over its theme and dates. The separator (": " or
+// ", ") stays in the heading's text, unseen.
+html[data-pf-mode="exhibition"] .pf-section__title-main {
+  display: block;
+}
+
+html[data-pf-mode="exhibition"] .pf-section__title-sep {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+html[data-pf-mode="exhibition"] .pf-section__title-sub {
+  display: block;
+  max-width: 32ch;
+  margin-top: 0.45em;
+  font-size: max(1.125rem, 0.34em);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  color: var(--bs-body-color);
+  text-wrap: balance;
+}
+
 html[data-pf-mode="exhibition"] .pf-section:not([style*="--pf-gallery-index"]) .pf-section__title::before {
   content: none;
 }
@@ -3970,6 +4000,30 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
   backdrop-filter: blur(6px);
 }
 
+// The whole caption, for a label placed under its picture (below); the
+// corner shows the first sentence.
+.pf-exhibit-lead-label__full {
+  display: none;
+
+  p,
+  .field {
+    display: inline;
+    margin: 0;
+  }
+
+  // A credit's link is plain text in the copy: a click on the label opens
+  // the viewer (View lies over it); the link itself is in the figure's
+  // caption and the viewer.
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .pf-exhibit-out {
+    display: none;
+  }
+}
+
 .pf-exhibit-lead-label__text {
   display: none;
   align-self: center;
@@ -4805,15 +4859,17 @@ $pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last
 // A whole lead's label under its picture from lg, where the picture
 // stands clear of the text column (js/exhibition.js, placeLabel(), which
 // sets --pf-pic-x/y/w/h and .is-placed): plain text at the picture's left
-// edge, no plate or rule, the caption's first sentence alone, as a museum
-// label under the work, with room kept for it under the picture. The
+// edge, no plate or rule, the whole caption (.pf-exhibit-lead-label__full,
+// at most 62ch a line and six lines) in place of the corner's first
+// sentence, as a museum label under the work, with its own height kept
+// under the picture (--pf-label-room, 3rem until measured). The
 // caption and the picture (.pf-exhibit-wall-hero__hit, over it) both open
 // the viewer, and either in hand lights the caption. Below lg the text
 // scrolls over the picture, and a bare wall's tiles rise over the foot, so
 // the label stays in the corner there.
 @include media-breakpoint-up(lg) {
   .pf-section__inner:has(.pf-exhibit-wall__text) .pf-exhibit-wall-hero--whole .pf-exhibit-wall-hero__frame:has(.pf-exhibit-lead-label) > .pf-exhibit-wall-hero__img {
-    padding-bottom: calc(clamp(1.5rem, 6vh, 4rem) + 3rem);
+    padding-bottom: calc(clamp(1.5rem, 6vh, 4rem) + var(--pf-label-room, 3rem));
   }
 
   .pf-exhibit-wall-hero--whole .pf-exhibit-wall-hero__frame.is-placed {
@@ -4834,8 +4890,18 @@ $pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last
     }
 
     .pf-exhibit-lead-label__text {
-      align-self: auto;
-      padding: 0;
+      display: none;
+    }
+
+    .pf-exhibit-lead-label__full {
+      display: -webkit-box;
+      max-width: 62ch;
+      overflow: hidden;
+      -webkit-line-clamp: 6;
+      -webkit-box-orient: vertical;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: var(--pf-exhibit-muted);
       text-decoration: underline 1px transparent;
       text-underline-offset: 0.3em;
 
@@ -4862,7 +4928,7 @@ $pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last
       }
     }
 
-    &:has(.pf-exhibit-wall-hero__hit:hover, .pf-exhibit-lead-label__view:is(:hover, :focus-visible)) .pf-exhibit-lead-label__text {
+    &:has(.pf-exhibit-wall-hero__hit:hover, .pf-exhibit-lead-label__view:is(:hover, :focus-visible)) .pf-exhibit-lead-label__full {
       color: var(--pf-g-hover, var(--pf-exhibit-accent));
       text-decoration-color: currentColor;
       transition-duration: $pf-hover-in;
