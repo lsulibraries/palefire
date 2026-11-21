@@ -189,6 +189,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-20:** Onward cue `.pf-exhibit-onward` (was `.pf-exhibit-next` in the viewer): sticky at `max(4.5rem, 50% - 6rem)`; `.pf-hero-cue__line` 2px, fill `--pf-viewer-accent` by `--pf-next`; title `opacity: calc(.68 + .32 * var(--pf-next))`, rising 6px (motion only); `__say` / `__ready` cross at 85% (`.is-ready`); `.is-going` brightens the line; step after 220ms through a view transition (none with reduced motion).
 - **2026-11-20:** Reader font on exhibitions: `.pf-section__title` and `.pf-exhibit-body-title` use `$pf-font-reader-title` (“Times New Roman”, Times, “Liberation Serif”, serif), `letter-spacing: -0.01em`.
 - **2026-11-20:** Reader font (`html.pf-a11y-reader`) also on `data-pf-mode="exhibition"`: `$pf-font-reader` on `.pf-exhibit-wall__intro`, `.pf-exhibit-cover__intro`, `.pf-guide-prose` and `.pf-viewer__body` paragraphs, at their own size. Setting label “Reader font for guides and exhibitions”.
 - **2026-11-20:** `.pf-exhibit-next` (keep-scrolling cue) at the end of every wall entry’s panel, not only a text plate’s; none in a clip’s side panel.

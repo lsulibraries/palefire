@@ -1971,24 +1971,29 @@
 
   // An entry's end: "Keep scrolling" and the next entry's title over
   // the landing's scroll cue line, then room to scroll on. Scrolling on
-  // through that room fills the line, and at its end the view steps to the
-  // next entry as the arrow does (the count's change is announced). The
-  // room is at least 40% of the panel past the point where the cue is in
-  // full view, so the step only comes of scrolling on deliberately; the
-  // cue is also a button, for the keyboard and for anyone who'd rather
-  // not scroll. Nothing moves by itself.
+  // through that room fills the line in the accent and brings the title
+  // forward; near the end the words turn to "Opening the next page", and
+  // at the end, after a breath (cancelled by scrolling back), the view
+  // fades to the next entry as the arrow steps (the count's change is
+  // announced). The room is at least 40% of the panel past the point
+  // where the cue is in full view, so the step only comes of scrolling on
+  // deliberately; the cue is also a button, for the keyboard and for
+  // anyone who'd rather not scroll. Nothing moves by itself. With reduced
+  // motion the line and the words still change, without the breath, the
+  // lift or the fade (_exhibition.scss .pf-exhibit-onward).
   function nextCue(view, on) {
     if (!view.cue) {
       const cue = document.createElement('div');
-      cue.className = 'pf-exhibit-next';
+      cue.className = 'pf-exhibit-onward';
       cue.hidden = true;
-      cue.innerHTML = '<button type="button" class="pf-exhibit-next__cue">'
-        + '<span class="pf-exhibit-next__prompt">' + Drupal.t('Keep scrolling for the next page') + '</span>'
-        + '<span class="pf-exhibit-next__title"></span>'
+      cue.innerHTML = '<button type="button" class="pf-exhibit-onward__cue">'
+        + '<span class="pf-exhibit-onward__prompt"><span class="pf-exhibit-onward__say">' + Drupal.t('Keep scrolling for the next page') + '</span>'
+        + '<span class="pf-exhibit-onward__ready" aria-hidden="true">' + Drupal.t('Opening the next page') + '</span></span>'
+        + '<span class="pf-exhibit-onward__title"></span>'
         + '<span class="pf-hero-cue__line" aria-hidden="true"></span>'
         + '</button>'
-        + '<div class="pf-exhibit-next__room" aria-hidden="true"></div>';
-      cue.querySelector('button').addEventListener('click', () => view.steps[1].click());
+        + '<div class="pf-exhibit-onward__room" aria-hidden="true"></div>';
+      cue.querySelector('button').addEventListener('click', () => goOn(view));
       view.panel.append(cue);
       view.cue = cue;
       view.panel.addEventListener('scroll', () => onCueScroll(view), { passive: true });
@@ -2005,40 +2010,79 @@
     const cue = view.cue;
     cue.hidden = !on;
     cue.style.setProperty('--pf-next', '0');
+    cue.classList.remove('is-ready', 'is-going');
+    window.clearTimeout(view.cueTimer);
+    view.cueTimer = 0;
     view.cueBusy = false;
     if (!on) {
       return;
     }
     const next = wallState.tiles[(wallState.index + 1) % wallState.tiles.length];
     const head = next ? document.getElementById(next.dataset.pfTile) : null;
-    cue.querySelector('.pf-exhibit-next__title').textContent = head ? head.textContent.trim() : '';
+    cue.querySelector('.pf-exhibit-onward__title').textContent = head ? head.textContent.trim() : '';
     sizeCue(view);
     requestAnimationFrame(() => sizeCue(view));
   }
 
+  // Where the cue ends in the panel's scroll, measured at the room under
+  // it: the cue itself is sticky, so its own box moves as the panel does.
+  function cueEnd(view) {
+    const panel = view.panel;
+    return view.cue.querySelector('.pf-exhibit-onward__room').getBoundingClientRect().top - panel.getBoundingClientRect().top + panel.scrollTop;
+  }
+
   function sizeCue(view) {
     const panel = view.panel;
-    const room = view.cue.querySelector('.pf-exhibit-next__room');
+    const room = view.cue.querySelector('.pf-exhibit-onward__room');
     room.style.height = '0px';
     const h = panel.clientHeight;
-    const end = view.cue.querySelector('button').getBoundingClientRect().bottom - panel.getBoundingClientRect().top + panel.scrollTop;
-    room.style.height = Math.round(Math.max(h * .4, h * 1.4 - end)) + 'px';
+    room.style.height = Math.round(Math.max(h * .4, h * 1.4 - cueEnd(view))) + 'px';
+  }
+
+  // On to the next entry, the old view fading into the new where the
+  // browser has view transitions and motion is welcome.
+  function goOn(view) {
+    if (viewer.canMorph()) {
+      document.startViewTransition(() => view.steps[1].click());
+    }
+    else {
+      view.steps[1].click();
+    }
   }
 
   function onCueScroll(view) {
     const cue = view.cue;
-    if (!cue || cue.hidden || view.cueBusy) {
+    if (!cue || cue.hidden || (view.cueBusy && !view.cueTimer)) {
       return;
     }
     const panel = view.panel;
-    const button = cue.querySelector('button');
     const end = panel.scrollHeight - panel.clientHeight;
-    const shown = Math.max(0, button.getBoundingClientRect().bottom - panel.getBoundingClientRect().top + panel.scrollTop - panel.clientHeight);
+    const shown = Math.max(0, cueEnd(view) - panel.clientHeight);
     const progress = end > shown ? Math.min(1, Math.max(0, (panel.scrollTop - shown) / (end - shown))) : 0;
     cue.style.setProperty('--pf-next', progress.toFixed(3));
-    if (panel.scrollTop >= end - 2 && progress >= 1) {
+    cue.classList.toggle('is-ready', progress >= .85);
+    const atEnd = panel.scrollTop >= end - 2 && progress >= 1;
+    // Scrolled back during the breath: the step is off.
+    if (view.cueTimer) {
+      if (!atEnd) {
+        window.clearTimeout(view.cueTimer);
+        view.cueTimer = 0;
+        view.cueBusy = false;
+        cue.classList.remove('is-going');
+      }
+      return;
+    }
+    if (atEnd) {
       view.cueBusy = true;
-      view.steps[1].click();
+      cue.classList.add('is-going');
+      if (!viewer.canMorph()) {
+        goOn(view);
+        return;
+      }
+      view.cueTimer = window.setTimeout(() => {
+        view.cueTimer = 0;
+        goOn(view);
+      }, 220);
     }
   }
 

@@ -879,6 +879,12 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Keep scrolling shows it is working', <<<'HTML'
+<ul>
+<li>At the end of a gallery item, the “Keep scrolling” prompt now stays in the middle of the panel as you scroll, and its line fills in gold to show how far you have to go. The next item’s title brightens and rises as you get closer.</li>
+<li>Just before the end the prompt changes to “Opening the next page”. At the end there is a short pause, and the next item fades in; scrolling back up during the pause cancels it. With reduced motion turned on, the line and the words still change but nothing moves.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: Serif gallery titles with the Reader font', <<<'HTML'
 <ul>
 <li>With the Reader font setting on, an exhibition’s large gallery titles change to Times New Roman as well, to match the book-style text under them.</li>
