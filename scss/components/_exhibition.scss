@@ -4010,6 +4010,7 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
 // past the fade) in its place with reduced transparency and more contrast.
 $pf-exhibit-text-edge: calc(var(--pf-section-pad-inline, 1.25rem) + min(36rem, (100% - 2 * var(--pf-section-pad-inline, 1.25rem)) * .46));
 $pf-exhibit-veil: linear-gradient(to right, color-mix(in srgb, var(--bs-body-bg) 90%, transparent) #{$pf-exhibit-text-edge}, color-mix(in srgb, var(--bs-body-bg) 62%, transparent) calc(#{$pf-exhibit-text-edge} + #{$pf-exhibit-wash-fade}));
+$pf-exhibit-veil-text: linear-gradient(to right, color-mix(in srgb, var(--bs-body-bg) 90%, transparent) #{$pf-exhibit-text-edge}, transparent calc(#{$pf-exhibit-text-edge} + #{$pf-exhibit-wash-fade}));
 $pf-exhibit-side-wash: linear-gradient(to right, var(--bs-body-bg) #{$pf-exhibit-text-edge}, transparent calc(#{$pf-exhibit-text-edge} + #{$pf-exhibit-wash-fade}));
 
 // Below lg, a wall that opens on its title and facts alone: the foot's
@@ -4075,6 +4076,15 @@ $pf-bare-fade: 8rem;
         background: $pf-exhibit-veil;
         -webkit-backdrop-filter: blur(6px);
         backdrop-filter: blur(6px);
+      }
+
+      // A whole lead's backdrop is already the page color with a faint copy
+      // of the picture (pf-exhibit-plate), and the framed picture is over
+      // it: the veil darkens under the text alone (90%, clear past the fade),
+      // which the text needs (the plate alone measured 3.4:1 beside Aves'
+      // text); across the rest it is only the blur, with the push-in.
+      .pf-section__inner:has(.pf-exhibit-wall__text) .pf-exhibit-wall-hero--whole & {
+        background: $pf-exhibit-veil-text;
       }
 
       // A wall that opens on its title and facts alone (no intro over the

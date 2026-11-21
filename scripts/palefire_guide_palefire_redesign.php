@@ -879,6 +879,11 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: A lighter backdrop for framed pictures', <<<'HTML'
+<ul>
+<li>Behind a framed opening picture, the faint backdrop now only softens and draws in as the text arrives; it darkens only behind the text.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: Framed pictures stay in focus', <<<'HTML'
 <ul>
 <li>When a gallery shows its opening picture whole, in a frame, the picture now stays sharp and bright as the text comes in; only the faint copy behind it is veiled, softened and drawn in.</li>
