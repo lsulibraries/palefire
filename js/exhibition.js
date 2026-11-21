@@ -2069,9 +2069,11 @@
   // next entry as the arrow steps (stepFade()). Scrolling up at the top is
   // its mirror, back to the previous entry. Neither takes room (a box of
   // no height, its band hung over the text, fitBand()), so the scrollbar
-  // is the text's own. Only a gesture begun at rest at that end counts: a
-  // scroll's momentum running into the end, or on into the next entry
-  // after a step, does not, so one scroll never steps twice. A band lets
+  // is the text's own. Scrolling counts toward it only once the panel
+  // has stood still at that end a moment (a third of a second; just after a
+  // step, longer), so a scroll's momentum, running into the end or on
+  // into the next entry, spends itself there and one flick never steps
+  // twice, while a wheel or a touchpad that keeps going fills the cue. A band lets
   // go (fades out) when the reader stops short or turns back. Nothing
   // moves by itself; the keyboard has the arrows, and the bands are hidden
   // from screen readers, which hear the count change. With reduced motion
@@ -2111,10 +2113,10 @@
       }
       listenWays(view);
     }
-    // A step ends the gesture that made it: its wheel's next pause is
-    // timed from here.
+    // A step ends the touch that made it, and the next entry stands still
+    // a little longer before scrolling counts.
     view.fresh = {};
-    view.wheelAt = performance.now();
+    view.arrivedAt = performance.now() + 150;
     view.wayBusy = false;
     window.clearTimeout(view.wayTimer);
     Object.keys(ways).forEach((way) => {
@@ -2158,27 +2160,18 @@
       }
     }, { passive: true });
     panel.addEventListener('wheel', (event) => {
-      // The event's own time, not when it is handled: a step's redraw can
-      // hold a spin's events back long enough to look like a pause.
-      const now = event.timeStamp;
-      // A new gesture after a pause: it counts only at an end the panel
-      // was already resting at, not one it was just carried to.
-      if (now - (view.wheelAt || 0) > 200) {
-        const still = now - (view.movedAt || 0) > 300;
-        view.fresh = { back: still && atTop(), on: still && atEnd() };
+      // Still at an end a moment: not just carried there. (The event's own
+      // time: a step's redraw can hold events back.)
+      if (event.timeStamp - Math.max(view.movedAt || 0, view.arrivedAt || 0) < 350) {
+        return;
       }
       const dy = event.deltaY * (event.deltaMode === 1 ? 16 : 1);
-      if (view.fresh.on) {
+      if (atEnd()) {
         pull(view, 'on', dy);
       }
-      if (view.fresh.back) {
+      if (atTop()) {
         pull(view, 'back', -dy);
       }
-    }, { passive: true });
-    // Every wheel on the page times the pause, not just the panel's: while
-    // a step fades, a spin's events land on the fade, not the panel.
-    window.addEventListener('wheel', (event) => {
-      view.wheelAt = event.timeStamp;
     }, { passive: true });
     panel.addEventListener('touchstart', (event) => {
       view.fresh = { back: atTop(), on: atEnd() };

@@ -879,6 +879,12 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Keep-scrolling works on touchpads', <<<'HTML'
+<ul>
+<li>The keep-scrolling prompt now works with laptop touchpads and smooth-scrolling mice: once you reach the end, keep scrolling and the prompt fills, then moves on. Before, it waited for a pause those devices never make, so nothing happened.</li>
+<li>A quick flick that runs into the end still won’t move you on by itself; it takes a deliberate scroll.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: A fuller keep-scrolling cue, and a smooth step', <<<'HTML'
 <ul>
 <li>The keep-scrolling prompt (and its scroll-up twin) now fills the whole sidebar, centered, with a larger title, and it takes a little more scrolling to move on.</li>

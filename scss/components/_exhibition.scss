@@ -6380,12 +6380,20 @@ html.pf-reading-dark .pf-viewer--exhibit {
   background: linear-gradient(var(--pf-sidebar-bg, var(--bs-body-bg)), var(--pf-sidebar-bg, var(--bs-body-bg))), var(--pf-sidebar-bg, var(--bs-body-bg));
 }
 
+// Its words rise, not the band, and the band clips them: it ends at the
+// panel's foot, and anything below would lengthen the panel's scroll as
+// it fades in (scrolling counts only while the panel stands still).
 .pf-exhibit-onward__band {
+  overflow: clip;
   opacity: min(1, calc(var(--pf-next, 0) * 2.5));
 
   @include pf-viewer-motion {
-    translate: 0 calc((1 - min(1, var(--pf-next, 0) * 2.5)) * .75rem);
-    transition: opacity .2s ease, translate .2s ease;
+    transition: opacity .2s ease;
+
+    > * {
+      translate: 0 calc((1 - min(1, var(--pf-next, 0) * 2.5)) * .75rem);
+      transition: translate .2s ease;
+    }
   }
 }
 
