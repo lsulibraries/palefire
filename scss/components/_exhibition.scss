@@ -5230,15 +5230,54 @@ $pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last
   }
 }
 
+// The arrows in the panel's top row: a phone's clip, and a text plate's
+// side panel at every width.
+@mixin pf-exhibit-step {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  color: var(--bs-body-color);
+  background: none;
+  border: 1px solid $pf-hairline;
+  transition: color .3s ease;
+
+  &:hover {
+    color: var(--pf-viewer-accent);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--pf-viewer-accent);
+    outline-offset: 2px;
+  }
+
+  &[hidden] {
+    display: none;
+  }
+
+  svg {
+    width: 1rem;
+  }
+}
+
 // Reading: an entry with no picture opened in the object view (a text
 // plate or a name tile; js/exhibition.js sets .is-reading). The text is the
-// thing: the stage is empty, the exhibition showing through its glass,
-// with only the arrows; the panel keeps its usual width and is never
-// folded away (sync({ text: true }), js/viewer.js). Below lg the panel
-// takes the screen, as a clip's transcript does (below). The words are
-// set larger and looser. At the text's end, the way on to the next entry
-// (.pf-exhibit-next).
+// thing: it opens as a side panel over the page (.is-side, _viewer.scss),
+// beside it from lg and a sheet at its foot below, with no modal and
+// nothing dimmed or blurred, so the page stays clear and in reach. The
+// count and the arrows (the phone's, .pf-exhibit-phone-step) are in its
+// top row, since it has no stage. The words are set larger and looser.
+// At the text's end, the way on to the next entry (.pf-exhibit-next).
 .pf-viewer--exhibit.is-reading {
+  .pf-viewer__count {
+    display: block;
+  }
+
+  .pf-exhibit-phone-step {
+    @include pf-exhibit-step;
+  }
+
   .pf-viewer__body {
     max-width: 66ch;
     font-size: 1.125rem;
@@ -6046,6 +6085,12 @@ html.pf-a11y-motion .pf-exhibit-object__body :is(.pf-audio, .pf-audio__now) {
   .pf-viewer__panel {
     background-color: var(--pf-sidebar-bg, var(--bs-body-bg));
   }
+
+  // A side panel (a text plate, a clip with no picture) is the panel
+  // alone over the page: its own glass, once, and no modal behind it.
+  &.is-side {
+    background: transparent;
+  }
 }
 
 html.pf-reading-dark .pf-viewer--exhibit {
@@ -6154,7 +6199,7 @@ html.pf-reading-dark .pf-viewer--exhibit {
 }
 
 @include media-breakpoint-down(lg) {
-  .pf-viewer--exhibit:is(.is-clip, .is-reading)[open]:not(.is-side, .is-full) {
+  .pf-viewer--exhibit.is-clip[open]:not(.is-side, .is-full) {
     grid-template-rows: minmax(0, 1fr);
 
     .pf-viewer__stage {
@@ -6182,32 +6227,7 @@ html.pf-reading-dark .pf-viewer--exhibit {
     }
 
     .pf-exhibit-phone-step {
-      display: grid;
-      place-items: center;
-      width: 2.75rem;
-      height: 2.75rem;
-      padding: 0;
-      color: var(--bs-body-color);
-      background: none;
-      border: 1px solid $pf-hairline;
-      transition: color .3s ease;
-
-      &:hover {
-        color: var(--pf-viewer-accent);
-      }
-
-      &:focus-visible {
-        outline: 2px solid var(--pf-viewer-accent);
-        outline-offset: 2px;
-      }
-
-      &[hidden] {
-        display: none;
-      }
-
-      svg {
-        width: 1rem;
-      }
+      @include pf-exhibit-step;
     }
 
     // The thumbnail: the photo, its name in the stage buttons' voice over

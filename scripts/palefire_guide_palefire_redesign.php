@@ -879,6 +879,12 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Text panels open beside the page', <<<'HTML'
+<ul>
+<li>A text panel in an exhibition (one with no picture) now opens as a sidebar over the page instead of in the full viewer. The exhibition beside it stays clear, not blurred, and you can keep scrolling and clicking it with the panel open.</li>
+<li>The panel has its own previous and next arrows and the count at the top. Stepping to an item with a picture opens the full viewer, and stepping back to text returns to the sidebar. On phones it is a sheet at the bottom of the screen.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: Opened items over frosted glass', <<<'HTML'
 <ul>
 <li>When you open a picture, a clip or a text panel in an exhibition, the exhibition now shows through behind it, blurred and dimmed like frosted glass, as it does behind the search and hours panels. The text beside it is on a darker glass, like the breadcrumb bar.</li>

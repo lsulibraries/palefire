@@ -1063,7 +1063,9 @@
   };
 
   // A clip with no picture opens as a side panel beside the page (no
-  // stage, so no arrows): the reader can go on through the exhibition.
+  // stage, so no arrows): the reader can go on through the exhibition. A
+  // text plate opens as a side panel too, but with objectHandler: its
+  // arrows are in the panel's top row (showEntry()).
   const sideHandler = {
     close: () => closeObject(true),
     closed: objectClosed,
@@ -1920,10 +1922,11 @@
       view.media.replaceChildren();
     }
 
-    // No picture, only a plate: the panel alone over the exhibition's
-    // glass, with the arrows (.is-reading, _exhibition.scss), and at its
-    // end the way on to the next entry (nextCue()).
-    const reading = !media.links.length && !!tile.querySelector('.pf-exhibit-plate');
+    // No picture, only a plate: the panel alone, a side panel over the
+    // page (showEntry()), with the count and arrows in its top row
+    // (.is-reading, _exhibition.scss), and at its end the way on to the
+    // next entry (nextCue()).
+    const reading = plateOnly(tile);
     view.dialog.classList.toggle('is-reading', reading);
 
     // The entry's heading, caption and the rest of its content.
@@ -2388,9 +2391,32 @@
       }
     }
     else if (wallState.tiles.length > 1) {
-      fillObject(wallState.index + delta);
+      showEntry(wallState.index + delta);
       history.replaceState(history.state, '', location.pathname + location.search + '#' + wallState.tile.dataset.pfTile);
     }
+  }
+
+  // An entry with no picture, only a plate (a text plate, or a life with
+  // no portrait).
+  function plateOnly(tile) {
+    const heading = tile ? document.getElementById(tile.dataset.pfTile) : null;
+    const entry = heading ? heading.closest('.pf-exhibit-entry') : null;
+    return !!entry && !entryMedia(entry).links.length && !!tile.querySelector('.pf-exhibit-plate');
+  }
+
+  // Fills the view with a wall's entry index. A plate alone is a side
+  // panel over the page, no modal and nothing dimmed or blurred, so the
+  // exhibition stays in reach; anything else is on the stage. Stepping
+  // from one to the other reopens the view the other way, quietly
+  // (js/viewer.js show()).
+  function showEntry(index) {
+    const n = wallState.tiles.length;
+    const reading = plateOnly(wallState.tiles[(index + n) % n]);
+    if (reading === viewer.isSide()) {
+      fillObject(index);
+      return;
+    }
+    viewer.show(objectHandler, () => fillObject(index), { kind: 'exhibit', side: reading });
   }
 
   // Opens an entry on a wall. animate: grow out of its tile.
@@ -2404,8 +2430,9 @@
     wallState.tiles = Array.from(tile.closest('[data-pf-wall]').querySelectorAll('[data-pf-tile]'));
     const index = wallState.tiles.indexOf(tile);
     history.replaceState(history.state, '', location.pathname + location.search + '#' + tile.dataset.pfTile);
-    const side = !!tile.querySelector('.pf-exhibit-reel');
-    viewer.show(side ? sideHandler : objectHandler, () => fillObject(index), { from: animate && !side ? tile.querySelector('.pf-exhibit-wall__img') : null, kind: 'exhibit', side: side });
+    const reel = !!tile.querySelector('.pf-exhibit-reel');
+    const side = reel || plateOnly(tile);
+    viewer.show(reel ? sideHandler : objectHandler, () => fillObject(index), { from: animate && !side ? tile.querySelector('.pf-exhibit-wall__img') : null, kind: 'exhibit', side: side });
   }
 
   // animate: shrink back into the tile (scrolled into view first), or the
@@ -2417,7 +2444,7 @@
     }
     const loose = wallState.loose;
     if (loose && loose.entry !== null && !quiet) {
-      fillObject(loose.entry);
+      showEntry(loose.entry);
       viewer.focusClose();
       return;
     }
