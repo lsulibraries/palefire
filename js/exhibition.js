@@ -2036,124 +2036,82 @@
     nextCue(view, total > 1 && !(view.side && !reading));
   }
 
-  // An entry's end: "Keep scrolling" and the next entry's title over
-  // the landing's scroll cue line, then room to scroll on. Scrolling on
-  // through that room fills the line in the accent and brings the title
-  // forward; near the end the words turn to "Opening the next page", and
-  // at the end, after a breath (cancelled by scrolling back), the view
-  // fades to the next entry as the arrow steps (the count's change is
-  // announced). The room is at least 40% of the panel past the point
-  // where the cue is in full view, so the step only comes of scrolling on
-  // deliberately; the cue is also a button, for the keyboard and for
-  // anyone who'd rather not scroll. Nothing moves by itself. With reduced
-  // motion the line and the words still change, without the breath, the
-  // lift or the fade (_exhibition.scss .pf-exhibit-onward).
+  // An entry's ends: the ways on and back. Scrolling on while the panel
+  // is already at its end fades in a band over the text's foot: "Keep
+  // scrolling for the next page" (or section), the next entry's title and
+  // the landing's scroll cue line filling down in the accent with the
+  // pull; from 85% "Opening the next page", and at a full pull (35% of the
+  // panel, at least 160px), after a breath, the view fades to the next
+  // entry as the arrow steps. Scrolling up at the top is its mirror under
+  // the top row, back to the previous entry. Neither takes room (a box of
+  // no height, its band hung over the text), so the scrollbar is the
+  // text's own. Only a gesture begun at rest at that end counts: a
+  // scroll's momentum running into the end, or on into the next entry
+  // after a step, does not, so one scroll never steps twice. A band lets
+  // go (fades out) when the reader stops short or turns back. Nothing
+  // moves by itself; the keyboard has the arrows, and the bands are hidden
+  // from screen readers, which hear the count change. With reduced motion
+  // the line and the words still change, without the breath, the lift or
+  // the fade (_exhibition.scss .pf-exhibit-onward, .pf-exhibit-rewind).
+  const ways = {
+    on: { el: 'cue', name: 'pf-exhibit-onward', prop: '--pf-next', step: 1 },
+    back: { el: 'rewind', name: 'pf-exhibit-rewind', prop: '--pf-back', step: 0 },
+  };
+
+  function wayBand(view, way) {
+    const name = ways[way].name;
+    const band = document.createElement('div');
+    band.className = name;
+    band.hidden = true;
+    band.setAttribute('aria-hidden', 'true');
+    const line = '<span class="pf-hero-cue__line"></span>';
+    const words = '<span class="' + name + '__prompt"><span class="' + name + '__say"></span><span class="' + name + '__ready"></span></span>'
+      + '<span class="' + name + '__title"></span>';
+    band.innerHTML = '<div class="' + name + '__band">' + (way === 'on' ? words + line : line + words) + '</div>';
+    view[ways[way].el] = band;
+    return band;
+  }
+
   function nextCue(view, on) {
     if (!view.cue) {
-      const cue = document.createElement('div');
-      cue.className = 'pf-exhibit-onward';
-      cue.hidden = true;
-      cue.innerHTML = '<button type="button" class="pf-exhibit-onward__cue">'
-        + '<span class="pf-exhibit-onward__prompt"><span class="pf-exhibit-onward__say"></span>'
-        + '<span class="pf-exhibit-onward__ready" aria-hidden="true"></span></span>'
-        + '<span class="pf-exhibit-onward__title"></span>'
-        + '<span class="pf-hero-cue__line" aria-hidden="true"></span>'
-        + '</button>'
-        + '<div class="pf-exhibit-onward__room" aria-hidden="true"></div>';
-      cue.querySelector('button').addEventListener('click', () => goOn(view));
-      view.panel.append(cue);
-      view.cue = cue;
-      view.panel.addEventListener('scroll', () => onCueScroll(view), { passive: true });
-      // Sized again once the view has its size (it may fill before it opens)
-      // and as it resizes.
-      if (window.ResizeObserver) {
-        new ResizeObserver(() => {
-          if (!view.cue.hidden) {
-            sizeCue(view);
-          }
-        }).observe(view.panel);
+      view.pulls = {};
+      view.fresh = {};
+      view.panel.append(wayBand(view, 'on'));
+      const back = wayBand(view, 'back');
+      const top = view.panel.querySelector(':scope > .pf-viewer__top');
+      if (top) {
+        top.after(back);
       }
+      else {
+        view.panel.prepend(back);
+      }
+      listenWays(view);
     }
-    const cue = view.cue;
-    cue.hidden = !on;
-    cue.style.setProperty('--pf-next', '0');
-    cue.classList.remove('is-ready', 'is-going');
-    window.clearTimeout(view.cueTimer);
-    view.cueTimer = 0;
-    view.cueBusy = false;
-    backCue(view, on);
+    // A step ends the gesture that made it: its wheel's next pause is
+    // timed from here.
+    view.fresh = {};
+    view.wheelAt = performance.now();
+    view.wayBusy = false;
+    window.clearTimeout(view.wayTimer);
+    Object.keys(ways).forEach((way) => {
+      const band = view[ways[way].el];
+      band.hidden = !on;
+      window.clearTimeout(view.pulls[way + 'Timer']);
+      setPull(view, way, 0);
+    });
     if (!on) {
       return;
     }
     const to = neighbor(1);
-    const crossing = to.tiles !== wallState.tiles;
-    cue.querySelector('.pf-exhibit-onward__say').textContent = crossing ? Drupal.t('Keep scrolling for the next section') : Drupal.t('Keep scrolling for the next page');
-    cue.querySelector('.pf-exhibit-onward__ready').textContent = crossing ? Drupal.t('Opening the next section') : Drupal.t('Opening the next page');
-    cue.querySelector('.pf-exhibit-onward__title').textContent = tileTitle(to.tiles[to.index]);
-    sizeCue(view);
-    requestAnimationFrame(() => sizeCue(view));
-  }
-
-  // Where the cue ends in the panel's scroll, measured at the room under
-  // it: the cue itself is sticky, so its own box moves as the panel does.
-  function cueEnd(view) {
-    const panel = view.panel;
-    return view.cue.querySelector('.pf-exhibit-onward__room').getBoundingClientRect().top - panel.getBoundingClientRect().top + panel.scrollTop;
-  }
-
-  function sizeCue(view) {
-    const panel = view.panel;
-    const room = view.cue.querySelector('.pf-exhibit-onward__room');
-    room.style.height = '0px';
-    const h = panel.clientHeight;
-    room.style.height = Math.round(Math.max(h * .4, h * 1.4 - cueEnd(view))) + 'px';
-  }
-
-  // On to the next entry, the old view fading into the new where the
-  // browser has view transitions and motion is welcome.
-  function goOn(view) {
-    if (viewer.canMorph()) {
-      document.startViewTransition(() => view.steps[1].click());
-    }
-    else {
-      view.steps[1].click();
-    }
-  }
-
-  function onCueScroll(view) {
-    const cue = view.cue;
-    if (!cue || cue.hidden || (view.cueBusy && !view.cueTimer)) {
-      return;
-    }
-    const panel = view.panel;
-    const end = panel.scrollHeight - panel.clientHeight;
-    const shown = Math.max(0, cueEnd(view) - panel.clientHeight);
-    const progress = end > shown ? Math.min(1, Math.max(0, (panel.scrollTop - shown) / (end - shown))) : 0;
-    cue.style.setProperty('--pf-next', progress.toFixed(3));
-    cue.classList.toggle('is-ready', progress >= .85);
-    const atEnd = panel.scrollTop >= end - 2 && progress >= 1;
-    // Scrolled back during the breath: the step is off.
-    if (view.cueTimer) {
-      if (!atEnd) {
-        window.clearTimeout(view.cueTimer);
-        view.cueTimer = 0;
-        view.cueBusy = false;
-        cue.classList.remove('is-going');
-      }
-      return;
-    }
-    if (atEnd) {
-      view.cueBusy = true;
-      cue.classList.add('is-going');
-      if (!viewer.canMorph()) {
-        goOn(view);
-        return;
-      }
-      view.cueTimer = window.setTimeout(() => {
-        view.cueTimer = 0;
-        goOn(view);
-      }, 220);
-    }
+    const onward = to.tiles !== wallState.tiles;
+    view.cue.querySelector('.pf-exhibit-onward__say').textContent = onward ? Drupal.t('Keep scrolling for the next section') : Drupal.t('Keep scrolling for the next page');
+    view.cue.querySelector('.pf-exhibit-onward__ready').textContent = onward ? Drupal.t('Opening the next section') : Drupal.t('Opening the next page');
+    view.cue.querySelector('.pf-exhibit-onward__title').textContent = tileTitle(to.tiles[to.index]);
+    const from = neighbor(-1);
+    const backward = from.tiles !== wallState.tiles;
+    view.rewind.querySelector('.pf-exhibit-rewind__say').textContent = backward ? Drupal.t('Keep scrolling up for the previous section') : Drupal.t('Keep scrolling up for the previous page');
+    view.rewind.querySelector('.pf-exhibit-rewind__ready').textContent = backward ? Drupal.t('Opening the previous section') : Drupal.t('Opening the previous page');
+    view.rewind.querySelector('.pf-exhibit-rewind__title').textContent = tileTitle(from.tiles[from.index]);
   }
 
   // A tile's entry title.
@@ -2162,133 +2120,108 @@
     return head ? head.textContent.trim() : '';
   }
 
-  // The way back, the next cue's mirror: scrolling up while the panel is
-  // already at its top fades in "Keep scrolling up for the previous page"
-  // and the previous entry's title under the top row, its line filling
-  // upward with the pull; from 85% "Opening the previous page", and at a
-  // full pull (35% of the panel, at least 160px), after a breath, the view
-  // fades to the previous entry as the arrow steps. The cue takes no room
-  // (a sticky band of no height), so the scrollbar never moves. Only a
-  // gesture begun at the top counts: a scroll's momentum running on into
-  // the top does not, so reading back up never steps by accident. It lets
-  // go (fades out) when the reader stops short or scrolls down. Nothing
-  // moves by itself; the keyboard has the arrows, and the band is hidden
-  // from screen readers, which hear the count change.
-  function backCue(view, on) {
-    if (!view.rewind) {
-      const back = document.createElement('div');
-      back.className = 'pf-exhibit-rewind';
-      back.hidden = true;
-      back.setAttribute('aria-hidden', 'true');
-      back.innerHTML = '<div class="pf-exhibit-rewind__band">'
-        + '<span class="pf-hero-cue__line"></span>'
-        + '<span class="pf-exhibit-rewind__prompt"><span class="pf-exhibit-rewind__say"></span><span class="pf-exhibit-rewind__ready"></span></span>'
-        + '<span class="pf-exhibit-rewind__title"></span>'
-        + '</div>';
-      const top = view.panel.querySelector(':scope > .pf-viewer__top');
-      if (top) {
-        top.after(back);
+  function listenWays(view) {
+    const panel = view.panel;
+    const atTop = () => panel.scrollTop <= 0;
+    const atEnd = () => panel.scrollTop >= panel.scrollHeight - panel.clientHeight - 2;
+    panel.addEventListener('scroll', () => {
+      view.movedAt = performance.now();
+      if (view.pulls.back && !atTop()) {
+        setPull(view, 'back', 0);
       }
-      else {
-        view.panel.prepend(back);
+      if (view.pulls.on && !atEnd()) {
+        setPull(view, 'on', 0);
       }
-      view.rewind = back;
-      const panel = view.panel;
-      panel.addEventListener('scroll', () => {
-        view.movedAt = performance.now();
-        if (panel.scrollTop > 0 && view.pull) {
-          setPull(view, 0);
-        }
-      }, { passive: true });
-      panel.addEventListener('wheel', (event) => {
-        const now = performance.now();
-        // A new gesture after a pause: it counts only if the panel was
-        // still at its top, not just carried there.
-        if (now - (view.wheelAt || 0) > 200) {
-          view.fresh = panel.scrollTop <= 0 && now - (view.movedAt || 0) > 300;
-        }
-        view.wheelAt = now;
-        if (view.fresh) {
-          pullBack(view, -event.deltaY * (event.deltaMode === 1 ? 16 : 1));
-        }
-      }, { passive: true });
-      panel.addEventListener('touchstart', (event) => {
-        view.fresh = panel.scrollTop <= 0;
-        view.touchY = event.touches[0].clientY;
-      }, { passive: true });
-      panel.addEventListener('touchmove', (event) => {
-        const y = event.touches[0].clientY;
-        const dy = y - view.touchY;
-        view.touchY = y;
-        if (view.fresh) {
-          pullBack(view, dy);
-        }
-      }, { passive: true });
-      panel.addEventListener('touchend', () => {
-        if (view.pull && !view.backBusy) {
-          setPull(view, 0);
-        }
-      }, { passive: true });
-    }
-    const back = view.rewind;
-    back.hidden = !on;
-    window.clearTimeout(view.pullTimer);
-    window.clearTimeout(view.backTimer);
-    view.backBusy = false;
-    setPull(view, 0);
-    if (!on) {
-      return;
-    }
-    const to = neighbor(-1);
-    const crossing = to.tiles !== wallState.tiles;
-    back.querySelector('.pf-exhibit-rewind__say').textContent = crossing ? Drupal.t('Keep scrolling up for the previous section') : Drupal.t('Keep scrolling up for the previous page');
-    back.querySelector('.pf-exhibit-rewind__ready').textContent = crossing ? Drupal.t('Opening the previous section') : Drupal.t('Opening the previous page');
-    back.querySelector('.pf-exhibit-rewind__title').textContent = tileTitle(to.tiles[to.index]);
+    }, { passive: true });
+    panel.addEventListener('wheel', (event) => {
+      // The event's own time, not when it is handled: a step's redraw can
+      // hold a spin's events back long enough to look like a pause.
+      const now = event.timeStamp;
+      // A new gesture after a pause: it counts only at an end the panel
+      // was already resting at, not one it was just carried to.
+      if (now - (view.wheelAt || 0) > 200) {
+        const still = now - (view.movedAt || 0) > 300;
+        view.fresh = { back: still && atTop(), on: still && atEnd() };
+      }
+      const dy = event.deltaY * (event.deltaMode === 1 ? 16 : 1);
+      if (view.fresh.on) {
+        pull(view, 'on', dy);
+      }
+      if (view.fresh.back) {
+        pull(view, 'back', -dy);
+      }
+    }, { passive: true });
+    // Every wheel on the page times the pause, not just the panel's: while
+    // a step fades, a spin's events land on the fade, not the panel.
+    window.addEventListener('wheel', (event) => {
+      view.wheelAt = event.timeStamp;
+    }, { passive: true });
+    panel.addEventListener('touchstart', (event) => {
+      view.fresh = { back: atTop(), on: atEnd() };
+      view.touchY = event.touches[0].clientY;
+    }, { passive: true });
+    panel.addEventListener('touchmove', (event) => {
+      const y = event.touches[0].clientY;
+      const dy = y - view.touchY;
+      view.touchY = y;
+      if (view.fresh.on) {
+        pull(view, 'on', -dy);
+      }
+      if (view.fresh.back) {
+        pull(view, 'back', dy);
+      }
+    }, { passive: true });
+    panel.addEventListener('touchend', () => {
+      if (!view.wayBusy) {
+        Object.keys(ways).forEach((way) => {
+          if (view.pulls[way]) {
+            setPull(view, way, 0);
+          }
+        });
+      }
+    }, { passive: true });
   }
 
-  function setPull(view, progress) {
-    view.pull = progress ? view.pull : 0;
-    view.rewind.style.setProperty('--pf-back', progress.toFixed(3));
-    view.rewind.classList.toggle('is-ready', progress >= .85);
-    view.rewind.classList.toggle('is-going', progress >= 1);
+  function setPull(view, way, progress) {
+    const band = view[ways[way].el];
+    if (!progress) {
+      view.pulls[way] = 0;
+    }
+    band.style.setProperty(ways[way].prop, progress.toFixed(3));
+    band.classList.toggle('is-ready', progress >= .85);
+    band.classList.toggle('is-going', progress >= 1);
   }
 
-  // dy: how far up the reader pulled (px; down is negative).
-  function pullBack(view, dy) {
-    const back = view.rewind;
-    if (!back || back.hidden || view.backBusy) {
+  // dy: how far the reader pulled that way (px; the other way is negative).
+  function pull(view, way, dy) {
+    const band = view[ways[way].el];
+    if (!band || band.hidden || view.wayBusy) {
       return;
     }
     if (dy <= 0) {
-      if (view.pull) {
-        setPull(view, 0);
+      if (view.pulls[way]) {
+        setPull(view, way, 0);
       }
       return;
     }
     const need = Math.max(160, view.panel.clientHeight * .35);
-    view.pull = Math.min(need, (view.pull || 0) + dy);
-    setPull(view, view.pull / need);
-    window.clearTimeout(view.pullTimer);
-    if (view.pull < need) {
+    view.pulls[way] = Math.min(need, (view.pulls[way] || 0) + dy);
+    setPull(view, way, view.pulls[way] / need);
+    window.clearTimeout(view.pulls[way + 'Timer']);
+    if (view.pulls[way] < need) {
       // Stopped short: it lets go.
-      view.pullTimer = window.setTimeout(() => setPull(view, 0), 700);
+      view.pulls[way + 'Timer'] = window.setTimeout(() => setPull(view, way, 0), 700);
       return;
     }
-    view.backBusy = true;
-    const go = () => {
-      if (viewer.canMorph()) {
-        document.startViewTransition(() => view.steps[0].click());
-      }
-      else {
-        view.steps[0].click();
-      }
-    };
-    if (viewer.canMorph()) {
-      view.backTimer = window.setTimeout(go, 220);
+    view.wayBusy = true;
+    const step = view.steps[ways[way].step];
+    if (!viewer.canMorph()) {
+      step.click();
+      return;
     }
-    else {
-      go();
-    }
+    view.wayTimer = window.setTimeout(() => {
+      document.startViewTransition(() => step.click());
+    }, 220);
   }
 
   /* ---------------------------------------------------------------------

@@ -6258,165 +6258,24 @@ html.pf-reading-dark .pf-viewer--exhibit {
   }
 }
 
-// An entry's end (js/exhibition.js nextCue()): "Keep scrolling for the
-// next page" and the next entry's title over the landing's scroll cue
-// line, then room to scroll on (not the gallery's own signpost,
-// .pf-exhibit-next). Scrolling on fills the line in the accent (--pf-next,
-// 0 to 1) and brings the title forward, from 68% (still 4.5:1 on the
-// lightest swatch's glass) to full and up from 6px below; from 85% the
-// words turn to "Opening the next page" (.is-ready), and at the end the
-// line brightens (.is-going) while the view waits a breath and fades on.
-// A button too, for the keyboard. With reduced motion the line and the
-// words change at once and nothing moves.
-.pf-exhibit-onward {
-  padding-top: 1.5rem;
-  border-top: 1px solid $pf-hairline;
-
-  &[hidden] {
-    display: none;
-  }
-}
-
-// Sticky: once in view it holds about mid-panel (below the pinned top
-// row) while the room scrolls under it, so its line and words stay in
-// sight to the end.
-.pf-exhibit-onward__cue {
-  position: sticky;
-  top: max(4.5rem, 50% - 6rem);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: .6rem;
-  width: 100%;
-  padding: .5rem 0 0;
-  color: var(--pf-viewer-muted);
-  background: none;
-  border: 0;
-  text-align: center;
-  transition: color $pf-hover-out ease;
-
-  &:hover,
-  &:focus-visible {
-    color: var(--bs-body-color);
-    transition-duration: $pf-hover-in;
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--pf-viewer-accent);
-    outline-offset: 4px;
-  }
-}
-
-// The two wordings in one place, one at a time; the button's name is the
-// first (the second is hidden from screen readers).
-.pf-exhibit-onward__prompt {
-  display: grid;
-  font: var(--pf-mono-label)/1.4 var(--pf-viewer-mono);
-  letter-spacing: .14em;
-  text-transform: uppercase;
-}
-
-.pf-exhibit-onward__say,
-.pf-exhibit-onward__ready {
-  grid-area: 1 / 1;
-  text-wrap: balance;
-}
-
-.pf-exhibit-onward__ready {
-  color: var(--bs-body-color);
-  opacity: 0;
-}
-
-.is-ready > .pf-exhibit-onward__cue {
-  .pf-exhibit-onward__say {
-    opacity: 0;
-  }
-
-  .pf-exhibit-onward__ready {
-    opacity: 1;
-  }
-}
-
-.pf-exhibit-onward__title {
-  max-width: 28ch;
-  text-wrap: balance;
-  font-size: 1.0625rem;
-  font-weight: 600;
-  line-height: 1.35;
-  color: var(--bs-body-color);
-  opacity: calc(.68 + .32 * var(--pf-next, 0));
-}
-
-// The line: a 2px track of hairline, filled from the top in the accent.
-.pf-viewer .pf-exhibit-onward .pf-hero-cue__line {
-  flex: none;
-  width: 2px;
-  height: 5rem;
-
-  &::after {
-    background: var(--pf-viewer-accent);
-    translate: 0 calc((var(--pf-next, 0) - 1) * 100%);
-    animation: none;
-  }
-}
-
-.pf-exhibit-onward.is-going .pf-hero-cue__line::after {
-  filter: brightness(1.25);
-}
-
-// The words cross with a small rise, the title lifts as it brightens,
-// the line brightens over a moment.
-.pf-exhibit-onward__say,
-.pf-exhibit-onward__ready {
-  @include pf-viewer-motion {
-    transition: opacity .3s ease, translate .3s ease;
-  }
-}
-
-.pf-exhibit-onward__ready {
-  @include pf-viewer-motion {
-    translate: 0 .25rem;
-  }
-}
-
-.is-ready > .pf-exhibit-onward__cue .pf-exhibit-onward__say {
-  @include pf-viewer-motion {
-    translate: 0 -.25rem;
-  }
-}
-
-.is-ready > .pf-exhibit-onward__cue .pf-exhibit-onward__ready {
-  @include pf-viewer-motion {
-    translate: none;
-  }
-}
-
-.pf-exhibit-onward__title {
-  @include pf-viewer-motion {
-    translate: 0 calc((1 - var(--pf-next, 0)) * .375rem);
-  }
-}
-
-.pf-viewer .pf-exhibit-onward .pf-hero-cue__line::after {
-  @include pf-viewer-motion {
-    transition: filter .2s ease;
-  }
-}
-
-// The way back (js/exhibition.js backCue()): scrolling up at the panel's
-// top fades in a band under the top row, the next cue's mirror: its line
-// filling upward with the pull (--pf-back, 0 to 1), "Keep scrolling up for
-// the previous page", the previous entry's title; "Opening the previous
-// page" from 85% (.is-ready). A sticky box of no height (its gap taken
-// back), so the panel's scroll never changes; the band hangs from it over
-// the text on the panel's own glass. Hidden from screen readers, never
-// in the way of a click. With reduced motion it fades without moving.
+// An entry's ends (js/exhibition.js nextCue()): the ways on and back.
+// Scrolling on at the panel's end fades in a band over the text's foot
+// (.pf-exhibit-onward; not the gallery's own signpost, .pf-exhibit-next):
+// "Keep scrolling for the next page", the next entry's title and the
+// landing's scroll cue line filling down in the accent with the pull
+// (--pf-next, 0 to 1). Scrolling up at the top fades in its mirror under
+// the top row (.pf-exhibit-rewind, --pf-back), its line filling upward.
+// From 85% the words turn to "Opening the next page" (.is-ready), and at
+// a full pull the line brightens (.is-going) while the view waits a
+// breath and fades on. Each is a box of no height (the panel's gap taken
+// back), so the panel's scroll is the text's own; the band hangs from it
+// over the text on the panel's own glass. Hidden from screen readers,
+// never in the way of a click. With reduced motion they fade without
+// moving.
+.pf-exhibit-onward,
 .pf-exhibit-rewind {
-  position: sticky;
-  top: calc(var(--pf-viewer-top-h, 3.85rem) - var(--pf-pad-top));
   z-index: 2;
   height: 0;
-  margin-bottom: -1.25rem;
   pointer-events: none;
 
   &[hidden] {
@@ -6424,19 +6283,47 @@ html.pf-reading-dark .pf-viewer--exhibit {
   }
 }
 
+.pf-exhibit-onward {
+  position: relative;
+  margin-top: -1.25rem;
+}
+
+.pf-exhibit-rewind {
+  position: sticky;
+  top: calc(var(--pf-viewer-top-h, 3.85rem) - var(--pf-pad-top));
+  margin-bottom: -1.25rem;
+}
+
+.pf-exhibit-onward__band,
 .pf-exhibit-rewind__band {
   position: absolute;
-  inset: 0 calc(-1 * var(--pf-pad-end)) auto calc(-1 * var(--pf-pad-start));
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: .6rem;
-  padding: .75rem var(--pf-pad-end) 1.25rem var(--pf-pad-start);
   color: var(--pf-viewer-muted);
   text-align: center;
   // The panel's glass twice (99%): the text it hangs over must not read
   // through the words.
   background: linear-gradient(var(--pf-sidebar-bg, var(--bs-body-bg)), var(--pf-sidebar-bg, var(--bs-body-bg))), var(--pf-sidebar-bg, var(--bs-body-bg));
+}
+
+// Over the text's last lines, down to the panel's foot padding.
+.pf-exhibit-onward__band {
+  inset: auto calc(-1 * var(--pf-pad-end)) 0 calc(-1 * var(--pf-pad-start));
+  padding: 1.25rem var(--pf-pad-end) .25rem var(--pf-pad-start);
+  border-top: 1px solid $pf-hairline;
+  opacity: min(1, calc(var(--pf-next, 0) * 2.5));
+
+  @include pf-viewer-motion {
+    translate: 0 calc((1 - min(1, var(--pf-next, 0) * 2.5)) * .75rem);
+    transition: opacity .2s ease, translate .2s ease;
+  }
+}
+
+.pf-exhibit-rewind__band {
+  inset: 0 calc(-1 * var(--pf-pad-end)) auto calc(-1 * var(--pf-pad-start));
+  padding: .75rem var(--pf-pad-end) 1.25rem var(--pf-pad-start);
   border-bottom: 1px solid $pf-hairline;
   opacity: min(1, calc(var(--pf-back, 0) * 2.5));
 
@@ -6446,6 +6333,7 @@ html.pf-reading-dark .pf-viewer--exhibit {
   }
 }
 
+.pf-exhibit-onward__prompt,
 .pf-exhibit-rewind__prompt {
   display: grid;
   font: var(--pf-mono-label)/1.4 var(--pf-viewer-mono);
@@ -6453,6 +6341,8 @@ html.pf-reading-dark .pf-viewer--exhibit {
   text-transform: uppercase;
 }
 
+.pf-exhibit-onward__say,
+.pf-exhibit-onward__ready,
 .pf-exhibit-rewind__say,
 .pf-exhibit-rewind__ready {
   grid-area: 1 / 1;
@@ -6463,21 +6353,26 @@ html.pf-reading-dark .pf-viewer--exhibit {
   }
 }
 
+.pf-exhibit-onward__ready,
 .pf-exhibit-rewind__ready {
   color: var(--bs-body-color);
   opacity: 0;
 }
 
+.pf-exhibit-onward.is-ready,
 .pf-exhibit-rewind.is-ready {
+  .pf-exhibit-onward__say,
   .pf-exhibit-rewind__say {
     opacity: 0;
   }
 
+  .pf-exhibit-onward__ready,
   .pf-exhibit-rewind__ready {
     opacity: 1;
   }
 }
 
+.pf-exhibit-onward__title,
 .pf-exhibit-rewind__title {
   max-width: 28ch;
   text-wrap: balance;
@@ -6487,7 +6382,9 @@ html.pf-reading-dark .pf-viewer--exhibit {
   color: var(--bs-body-color);
 }
 
-// The line fills from its foot up.
+// The line: a 2px track of hairline filled in the accent, down from its
+// top on the way on, up from its foot on the way back.
+.pf-viewer .pf-exhibit-onward .pf-hero-cue__line,
 .pf-viewer .pf-exhibit-rewind .pf-hero-cue__line {
   flex: none;
   width: 2px;
@@ -6495,11 +6392,19 @@ html.pf-reading-dark .pf-viewer--exhibit {
 
   &::after {
     background: var(--pf-viewer-accent);
-    translate: 0 calc((1 - var(--pf-back, 0)) * 100%);
     animation: none;
   }
 }
 
+.pf-viewer .pf-exhibit-onward .pf-hero-cue__line::after {
+  translate: 0 calc((var(--pf-next, 0) - 1) * 100%);
+}
+
+.pf-viewer .pf-exhibit-rewind .pf-hero-cue__line::after {
+  translate: 0 calc((1 - var(--pf-back, 0)) * 100%);
+}
+
+.pf-exhibit-onward.is-going .pf-hero-cue__line::after,
 .pf-exhibit-rewind.is-going .pf-hero-cue__line::after {
   filter: brightness(1.25);
 }

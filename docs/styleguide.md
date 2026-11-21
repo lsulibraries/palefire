@@ -189,6 +189,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-20:** Object view: `.pf-exhibit-onward` is now the mirror of `.pf-exhibit-rewind`: a box of no height at the text’s end (gap taken back) with `__band` hung over the text’s foot on the doubled panel glass, hairline top rule, opacity and a .75rem rise from `--pf-next` (×2.5), line 2px × 3rem filled down; aria-hidden, no pointer events, no room or button. The two cues share their prompt, title and line rules.
 - **2026-11-20:** Placed whole-lead label: `.pf-exhibit-lead-label__view` absolute over the caption (`inset: -0.25rem`, `font-size: 0`, icon hidden), the label `width: fit-content`, 3rem kept under the picture; placed only when there is a caption line.
 - **2026-11-20:** `.pf-exhibit-wall-hero--whole .pf-exhibit-wall-hero__frame.is-placed` from lg (galleries with an intro): `.pf-exhibit-lead-label` at `--pf-pic-x` / under `--pf-pic-y + --pf-pic-h`, plain (no background, border or blur), text over View; `.pf-exhibit-wall-hero__hit` over the picture opens the viewer; the image keeps 4.5rem more under it for the label.
 - **2026-11-20:** Object view: arrows and the onward cue cross sections (“next section” wording). New `.pf-exhibit-rewind` (scroll up at the top to go back): sticky, no height, band in the panel glass doubled, line 2px × 3rem filled upward by `--pf-back`, `__say` / `__ready` at 85%, aria-hidden. Panel `overscroll-behavior-y: contain`.

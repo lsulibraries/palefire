@@ -879,6 +879,12 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: The keep-scrolling cue as an overlay', <<<'HTML'
+<ul>
+<li>At the end of an item, the “Keep scrolling for the next page” prompt no longer adds empty space below the text, so the scroll bar ends where the text does. Keep scrolling once you are at the end and the prompt fades in over the bottom of the panel, with the next item’s title; keep going to move on, or stop and it fades away. It works just like the scroll-up prompt at the top.</li>
+<li>One scroll now moves one item. A fast scroll could carry on through a short item and skip ahead (first item straight to the third); now you have to pause at the end and scroll again, in either direction.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: Just the caption under framed pictures', <<<'HTML'
 <ul>
 <li>The label under a framed picture is now just its caption; clicking the caption or the picture opens it full screen.</li>
