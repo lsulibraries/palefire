@@ -879,6 +879,12 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Scroll on between sections, and back', <<<'HTML'
+<ul>
+<li>At the last item of a section, keep scrolling (or use the arrow) to go on to the first item of the next section; the prompt says “Keep scrolling for the next section”.</li>
+<li>Scrolling up when you are already at the top of the panel now goes back: a prompt fades in under the top bar, “Keep scrolling up for the previous page”, with the previous item’s title, and keep scrolling up to go back to it. It only starts from a fresh scroll at the top, so scrolling quickly back up the text will not jump by accident, and it fades away if you stop.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: A cleaner Find us map on phones', <<<'HTML'
 <ul>
 <li>On phones the Find us map on Oral History’s homepage stays a plain drawing; the building’s photo no longer appears behind it when tapped.</li>

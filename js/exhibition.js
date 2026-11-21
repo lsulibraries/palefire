@@ -1959,14 +1959,17 @@
     // A clip: the reader may minimize it (Keep listening) and go on through
     // the exhibition while it plays.
     const clip = !!view.body.querySelector('[data-pf-audio] audio');
-    viewer.sync({ steps: n, extra: clip ? [keepButton(view)] : [], text: reading });
+    // The arrows step on past the wall's ends into the next section's
+    // (neighbor()), so they show while the page has more than one entry.
+    const total = stepCount();
+    viewer.sync({ steps: total, extra: clip ? [keepButton(view)] : [], text: reading });
     view.phoneSteps.querySelectorAll('button').forEach((b) => {
-      b.hidden = n < 2;
+      b.hidden = total < 2;
     });
     // The way on at the panel's end, on every entry of a wall with more
     // than one; not in a clip's side panel (sideHandler), which has no
     // arrows to step with.
-    nextCue(view, n > 1 && !(view.side && !reading));
+    nextCue(view, total > 1 && !(view.side && !reading));
   }
 
   // An entry's end: "Keep scrolling" and the next entry's title over
@@ -1987,8 +1990,8 @@
       cue.className = 'pf-exhibit-onward';
       cue.hidden = true;
       cue.innerHTML = '<button type="button" class="pf-exhibit-onward__cue">'
-        + '<span class="pf-exhibit-onward__prompt"><span class="pf-exhibit-onward__say">' + Drupal.t('Keep scrolling for the next page') + '</span>'
-        + '<span class="pf-exhibit-onward__ready" aria-hidden="true">' + Drupal.t('Opening the next page') + '</span></span>'
+        + '<span class="pf-exhibit-onward__prompt"><span class="pf-exhibit-onward__say"></span>'
+        + '<span class="pf-exhibit-onward__ready" aria-hidden="true"></span></span>'
         + '<span class="pf-exhibit-onward__title"></span>'
         + '<span class="pf-hero-cue__line" aria-hidden="true"></span>'
         + '</button>'
@@ -2014,12 +2017,15 @@
     window.clearTimeout(view.cueTimer);
     view.cueTimer = 0;
     view.cueBusy = false;
+    backCue(view, on);
     if (!on) {
       return;
     }
-    const next = wallState.tiles[(wallState.index + 1) % wallState.tiles.length];
-    const head = next ? document.getElementById(next.dataset.pfTile) : null;
-    cue.querySelector('.pf-exhibit-onward__title').textContent = head ? head.textContent.trim() : '';
+    const to = neighbor(1);
+    const crossing = to.tiles !== wallState.tiles;
+    cue.querySelector('.pf-exhibit-onward__say').textContent = crossing ? Drupal.t('Keep scrolling for the next section') : Drupal.t('Keep scrolling for the next page');
+    cue.querySelector('.pf-exhibit-onward__ready').textContent = crossing ? Drupal.t('Opening the next section') : Drupal.t('Opening the next page');
+    cue.querySelector('.pf-exhibit-onward__title').textContent = tileTitle(to.tiles[to.index]);
     sizeCue(view);
     requestAnimationFrame(() => sizeCue(view));
   }
@@ -2083,6 +2089,141 @@
         view.cueTimer = 0;
         goOn(view);
       }, 220);
+    }
+  }
+
+  // A tile's entry title.
+  function tileTitle(tile) {
+    const head = tile ? document.getElementById(tile.dataset.pfTile) : null;
+    return head ? head.textContent.trim() : '';
+  }
+
+  // The way back, the next cue's mirror: scrolling up while the panel is
+  // already at its top fades in "Keep scrolling up for the previous page"
+  // and the previous entry's title under the top row, its line filling
+  // upward with the pull; from 85% "Opening the previous page", and at a
+  // full pull (35% of the panel, at least 160px), after a breath, the view
+  // fades to the previous entry as the arrow steps. The cue takes no room
+  // (a sticky band of no height), so the scrollbar never moves. Only a
+  // gesture begun at the top counts: a scroll's momentum running on into
+  // the top does not, so reading back up never steps by accident. It lets
+  // go (fades out) when the reader stops short or scrolls down. Nothing
+  // moves by itself; the keyboard has the arrows, and the band is hidden
+  // from screen readers, which hear the count change.
+  function backCue(view, on) {
+    if (!view.rewind) {
+      const back = document.createElement('div');
+      back.className = 'pf-exhibit-rewind';
+      back.hidden = true;
+      back.setAttribute('aria-hidden', 'true');
+      back.innerHTML = '<div class="pf-exhibit-rewind__band">'
+        + '<span class="pf-hero-cue__line"></span>'
+        + '<span class="pf-exhibit-rewind__prompt"><span class="pf-exhibit-rewind__say"></span><span class="pf-exhibit-rewind__ready"></span></span>'
+        + '<span class="pf-exhibit-rewind__title"></span>'
+        + '</div>';
+      const top = view.panel.querySelector(':scope > .pf-viewer__top');
+      if (top) {
+        top.after(back);
+      }
+      else {
+        view.panel.prepend(back);
+      }
+      view.rewind = back;
+      const panel = view.panel;
+      panel.addEventListener('scroll', () => {
+        view.movedAt = performance.now();
+        if (panel.scrollTop > 0 && view.pull) {
+          setPull(view, 0);
+        }
+      }, { passive: true });
+      panel.addEventListener('wheel', (event) => {
+        const now = performance.now();
+        // A new gesture after a pause: it counts only if the panel was
+        // still at its top, not just carried there.
+        if (now - (view.wheelAt || 0) > 200) {
+          view.fresh = panel.scrollTop <= 0 && now - (view.movedAt || 0) > 300;
+        }
+        view.wheelAt = now;
+        if (view.fresh) {
+          pullBack(view, -event.deltaY * (event.deltaMode === 1 ? 16 : 1));
+        }
+      }, { passive: true });
+      panel.addEventListener('touchstart', (event) => {
+        view.fresh = panel.scrollTop <= 0;
+        view.touchY = event.touches[0].clientY;
+      }, { passive: true });
+      panel.addEventListener('touchmove', (event) => {
+        const y = event.touches[0].clientY;
+        const dy = y - view.touchY;
+        view.touchY = y;
+        if (view.fresh) {
+          pullBack(view, dy);
+        }
+      }, { passive: true });
+      panel.addEventListener('touchend', () => {
+        if (view.pull && !view.backBusy) {
+          setPull(view, 0);
+        }
+      }, { passive: true });
+    }
+    const back = view.rewind;
+    back.hidden = !on;
+    window.clearTimeout(view.pullTimer);
+    window.clearTimeout(view.backTimer);
+    view.backBusy = false;
+    setPull(view, 0);
+    if (!on) {
+      return;
+    }
+    const to = neighbor(-1);
+    const crossing = to.tiles !== wallState.tiles;
+    back.querySelector('.pf-exhibit-rewind__say').textContent = crossing ? Drupal.t('Keep scrolling up for the previous section') : Drupal.t('Keep scrolling up for the previous page');
+    back.querySelector('.pf-exhibit-rewind__ready').textContent = crossing ? Drupal.t('Opening the previous section') : Drupal.t('Opening the previous page');
+    back.querySelector('.pf-exhibit-rewind__title').textContent = tileTitle(to.tiles[to.index]);
+  }
+
+  function setPull(view, progress) {
+    view.pull = progress ? view.pull : 0;
+    view.rewind.style.setProperty('--pf-back', progress.toFixed(3));
+    view.rewind.classList.toggle('is-ready', progress >= .85);
+    view.rewind.classList.toggle('is-going', progress >= 1);
+  }
+
+  // dy: how far up the reader pulled (px; down is negative).
+  function pullBack(view, dy) {
+    const back = view.rewind;
+    if (!back || back.hidden || view.backBusy) {
+      return;
+    }
+    if (dy <= 0) {
+      if (view.pull) {
+        setPull(view, 0);
+      }
+      return;
+    }
+    const need = Math.max(160, view.panel.clientHeight * .35);
+    view.pull = Math.min(need, (view.pull || 0) + dy);
+    setPull(view, view.pull / need);
+    window.clearTimeout(view.pullTimer);
+    if (view.pull < need) {
+      // Stopped short: it lets go.
+      view.pullTimer = window.setTimeout(() => setPull(view, 0), 700);
+      return;
+    }
+    view.backBusy = true;
+    const go = () => {
+      if (viewer.canMorph()) {
+        document.startViewTransition(() => view.steps[0].click());
+      }
+      else {
+        view.steps[0].click();
+      }
+    };
+    if (viewer.canMorph()) {
+      view.backTimer = window.setTimeout(go, 220);
+    }
+    else {
+      go();
     }
   }
 
@@ -2428,10 +2569,40 @@
         fillLoose(wallState.loose.index + delta);
       }
     }
-    else if (wallState.tiles.length > 1) {
-      showEntry(wallState.index + delta);
+    else if (stepCount() > 1) {
+      const to = neighbor(delta);
+      wallState.tiles = to.tiles;
+      showEntry(to.index);
       history.replaceState(history.state, '', location.pathname + location.search + '#' + wallState.tile.dataset.pfTile);
     }
+  }
+
+  // The page's walls that hold entries, in order (one per section).
+  function walls() {
+    return Array.from(document.querySelectorAll('[data-pf-wall]')).filter((wall) => wall.querySelector('[data-pf-tile]'));
+  }
+
+  function stepCount() {
+    return walls().reduce((sum, wall) => sum + wall.querySelectorAll('[data-pf-tile]').length, 0);
+  }
+
+  // The entry delta (1 or -1) away: the next on this wall, or past either
+  // end the first (last) of the next (previous) section's wall, round from
+  // the last section to the first; with one wall, round it.
+  function neighbor(delta) {
+    const tiles = wallState.tiles;
+    const to = wallState.index + delta;
+    if (to >= 0 && to < tiles.length) {
+      return { tiles, index: to };
+    }
+    const all = walls();
+    const here = tiles.length ? all.indexOf(tiles[0].closest('[data-pf-wall]')) : -1;
+    if (all.length < 2 || here < 0) {
+      return { tiles, index: (to + tiles.length) % tiles.length };
+    }
+    const wall = all[(here + delta + all.length) % all.length];
+    const next = Array.from(wall.querySelectorAll('[data-pf-tile]'));
+    return { tiles: next, index: delta > 0 ? 0 : next.length - 1 };
   }
 
   // An entry with no picture, only a plate (a text plate, or a life with

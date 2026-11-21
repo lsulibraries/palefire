@@ -6325,6 +6325,113 @@ html.pf-reading-dark .pf-viewer--exhibit {
   }
 }
 
+// The way back (js/exhibition.js backCue()): scrolling up at the panel's
+// top fades in a band under the top row, the next cue's mirror: its line
+// filling upward with the pull (--pf-back, 0 to 1), "Keep scrolling up for
+// the previous page", the previous entry's title; "Opening the previous
+// page" from 85% (.is-ready). A sticky box of no height (its gap taken
+// back), so the panel's scroll never changes; the band hangs from it over
+// the text on the panel's own glass. Hidden from screen readers, never
+// in the way of a click. With reduced motion it fades without moving.
+.pf-exhibit-rewind {
+  position: sticky;
+  top: calc(var(--pf-viewer-top-h, 3.85rem) - var(--pf-pad-top));
+  z-index: 2;
+  height: 0;
+  margin-bottom: -1.25rem;
+  pointer-events: none;
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.pf-exhibit-rewind__band {
+  position: absolute;
+  inset: 0 calc(-1 * var(--pf-pad-end)) auto calc(-1 * var(--pf-pad-start));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .6rem;
+  padding: .75rem var(--pf-pad-end) 1.25rem var(--pf-pad-start);
+  color: var(--pf-viewer-muted);
+  text-align: center;
+  // The panel's glass twice (99%): the text it hangs over must not read
+  // through the words.
+  background: linear-gradient(var(--pf-sidebar-bg, var(--bs-body-bg)), var(--pf-sidebar-bg, var(--bs-body-bg))), var(--pf-sidebar-bg, var(--bs-body-bg));
+  border-bottom: 1px solid $pf-hairline;
+  opacity: min(1, calc(var(--pf-back, 0) * 2.5));
+
+  @include pf-viewer-motion {
+    translate: 0 calc((min(1, var(--pf-back, 0) * 2.5) - 1) * .75rem);
+    transition: opacity .2s ease, translate .2s ease;
+  }
+}
+
+.pf-exhibit-rewind__prompt {
+  display: grid;
+  font: var(--pf-mono-label)/1.4 var(--pf-viewer-mono);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.pf-exhibit-rewind__say,
+.pf-exhibit-rewind__ready {
+  grid-area: 1 / 1;
+  text-wrap: balance;
+
+  @include pf-viewer-motion {
+    transition: opacity .3s ease;
+  }
+}
+
+.pf-exhibit-rewind__ready {
+  color: var(--bs-body-color);
+  opacity: 0;
+}
+
+.pf-exhibit-rewind.is-ready {
+  .pf-exhibit-rewind__say {
+    opacity: 0;
+  }
+
+  .pf-exhibit-rewind__ready {
+    opacity: 1;
+  }
+}
+
+.pf-exhibit-rewind__title {
+  max-width: 28ch;
+  text-wrap: balance;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--bs-body-color);
+}
+
+// The line fills from its foot up.
+.pf-viewer .pf-exhibit-rewind .pf-hero-cue__line {
+  flex: none;
+  width: 2px;
+  height: 3rem;
+
+  &::after {
+    background: var(--pf-viewer-accent);
+    translate: 0 calc((1 - var(--pf-back, 0)) * 100%);
+    animation: none;
+  }
+}
+
+.pf-exhibit-rewind.is-going .pf-hero-cue__line::after {
+  filter: brightness(1.25);
+}
+
+// Scrolling up at the panel's top stays in the panel (the way back reads
+// it), not the page behind a side panel.
+.pf-viewer--exhibit .pf-viewer__panel {
+  overscroll-behavior-y: contain;
+}
+
 // An oral history clip below lg (js/exhibition.js phoneParts()): the
 // transcript leads. The panel takes the whole screen over the stage, which
 // is only the photo's wash behind it; the photo is a thumbnail beside the

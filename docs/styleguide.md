@@ -189,6 +189,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-20:** Object view: arrows and the onward cue cross sections (“next section” wording). New `.pf-exhibit-rewind` (scroll up at the top to go back): sticky, no height, band in the panel glass doubled, line 2px × 3rem filled upward by `--pf-back`, `__say` / `__ready` at 85%, aria-hidden. Panel `overscroll-behavior-y: contain`.
 - **2026-11-20:** `.pf-hero-banner--map .pf-hero-banner__photo` is `display: none` in the narrow wash layout (`@container pf-cover (width < 44rem)`); the frost stays.
 - **2026-11-20:** `.pf-exhibit-cover__media::after` below lg (with scroll timelines): pinned veil, `color-mix(var(--bs-body-bg) 88%)` + `blur(6px)`, opacity 0 to 1 over `scroll(root)` 0 to 30svh (`pf-exhibit-cover-veil`); hidden under `.pf-exhibit-deep`.
 - **2026-11-20:** `.pf-exhibit-wall-hero--whole .pf-exhibit-wall-hero__frame::after` from lg: `$pf-exhibit-veil-text` (90% to the text edge, clear past the fade; blur across).
