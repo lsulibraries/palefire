@@ -879,6 +879,11 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Sat Nov 21: Every phrase lights up as you listen', <<<'HTML'
+<ul>
+<li>In oral history clips, the transcript now lights up every phrase in gold as it is spoken. Before, a phrase was skipped wherever the speaker’s words differed slightly from the typed transcript, such as “can” for “could”.</li>
+</ul>
+HTML),
   $text('Sat Nov 21: A new way to look at exhibition items', <<<'HTML'
 <ul>
 <li>Opening an item in an exhibition now blurs the page behind it and shows the item in a centered frame, like a museum label beside the work: the picture on the left, its text on the right, with the gallery’s name and Close across the top.</li>

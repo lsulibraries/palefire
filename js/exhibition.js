@@ -3449,9 +3449,21 @@
     return timings.get(url);
   }
 
+  // A speaker's name before their words (<strong>NAME:</strong>, or as
+  // the page sets it, .pf-speaker with its colon hidden): never part of a
+  // phrase.
+  function isLabel(node) {
+    const el = node.parentElement && node.parentElement.closest('strong, b');
+    return !!el && (el.classList.contains('pf-speaker') || /:$/.test(el.textContent.trim()));
+  }
+
   // Wraps each cue's words in the transcript, in order: [{start, els}]. A
-  // cue whose words aren't found (the text edited since) is left out. The
-  // object view's copy of an entry arrives already wrapped.
+  // cue whose words differ from the transcript's by a word or two (the
+  // timings keep the speaker's own words: "can" where the transcript has
+  // "could", an added "the") is the text between its neighbors, when that
+  // is about its length (gapRanges()); otherwise it is left out (the text
+  // edited since). The object view's copy of an entry arrives already
+  // wrapped.
   function phrasesOf(text, cues) {
     const phrases = cues.map((cue) => ({ start: cue.start, els: [] }));
     if (!text.querySelector('.pf-phrase')) {
@@ -3473,9 +3485,11 @@
           from = pattern.lastIndex;
         }
       });
+      ranges.push(...gapRanges(cues, ranges, nodes, full));
+      ranges.sort((a, b) => a.start - b.start);
       // Last first, so splitting a text node keeps the earlier offsets.
       ranges.reverse().forEach((range) => {
-        nodes.filter((n) => n.at < range.end && n.at + n.node.data.length > range.start).reverse().forEach((n) => {
+        nodes.filter((n) => !isLabel(n.node) && n.at < range.end && n.at + n.node.data.length > range.start).reverse().forEach((n) => {
           let piece = n.node;
           const end = Math.min(range.end - n.at, piece.data.length);
           const start = Math.max(range.start - n.at, 0);
@@ -3505,6 +3519,74 @@
     });
     text.classList.remove('is-following');
     return phrases;
+  }
+
+  // The cues not found word for word, each run of them between the
+  // neighbors' matches (or the text's start or end): that text, without
+  // the speakers' names, when it is about the run's length (half to twice,
+  // give or take a few letters), shared out by the cues' lengths at the
+  // nearest space. Gives [{index, start, end}] in full's offsets.
+  function gapRanges(cues, ranges, nodes, full) {
+    const found = new Map(ranges.map((range) => [range.index, range]));
+    const labels = nodes.filter((n) => isLabel(n.node)).map((n) => [n.at, n.at + n.node.data.length]);
+    const spoken = (a, b) => b - a - labels.reduce((sum, [x, y]) => sum + Math.max(0, Math.min(b, y) - Math.max(a, x)), 0);
+    const space = (i) => /\s/.test(full[i]);
+    const out = [];
+    let i = 0;
+    while (i < cues.length) {
+      if (found.has(i)) {
+        i++;
+        continue;
+      }
+      let j = i;
+      while (j < cues.length && !found.has(j)) {
+        j++;
+      }
+      const prev = found.get(i - 1);
+      const next = found.get(j);
+      let a = prev ? prev.end : 0;
+      let b = next ? next.start : full.length;
+      // Past spaces and a name at its start; spaces at its end.
+      for (let moved = true; moved;) {
+        moved = false;
+        while (a < b && space(a)) {
+          a++;
+        }
+        const label = labels.find(([x, y]) => x <= a && a < y);
+        if (label) {
+          a = label[1];
+          moved = true;
+        }
+      }
+      while (b > a && space(b - 1)) {
+        b--;
+      }
+      const want = cues.slice(i, j).reduce((sum, cue) => sum + cue.words.length, 0);
+      const have = spoken(a, b);
+      if (have > 0 && have >= want / 2 - 10 && have <= want * 2 + 10) {
+        let at = a;
+        let left = want;
+        for (let k = i; k < j; k++) {
+          let end = b;
+          if (k < j - 1) {
+            end = Math.round(at + (b - at) * cues[k].words.length / left);
+            while (end < b && !space(end)) {
+              end++;
+            }
+          }
+          if (end > at) {
+            out.push({ index: k, start: at, end: end });
+          }
+          left -= cues[k].words.length;
+          at = end;
+          while (at < b && space(at)) {
+            at++;
+          }
+        }
+      }
+      i = j;
+    }
+    return out;
   }
 
   // The nearest box that scrolls the transcript (the object view's panel),
