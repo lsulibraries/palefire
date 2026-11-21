@@ -879,6 +879,13 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Opened items over frosted glass', <<<'HTML'
+<ul>
+<li>When you open a picture, a clip or a text panel in an exhibition, the exhibition now shows through behind it, blurred and dimmed like frosted glass, as it does behind the search and hours panels. The text beside it is on a darker glass, like the breadcrumb bar.</li>
+<li>A text panel opens as the text alone, in the usual narrow column, with no empty picture area. At its end, “Keep scrolling for the next page” names what comes next: keep scrolling, or select it, to go on.</li>
+<li>On phones a clip’s transcript is on the same glass instead of a blurred copy of the photo, and the player at the foot of the screen is glass too, with a lighter play button and a plainer expand button.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: A roomier breadcrumb bar', <<<'HTML'
 <ul>
 <li>The thin bar under the header with the breadcrumb is a little taller, so its small capitals no longer crowd its edges.</li>

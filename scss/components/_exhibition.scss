@@ -2722,17 +2722,20 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
   }
 }
 
+// Play: a ring of the text color over a breath of it, glass like the bar
+// it sits in, the icon in the text color; filled with the accent on hover
+// or focus.
 .pf-audio__play {
   display: grid;
   place-items: center;
   width: 3rem;
   height: 3rem;
   padding: 0;
-  color: var(--bs-body-bg);
-  background: var(--bs-body-color);
-  border: 0;
+  color: var(--bs-body-color);
+  background: color-mix(in srgb, var(--bs-body-color) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--bs-body-color) 45%, transparent);
   border-radius: 50%;
-  transition: background-color $pf-hover-out ease;
+  transition: background-color $pf-hover-out ease, border-color $pf-hover-out ease, color $pf-hover-out ease;
 
   svg {
     width: 1.1rem;
@@ -2746,7 +2749,9 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
 
   &:hover,
   &:focus-visible {
+    color: var(--bs-body-bg);
     background: var(--pf-g-hover, var(--pf-exhibit-accent));
+    border-color: var(--pf-g-hover, var(--pf-exhibit-accent));
     transition-duration: $pf-hover-in;
   }
 
@@ -2920,7 +2925,11 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
   margin-inline: auto;
   padding: .75rem 1rem;
   color: var(--bs-body-color);
-  background: var(--bs-body-bg);
+  // The breadcrumb bar's glass (.pf-landing__bar): the sidebar's tint,
+  // solid where transparency is reduced (the same token).
+  background-color: var(--pf-sidebar-bg, var(--bs-body-bg));
+  -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+  backdrop-filter: var(--pf-glass-filter, blur(26px));
   border: 1px solid $pf-hairline;
   box-shadow: 0 1rem 2.5rem -1.5rem rgba(0, 0, 0, .45);
   pointer-events: auto;
@@ -3045,12 +3054,11 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
   // seek, time, Mute (and CC). From md one row. No volume slider here
   // (it's in the view; phones have their own buttons).
   //
-  // Expand (.pf-listen__open) is a square like Close. While the caption
-  // band shows, it sits at the band's right edge right above Close, the
-  // band's words kept clear of it; otherwise (CC off, no captions, before
-  // the first words) it's in the row, left of Close.
+  // Expand (.pf-listen__open) is its icon alone, no square. While the
+  // caption band shows, it sits in the band's top right corner, the band's
+  // words kept clear of it; otherwise (CC off, no captions, before the
+  // first words) it's in the row, left of Close.
   .pf-listen__inner {
-    position: relative;
     grid-template-columns: auto minmax(0, 1fr) auto auto auto;
     grid-template-areas: "play expand expand open close" "seek seek seek time mute";
     column-gap: .75rem;
@@ -3088,15 +3096,18 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
       padding-inline-end: 4.5rem;
     }
 
+    // Placed on the bar (.pf-listen, whose top is the band's): the band is
+    // centered in the bar's padding, at most 50rem wide.
     .pf-listen__open {
       position: absolute;
-      right: 1rem;
-      bottom: calc(100% + .375rem);
+      top: .375rem;
+      right: calc(max(.75rem, env(safe-area-inset-right, 0px)) + max(0px, (100% - 1.5rem - 50rem) / 2) + .375rem);
     }
   }
 
   .pf-listen__open {
     grid-area: open;
+    border: 0;
   }
 
   .pf-listen__about {
@@ -3188,7 +3199,9 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
     margin: 0 auto;
     padding: .75rem 1rem .625rem;
     color: var(--bs-body-color);
-    background: var(--bs-body-bg);
+    background-color: var(--pf-sidebar-bg, var(--bs-body-bg));
+    -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+    backdrop-filter: var(--pf-glass-filter, blur(26px));
     border: 1px solid $pf-hairline;
     border-bottom: 0;
   }
@@ -5219,30 +5232,13 @@ $pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last
 
 // Reading: an entry with no picture opened in the object view (a text
 // plate or a name tile; js/exhibition.js sets .is-reading). The text is the
-// thing, so the plate dims back on its stage and the panel widens to a
-// reading column, reader-view fashion: from lg up to 46rem (as much as
-// 56% of the screen) beside the plate; below lg the stage gives up most of
-// its height. The words are set larger and looser, at most 66 characters
-// to the line. Folded away (.is-full), the viewer is as before.
+// thing: the stage is empty, the exhibition showing through its glass,
+// with only the arrows; the panel keeps its usual width and is never
+// folded away (sync({ text: true }), js/viewer.js). Below lg the panel
+// takes the screen, as a clip's transcript does (below). The words are
+// set larger and looser. At the text's end, the way on to the next entry
+// (.pf-exhibit-next).
 .pf-viewer--exhibit.is-reading {
-  @include media-breakpoint-up(lg) {
-    --pf-panel-w: max(20rem, min(46rem, 56vw));
-  }
-
-  &[open]:not(.is-full) {
-    @include media-breakpoint-down(lg) {
-      grid-template-rows: minmax(0, 30%) minmax(0, 1fr);
-    }
-  }
-
-  .pf-viewer__frame--plate .pf-exhibit-plate {
-    opacity: .4;
-
-    @include pf-exhibit-motion {
-      transition: opacity .6s $pf-exhibit-ease;
-    }
-  }
-
   .pf-viewer__body {
     max-width: 66ch;
     font-size: 1.125rem;
@@ -5864,15 +5860,17 @@ $pf-deck-strokes: 15, 20, 22, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 90;
   }
 
   // The player pins under the panel's top row (its height measured by
-  // js/exhibition.js) while the transcript scrolls by, across the panel on
-  // the page color, solid so no line shows through behind the controls.
+  // js/exhibition.js) while the transcript scrolls by, across the panel in
+  // the top row's glass, the transcript blurring away behind the controls.
   .pf-audio {
     position: sticky;
     top: calc(var(--pf-viewer-top-h, 3.85rem) - var(--pf-pad-top));
     z-index: 1;
     margin-inline: calc(-1 * var(--pf-pad-start)) calc(-1 * var(--pf-pad-end));
     padding: .75rem var(--pf-pad-end) .75rem var(--pf-pad-start);
-    background-color: var(--bs-body-bg);
+    background-color: var(--pf-sidebar-bg, var(--bs-body-bg));
+    -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+    backdrop-filter: var(--pf-glass-filter, blur(26px));
     border-bottom: 1px solid $pf-hairline;
   }
 
@@ -5917,7 +5915,9 @@ $pf-deck-strokes: 15, 20, 22, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 90;
       text-transform: uppercase;
       white-space: nowrap;
       color: var(--pf-viewer-muted);
-      background-color: var(--bs-body-bg);
+      background-color: var(--pf-sidebar-bg, var(--bs-body-bg));
+      -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+      backdrop-filter: var(--pf-glass-filter, blur(26px));
       pointer-events: none;
       animation: pf-audio-now-title linear both;
       animation-timeline: --pf-audio-above;
@@ -6023,43 +6023,115 @@ html.pf-a11y-motion .pf-exhibit-object__body :is(.pf-audio, .pf-audio__now) {
   }
 }
 
-// An oral history clip's stage (js/exhibition.js setWash()): its photo
-// blurred into a wash of color and light over the reading color, so a
-// portrait doesn't stand in empty bands. Never behind objects, whose
-// colors a tinted ground would change; the text panel stays solid. The
-// stage's buttons keep their own 75% page-color backing.
-.pf-viewer__stage:has(> .pf-exhibit-wash) {
-  overflow: hidden;
-  isolation: isolate;
+// The object view in glass: the exhibition stays in sight behind it,
+// blurred and dimmed, as behind the utility drawers (search, hours:
+// _utility-panels.scss). The view itself is the glass: the page dimmed
+// (black on dark swatches, the page color on light ones, the drawers'
+// backdrop) under the drawers' glass, blurred. The panel is darker glass,
+// the breadcrumb bar's (.pf-landing__bar), over it. Solid where
+// transparency is reduced or contrast raised, or without backdrop-filter.
+// The stage's buttons keep their own 75% page-color backing.
+.pf-viewer--exhibit {
+  --pf-viewer-glass:
+    linear-gradient(rgba(var(--pf-g-bg-rgb, 247, 244, 236), #{$pf-panel-glass}), rgba(var(--pf-g-bg-rgb, 247, 244, 236), #{$pf-panel-glass})),
+    rgba(var(--pf-g-bg-rgb, 247, 244, 236), #{$pf-panel-backdrop-light});
+  background: var(--pf-viewer-glass);
+  -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+  backdrop-filter: var(--pf-glass-filter, blur(26px));
+
+  &::backdrop {
+    background: transparent;
+  }
+
+  .pf-viewer__panel {
+    background-color: var(--pf-sidebar-bg, var(--bs-body-bg));
+  }
 }
 
-.pf-exhibit-wash {
-  position: absolute;
-  // Past the stage's edges, so the blur's soft rim is clipped away.
-  inset: -4rem;
-  z-index: -1;
-  background: center / cover no-repeat;
-  filter: blur(48px) saturate(.7);
-  opacity: 0;
-  pointer-events: none;
+html.pf-reading-dark .pf-viewer--exhibit {
+  --pf-viewer-glass:
+    linear-gradient(color-mix(in srgb, color-mix(in srgb, var(--pf-g-bg) 80%, #000) #{$pf-panel-glass-dark}, transparent), color-mix(in srgb, color-mix(in srgb, var(--pf-g-bg) 80%, #000) #{$pf-panel-glass-dark}, transparent)),
+    rgb(0 0 0 / #{$pf-panel-backdrop-dark});
+}
 
-  &.is-shown {
-    opacity: .35;
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .pf-viewer--exhibit {
+    --pf-viewer-glass: var(--bs-body-bg);
+  }
+}
+
+@include pf-solid-chrome {
+  .pf-viewer--exhibit {
+    --pf-viewer-glass: var(--bs-body-bg);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+// A text plate's end (js/exhibition.js nextCue()): "Keep scrolling for the
+// next page" and the next entry's title over the landing's scroll cue
+// line, which fills as the reader scrolls on through the room under it;
+// at its end the view steps on. A button too, for the keyboard.
+.pf-exhibit-next {
+  padding-top: 1.5rem;
+  border-top: 1px solid $pf-hairline;
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.pf-exhibit-next__cue {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .6rem;
+  width: 100%;
+  padding: .5rem 0 0;
+  color: var(--pf-viewer-muted);
+  background: none;
+  border: 0;
+  text-align: center;
+  transition: color $pf-hover-out ease;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--bs-body-color);
+    transition-duration: $pf-hover-in;
   }
 
-  // Zoomed in, the image is all there is to look at.
-  .pf-viewer__stage:has(.is-zoomed) > & {
-    opacity: 0;
+  &:focus-visible {
+    outline: 2px solid var(--pf-viewer-accent);
+    outline-offset: 4px;
   }
 
-  // In after the image has grown out of its tile; out at once.
-  @include pf-viewer-motion {
-    transition: opacity .6s ease .25s;
-
-    &.is-leaving {
-      transition-delay: 0s;
-    }
+  .pf-hero-cue__line {
+    flex: none;
+    height: 5rem;
   }
+}
+
+.pf-exhibit-next__prompt {
+  text-wrap: balance;
+  font: var(--pf-mono-label)/1.4 var(--pf-viewer-mono);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.pf-exhibit-next__title {
+  max-width: 28ch;
+  text-wrap: balance;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--bs-body-color);
+}
+
+// The line fills with the scroll (--pf-next, 0 to 1), not on a timer: the
+// landing's own passes are off here.
+.pf-viewer .pf-exhibit-next .pf-hero-cue__line::after {
+  translate: 0 calc((var(--pf-next, 0) - 1) * 100%);
+  animation: none;
 }
 
 // An oral history clip below lg (js/exhibition.js phoneParts()): the
@@ -6082,7 +6154,7 @@ html.pf-a11y-motion .pf-exhibit-object__body :is(.pf-audio, .pf-audio__now) {
 }
 
 @include media-breakpoint-down(lg) {
-  .pf-viewer--exhibit.is-clip[open]:not(.is-side, .is-full) {
+  .pf-viewer--exhibit:is(.is-clip, .is-reading)[open]:not(.is-side, .is-full) {
     grid-template-rows: minmax(0, 1fr);
 
     .pf-viewer__stage {
@@ -6101,7 +6173,6 @@ html.pf-a11y-motion .pf-exhibit-object__body :is(.pf-audio, .pf-audio__now) {
       position: relative;
       z-index: 1;
       grid-row: 1;
-      background: transparent;
       border-top: 0;
     }
 
@@ -6230,9 +6301,12 @@ html.pf-a11y-motion .pf-exhibit-object__body :is(.pf-audio, .pf-audio__now) {
     // The photo, asked for: the stage over everything, the photo whole,
     // Transcript first among its tools; the arrows and the fold sit out.
     &.is-photo {
+      // Over the transcript, the view's own glass, blurring it away.
       .pf-viewer__stage {
         z-index: 2;
-        background: var(--bs-body-bg);
+        background: var(--pf-viewer-glass);
+        -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
+        backdrop-filter: var(--pf-glass-filter, blur(26px));
       }
 
       .pf-viewer__stage > :not(.pf-exhibit-wash) {

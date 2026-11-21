@@ -349,21 +349,22 @@
   // column, so it stays folded and its button goes. zoom: the Zoom button
   // shows (default: when the stage has something zoomable). hide: Hide
   // image shows (the reader may want the panel alone). extra: the page's
-  // own buttons for the panel's top row.
-  function sync({ steps = 0, bare = false, zoom: zoomable, hide = false, extra = [] } = {}) {
+  // own buttons for the panel's top row. text: the panel is the thing (an
+  // exhibition's text plate), so it is never folded away and has no fold.
+  function sync({ steps = 0, bare = false, zoom: zoomable, hide = false, extra = [], text = false } = {}) {
     view.steps.forEach((button) => {
       button.hidden = steps < 2;
     });
     view.zoom.hidden = zoomable === undefined ? !view.media.querySelector('.pf-viewer__zoomable') : !zoomable;
     view.zoom.setAttribute('aria-pressed', 'false');
-    view.info.hidden = bare;
+    view.info.hidden = bare || text;
     view.bare = bare;
     view.canHide = hide;
     view.hide.hidden = !hide || view.side;
     view.unhide.hidden = !(view.side && view.switched);
     view.extra.replaceChildren(...extra);
     // A side panel is the text alone: never folded away.
-    setFull(!view.side && (bare || savedFull()), false);
+    setFull(!view.side && !text && (bare || savedFull()), false);
     view.panel.scrollTop = 0;
   }
 

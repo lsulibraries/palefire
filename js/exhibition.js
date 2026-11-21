@@ -907,7 +907,7 @@
   }
 
   // An oral history clip on a phone or tablet (below lg, _exhibition.scss):
-  // the transcript takes the whole screen over the photo's wash, the photo
+  // the transcript takes the whole screen in the view's glass, the photo
   // a thumbnail beside the title that shows it whole (is-photo), with a
   // way back to the transcript; the arrows, gone with the stage, beside
   // the count. Hidden from lg, where the photo stands beside the panel.
@@ -955,9 +955,10 @@
     (on ? view.back : view.thumb).focus({ preventScroll: true });
   }
 
-  // An oral history clip's stage: its photo blurred into a wash behind it
-  // (_exhibition.scss), fading in after the image and crossfading as the
-  // view steps. src: the tile's loaded image, or null for none (objects).
+  // An oral history clip (is-clip): its photo is the phone's thumbnail
+  // (phoneParts()). The stage is the view's glass, as for every entry
+  // (_exhibition.scss); any old wash layer goes. src: the tile's loaded
+  // image, or null for none (objects).
   // Below lg the same photo is the panel's thumbnail (phoneParts()).
   function setWash(view, src) {
     view.dialog.classList.toggle('is-clip', !!src);
@@ -973,18 +974,6 @@
       layer.classList.remove('is-shown');
       window.setTimeout(() => layer.remove(), 800);
     });
-    if (!src) {
-      return;
-    }
-    const layer = document.createElement('div');
-    layer.className = 'pf-exhibit-wash';
-    layer.setAttribute('aria-hidden', 'true');
-    layer.style.backgroundImage = 'url("' + src.replace(/"/g, '%22') + '")';
-    view.stage.prepend(layer);
-    // Its hidden style read first, so the opacity transitions rather than
-    // starts shown (animation frames may not run in a background tab).
-    window.getComputedStyle(layer).opacity;
-    layer.classList.add('is-shown');
   }
 
   // A clip in the panel's copy of its entry: the copied player has no
@@ -1925,20 +1914,17 @@
       }
       view.media.replaceChildren(frame);
     }
-    else if (tile.querySelector('.pf-exhibit-plate')) {
-      // A life with no portrait: its name plate, as large as fits.
-      frame.classList.add('pf-viewer__frame--plate');
-      frame.append(tile.querySelector('.pf-exhibit-plate').cloneNode(true));
-      view.media.replaceChildren(frame);
-    }
     else {
+      // Nothing to show, or only a plate (a text plate, or a life with no
+      // portrait): the text is the thing, and the stage stays empty.
       view.media.replaceChildren();
     }
 
-    // No picture, only a plate (a text plate or a name tile): the text is
-    // the thing. The plate dims back and the panel widens to a reading
-    // column (.is-reading, _exhibition.scss).
-    view.dialog.classList.toggle('is-reading', !media.links.length && !!tile.querySelector('.pf-exhibit-plate'));
+    // No picture, only a plate: the panel alone over the exhibition's
+    // glass, with the arrows (.is-reading, _exhibition.scss), and at its
+    // end the way on to the next entry (nextCue()).
+    const reading = !media.links.length && !!tile.querySelector('.pf-exhibit-plate');
+    view.dialog.classList.toggle('is-reading', reading);
 
     // The entry's heading, caption and the rest of its content.
     view.title.textContent = heading.textContent.trim();
@@ -1979,10 +1965,84 @@
     // A clip: the reader may minimize it (Keep listening) and go on through
     // the exhibition while it plays.
     const clip = !!view.body.querySelector('[data-pf-audio] audio');
-    viewer.sync({ steps: n, extra: clip ? [keepButton(view)] : [] });
+    viewer.sync({ steps: n, extra: clip ? [keepButton(view)] : [], text: reading });
     view.phoneSteps.querySelectorAll('button').forEach((b) => {
       b.hidden = n < 2;
     });
+    nextCue(view, reading && n > 1);
+  }
+
+  // A text plate's end: "Keep scrolling" and the next entry's title over
+  // the landing's scroll cue line, then room to scroll on. Scrolling on
+  // through that room fills the line, and at its end the view steps to the
+  // next entry as the arrow does (the count's change is announced). The
+  // room is at least 40% of the panel past the point where the cue is in
+  // full view, so the step only comes of scrolling on deliberately; the
+  // cue is also a button, for the keyboard and for anyone who'd rather
+  // not scroll. Nothing moves by itself.
+  function nextCue(view, on) {
+    if (!view.cue) {
+      const cue = document.createElement('div');
+      cue.className = 'pf-exhibit-next';
+      cue.hidden = true;
+      cue.innerHTML = '<button type="button" class="pf-exhibit-next__cue">'
+        + '<span class="pf-exhibit-next__prompt">' + Drupal.t('Keep scrolling for the next page') + '</span>'
+        + '<span class="pf-exhibit-next__title"></span>'
+        + '<span class="pf-hero-cue__line" aria-hidden="true"></span>'
+        + '</button>'
+        + '<div class="pf-exhibit-next__room" aria-hidden="true"></div>';
+      cue.querySelector('button').addEventListener('click', () => view.steps[1].click());
+      view.panel.append(cue);
+      view.cue = cue;
+      view.panel.addEventListener('scroll', () => onCueScroll(view), { passive: true });
+      // Sized again once the view has its size (it may fill before it opens)
+      // and as it resizes.
+      if (window.ResizeObserver) {
+        new ResizeObserver(() => {
+          if (!view.cue.hidden) {
+            sizeCue(view);
+          }
+        }).observe(view.panel);
+      }
+    }
+    const cue = view.cue;
+    cue.hidden = !on;
+    cue.style.setProperty('--pf-next', '0');
+    view.cueBusy = false;
+    if (!on) {
+      return;
+    }
+    const next = wallState.tiles[(wallState.index + 1) % wallState.tiles.length];
+    const head = next ? document.getElementById(next.dataset.pfTile) : null;
+    cue.querySelector('.pf-exhibit-next__title').textContent = head ? head.textContent.trim() : '';
+    sizeCue(view);
+    requestAnimationFrame(() => sizeCue(view));
+  }
+
+  function sizeCue(view) {
+    const panel = view.panel;
+    const room = view.cue.querySelector('.pf-exhibit-next__room');
+    room.style.height = '0px';
+    const h = panel.clientHeight;
+    const end = view.cue.querySelector('button').getBoundingClientRect().bottom - panel.getBoundingClientRect().top + panel.scrollTop;
+    room.style.height = Math.round(Math.max(h * .4, h * 1.4 - end)) + 'px';
+  }
+
+  function onCueScroll(view) {
+    const cue = view.cue;
+    if (!cue || cue.hidden || view.cueBusy) {
+      return;
+    }
+    const panel = view.panel;
+    const button = cue.querySelector('button');
+    const end = panel.scrollHeight - panel.clientHeight;
+    const shown = Math.max(0, button.getBoundingClientRect().bottom - panel.getBoundingClientRect().top + panel.scrollTop - panel.clientHeight);
+    const progress = end > shown ? Math.min(1, Math.max(0, (panel.scrollTop - shown) / (end - shown))) : 0;
+    cue.style.setProperty('--pf-next', progress.toFixed(3));
+    if (panel.scrollTop >= end - 2 && progress >= 1) {
+      view.cueBusy = true;
+      view.steps[1].click();
+    }
   }
 
   /* ---------------------------------------------------------------------
@@ -2078,6 +2138,7 @@
     const photo = card.querySelector('.pf-interview__photo img');
     stopAudio(view);
     view.dialog.classList.remove('is-reading');
+    nextCue(view, false);
     view.dialog.removeAttribute('aria-label');
     view.dialog.setAttribute('aria-labelledby', 'pf-viewer-title');
     view.title.hidden = false;
@@ -2258,6 +2319,7 @@
     setWash(view, null);
     view.body.replaceChildren();
     view.dialog.classList.remove('is-reading', 'is-transcript');
+    nextCue(view, false);
     view.scale.hidden = true;
     view.scale.replaceChildren();
     view.count.textContent = n > 1 ? Drupal.t('Image @n of @total', { '@n': loose.index + 1, '@total': n }) : '';

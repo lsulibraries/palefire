@@ -189,6 +189,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-20:** Object view glass: `.pf-viewer--exhibit` background `--pf-viewer-glass` (drawer glass over the drawers’ backdrop) with `--pf-glass-filter`; panel, pinned player and `.pf-listen` in `--pf-sidebar-bg` glass. `.pf-exhibit-wash` removed. Text plate (`.is-reading`): no stage picture, panel `--pf-panel-w` as any entry, `.pf-exhibit-next` cue (mono prompt, title 1.0625rem/600, `.pf-hero-cue__line` 5rem filled by `--pf-next`). `.pf-audio__play`: 1px ring at 45% of the text color over 8%; hover filled with the accent. `.pf-listen--clip .pf-listen__open`: no border, top right of the caption band.
 - **2026-11-20:** Breadcrumb bar: `--pf-bar-button` and `--pf-landing-bar-h` 2.25rem (was 2rem); `.pf-page-bar` and `.pf-showcase-head` the same; the reading rail’s top padding 3.25rem.
 - **2026-11-20:** Framed cover and whole lead washes (`pf-exhibit-plate`): `opacity: .14`, `filter: blur(3px)`, `scale: 1.06`, `mask-image: linear-gradient(transparent, #000 18%, #000 72%, transparent)`; hidden with more contrast. Matches `.pf-showcase__plate`.
 - **2026-11-20:** Exhibition cover: the bar’s zoom button (`.pf-exhibit-zoom`) is gone; the cover has a museum label instead (`.pf-exhibit-lead-label.pf-exhibit-cover__label`, View only), top right under the bar, the same component as a full-screen gallery lead’s.
