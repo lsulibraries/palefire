@@ -879,6 +879,11 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Reader font on exhibitions', <<<'HTML'
+<ul>
+<li>The Reader font setting now works on exhibitions too: their longer writing (gallery introductions, essays, captions and biographies) switches to a book-style serif. It is off unless a visitor turns it on in Settings.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: Keep scrolling on every gallery item', <<<'HTML'
 <ul>
 <li>The “Keep scrolling for the next page” prompt at the end of a text panel now ends every item opened from an exhibition gallery: pictures and clips too. Keep scrolling past it, or select it, to go on to the next item.</li>

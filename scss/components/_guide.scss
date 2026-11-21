@@ -58,7 +58,7 @@ html[data-pf-mode="guide"] {
   }
 }
 
-// Reader font (Settings > Reading > "Reader font for guides") ---------------
+// Reader font (Settings > Reading > "Reader font for guides and exhibitions")
 // The book serif and measure of Edge's Reader view: Sitka on Windows (what
 // Reader view uses), Charter / Iowan Old Style on Apple, Georgia elsewhere.
 // System fonts only, nothing downloaded. Only the page title, the guide head
@@ -90,6 +90,19 @@ html.pf-a11y-reader:not(.pf-a11y-font)[data-pf-mode="guide"] {
     font-family: $pf-font-reader-heading;
     font-weight: 700;
     letter-spacing: 0;
+  }
+}
+
+// On an exhibition, its reading text only: a gallery's opening text, a
+// cover's essay, the galleries' prose, captions, biographies and
+// transcripts (.pf-guide-prose), and the object view's paragraphs. At the
+// layout's own size, as the fold under a long opening is measured from its
+// lines. Titles, counts, facts, labels and buttons keep their fonts.
+html.pf-a11y-reader:not(.pf-a11y-font)[data-pf-mode="exhibition"] {
+  :is(.pf-exhibit-wall__intro, .pf-exhibit-cover__intro, .pf-guide-prose),
+  .pf-viewer__body :is(p, li, blockquote, dd) {
+    font-family: $pf-font-reader;
+    font-kerning: normal;
   }
 }
 
