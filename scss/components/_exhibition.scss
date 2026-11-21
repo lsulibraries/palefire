@@ -1283,6 +1283,45 @@ $pf-exhibit-wash-fade: clamp(14rem, 24vw, 30rem);
   display: none;
 }
 
+// Below lg the cover's text spans the column and a long intro scrolls up
+// over the pinned picture, past the foot's wash: a veil of the page color
+// (88%) over a 6px blur, pinned with the picture (as a framed cover's wash,
+// it follows the image and is pulled up over it), comes in over the first
+// 30% of a screen of scrolling, so the page opens on the clear picture and
+// the intro reads at 4.5:1 by the time it is over it (at 88% even a white
+// patch is under the gray text's 4.5:1 line). Only the layer fades; the
+// blur is fixed. Without scroll timelines the cover is as before.
+@supports (animation-timeline: scroll()) {
+  @include media-breakpoint-down(lg) {
+    .pf-exhibit-cover__media::after {
+      content: "";
+      position: sticky;
+      top: var(--pf-header-h);
+      display: block;
+      height: calc(100lvh - #{$pf-header-bar-compact-h});
+      margin-top: calc(-100lvh + #{$pf-header-bar-compact-h});
+      translate: 0 calc(#{$pf-header-bar-compact-h} - var(--pf-header-h));
+      pointer-events: none;
+      background: color-mix(in srgb, var(--bs-body-bg) 88%, transparent);
+      -webkit-backdrop-filter: blur(6px);
+      backdrop-filter: blur(6px);
+      animation: pf-exhibit-cover-veil linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 30svh;
+    }
+
+    .pf-exhibit-deep .pf-exhibit-cover__media::after {
+      display: none;
+    }
+  }
+}
+
+@keyframes pf-exhibit-cover-veil {
+  from {
+    opacity: 0;
+  }
+}
+
 @keyframes pf-exhibit-cover-in {
   from {
     opacity: $pf-exhibit-fade-from;
