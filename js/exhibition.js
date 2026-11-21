@@ -1963,10 +1963,13 @@
     view.phoneSteps.querySelectorAll('button').forEach((b) => {
       b.hidden = n < 2;
     });
-    nextCue(view, reading && n > 1);
+    // The way on at the panel's end, on every entry of a wall with more
+    // than one; not in a clip's side panel (sideHandler), which has no
+    // arrows to step with.
+    nextCue(view, n > 1 && !(view.side && !reading));
   }
 
-  // A text plate's end: "Keep scrolling" and the next entry's title over
+  // An entry's end: "Keep scrolling" and the next entry's title over
   // the landing's scroll cue line, then room to scroll on. Scrolling on
   // through that room fills the line, and at its end the view steps to the
   // next entry as the arrow does (the count's change is announced). The

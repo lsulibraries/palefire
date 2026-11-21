@@ -189,6 +189,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-20:** `.pf-exhibit-next` (keep-scrolling cue) at the end of every wall entry’s panel, not only a text plate’s; none in a clip’s side panel.
 - **2026-11-20:** Gallery opening from lg: `.pf-exhibit-wall-hero__img` adds `pf-exhibit-focus-pull` (scale 1 to 1.04) on `--pf-open`, the veil’s range, `animation-composition: replace, add`.
 - **2026-11-20:** Gallery opening from lg: `.pf-exhibit-wall-hero__frame::after` with text is `$pf-exhibit-veil` (page color 90% to the text edge, 62% past `$pf-exhibit-wash-fade`) with `backdrop-filter: blur(6px)`, animated `pf-exhibit-reveal-veil` (opacity .25 to 1) over `contain 0svh` to `56svh` (`30svh` for a long cover text); `pf-solid-chrome` uses `$pf-exhibit-side-wash`. `.is-brief`/`.is-wash-live` removed. Show less returns to the Read more view (180ms fade out, 420ms in). `.pf-exhibit-head` bar 2.25rem.
 - **2026-11-20:** Text plate as a side panel: `.pf-viewer--exhibit.is-reading` opens `.is-side` (panel width from lg, a sheet below), page not locked or blurred; `.pf-viewer__count` and `.pf-exhibit-phone-step` (mixin `pf-exhibit-step`: 2.75rem square, hairline border, accent on hover) in its top row at every width. `.pf-viewer--exhibit.is-side` background transparent, the panel’s `--pf-sidebar-bg` glass alone.

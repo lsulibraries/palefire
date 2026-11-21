@@ -5273,7 +5273,8 @@ $pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last
 // nothing dimmed or blurred, so the page stays clear and in reach. The
 // count and the arrows (the phone's, .pf-exhibit-phone-step) are in its
 // top row, since it has no stage. The words are set larger and looser.
-// At the text's end, the way on to the next entry (.pf-exhibit-next).
+// At the text's end, the way on to the next entry (.pf-exhibit-next),
+// as at the end of every entry's panel.
 .pf-viewer--exhibit.is-reading {
   .pf-viewer__count {
     display: block;
@@ -6118,7 +6119,7 @@ html.pf-reading-dark .pf-viewer--exhibit {
   }
 }
 
-// A text plate's end (js/exhibition.js nextCue()): "Keep scrolling for the
+// An entry's end (js/exhibition.js nextCue()): "Keep scrolling for the
 // next page" and the next entry's title over the landing's scroll cue
 // line, which fills as the reader scrolls on through the room under it;
 // at its end the view steps on. A button too, for the keyboard.

@@ -879,6 +879,11 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Keep scrolling on every gallery item', <<<'HTML'
+<ul>
+<li>The “Keep scrolling for the next page” prompt at the end of a text panel now ends every item opened from an exhibition gallery: pictures and clips too. Keep scrolling past it, or select it, to go on to the next item.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: A focus pull', <<<'HTML'
 <ul>
 <li>As the veil and blur come over a gallery’s opening picture on a large screen, the picture also moves in very slightly, as a camera does when its focus is pulled. It stays still for anyone who has asked for less motion.</li>
