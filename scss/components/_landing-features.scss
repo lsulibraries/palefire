@@ -4535,6 +4535,13 @@ $pf-wash-narrow: 'html:root .pf-landing.pf-landing--cover.pf-landing--wash > .pf
     .pf-hero-banner__frost {
       opacity: 1;
     }
+
+    // No building photo behind the drawing here: a tap is hover and focus
+    // on a phone, so it would come up behind the map, which needs no
+    // picture under it. Hidden, its file never loads.
+    .pf-hero-banner__photo {
+      display: none;
+    }
   }
 }
 

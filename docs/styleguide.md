@@ -189,6 +189,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-20:** `.pf-hero-banner--map .pf-hero-banner__photo` is `display: none` in the narrow wash layout (`@container pf-cover (width < 44rem)`); the frost stays.
 - **2026-11-20:** `.pf-exhibit-cover__media::after` below lg (with scroll timelines): pinned veil, `color-mix(var(--bs-body-bg) 88%)` + `blur(6px)`, opacity 0 to 1 over `scroll(root)` 0 to 30svh (`pf-exhibit-cover-veil`); hidden under `.pf-exhibit-deep`.
 - **2026-11-20:** `.pf-exhibit-wall-hero--whole .pf-exhibit-wall-hero__frame::after` from lg: `$pf-exhibit-veil-text` (90% to the text edge, clear past the fade; blur across).
 - **2026-11-20:** `.pf-exhibit-wall-hero--whole .pf-exhibit-wall-hero__img` from lg: `z-index: 2`, over the veil, no focus pull; `pf-exhibit-focus-pull` on `.pf-exhibit-wall-hero__wash` instead (added to its plate scale).

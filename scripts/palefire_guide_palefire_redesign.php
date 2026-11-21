@@ -879,6 +879,11 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: A cleaner Find us map on phones', <<<'HTML'
+<ul>
+<li>On phones the Find us map on Oral History’s homepage stays a plain drawing; the building’s photo no longer appears behind it when tapped.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: Easier reading over title pictures on phones', <<<'HTML'
 <ul>
 <li>On phones and tablets an exhibition still opens on its clear picture; as the introduction scrolls up, the picture softens and darkens behind it so the text stays easy to read.</li>
