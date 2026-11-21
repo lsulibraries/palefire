@@ -879,6 +879,12 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Dates on their own line, and framed pictures on every gallery', <<<'HTML'
+<ul>
+<li>A gallery title’s dates now sit on their own small line under the subtitle, like the date line on a museum label.</li>
+<li>Galleries that open on their entries (such as Golden Age) now show a framed picture with its full caption beside the title, the same as galleries with an introduction.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: Keep-scrolling works on touchpads', <<<'HTML'
 <ul>
 <li>The keep-scrolling prompt now works with laptop touchpads and smooth-scrolling mice: once you reach the end, keep scrolling and the prompt fills, then moves on. Before, it waited for a pause those devices never make, so nothing happened.</li>

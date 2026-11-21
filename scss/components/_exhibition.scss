@@ -189,6 +189,18 @@ html[data-pf-mode="exhibition"] .pf-section__title-sub {
   text-wrap: balance;
 }
 
+// A closing year or range: its own line under the subtitle (or the title),
+// in the mono of the gallery's number, letter-spaced and muted, as the date
+// line of a museum label.
+html[data-pf-mode="exhibition"] .pf-section__title-date {
+  display: block;
+  margin-top: 1rem;
+  font: 500 max(0.875rem, 0.17em)/1.4 var(--pf-exhibit-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.14em;
+  color: var(--pf-exhibit-muted);
+}
+
 html[data-pf-mode="exhibition"] .pf-section:not([style*="--pf-gallery-index"]) .pf-section__title::before {
   content: none;
 }
@@ -4269,6 +4281,7 @@ $pf-wall-bare: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf
 
 #{$pf-wall-bare} {
   > .pf-section__title::before,
+  .pf-section__title-date,
   .pf-exhibit-wall__stats {
     color: var(--pf-g-heading, var(--bs-emphasis-color));
   }
@@ -4882,7 +4895,7 @@ $pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last
       align-items: flex-start;
       gap: 0.35rem;
       width: fit-content;
-      max-width: min(max(var(--pf-pic-w), 18rem), 100% - var(--pf-pic-x) - 0.75rem);
+      max-width: min(max(var(--pf-pic-w), 24rem), 100% - var(--pf-pic-x) - 0.75rem);
       background: none;
       border: 0;
       -webkit-backdrop-filter: none;
@@ -4933,6 +4946,23 @@ $pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last
       text-decoration-color: currentColor;
       transition-duration: $pf-hover-in;
     }
+  }
+
+  // A bare wall's whole picture, as a gallery with an intro's: it ends
+  // above the first row of tiles (the first screen less $pf-bare-peek, with
+  // its label's room and 1.5rem clear of the tiles), and the foot's wash keeps to the text column, so
+  // the picture and its label sit clear and undimmed beside the title.
+  #{$pf-wall-bare}:has(.pf-exhibit-wall-hero--whole)::before {
+    -webkit-mask-image: linear-gradient(to right, #000 #{$pf-exhibit-text-edge}, transparent calc(#{$pf-exhibit-text-edge} + #{$pf-exhibit-wash-fade}));
+    mask-image: linear-gradient(to right, #000 #{$pf-exhibit-text-edge}, transparent calc(#{$pf-exhibit-text-edge} + #{$pf-exhibit-wash-fade}));
+  }
+
+  #{$pf-wall-bare} .pf-exhibit-wall-hero--whole .pf-exhibit-wall-hero__img {
+    padding-bottom: calc(clamp(1.5rem, 6vh, 4rem) + #{$pf-bare-peek});
+  }
+
+  #{$pf-wall-bare} .pf-exhibit-wall-hero--whole .pf-exhibit-wall-hero__frame:has(.pf-exhibit-lead-label) > .pf-exhibit-wall-hero__img {
+    padding-bottom: calc(clamp(1.5rem, 6vh, 4rem) + #{$pf-bare-peek} + 1.5rem + var(--pf-label-room, 3rem));
   }
 
   .pf-exhibit-wall-hero__hit {

@@ -98,9 +98,10 @@
   // the image's size, the box's padding and object-position). A layer over
   // it (aria-hidden and out of the tab order: View is the way in for the
   // keyboard and screen readers) passes a click to View. Only from lg,
-  // where the picture stands clear of the text column, and only with an
-  // intro (a bare wall's tiles rise over the foot) and a caption line to
-  // show; otherwise, and without this, the label stays in the corner.
+  // where the picture stands clear of the text column (a bare wall's
+  // picture ends above its tiles, _exhibition.scss), and with a caption
+  // line to show; otherwise, and without this, the label stays in the
+  // corner.
   // Placed, it shows the whole caption rather than the corner's first
   // sentence: a copy of the figure's caption (inert and aria-hidden: the
   // figure is already labelled by it), and the room under the picture is
@@ -114,7 +115,7 @@
       return;
     }
     const hit = frame.querySelector('.pf-exhibit-wall-hero__hit');
-    if (!wide.matches || !page.querySelector('.pf-exhibit-wall__text') || !frame.querySelector('.pf-exhibit-lead-label__text')) {
+    if (!wide.matches || !frame.querySelector('.pf-exhibit-lead-label__text')) {
       frame.classList.remove('is-placed');
       if (hit) {
         hit.remove();
