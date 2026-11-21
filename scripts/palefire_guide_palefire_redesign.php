@@ -879,6 +879,11 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Serif gallery titles with the Reader font', <<<'HTML'
+<ul>
+<li>With the Reader font setting on, an exhibition’s large gallery titles change to Times New Roman as well, to match the book-style text under them.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: Reader font on exhibitions', <<<'HTML'
 <ul>
 <li>The Reader font setting now works on exhibitions too: their longer writing (gallery introductions, essays, captions and biographies) switches to a book-style serif. It is off unless a visitor turns it on in Settings.</li>

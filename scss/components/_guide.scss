@@ -67,6 +67,10 @@ html[data-pf-mode="guide"] {
 // when both are on: it is the accessibility setting.
 $pf-font-reader: 'Sitka Text', 'Sitka', Charter, 'Bitstream Charter', 'Iowan Old Style', Cambria, Georgia, serif;
 $pf-font-reader-heading: 'Sitka Heading', 'Sitka', Charter, 'Bitstream Charter', 'Iowan Old Style', Cambria, Georgia, serif;
+// An exhibition's gallery titles: a classic book face at display size, in
+// its regular weight (the titles' 500), so the large gold title reads like a
+// catalog's.
+$pf-font-reader-title: 'Times New Roman', Times, 'Liberation Serif', serif;
 
 html.pf-a11y-reader:not(.pf-a11y-font)[data-pf-mode="guide"] {
   :is(.pf-sections, .pf-guide-head, .pf-modular__title) {
@@ -93,16 +97,25 @@ html.pf-a11y-reader:not(.pf-a11y-font)[data-pf-mode="guide"] {
   }
 }
 
-// On an exhibition, its reading text only: a gallery's opening text, a
-// cover's essay, the galleries' prose, captions, biographies and
-// transcripts (.pf-guide-prose), and the object view's paragraphs. At the
-// layout's own size, as the fold under a long opening is measured from its
-// lines. Titles, counts, facts, labels and buttons keep their fonts.
+// On an exhibition, its reading text: a gallery's opening text, a cover's
+// essay, the galleries' prose, captions, biographies and transcripts
+// (.pf-guide-prose), and the object view's paragraphs. At the layout's own
+// size, as the fold under a long opening is measured from its lines. The
+// galleries' titles (and the title repeated over a panning lead's text)
+// in Times New Roman, tracked a little less tightly than the sans; their
+// number ("03 / 07") sets its own mono font. The exhibition's cover title,
+// counts, facts, labels and buttons keep their fonts.
 html.pf-a11y-reader:not(.pf-a11y-font)[data-pf-mode="exhibition"] {
   :is(.pf-exhibit-wall__intro, .pf-exhibit-cover__intro, .pf-guide-prose),
   .pf-viewer__body :is(p, li, blockquote, dd) {
     font-family: $pf-font-reader;
     font-kerning: normal;
+  }
+
+  :is(.pf-section__title, .pf-exhibit-body-title) {
+    font-family: $pf-font-reader-title;
+    font-kerning: normal;
+    letter-spacing: -0.01em;
   }
 }
 

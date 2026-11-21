@@ -189,6 +189,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-20:** Reader font on exhibitions: `.pf-section__title` and `.pf-exhibit-body-title` use `$pf-font-reader-title` (“Times New Roman”, Times, “Liberation Serif”, serif), `letter-spacing: -0.01em`.
 - **2026-11-20:** Reader font (`html.pf-a11y-reader`) also on `data-pf-mode="exhibition"`: `$pf-font-reader` on `.pf-exhibit-wall__intro`, `.pf-exhibit-cover__intro`, `.pf-guide-prose` and `.pf-viewer__body` paragraphs, at their own size. Setting label “Reader font for guides and exhibitions”.
 - **2026-11-20:** `.pf-exhibit-next` (keep-scrolling cue) at the end of every wall entry’s panel, not only a text plate’s; none in a clip’s side panel.
 - **2026-11-20:** Gallery opening from lg: `.pf-exhibit-wall-hero__img` adds `pf-exhibit-focus-pull` (scale 1 to 1.04) on `--pf-open`, the veil’s range, `animation-composition: replace, add`.
