@@ -1889,9 +1889,7 @@
       if (media.caption) {
         return;
       }
-      const own = media.links[to].closest('figure').querySelector(':scope > figcaption');
-      view.label.replaceChildren(...(own ? Array.from(own.cloneNode(true).childNodes) : []));
-      view.label.hidden = !own;
+      setLabel(view, media.links[to].closest('figure').querySelector(':scope > figcaption'));
     };
     if (media.links.length === 2 && !turned) {
       const [a, b] = media.links;
@@ -2027,8 +2025,7 @@
 
     // The entry's heading, caption and the rest of its content.
     view.title.textContent = heading.textContent.trim();
-    view.label.replaceChildren(...(media.caption ? Array.from(media.caption.cloneNode(true).childNodes) : []));
-    view.label.hidden = !media.caption;
+    setLabel(view, media.caption);
     if (turned) {
       pageLabel(0);
     }
@@ -2594,9 +2591,8 @@
     view.dialog.removeAttribute('aria-labelledby');
     view.dialog.setAttribute('aria-label', Drupal.t('Image viewer'));
     view.title.hidden = true;
-    view.label.replaceChildren(...(caption ? Array.from(caption.cloneNode(true).childNodes) : []));
+    setLabel(view, caption);
     view.label.querySelectorAll('a[href]:not([target])').forEach(markOutside);
-    view.label.hidden = !caption;
     stopAudio(view);
     setWash(view, null);
     view.body.replaceChildren();
@@ -2607,6 +2603,97 @@
     view.scale.replaceChildren();
     view.count.textContent = n > 1 ? Drupal.t('Image @n of @total', { '@n': loose.index + 1, '@total': n }) : '';
     viewer.sync({ steps: n, bare: !caption && n < 2 });
+  }
+
+  // A caption in the panel: what it shows, then where it is from as rows
+  // (.pf-viewer__credit, a <dl>): Source (the credit as written), Call
+  // no. (a call number in brackets at its end) and View (the links at its
+  // end, to the catalog). Only where the caption marks its credit off
+  // itself, with a line break after the description; anything else shows
+  // as written, nothing guessed.
+  function setLabel(view, caption) {
+    view.label.replaceChildren(...(caption ? Array.from(caption.cloneNode(true).childNodes) : []));
+    view.label.hidden = !caption;
+    const br = caption ? view.label.querySelector('br') : null;
+    const block = br && br.parentElement;
+    if (!br) {
+      return;
+    }
+    let lead = '';
+    for (let node = block.firstChild; node && node !== br; node = node.nextSibling) {
+      lead += node.textContent;
+    }
+    const after = [];
+    for (let node = br.nextSibling; node; node = node.nextSibling) {
+      after.push(node);
+    }
+    if (!lead.trim() || !after.length) {
+      return;
+    }
+    // Its end: links, with nothing but spaces and stops between.
+    const links = [];
+    while (after.length) {
+      const last = after[after.length - 1];
+      if (last.nodeType === Node.TEXT_NODE && /^[\s.,;·|]*$/.test(last.data)) {
+        after.pop();
+      }
+      else if (last.nodeName === 'A') {
+        links.unshift(after.pop());
+      }
+      else {
+        break;
+      }
+    }
+    // A call number: [Hill Louisiana PS 1244 G6 1899].
+    let call = '';
+    const tail = after[after.length - 1];
+    const bracket = tail && tail.nodeType === Node.TEXT_NODE ? tail.data.match(/\s*\[([^\]]+)\]\.?\s*$/) : null;
+    if (bracket) {
+      call = bracket[1].trim();
+      tail.data = tail.data.slice(0, bracket.index);
+    }
+    const last = after[after.length - 1];
+    if (last && last.nodeType === Node.TEXT_NODE) {
+      last.data = last.data.replace(/\s+$/, '');
+    }
+    const source = after.filter((node) => node.textContent.trim());
+    const list = document.createElement('dl');
+    list.className = 'pf-viewer__credit';
+    const row = (name, nodes) => {
+      const item = document.createElement('div');
+      const term = document.createElement('dt');
+      const value = document.createElement('dd');
+      term.textContent = name;
+      value.append(...nodes);
+      item.append(term, value);
+      list.append(item);
+    };
+    if (source.length) {
+      row(Drupal.t('Source'), after);
+    }
+    if (call) {
+      row(Drupal.t('Call no.'), [document.createTextNode(call)]);
+    }
+    if (links.length) {
+      row(Drupal.t('View'), links.flatMap((link, i) => (i ? [document.createTextNode(', '), link] : [link])));
+    }
+    if (!list.children.length) {
+      return;
+    }
+    // Whatever is left after the break (spaces) goes, and the break.
+    let end = br.nextSibling;
+    while (end) {
+      const next = end.nextSibling;
+      end.remove();
+      end = next;
+    }
+    br.remove();
+    if (block.matches('p')) {
+      block.after(list);
+    }
+    else {
+      block.append(list);
+    }
   }
 
   // "Actual size": this gallery's sheet beside the page's other sheets.

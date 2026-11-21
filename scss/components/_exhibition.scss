@@ -6712,6 +6712,60 @@ html.pf-reading-dark .pf-viewer--exhibit {
   }
 }
 
+// A caption's credit as rows (js/exhibition.js setLabel()): Source, Call
+// no., View, each a mono name over its value from md beside it, with
+// hairlines between, as a wall label's details.
+.pf-viewer__credit {
+  display: grid;
+  margin: .75rem 0 0;
+
+  > div {
+    position: relative;
+    display: grid;
+    gap: .15rem 1rem;
+    padding: .5rem 0;
+
+    @include media-breakpoint-up(md) {
+      grid-template-columns: 6.5rem minmax(0, 1fr);
+    }
+  }
+
+  > div + div::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 1px;
+    background: $pf-hairline;
+  }
+
+  dt {
+    @extend %pf-viewer-kicker;
+    padding-top: .15rem;
+  }
+
+  dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+}
+
+// On the stage its hairlines draw with the label's rule (.is-in).
+.pf-viewer--exhibit.is-staged {
+  @include pf-viewer-motion {
+    .pf-viewer__credit > div + div::before {
+      transform: scaleX(0);
+      transform-origin: 100% 50%;
+      transition: transform .22s ease;
+    }
+
+    &.is-in .pf-viewer__credit > div + div::before {
+      transform: none;
+      transform-origin: 0 50%;
+      transition: transform .9s var(--pf-stage-ease) .3s;
+    }
+  }
+}
+
 // An entry's ends (js/exhibition.js nextCue()): the ways on and back.
 // Scrolling on at the panel's end fades in a veil over the whole panel
 // under its top row, the words centered in it (.pf-exhibit-onward; not
