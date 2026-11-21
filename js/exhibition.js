@@ -94,7 +94,6 @@
     state.pages.forEach((page) => {
       sizeHero(page);
       foldIntro(page);
-      briefWash(page);
     });
   }
 
@@ -261,7 +260,6 @@
     foldText(page);
     foldSources(page);
     foldIntro(page);
-    briefWash(page);
     sizeHero(page);
     addNext(page);
   }
@@ -536,7 +534,6 @@
         const page = list.closest('.pf-section');
         if (page) {
           foldIntro(page);
-          briefWash(page, true);
         }
       });
       list.after(button);
@@ -648,8 +645,8 @@
   }
 
   // "Read more" under a folded intro (a wall's, or a cover's long essay):
-  // it opens to the whole text and folds back to limit(), the button
-  // keeping its place on screen. hold: a wall's title row keeps its height
+  // it opens to the whole text and folds back to limit(), back at the view
+  // it was opened from. hold: a wall's title row keeps its height
   // while open (holdWallTop()).
   function addIntroToggle(page, intro, limit, hold) {
     const button = document.createElement('button');
@@ -671,57 +668,78 @@
           holdWallTop(page, intro, true);
         }
         sync(true);
-        briefWash(page, true);
       }
     });
-    button.addEventListener('click', () => {
-      const open = intro.classList.contains('is-folded');
-      const from = intro.getBoundingClientRect().height;
-      const to = open ? intro.scrollHeight : limit();
-      if (open && hold) {
-        holdWallTop(page, intro, true);
-      }
-      // The browser's own scroll anchoring would move the page as well.
-      ROOT.style.overflowAnchor = 'none';
-      intro.style.maxHeight = from + 'px';
-      sync(open);
-      briefWash(page, true);
-      // Closing, the button keeps its place on screen (the page scrolls up
-      // as the text above it folds), never taken up past the header.
-      let last = from;
-      const follow = () => {
-        const now = intro.getBoundingClientRect().height;
-        if (!open) {
-          window.scrollBy({ top: now - last, behavior: 'instant' });
-        }
-        last = now;
-      };
-      const done = () => {
-        follow();
-        ROOT.style.overflowAnchor = '';
-        if (!open && hold) {
+    // Where the button was on screen when it opened the text (null when a
+    // link opened it).
+    let openedAt = null;
+    let closing = false;
+    // Show less: the text fades, folds and the page goes back to the view
+    // it was opened from, all in one step, then fades in. Scrolling the
+    // page along with the fold took it back up through the gallery's
+    // opening, whose scroll-driven reveal played on the way down the
+    // screen, and it ended short of where the reader had been.
+    const close = () => {
+      const place = openedAt === null
+        ? Math.min(Math.max(button.getBoundingClientRect().top, headerOffset()), window.innerHeight - button.offsetHeight * 3)
+        : openedAt;
+      openedAt = null;
+      const swap = () => {
+        // The browser's own scroll anchoring would move the page as well.
+        ROOT.style.overflowAnchor = 'none';
+        sync(false);
+        if (hold) {
           holdWallTop(page, intro, false);
         }
+        window.scrollBy({ top: button.getBoundingClientRect().top - place, behavior: 'instant' });
+        ROOT.style.overflowAnchor = '';
+      };
+      const view = intro.closest('.pf-section__inner');
+      if (reduceMotion() || !view || !view.animate) {
+        swap();
+        return;
+      }
+      closing = true;
+      const out = view.animate({ opacity: [1, 0] }, { duration: 180, easing: 'ease-in', fill: 'forwards' });
+      out.onfinish = () => {
+        swap();
+        view.animate({ opacity: [0, 1] }, { duration: 420, easing: 'cubic-bezier(.2, 0, .2, 1)' });
+        out.cancel();
+        closing = false;
+      };
+    };
+    button.addEventListener('click', () => {
+      if (closing) {
+        return;
+      }
+      if (!intro.classList.contains('is-folded')) {
+        close();
+        return;
+      }
+      openedAt = button.getBoundingClientRect().top;
+      const from = intro.getBoundingClientRect().height;
+      const to = intro.scrollHeight;
+      if (hold) {
+        holdWallTop(page, intro, true);
+      }
+      // The text opens downward from where it is: no scroll anchoring.
+      ROOT.style.overflowAnchor = 'none';
+      intro.style.maxHeight = from + 'px';
+      sync(true);
+      const done = () => {
+        intro.style.maxHeight = '';
+        ROOT.style.overflowAnchor = '';
       };
       if (reduceMotion() || Math.abs(from - to) < 1) {
-        intro.style.maxHeight = '';
         done();
         return;
       }
-      let frame = 0;
-      const step = () => {
-        follow();
-        frame = requestAnimationFrame(step);
-      };
       requestAnimationFrame(() => {
         intro.style.maxHeight = to + 'px';
-        frame = requestAnimationFrame(step);
         const end = (event) => {
           if (event.target !== intro) {
             return;
           }
-          cancelAnimationFrame(frame);
-          intro.style.maxHeight = '';
           intro.removeEventListener('transitionend', end);
           done();
         };
@@ -729,33 +747,6 @@
       });
     });
     intro.after(button);
-  }
-
-  // From lg, a lead whose text is short (title to foot within BRIEF of the
-  // image's screen) has a lighter wash, lifted above the text (.is-brief,
-  // _exhibition.scss), settling back as the text opens. An intro with
-  // "Read more" is short while folded (its fold keeps it to the lower
-  // third) and long open.
-  // The wash moves (.is-wash-live) only for `byReader` ("Read more", "Show
-  // more"): set on load, an opening off screen was restyled only as it
-  // came near, so it turned in view from the long wash.
-  const BRIEF = 0.42;
-  function briefWash(page, byReader) {
-    const hero = page.querySelector('.pf-exhibit-wall-hero');
-    const title = page.querySelector('.pf-section__title');
-    const intro = page.querySelector('.pf-exhibit-wall__intro');
-    if (!hero || !title) {
-      return;
-    }
-    let brief = false;
-    if (intro && wide.matches) {
-      const toggle = intro.parentElement.querySelector('.pf-exhibit-wall__more');
-      const stack = layoutTop(hero) + hero.offsetHeight - layoutTop(title);
-      brief = toggle ? intro.classList.contains('is-folded') : stack <= hero.querySelector('.pf-exhibit-wall-hero__frame').offsetHeight * BRIEF;
-    }
-    const inner = title.closest('.pf-section__inner');
-    inner.classList.toggle('is-wash-live', !!byReader);
-    inner.classList.toggle('is-brief', brief);
   }
 
   // With a lead, the title's row takes what the text leaves of the first

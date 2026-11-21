@@ -879,6 +879,13 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Show less, and a softer veil over the picture', <<<'HTML'
+<ul>
+<li>On a gallery’s opening, Show less now takes you back to where you were when you clicked Read more, with a short fade, instead of sweeping the page back up through the opening.</li>
+<li>On a large screen the picture behind a gallery’s opening text is now veiled and softly blurred across its whole width, deepening as the text comes in, in place of the darker corner at its lower left.</li>
+<li>The bar under the header with the breadcrumb is the taller one on exhibitions too.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: Text panels open beside the page', <<<'HTML'
 <ul>
 <li>A text panel in an exhibition (one with no picture) now opens as a sidebar over the page instead of in the full viewer. The exhibition beside it stays clear, not blurred, and you can keep scrolling and clicking it with the panel open.</li>

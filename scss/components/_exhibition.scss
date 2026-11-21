@@ -53,23 +53,6 @@ $pf-wash-lift: 10%;
   @return linear-gradient($direction, $stops);
 }
 
-// A mask that lifts a wash off from the far end: kept from its start to
-// $from and gone by $to (eased as pf-eased-wash()) at --pf-wash-turn 1; at 0
-// the fade is pushed past the end, so the mask keeps everything. Turning
-// slides the fade along, so each pixel only darkens or clears (moving the
-// wash's own angle and stops passed through a state darker than either).
-@function pf-lift-mask($angle, $from, $to, $steps: 12) {
-  $stops: ();
-  $push: 100% - $from;
-  @for $i from 0 through $steps {
-    $t: math.div($i, $steps);
-    $alpha: math.div(math.round(math.div(1 + math.cos(math.$pi * $t), 2) * 1000), 1000);
-    $at: math.div(math.round(($from + ($to - $from) * $t) * 10), 10);
-    $stops: list.append($stops, rgb(0 0 0 / #{$alpha}) calc(#{$at} + #{$push} * (1 - var(--pf-wash-turn, 0))), comma);
-  }
-  @return linear-gradient($angle, $stops);
-}
-
 // Where load-time fades start: just above 0, which looks the same, because
 // Chrome never counts an element first painted at opacity 0 as the
 // Largest Contentful Paint, so the cover and title went unmeasured and LCP
@@ -1834,9 +1817,11 @@ $pf-exhibit-wash-fade: clamp(14rem, 24vw, 30rem);
 // On the title page it stays under the header while the cover is on
 // screen.
 .pf-exhibit-head {
-  // The landing's bar spacing (.pf-landing sets these there).
+  // The landing's bar spacing and row (.pf-landing sets these there).
   --pf-bar-edge: 1rem;
   --pf-bar-icon-edge: .375rem;
+  --pf-bar-button: 2.25rem;
+  --pf-landing-bar-h: 2.25rem;
   padding-top: 0;
 
   > .pf-landing__bar {
@@ -3935,7 +3920,7 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
 .pf-exhibit-lead-label {
   position: absolute;
   z-index: 2;
-  top: calc(var(--pf-landing-bar-h, 2rem) + 1rem);
+  top: calc(var(--pf-landing-bar-h, 2.25rem) + 1rem);
   right: clamp(0.75rem, 2.5vw, 2rem);
   display: flex;
   align-items: stretch;
@@ -4020,19 +4005,12 @@ $pf-covered: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section > .pf-s
   }
 }
 
-@property --pf-wash-turn {
-  syntax: "<number>";
-  inherits: false;
-  initial-value: 0;
-}
-
-// The brief wash (below): the lift's angle (from the foot, leaning right),
-// and where it keeps the wash to and clears it by. 44% keeps the text: a
-// brief stack is at most 42% of the screen, about 43% along this line at
-// its right edge.
-$pf-brief-angle: 10deg;
-$pf-brief-solid: 44%;
-$pf-brief-clear: 90%;
+// The lead's veil from lg (below): the text column's edge, the veil's two
+// strengths, and the solid side wash (page color under the text, clear
+// past the fade) in its place with reduced transparency and more contrast.
+$pf-exhibit-text-edge: calc(var(--pf-section-pad-inline, 1.25rem) + min(36rem, (100% - 2 * var(--pf-section-pad-inline, 1.25rem)) * .46));
+$pf-exhibit-veil: linear-gradient(to right, color-mix(in srgb, var(--bs-body-bg) 90%, transparent) #{$pf-exhibit-text-edge}, color-mix(in srgb, var(--bs-body-bg) 62%, transparent) calc(#{$pf-exhibit-text-edge} + #{$pf-exhibit-wash-fade}));
+$pf-exhibit-side-wash: linear-gradient(to right, var(--bs-body-bg) #{$pf-exhibit-text-edge}, transparent calc(#{$pf-exhibit-text-edge} + #{$pf-exhibit-wash-fade}));
 
 // Below lg, a wall that opens on its title and facts alone: the foot's
 // wash, dense to just above them (about 34% of the screen at 320 x 568,
@@ -4079,33 +4057,24 @@ $pf-bare-fade: 8rem;
       background: $pf-bare-wash;
     }
 
-    // From lg the text is on the side wash, and the foot only settles the
-    // image into the page (::before, below). A short text (.is-brief,
-    // js/exhibition.js briefWash()) sits low, so the wash lifts off above
-    // it, leaving the lower left (a 210° look) and the image's upper part
-    // clear; it settles back down as the text opens. Slow and eased at both
-    // ends, so it follows the text (0.5s) rather than arriving with it. Only
-    // when the reader opens or closes the text (.is-wash-live), so a short
-    // opening arrives already lifted. Dense to the text column's edge (its
-    // min(36rem, 46%) past the padding, below) and gone
-    // $pf-exhibit-wash-fade later: in percents (42% to 74%) the words ran
-    // out over the fade at lg (47%), and it ran to 94% before that, which
-    // muddied a pale image (Audubon's drawings on parchment).
+    // From lg the text is on a veil over the whole picture, and the foot
+    // only settles the image into the page (::before, below): the page
+    // color at 90% under the text column (its min(36rem, 46%) past the
+    // padding), easing to 62% over $pf-exhibit-wash-fade, the picture
+    // softened under it by a 6px blur. 90% keeps the text (#b7b3ba on the
+    // dark page) over 4.5:1 on a white patch; the far side lets the
+    // picture read. With scroll timelines it comes in at a quarter as the
+    // photograph fills the screen and deepens as the text rises
+    // (pf-exhibit-reveal-veil, below); otherwise it is there from the
+    // start. Only the layer fades: a blur whose radius changes is drawn
+    // again every frame. In place of a side wash that lifted off a short
+    // text to its lower left. Reduce transparency and more contrast keep
+    // the solid side wash ($pf-exhibit-side-wash, after this rule).
     @include media-breakpoint-up(lg) {
-      $pad: var(--pf-section-pad-inline, 1.25rem);
-      $edge: calc(#{$pad} + min(36rem, (100% - 2 * #{$pad}) * .46));
-      background: pf-eased-wash(to right, $edge, calc(#{$edge} + #{$pf-exhibit-wash-fade}), $floor: true);
-      -webkit-mask-image: pf-lift-mask($pf-brief-angle, $pf-brief-solid, $pf-brief-clear);
-      mask-image: pf-lift-mask($pf-brief-angle, $pf-brief-solid, $pf-brief-clear);
-
-      @media (prefers-reduced-motion: no-preference) {
-        .pf-section__inner.is-wash-live & {
-          transition: --pf-wash-turn 1.8s cubic-bezier(.45, 0, .25, 1);
-        }
-      }
-
-      .pf-section__inner.is-brief & {
-        --pf-wash-turn: 1;
+      .pf-section__inner:has(.pf-exhibit-wall__text) & {
+        background: $pf-exhibit-veil;
+        -webkit-backdrop-filter: blur(6px);
+        backdrop-filter: blur(6px);
       }
 
       // A wall that opens on its title and facts alone (no intro over the
@@ -4145,6 +4114,16 @@ $pf-bare-fade: 8rem;
         background: pf-eased-wash(to top, 0%, 100%, 12, .4) left bottom / 100% clamp(3rem, 10vh, 6rem) no-repeat;
         opacity: 1;
       }
+    }
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  @include pf-solid-chrome {
+    .pf-section__inner:has(.pf-exhibit-wall__text) .pf-exhibit-wall-hero__frame::after {
+      background: $pf-exhibit-side-wash;
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
     }
   }
 }
@@ -4385,9 +4364,8 @@ $pf-wall-photo: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-sectio
 
 $pf-reveal-len: 90svh;
 $pf-reveal-long: 56svh;
-// The side wash slides in from the left: how far, and its easing (gentle
-// at both ends, so the whole travel reads).
-$pf-reveal-slide: -50%;
+// The wash's rise below lg: its easing (gentle at both ends, so the whole
+// travel reads).
 $pf-reveal-slide-ease: cubic-bezier(.4, 0, .2, 1);
 $pf-reveal-section: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-sections > .pf-section:has(> .pf-section__inner > .pf-gallery:is(.pf-gallery--cover, .is-walled) .pf-exhibit-wall-hero)';
 $pf-reveal-text: '> .pf-section__inner > .pf-section__title, .pf-exhibit-mark, .pf-exhibit-wall__stats, .pf-exhibit-cover__nav, .pf-exhibit-wall__text';
@@ -4484,10 +4462,10 @@ $pf-reveal-bare: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-secti
           min-height: calc(max(22rem, var(--pf-wall-hero-h)) + var(--pf-reveal));
         }
 
-        // The side wash fades in slowly (ease-in-out over 36% of a screen)
-        // while it slides in from half its width to the left (over 64%);
-        // the title waits until it is mostly in place (36%). A foot-only
-        // wash (no opening text) just fades.
+        // A foot-only wash (no opening text) fades in over 30% of a
+        // screen. The veil over a text's picture is a quarter in as the
+        // photograph fills the screen and deepens over 56% of a screen,
+        // ahead of the title (36% to 60%) and the text after it.
         .pf-exhibit-wall-hero__frame::after {
           animation: pf-exhibit-reveal-wash linear both;
           animation-timeline: --pf-open;
@@ -4495,9 +4473,9 @@ $pf-reveal-bare: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-secti
         }
 
         > .pf-section__inner:has(.pf-exhibit-wall__text) .pf-exhibit-wall-hero__frame::after {
-          animation: pf-exhibit-reveal-wash ease-in-out both, pf-exhibit-reveal-side $pf-reveal-slide-ease both;
-          animation-timeline: --pf-open, --pf-open;
-          animation-range: contain 0svh contain 36svh, contain 0svh contain 64svh;
+          animation: pf-exhibit-reveal-veil ease-in-out both;
+          animation-timeline: --pf-open;
+          animation-range: contain 0svh contain 56svh;
         }
 
         #{$pf-reveal-text} {
@@ -4543,9 +4521,9 @@ $pf-reveal-bare: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-secti
             mask-image: none;
           }
 
-          // The wash sooner, ahead of the moving text.
+          // The veil sooner, ahead of the moving text.
           > .pf-section__inner .pf-exhibit-wall-hero__frame::after {
-            animation-range: contain 0svh contain 24svh, contain 0svh contain 44svh;
+            animation-range: contain 0svh contain 30svh;
           }
 
           > .pf-section__inner:has(:focus-within) .pf-exhibit-wall-hero__frame::after {
@@ -4669,11 +4647,11 @@ $pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last
   }
 }
 
-// The wash's right part is clear, so however far it travels it leaves no
-// edge.
-@keyframes pf-exhibit-reveal-side {
+// The lead's veil from lg: a quarter of its strength as the photograph
+// fills the screen.
+@keyframes pf-exhibit-reveal-veil {
   from {
-    translate: $pf-reveal-slide 0;
+    opacity: .25;
   }
 }
 
