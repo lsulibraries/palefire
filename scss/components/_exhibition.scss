@@ -4478,6 +4478,18 @@ $pf-reveal-bare: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-secti
           animation-range: contain 0svh contain 56svh;
         }
 
+        // A focus pull: as the veil and its blur come in, the picture
+        // pushes in 4%, as a lens's framing shifts when its focus is
+        // thrown. Only scale (composited), added to the load's settle
+        // (pf-exhibit-cover-in), and never back out: zooming out again
+        // reads as a camera move.
+        > .pf-section__inner:has(.pf-exhibit-wall__text) .pf-exhibit-wall-hero__img {
+          animation: pf-exhibit-cover-in 2.4s $pf-exhibit-ease both, pf-exhibit-focus-pull ease-in-out both;
+          animation-timeline: auto, --pf-open;
+          animation-range: normal, contain 0svh contain 56svh;
+          animation-composition: replace, add;
+        }
+
         #{$pf-reveal-text} {
           animation: pf-exhibit-pin linear both, pf-exhibit-reveal $pf-exhibit-ease both;
           animation-timeline: --pf-open, --pf-open;
@@ -4521,9 +4533,13 @@ $pf-reveal-bare: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-secti
             mask-image: none;
           }
 
-          // The veil sooner, ahead of the moving text.
+          // The veil and the push-in sooner, ahead of the moving text.
           > .pf-section__inner .pf-exhibit-wall-hero__frame::after {
             animation-range: contain 0svh contain 30svh;
+          }
+
+          > .pf-section__inner .pf-exhibit-wall-hero__img {
+            animation-range: normal, contain 0svh contain 30svh;
           }
 
           > .pf-section__inner:has(:focus-within) .pf-exhibit-wall-hero__frame::after {
@@ -4652,6 +4668,17 @@ $pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last
 @keyframes pf-exhibit-reveal-veil {
   from {
     opacity: .25;
+  }
+}
+
+// The lead's picture with the veil (added to its own scale).
+@keyframes pf-exhibit-focus-pull {
+  from {
+    scale: 1;
+  }
+
+  to {
+    scale: 1.04;
   }
 }
 

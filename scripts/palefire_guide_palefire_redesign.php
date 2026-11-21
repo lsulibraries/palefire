@@ -879,6 +879,11 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: A focus pull', <<<'HTML'
+<ul>
+<li>As the veil and blur come over a gallery’s opening picture on a large screen, the picture also moves in very slightly, as a camera does when its focus is pulled. It stays still for anyone who has asked for less motion.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: Show less, and a softer veil over the picture', <<<'HTML'
 <ul>
 <li>On a gallery’s opening, Show less now takes you back to where you were when you clicked Read more, with a short fade, instead of sweeping the page back up through the opening.</li>
