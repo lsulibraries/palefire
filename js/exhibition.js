@@ -99,7 +99,8 @@
   // it (aria-hidden and out of the tab order: View is the way in for the
   // keyboard and screen readers) passes a click to View. Only from lg,
   // where the picture stands clear of the text column, and only with an
-  // intro (a bare wall's tiles rise over the foot); otherwise, and without
+  // intro (a bare wall's tiles rise over the foot) and a caption line to
+  // show (placed, the label is that line alone); otherwise, and without
   // this, the label stays in the corner.
   function placeLabel(page) {
     const frame = page.querySelector('.pf-exhibit-wall-hero--whole .pf-exhibit-wall-hero__frame');
@@ -109,7 +110,7 @@
       return;
     }
     const hit = frame.querySelector('.pf-exhibit-wall-hero__hit');
-    if (!wide.matches || !page.querySelector('.pf-exhibit-wall__text')) {
+    if (!wide.matches || !page.querySelector('.pf-exhibit-wall__text') || !frame.querySelector('.pf-exhibit-lead-label__text')) {
       frame.classList.remove('is-placed');
       if (hit) {
         hit.remove();
