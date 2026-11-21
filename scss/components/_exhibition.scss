@@ -4915,13 +4915,10 @@ $pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last
       font-size: 0.875rem;
       line-height: 1.5;
       color: var(--pf-exhibit-muted);
-      text-decoration: underline 1px transparent;
-      text-underline-offset: 0.3em;
 
+      // In hand it turns the accent, no underline.
       @include pf-exhibit-motion {
-        transition:
-          color $pf-hover-out ease,
-          text-decoration-color $pf-hover-out ease;
+        transition: color $pf-hover-out ease;
       }
     }
 
@@ -4943,8 +4940,26 @@ $pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last
 
     &:has(.pf-exhibit-wall-hero__hit:hover, .pf-exhibit-lead-label__view:is(:hover, :focus-visible)) .pf-exhibit-lead-label__full {
       color: var(--pf-g-hover, var(--pf-exhibit-accent));
-      text-decoration-color: currentColor;
       transition-duration: $pf-hover-in;
+    }
+  }
+
+  // Beside a portrait picture with room for it (js/exhibition.js,
+  // .is-beside): the label at the picture's right, its foot on the
+  // picture's foot, up to 22rem wide, as a wall label beside a work; the
+  // picture keeps the height (no room under it), and a longer caption has
+  // up to twelve lines.
+  .pf-exhibit-wall-hero--whole .pf-exhibit-wall-hero__frame.is-placed.is-beside {
+    .pf-exhibit-lead-label {
+      top: auto;
+      bottom: var(--pf-pic-foot);
+      left: calc(var(--pf-pic-x) + var(--pf-pic-w) + 1.5rem);
+      width: var(--pf-label-side);
+      max-width: none;
+    }
+
+    .pf-exhibit-lead-label__full {
+      -webkit-line-clamp: 12;
     }
   }
 

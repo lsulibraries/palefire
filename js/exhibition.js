@@ -106,7 +106,14 @@
   // sentence: a copy of the figure's caption (inert and aria-hidden: the
   // figure is already labelled by it), and the room under the picture is
   // the label's own height (--pf-label-room), the picture fitted again
-  // until they agree (pass).
+  // until they agree (pass). A portrait picture whose box has room for it
+  // and 16rem more (judged at its size with no room under it, so the
+  // choice holds once made) has its label beside it instead, as a wall
+  // label beside a work: the two centered together in the box (the
+  // picture moved by an inline object-position), the label up to 22rem
+  // wide, its foot on the picture's foot (.is-beside, --pf-label-side,
+  // --pf-pic-foot), and no room under the picture. Not for a mirrored
+  // picture, whose flip would move it the other way.
   function placeLabel(page, pass = 0) {
     const frame = page.querySelector('.pf-exhibit-wall-hero--whole .pf-exhibit-wall-hero__frame');
     const img = frame && frame.querySelector('.pf-exhibit-wall-hero__img');
@@ -116,7 +123,8 @@
     }
     const hit = frame.querySelector('.pf-exhibit-wall-hero__hit');
     if (!wide.matches || !frame.querySelector('.pf-exhibit-lead-label__text')) {
-      frame.classList.remove('is-placed');
+      frame.classList.remove('is-placed', 'is-beside');
+      img.style.removeProperty('object-position');
       if (hit) {
         hit.remove();
       }
@@ -134,6 +142,22 @@
     const ch = img.offsetHeight - px(cs.paddingTop) - px(cs.paddingBottom);
     if (cw <= 0 || ch <= 0) {
       return;
+    }
+    const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+    const was = frame.style.getPropertyValue('--pf-label-room');
+    const roomNow = was === '' ? 3 * rem : px(was);
+    const w0 = nw * Math.min(cw / nw, (ch + roomNow) / nh);
+    const gap = 1.5 * rem;
+    const beside = nh > nw * 1.1 && cw - w0 - gap >= 16 * rem && !img.classList.contains('pf-exhibit-mirror');
+    frame.classList.toggle('is-beside', beside);
+    if (beside) {
+      const side = Math.min(22 * rem, cw - w0 - gap);
+      const shift = Math.max(0, (cw - (w0 + gap + side)) / 2);
+      img.style.objectPosition = Math.round(shift) + 'px 50%';
+      frame.style.setProperty('--pf-label-side', Math.round(side) + 'px');
+    }
+    else {
+      img.style.removeProperty('object-position');
     }
     const scale = Math.min(cw / nw, ch / nh);
     const w = nw * scale;
@@ -169,8 +193,11 @@
       label.insertBefore(full, view);
     }
     frame.classList.add('is-placed');
-    const room = Math.ceil(label.offsetHeight + 12);
-    if (Math.abs(room - (parseFloat(frame.style.getPropertyValue('--pf-label-room')) || 0)) > 1 && pass < 3) {
+    if (beside) {
+      frame.style.setProperty('--pf-pic-foot', Math.round(frame.clientHeight - rect.y - rect.h) + 'px');
+    }
+    const room = beside ? 0 : Math.ceil(label.offsetHeight + 12);
+    if ((was === '' || Math.abs(room - roomNow) > 1) && pass < 3) {
       frame.style.setProperty('--pf-label-room', room + 'px');
       placeLabel(page, pass + 1);
     }

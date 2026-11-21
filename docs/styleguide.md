@@ -189,6 +189,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-20:** `.pf-exhibit-wall-hero__frame.is-placed.is-beside` (js, portrait with 16rem free): label `bottom: var(--pf-pic-foot)`, `left: pic x + w + 1.5rem`, `width: var(--pf-label-side)` (≤ 22rem), clamp 12 lines; the image’s inline `object-position` centers picture and label as a pair; no `--pf-label-room`. `.pf-exhibit-lead-label__full`: no underline in hand, color only.
 - **2026-11-20:** Object view: cue `__band`s default to `top: 0; height: 0; overflow: clip` (sized only by `fitBand()`, reset per entry). `.pf-viewer__panel:focus { outline: none }`: a mode switch or a cue step focuses the panel (tabindex -1) instead of Close.
 - **2026-11-20:** `.pf-section__title-date` (exhibitions): block, `500 max(.875rem, .17em)/1.4` mono, `.14em` tracking, tabular figures, muted (heading color on a bare wall), 1rem above. Bare wall with a whole lead from lg: its ::before wash masked to the text column; the image keeps `$pf-bare-peek` + 1.5rem + `--pf-label-room` under it. Placed label `max-width: min(max(--pf-pic-w, 24rem), …)`.
 - **2026-11-20:** Object view cues: wheel scrolling counts once the panel has stood still 350ms at that end (500ms after a step); `.pf-exhibit-onward__band` has `overflow: clip` and its children, not the band, take the .75rem rise.
