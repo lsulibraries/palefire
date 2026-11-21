@@ -141,7 +141,7 @@
   color: var(--ldc-fg);
   background: transparent;
   filter: none;
-  transition: color $pf-hover-out ease, background-color $pf-hover-out ease, border-color $pf-hover-out ease;
+  transition: color $pf-hover-out ease, background-color $pf-hover-out ease;
 }
 
 .pf-events-carousel .libcal-day-carousel .libcal-day-carousel__control + .libcal-day-carousel__control {
@@ -150,9 +150,9 @@
 
 .pf-events-carousel .libcal-day-carousel .libcal-day-carousel__control:not(:disabled):is(:hover, :focus-visible) {
   position: relative; // its border draws over the neighbour's
-  // Text and fill swap places, so they keep the same timing.
+  // Text and fill swap places, so they keep the same timing. The border
+  // keeps its color: an arrow's edge never changes in hand.
   transition-duration: $pf-hover-in;
-  border-color: var(--ldc-fg);
   color: var(--ldc-surface);
   background-color: var(--ldc-fg);
 }

@@ -270,7 +270,8 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
 }
 
 // Square, joined, a thin drawn arrow: the exhibitions showcase's buttons
-// (_exhibit-showcase.scss), a size down. Text and fill swap on hover.
+// (_exhibit-showcase.scss), a size down. Text and fill swap on hover; the
+// border keeps its color (the text color, as the fill in hand).
 .pf-podcast__page {
   display: inline-grid;
   flex: 0 0 auto;
@@ -280,7 +281,7 @@ $pf-podcast-gap: clamp(1.25rem, 2.25vw, 2rem);
   padding: 0;
   color: inherit;
   background: transparent;
-  border: 1px solid currentColor;
+  border: 1px solid var(--bs-body-color);
   border-radius: 0;
   cursor: pointer;
   transition:

@@ -837,7 +837,8 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
 }
 
 // Square, joined, a thin drawn arrow: the events carousel's buttons, a
-// size up. Text and fill swap places on hover.
+// size up. Text and fill swap places on hover; the border keeps its color
+// (the foreground, as the fill in hand), so the pair never changes shape.
 .pf-showcase__arrow {
   display: inline-grid;
   flex: 0 0 auto;
@@ -847,7 +848,7 @@ html#{$pf-themed}[data-pf-mode="showcase"] {
   padding: 0;
   color: var(--pf-showcase-fg);
   background: transparent;
-  border: 1px solid currentColor;
+  border: 1px solid var(--pf-showcase-fg);
   border-radius: 0;
   cursor: pointer;
   transition:
