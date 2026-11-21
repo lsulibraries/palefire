@@ -2060,15 +2060,16 @@
   }
 
   // An entry's ends: the ways on and back. Scrolling on while the panel
-  // is already at its end fades in a band over the text's foot: "Keep
+  // is already at its end fades in a veil over the whole panel under its
+  // top row, the words centered in it: "Keep
   // scrolling for the next page" (or section), the next entry's title and
   // the landing's scroll cue line filling down in the accent with the
-  // pull; from 85% "Opening the next page", and at a full pull (35% of the
-  // panel, at least 160px), after a breath, the view fades to the next
-  // entry as the arrow steps. Scrolling up at the top is its mirror under
-  // the top row, back to the previous entry. Neither takes room (a box of
-  // no height, its band hung over the text), so the scrollbar is the
-  // text's own. Only a gesture begun at rest at that end counts: a
+  // pull; from 85% "Opening the next page", and at a full pull (55% of the
+  // panel, at least 240px), after a breath, the view cross-fades to the
+  // next entry as the arrow steps (stepFade()). Scrolling up at the top is
+  // its mirror, back to the previous entry. Neither takes room (a box of
+  // no height, its band hung over the text, fitBand()), so the scrollbar
+  // is the text's own. Only a gesture begun at rest at that end counts: a
   // scroll's momentum running into the end, or on into the next entry
   // after a step, does not, so one scroll never steps twice. A band lets
   // go (fades out) when the reader stops short or turns back. Nothing
@@ -2205,6 +2206,34 @@
     }, { passive: true });
   }
 
+  // The band over the panel from its top row down to its foot, from
+  // wherever its box sits in the text (measured as a pull starts).
+  function fitBand(view, way) {
+    const band = view[ways[way].el];
+    const inner = band.firstElementChild;
+    const box = band.getBoundingClientRect();
+    const panel = view.panel.getBoundingClientRect();
+    const top = view.panel.querySelector(':scope > .pf-viewer__top');
+    const from = top ? top.getBoundingClientRect().bottom : panel.top;
+    const to = panel.top + view.panel.clientTop + view.panel.clientHeight;
+    inner.style.top = Math.round(from - box.top) + 'px';
+    inner.style.height = Math.max(0, Math.floor(to - from)) + 'px';
+  }
+
+  // A step by a cue: the panel holds its place while its text cross-fades
+  // and the rest (the picture, the page behind) fades over to the next
+  // entry's, the side panel's slide and the text's rise not played again,
+  // so a picture's entry and a text's side panel pass smoothly one into
+  // the other (html.pf-exhibit-stepping, _exhibition.scss). Those stay
+  // off until a tile opens the view again (.pf-exhibit-stepped, cleared
+  // in openObject()): turned back on, they would play over the entry.
+  function stepFade(step) {
+    const html = document.documentElement;
+    html.classList.add('pf-exhibit-stepping', 'pf-exhibit-stepped');
+    const fade = document.startViewTransition(() => step.click());
+    fade.finished.finally(() => html.classList.remove('pf-exhibit-stepping'));
+  }
+
   function setPull(view, way, progress) {
     const band = view[ways[way].el];
     if (!progress) {
@@ -2227,7 +2256,10 @@
       }
       return;
     }
-    const need = Math.max(160, view.panel.clientHeight * .35);
+    const need = Math.max(240, view.panel.clientHeight * .55);
+    if (!view.pulls[way]) {
+      fitBand(view, way);
+    }
     view.pulls[way] = Math.min(need, (view.pulls[way] || 0) + dy);
     setPull(view, way, view.pulls[way] / need);
     window.clearTimeout(view.pulls[way + 'Timer']);
@@ -2242,9 +2274,7 @@
       step.click();
       return;
     }
-    view.wayTimer = window.setTimeout(() => {
-      document.startViewTransition(() => step.click());
-    }, 220);
+    view.wayTimer = window.setTimeout(() => stepFade(step), 220);
   }
 
   /* ---------------------------------------------------------------------
@@ -2655,6 +2685,8 @@
       return;
     }
     objectView();
+    // Opened afresh: its side panel's slide and its text's rise play again.
+    document.documentElement.classList.remove('pf-exhibit-stepped');
     // Every tile on the wall, across its sub-galleries' lists.
     wallState.tiles = Array.from(tile.closest('[data-pf-wall]').querySelectorAll('[data-pf-tile]'));
     const index = wallState.tiles.indexOf(tile);

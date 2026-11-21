@@ -879,6 +879,12 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: A fuller keep-scrolling cue, and a smooth step', <<<'HTML'
+<ul>
+<li>The keep-scrolling prompt (and its scroll-up twin) now fills the whole sidebar, centered, with a larger title, and it takes a little more scrolling to move on.</li>
+<li>Moving on with it is now a smooth fade: the sidebar stays in place while its text fades to the next item’s, and the picture fades in or out behind it. Going from a picture item to a text-only item (which shows only the sidebar) no longer jumps or slides the panel in again.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: Steadier arrow buttons', <<<'HTML'
 <ul>
 <li>The arrow buttons on the exhibitions showcase, the podcast and the events calendar keep the same outline when you point at them; only the fill changes.</li>

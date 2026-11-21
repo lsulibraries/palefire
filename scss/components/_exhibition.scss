@@ -6325,8 +6325,9 @@ html.pf-reading-dark .pf-viewer--exhibit {
 }
 
 // An entry's ends (js/exhibition.js nextCue()): the ways on and back.
-// Scrolling on at the panel's end fades in a band over the text's foot
-// (.pf-exhibit-onward; not the gallery's own signpost, .pf-exhibit-next):
+// Scrolling on at the panel's end fades in a veil over the whole panel
+// under its top row, the words centered in it (.pf-exhibit-onward; not
+// the gallery's own signpost, .pf-exhibit-next):
 // "Keep scrolling for the next page", the next entry's title and the
 // landing's scroll cue line filling down in the accent with the pull
 // (--pf-next, 0 to 1). Scrolling up at the top fades in its mirror under
@@ -6335,7 +6336,8 @@ html.pf-reading-dark .pf-viewer--exhibit {
 // a full pull the line brightens (.is-going) while the view waits a
 // breath and fades on. Each is a box of no height (the panel's gap taken
 // back), so the panel's scroll is the text's own; the band hangs from it
-// over the text on the panel's own glass. Hidden from screen readers,
+// over the text on the panel's own glass, placed and sized by fitBand()
+// as a pull starts. Hidden from screen readers,
 // never in the way of a click. With reduced motion they fade without
 // moving.
 .pf-exhibit-onward,
@@ -6363,10 +6365,14 @@ html.pf-reading-dark .pf-viewer--exhibit {
 .pf-exhibit-onward__band,
 .pf-exhibit-rewind__band {
   position: absolute;
+  right: calc(-1 * var(--pf-pad-end));
+  left: calc(-1 * var(--pf-pad-start));
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  gap: .6rem;
+  gap: .9rem;
+  padding: 1.5rem var(--pf-pad-end) 1.5rem var(--pf-pad-start);
   color: var(--pf-viewer-muted);
   text-align: center;
   // The panel's glass twice (99%): the text it hangs over must not read
@@ -6374,11 +6380,7 @@ html.pf-reading-dark .pf-viewer--exhibit {
   background: linear-gradient(var(--pf-sidebar-bg, var(--bs-body-bg)), var(--pf-sidebar-bg, var(--bs-body-bg))), var(--pf-sidebar-bg, var(--bs-body-bg));
 }
 
-// Over the text's last lines, down to the panel's foot padding.
 .pf-exhibit-onward__band {
-  inset: auto calc(-1 * var(--pf-pad-end)) 0 calc(-1 * var(--pf-pad-start));
-  padding: 1.25rem var(--pf-pad-end) .25rem var(--pf-pad-start);
-  border-top: 1px solid $pf-hairline;
   opacity: min(1, calc(var(--pf-next, 0) * 2.5));
 
   @include pf-viewer-motion {
@@ -6388,9 +6390,6 @@ html.pf-reading-dark .pf-viewer--exhibit {
 }
 
 .pf-exhibit-rewind__band {
-  inset: 0 calc(-1 * var(--pf-pad-end)) auto calc(-1 * var(--pf-pad-start));
-  padding: .75rem var(--pf-pad-end) 1.25rem var(--pf-pad-start);
-  border-bottom: 1px solid $pf-hairline;
   opacity: min(1, calc(var(--pf-back, 0) * 2.5));
 
   @include pf-viewer-motion {
@@ -6440,11 +6439,11 @@ html.pf-reading-dark .pf-viewer--exhibit {
 
 .pf-exhibit-onward__title,
 .pf-exhibit-rewind__title {
-  max-width: 28ch;
+  max-width: 24ch;
   text-wrap: balance;
-  font-size: 1.0625rem;
+  font-size: 1.375rem;
   font-weight: 600;
-  line-height: 1.35;
+  line-height: 1.3;
   color: var(--bs-body-color);
 }
 
@@ -6454,7 +6453,7 @@ html.pf-reading-dark .pf-viewer--exhibit {
 .pf-viewer .pf-exhibit-rewind .pf-hero-cue__line {
   flex: none;
   width: 2px;
-  height: 3rem;
+  height: 4.5rem;
 
   &::after {
     background: var(--pf-viewer-accent);
@@ -6473,6 +6472,43 @@ html.pf-reading-dark .pf-viewer--exhibit {
 .pf-exhibit-onward.is-going .pf-hero-cue__line::after,
 .pf-exhibit-rewind.is-going .pf-hero-cue__line::after {
   filter: brightness(1.25);
+}
+
+// A step by a cue (js/exhibition.js stepFade()): the panel holds its
+// place and its text cross-fades while the rest (the picture, the page
+// behind) fades over to the next entry's, without the rise a page visit
+// takes. The side panel's slide and the text's rise don't play again, so
+// a picture's entry and a text's side panel pass smoothly one into the
+// other. Only while it runs: a named element is a backdrop root.
+html.pf-exhibit-stepping .pf-viewer__panel {
+  view-transition-name: pf-exhibit-panel;
+}
+
+// Kept off after a step until a tile opens the view again: turned back
+// on, they would play over the entry.
+html.pf-exhibit-stepped {
+  .pf-viewer--exhibit.pf-viewer.is-side,
+  .pf-viewer--exhibit .pf-viewer__panel > * {
+    animation: none;
+  }
+}
+
+html.pf-exhibit-stepping::view-transition-old(root) {
+  animation: pf-vt-out .45s ease both;
+}
+
+html.pf-exhibit-stepping::view-transition-new(root) {
+  animation: pf-exhibit-fade-in .45s ease both;
+}
+
+html.pf-exhibit-stepping::view-transition-group(pf-exhibit-panel) {
+  animation-duration: .5s;
+}
+
+@keyframes pf-exhibit-fade-in {
+  from {
+    opacity: 0;
+  }
 }
 
 // Scrolling up at the panel's top stays in the panel (the way back reads

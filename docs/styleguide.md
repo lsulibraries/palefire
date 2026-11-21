@@ -189,6 +189,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-20:** Object view cues: `__band` covers the panel under its top row (top and height set by `fitBand()`), content centered, padding 1.5rem, no rules; title 1.375rem/1.3, max 24ch; line 2px × 4.5rem; full pull 55% of the panel, min 240px. A cue’s step: `html.pf-exhibit-stepping` (panel `view-transition-name: pf-exhibit-panel`, root old `pf-vt-out` .45s, new `pf-exhibit-fade-in` .45s, panel group .5s) and `html.pf-exhibit-stepped` (no side slide or text rise until reopened).
 - **2026-11-20:** Arrow buttons: the border never changes color. `.pf-showcase__arrow` `1px solid var(--pf-showcase-fg)`, `.pf-podcast__page` `1px solid var(--bs-body-color)`, events `.libcal-day-carousel__control` keeps `--ldc-border` on hover; hover swaps text and fill only.
 - **2026-11-20:** `.pf-exhibit-lead-label__full` (js/exhibition.js, placeLabel()): the whole caption in a placed label, 0.875rem/1.5, muted, 62ch, six lines at most, links plain; `--pf-label-room` on the frame sets the room under the picture (3rem until measured).
 - **2026-11-20:** Section heading parts (field--node--field-scroll-section--modular-page.html.twig): `.pf-section__title-main`, `.pf-section__title-sep` (unseen on exhibitions), `.pf-section__title-sub` (exhibitions: block, `max(1.125rem, .34em)`, 400, `--bs-body-color`, 32ch). Split at the first “: ” (main 40 characters at most), else at a closing “, YYYY” or “, YYYY–YYYY”.
