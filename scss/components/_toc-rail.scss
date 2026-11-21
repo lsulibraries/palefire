@@ -60,7 +60,7 @@ $pf-rail: '#{$pf-rail-html} #{$pf-rail-row}';
     justify-self: start;
     width: var(--pf-rail-col);
     overflow: visible; // the panel and the current name reach out over the content
-    padding: 3rem 0 1.25rem; // clears the landing's sub-header bar (2rem)
+    padding: 3.25rem 0 1.25rem; // clears the landing's sub-header bar (2.25rem)
     background-color: transparent !important;
     -webkit-backdrop-filter: none;
     backdrop-filter: none;

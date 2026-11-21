@@ -879,6 +879,11 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: A roomier breadcrumb bar', <<<'HTML'
+<ul>
+<li>The thin bar under the header with the breadcrumb is a little taller, so its small capitals no longer crowd its edges.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: Framed pictures over a faint backdrop', <<<'HTML'
 <ul>
 <li>Behind a framed cover or a gallery picture shown whole, the copy of the picture that fills the screen is now faint and fades out at the top and bottom, as the picture behind the exhibitions carousel does, instead of a heavy blur.</li>

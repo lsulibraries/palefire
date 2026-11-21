@@ -189,6 +189,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-20:** Breadcrumb bar: `--pf-bar-button` and `--pf-landing-bar-h` 2.25rem (was 2rem); `.pf-page-bar` and `.pf-showcase-head` the same; the reading rail’s top padding 3.25rem.
 - **2026-11-20:** Framed cover and whole lead washes (`pf-exhibit-plate`): `opacity: .14`, `filter: blur(3px)`, `scale: 1.06`, `mask-image: linear-gradient(transparent, #000 18%, #000 72%, transparent)`; hidden with more contrast. Matches `.pf-showcase__plate`.
 - **2026-11-20:** Exhibition cover: the bar’s zoom button (`.pf-exhibit-zoom`) is gone; the cover has a museum label instead (`.pf-exhibit-lead-label.pf-exhibit-cover__label`, View only), top right under the bar, the same component as a full-screen gallery lead’s.
 - **2026-11-20:** Whole wall lead from lg: `padding-inline-start: calc(var(--pf-section-pad-inline) + min(36rem, (100% - 2 * pad) * .46) + clamp(1.5rem, 3vw, 3rem))`, so the picture sits right of the text column.

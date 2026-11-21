@@ -66,7 +66,7 @@
 .pf-landing {
   --pf-bar-edge: 1rem;
   --pf-bar-icon-edge: .375rem;
-  --pf-bar-button: 2rem; // the bar's buttons (video, TOC), as tall as its row
+  --pf-bar-button: 2.25rem; // the bar's buttons (video, TOC), as tall as its row
   // The video button's distance from the screen's right edge. From lg its
   // centre is the header's last icon's (the settings gear): the header's
   // side padding and half an icon cell in (_header.scss), less half the
@@ -76,7 +76,7 @@
   @include media-breakpoint-up(lg) {
     --pf-bar-icon-end: calc(var(--pf-header-gutter, 3rem) + var(--pf-utility-cell, 2.75rem) / 2 - var(--pf-bar-button) / 2);
   }
-  --pf-landing-bar-h: 2rem; // the bar: its 2rem row, no padding (a slim strip under the header)
+  --pf-landing-bar-h: 2.25rem; // the bar: its 2.25rem row, no padding (a slim strip under the header, with room round its caps)
   --pf-landing-bar-gap: 1rem; // under the bar; none from md, where the panel meets it
 }
 
@@ -250,7 +250,7 @@ $pf-cover-bar: '.pf-cover-bar';
 // Collections hero.
 .pf-page-bar {
   --pf-bar-edge: 1rem;
-  --pf-bar-button: 2rem;
+  --pf-bar-button: 2.25rem;
   position: sticky;
   top: var(--pf-header-h);
   z-index: 3;
