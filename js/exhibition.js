@@ -90,9 +90,71 @@
     inner.style.setProperty('--pf-pan', Math.round(Math.min(Math.max(overflow, h / 3), h * 1.6)) + 'px');
   }
 
+  // A "Show whole image" lead's label (paragraph--exhibit-page.html.twig,
+  // lead_label()): from lg, under the picture as a museum label under the
+  // work rather than in the frame's corner, and the picture opens the
+  // viewer too. The picture is contained in its <img>'s padded box, so its
+  // own rectangle is worked out here (--pf-pic-x/y/w/h on the frame, from
+  // the image's size, the box's padding and object-position). A layer over
+  // it (aria-hidden and out of the tab order: View is the way in for the
+  // keyboard and screen readers) passes a click to View. Only from lg,
+  // where the picture stands clear of the text column, and only with an
+  // intro (a bare wall's tiles rise over the foot); otherwise, and without
+  // this, the label stays in the corner.
+  function placeLabel(page) {
+    const frame = page.querySelector('.pf-exhibit-wall-hero--whole .pf-exhibit-wall-hero__frame');
+    const img = frame && frame.querySelector('.pf-exhibit-wall-hero__img');
+    const view = frame && frame.querySelector('.pf-exhibit-lead-label__view');
+    if (!img || !view) {
+      return;
+    }
+    const hit = frame.querySelector('.pf-exhibit-wall-hero__hit');
+    if (!wide.matches || !page.querySelector('.pf-exhibit-wall__text')) {
+      frame.classList.remove('is-placed');
+      if (hit) {
+        hit.remove();
+      }
+      return;
+    }
+    const nw = img.naturalWidth || parseFloat(img.getAttribute('width'));
+    const nh = img.naturalHeight || parseFloat(img.getAttribute('height'));
+    if (!nw || !nh) {
+      img.addEventListener('load', () => placeLabel(page), { once: true });
+      return;
+    }
+    const cs = getComputedStyle(img);
+    const px = (v) => parseFloat(v) || 0;
+    const cw = img.offsetWidth - px(cs.paddingLeft) - px(cs.paddingRight);
+    const ch = img.offsetHeight - px(cs.paddingTop) - px(cs.paddingBottom);
+    if (cw <= 0 || ch <= 0) {
+      return;
+    }
+    const scale = Math.min(cw / nw, ch / nh);
+    const w = nw * scale;
+    const h = nh * scale;
+    const pos = cs.objectPosition.split(' ');
+    const at = (v, free) => (/%$/.test(v) ? free * parseFloat(v) / 100 : px(v));
+    const rect = {
+      x: img.offsetLeft + px(cs.paddingLeft) + at(pos[0] || '50%', cw - w),
+      y: img.offsetTop + px(cs.paddingTop) + at(pos[1] || '50%', ch - h),
+      w,
+      h,
+    };
+    Object.keys(rect).forEach((k) => frame.style.setProperty('--pf-pic-' + k, Math.round(rect[k]) + 'px'));
+    if (!hit) {
+      const layer = document.createElement('span');
+      layer.className = 'pf-exhibit-wall-hero__hit';
+      layer.setAttribute('aria-hidden', 'true');
+      layer.addEventListener('click', () => view.click());
+      frame.appendChild(layer);
+    }
+    frame.classList.add('is-placed');
+  }
+
   function onResize() {
     state.pages.forEach((page) => {
       sizeHero(page);
+      placeLabel(page);
       foldIntro(page);
     });
   }
@@ -261,6 +323,7 @@
     foldSources(page);
     foldIntro(page);
     sizeHero(page);
+    placeLabel(page);
     addNext(page);
   }
 

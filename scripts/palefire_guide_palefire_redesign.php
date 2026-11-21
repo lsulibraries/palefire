@@ -879,6 +879,11 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Fri Nov 20: Labels under framed pictures', <<<'HTML'
+<ul>
+<li>On larger screens a gallery’s framed opening picture now has its label underneath, like a museum wall label, and clicking the picture opens it full screen.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: Scroll on between sections, and back', <<<'HTML'
 <ul>
 <li>At the last item of a section, keep scrolling (or use the arrow) to go on to the first item of the next section; the prompt says “Keep scrolling for the next section”.</li>

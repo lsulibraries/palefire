@@ -4802,6 +4802,65 @@ $pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last
   }
 }
 
+// A whole lead's label under its picture from lg, where the picture
+// stands clear of the text column (js/exhibition.js, placeLabel(), which
+// sets --pf-pic-x/y/w/h and .is-placed): plain text at the picture's left
+// edge, no plate or rule, the caption's first sentence over View, as a
+// museum label under the work, with room kept for it under the picture.
+// The picture opens the viewer too (.pf-exhibit-wall-hero__hit, over it),
+// and in hand it lights View as View's own hover does. Below lg the text
+// scrolls over the picture, and a bare wall's tiles rise over the foot, so
+// the label stays in the corner there.
+@include media-breakpoint-up(lg) {
+  .pf-section__inner:has(.pf-exhibit-wall__text) .pf-exhibit-wall-hero--whole .pf-exhibit-wall-hero__frame:has(.pf-exhibit-lead-label) > .pf-exhibit-wall-hero__img {
+    padding-bottom: calc(clamp(1.5rem, 6vh, 4rem) + 4.5rem);
+  }
+
+  .pf-exhibit-wall-hero--whole .pf-exhibit-wall-hero__frame.is-placed {
+    .pf-exhibit-lead-label {
+      top: calc(var(--pf-pic-y) + var(--pf-pic-h) + 0.75rem);
+      right: auto;
+      left: var(--pf-pic-x);
+      z-index: 3;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.35rem;
+      width: max(var(--pf-pic-w), 18rem);
+      max-width: calc(100% - var(--pf-pic-x) - 0.75rem);
+      background: none;
+      border: 0;
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+
+    .pf-exhibit-lead-label__text {
+      align-self: auto;
+      padding: 0;
+    }
+
+    .pf-exhibit-lead-label__view {
+      min-height: 1.5rem;
+      padding: 0;
+      border-left: 0;
+    }
+
+    &:has(.pf-exhibit-wall-hero__hit:hover) .pf-exhibit-lead-label__view {
+      color: var(--pf-g-hover, var(--pf-exhibit-accent));
+      text-decoration-color: currentColor;
+    }
+  }
+
+  .pf-exhibit-wall-hero__hit {
+    position: absolute;
+    z-index: 3;
+    top: var(--pf-pic-y);
+    left: var(--pf-pic-x);
+    width: var(--pf-pic-w);
+    height: var(--pf-pic-h);
+    cursor: pointer;
+  }
+}
+
 .pf-exhibit-wall__intro {
   overflow: hidden;
 
