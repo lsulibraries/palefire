@@ -879,6 +879,14 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Sat Nov 21: A new way to look at exhibition items', <<<'HTML'
+<ul>
+<li>Opening an item in an exhibition now blurs the page behind it and shows the item in a centered frame, like a museum label beside the work: the picture on the left, its text on the right, with the gallery’s name and Close across the top.</li>
+<li>Previous and Next sit at the foot of the text, and the arrow keys step too. Each step fades the text out and draws it back in, with fine lines that draw across the frame.</li>
+<li>Text-only items open as one centered column of text in the same frame, so the page behind no longer moves while you read on.</li>
+<li>On phones the picture sits above the text, with Previous and Next always at the bottom.</li>
+</ul>
+HTML),
   $text('Fri Nov 20: Scrolling through text items no longer moves the page', <<<'HTML'
 <ul>
 <li>When you keep scrolling through an exhibition’s items and reach a text-only item, the page behind it no longer scrolls. Scrolling over the page itself, beside the text panel, still scrolls the page.</li>

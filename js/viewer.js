@@ -25,6 +25,14 @@
  * into it. Reduced motion (the OS setting or Settings > Reduce motion)
  * makes every change instant.
  *
+ * An exhibition's view (kind 'exhibit', not a side panel) is a stage
+ * (.is-staged, _exhibition.scss): the page blurred behind a centered
+ * frame, the top row (count, gallery, Close) across its head over a rule,
+ * the picture and the text in two columns from lg with a divider between,
+ * and the arrows at the foot of the text (.pf-viewer__steps). The rules
+ * draw as it opens (.is-framed), and a step fades the text out and draws
+ * it in again (.is-in, leave()).
+ *
  * show(…, { side: true }) opens the panel alone (.is-side), beside the page
  * from lg and as a sheet at the foot of the screen below it, and without
  * the modal: the page stays in reach and scrolls, so a reader can go on
@@ -88,7 +96,8 @@
     dialog.className = 'pf-viewer';
     dialog.setAttribute('aria-labelledby', 'pf-viewer-title');
     dialog.innerHTML =
-      '<div class="pf-viewer__stage">'
+      '<div class="pf-viewer__head"><p class="pf-viewer__gallery"></p></div>'
+      + '<div class="pf-viewer__stage">'
       + '<div class="pf-viewer__media"></div>'
       + '<div class="pf-viewer__tools">'
       + '<button type="button" class="pf-viewer__tool pf-viewer__hide" hidden>' + icon('hide') + '<span>' + Drupal.t('Hide image') + '</span></button>'
@@ -111,7 +120,8 @@
       + '<h2 class="pf-viewer__title" id="pf-viewer-title"></h2>'
       + '<div class="pf-viewer__label pf-guide-prose"></div>'
       + '<div class="pf-viewer__body"></div>'
-      + '</div>';
+      + '</div>'
+      + '<div class="pf-viewer__steps"><span class="pf-viewer__hint" aria-hidden="true">' + Drupal.t('← → to step') + '</span><span class="pf-viewer__pair"></span></div>';
     document.body.append(dialog);
     const parts = {
       dialog: dialog,
@@ -128,10 +138,17 @@
       unhide: dialog.querySelector('.pf-viewer__unhide'),
       extra: dialog.querySelector('.pf-viewer__extra'),
       steps: dialog.querySelectorAll('.pf-viewer__step'),
+      prev: dialog.querySelector('.pf-viewer__prev'),
+      next: dialog.querySelector('.pf-viewer__next'),
+      top: dialog.querySelector('.pf-viewer__top'),
+      head: dialog.querySelector('.pf-viewer__head'),
+      gallery: dialog.querySelector('.pf-viewer__gallery'),
+      foot: dialog.querySelector('.pf-viewer__steps'),
+      pair: dialog.querySelector('.pf-viewer__pair'),
     };
     const step = (delta) => {
       if (handler.step) {
-        handler.step(delta);
+        leave(() => handler.step(delta));
       }
     };
     const shut = () => (handler.close ? handler.close() : close(null));
@@ -330,6 +347,7 @@
     view.side = on;
     view.switched = on;
     view.dialog.classList.toggle('is-side', on);
+    place(view);
     if (on) {
       ROOT.classList.remove('pf-viewer-open');
       view.dialog.show();
@@ -357,15 +375,80 @@
     });
     view.zoom.hidden = zoomable === undefined ? !view.media.querySelector('.pf-viewer__zoomable') : !zoomable;
     view.zoom.setAttribute('aria-pressed', 'false');
-    view.info.hidden = bare || text;
+    // On the stage the text is a column of its own, not a fold.
+    const staged = view.dialog.classList.contains('is-staged');
+    view.info.hidden = bare || text || staged;
     view.bare = bare;
     view.canHide = hide;
     view.hide.hidden = !hide || view.side;
     view.unhide.hidden = !(view.side && view.switched);
     view.extra.replaceChildren(...extra);
     // A side panel is the text alone: never folded away.
-    setFull(!view.side && !text && (bare || savedFull()), false);
+    setFull(!view.side && !text && (bare || (!staged && savedFull())), false);
     view.panel.scrollTop = 0;
+  }
+
+  // Where the top row and the arrows go: on an exhibition's stage, the row
+  // across the head and the arrows at the text's foot; anywhere else, the
+  // row atop the panel and the arrows at the stage's sides. Moved only
+  // when they are elsewhere, so a focused button keeps its focus.
+  function place(parts) {
+    const staged = parts.kind === 'exhibit' && !parts.side;
+    parts.dialog.classList.toggle('is-staged', staged);
+    if (staged && parts.top.parentElement !== parts.head) {
+      parts.head.append(parts.top);
+      parts.pair.append(parts.prev, parts.next);
+    }
+    else if (!staged && parts.top.parentElement !== parts.panel) {
+      parts.panel.prepend(parts.top);
+      parts.stage.append(parts.prev, parts.next);
+    }
+  }
+
+  // A step on the stage: the text fades and its rules draw back to the
+  // right (.is-in off), then fill() puts the next thing in and enter()
+  // draws it in from the left. A switch between a picture and a text
+  // entry (.is-reading) draws the head's rule and the divider again.
+  // Steps asked for meanwhile are dropped. Anywhere else, fill() at once.
+  let leaving = false;
+  function leave(fill) {
+    const dialog = view && view.dialog;
+    if (!dialog || !dialog.classList.contains('is-staged')) {
+      fill();
+      return;
+    }
+    if (leaving) {
+      return;
+    }
+    leaving = true;
+    const was = dialog.classList.contains('is-reading');
+    dialog.classList.remove('is-in');
+    window.setTimeout(() => {
+      leaving = false;
+      fill();
+      enter(dialog.classList.contains('is-reading') !== was);
+    }, reduceMotion() ? 120 : 260);
+  }
+
+  // Draws the stage in: reframe draws its rules again first. On opening,
+  // the rules draw a moment before the text rises in.
+  function enter(reframe, opening) {
+    const dialog = view.dialog;
+    if (!dialog.classList.contains('is-staged')) {
+      return;
+    }
+    if (reframe) {
+      dialog.classList.remove('is-framed', 'is-in');
+    }
+    // Laid out undrawn first, so the drawing plays.
+    void dialog.offsetWidth;
+    dialog.classList.add('is-framed');
+    if (opening && !reduceMotion()) {
+      window.setTimeout(() => dialog.classList.add('is-in'), 320);
+    }
+    else {
+      dialog.classList.add('is-in');
+    }
   }
 
   // Focus on opening: whichever Close shows, in the panel or on the stage
@@ -413,7 +496,10 @@
     }
     parts.side = side;
     parts.switched = false;
-    parts.dialog.className = 'pf-viewer' + (kind ? ' pf-viewer--' + kind : '') + (side ? ' is-side' : '') + (parts.dialog.classList.contains('is-full') ? ' is-full' : '');
+    // Still open (filled again): drawn as it was.
+    const carry = ['is-full'].concat(parts.dialog.open ? ['is-framed', 'is-in'] : []).filter((name) => parts.dialog.classList.contains(name));
+    parts.dialog.className = 'pf-viewer' + (kind ? ' pf-viewer--' + kind : '') + (side ? ' is-side' : '') + carry.map((name) => ' ' + name).join('');
+    place(parts);
     const open = () => {
       fill(parts);
       if (!parts.dialog.open) {
@@ -425,6 +511,7 @@
           parts.dialog.showModal();
         }
         shown = true;
+        enter(true, true);
         if (!keep) {
           focusClose();
         }

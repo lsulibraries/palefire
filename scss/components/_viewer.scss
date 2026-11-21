@@ -570,6 +570,13 @@ html.pf-viewer-open {
   }
 }
 
+// An exhibition's stage only (.is-staged, _exhibition.scss): its head and
+// the arrows at the text's foot.
+.pf-viewer__head,
+.pf-viewer__steps {
+  display: none;
+}
+
 // The frame's grow and shrink (and an exhibition wall's re-sort).
 ::view-transition-group(*) {
   animation-duration: .65s;

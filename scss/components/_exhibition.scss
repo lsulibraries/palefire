@@ -3427,49 +3427,16 @@ html[data-pf-mode="exhibition"] .pf-guide-prose a {
   }
 
   @include media-breakpoint-up(lg) {
+    // On the stage, in the picture's column (a grid area is an absolute
+    // box's containing block), up to the divider.
     .pf-viewer:not(.is-side) > & {
-      inset: 0 var(--pf-panel-w) 0 auto;
-      width: min(var(--pf-panel-w), calc(100% - var(--pf-panel-w)));
-      padding: .75rem 2.25rem 3rem;
-      border-left: 1px solid $pf-hairline;
-      box-shadow: -1.5rem 0 3rem -2rem rgba(0, 0, 0, .5);
+      grid-area: pic;
+      padding: .75rem 2.5rem 3rem 0;
       translate: 1.5rem 0;
 
       &.is-open {
         translate: 0 0;
       }
-    }
-
-    // The text folded away: the biography at the screen's edge.
-    .pf-viewer.is-full:not(.is-side) > & {
-      right: 0;
-    }
-  }
-}
-
-// lg, the biography open: the stage's tools and Next move in beside it,
-// and the stage gives up the biography's width, so the picture sits whole
-// in what is left instead of under it (the wash still fills the stage).
-@include media-breakpoint-up(lg) {
-  .pf-viewer:not(.is-side) .pf-viewer__stage {
-    @include pf-exhibit-motion {
-      transition: padding-right .5s $pf-exhibit-ease;
-    }
-  }
-
-  .pf-viewer:not(.is-side):has(> .pf-viewer__bio.is-open) .pf-viewer__stage {
-    padding-right: calc(min(var(--pf-panel-w), 100vw - 2 * var(--pf-panel-w)) + 4rem);
-  }
-
-  .pf-viewer:not(.is-side, .is-full):has(> .pf-viewer__bio.is-open) {
-    --pf-bio-w: min(var(--pf-panel-w), calc(100vw - 2 * var(--pf-panel-w)));
-
-    .pf-viewer__next {
-      right: calc(var(--pf-bio-w) + .5rem);
-    }
-
-    .pf-viewer__tools {
-      right: calc(var(--pf-bio-w) + .75rem);
     }
   }
 }
@@ -5485,55 +5452,12 @@ $pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last
   }
 }
 
-// The arrows in the panel's top row: a phone's clip, and a text plate's
-// side panel at every width.
-@mixin pf-exhibit-step {
-  display: grid;
-  place-items: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  padding: 0;
-  color: var(--bs-body-color);
-  background: none;
-  border: 1px solid $pf-hairline;
-  transition: color .3s ease;
-
-  &:hover {
-    color: var(--pf-viewer-accent);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--pf-viewer-accent);
-    outline-offset: 2px;
-  }
-
-  &[hidden] {
-    display: none;
-  }
-
-  svg {
-    width: 1rem;
-  }
-}
-
 // Reading: an entry with no picture opened in the object view (a text
 // plate or a name tile; js/exhibition.js sets .is-reading). The text is the
-// thing: it opens as a side panel over the page (.is-side, _viewer.scss),
-// beside it from lg and a sheet at its foot below, with no modal and
-// nothing dimmed or blurred, so the page stays clear and in reach. The
-// count and the arrows (the phone's, .pf-exhibit-phone-step) are in its
-// top row, since it has no stage. The words are set larger and looser.
-// At the text's end, the way on to the next entry (.pf-exhibit-onward),
-// as at the end of every entry's panel.
+// thing: one column centered on the stage (.is-staged, above), the words
+// set larger and looser. At the text's end, the way on to the next entry
+// (.pf-exhibit-onward), as at the end of every entry's panel.
 .pf-viewer--exhibit.is-reading {
-  .pf-viewer__count {
-    display: block;
-  }
-
-  .pf-exhibit-phone-step {
-    @include pf-exhibit-step;
-  }
-
   .pf-viewer__body {
     max-width: 66ch;
     font-size: 1.125rem;
@@ -6369,6 +6293,425 @@ html.pf-reading-dark .pf-viewer--exhibit {
   }
 }
 
+// The stage (.is-staged, js/viewer.js place()): an exhibition's entry, its
+// pictures or an interview, not a side panel. The page stays put behind
+// it, blurred; the view is a frame centered over it, up to 78rem wide and
+// 52rem high. Across its head the count, the gallery's name and Close
+// over a rule; under it, from lg, the picture (1.5 parts), a divider and
+// the text (19 to 28rem, 36rem for a transcript) with the arrows at its
+// foot. Below lg one column: the picture over the text, the arrows pinned
+// at the foot. A text entry (.is-reading) is one column, 40rem at most,
+// centered, with no picture or divider.
+//
+// The rules draw as the view opens (.is-framed): the head's from its
+// center outward, the divider downward after it. A step (viewer.js
+// leave()) fades the text out as its rules draw back to the right, then
+// draws them in from the left, one after another, as the text rises 6px
+// (.is-in); a switch between a picture and a text entry draws the head's
+// rule and the divider again. Reduced motion: nothing draws or rises, the
+// text fades in 150ms.
+.pf-viewer--exhibit.is-staged {
+  --pf-stage-ease: cubic-bezier(.2, .7, .1, 1);
+  --pf-text-w: 28rem;
+  // Blurred heavily and a little grayed, so the page reads as a place,
+  // not as text.
+  -webkit-backdrop-filter: blur(22px) saturate(.7);
+  backdrop-filter: blur(22px) saturate(.7);
+
+  &[open] {
+    grid-template:
+      "head" auto
+      "rule" 1px
+      "pic" minmax(0, min(45svh, 28rem))
+      "text" minmax(0, 1fr)
+      "foot" auto / minmax(0, 1fr);
+    animation: pf-stage-in .15s ease both;
+
+    @include pf-viewer-motion {
+      animation-duration: .5s;
+    }
+
+    @include media-breakpoint-up(lg) {
+      grid-template:
+        "head head head" auto
+        "rule rule rule" 1px
+        "pic div text" minmax(0, 1fr)
+        "pic div foot" auto / minmax(0, 1.5fr) 1px minmax(19rem, var(--pf-text-w));
+      padding: max(1.5rem, (100dvh - 52rem) / 2) max(1.5rem, (100vw - 78rem) / 2);
+    }
+  }
+
+  // A text entry: one column, centered.
+  &.is-reading[open] {
+    grid-template:
+      "head" auto
+      "rule" 1px
+      "text" minmax(0, 1fr)
+      "foot" auto / minmax(0, 1fr);
+
+    @include media-breakpoint-up(lg) {
+      grid-template:
+        "head head head" auto
+        "rule rule rule" 1px
+        ". text ." minmax(0, 1fr)
+        ". foot ." auto / minmax(0, 1fr) minmax(0, 43rem) minmax(0, 1fr);
+    }
+  }
+
+  // Nothing worth a column beside it (sync({ bare })): the picture alone.
+  &.is-full[open] {
+    grid-template:
+      "head" auto
+      "rule" 1px
+      "pic" minmax(0, 1fr) / minmax(0, 1fr);
+
+    .pf-viewer__panel,
+    .pf-viewer__steps,
+    &::after {
+      display: none;
+    }
+  }
+
+  &.is-transcript:not(:has(> .pf-viewer__bio.is-open)) {
+    --pf-text-w: 36rem;
+  }
+
+  // The head's rule and the divider.
+  &::before,
+  &::after {
+    content: "";
+    background: $pf-hairline;
+  }
+
+  &::before {
+    grid-area: rule;
+    transform-origin: 50% 50%;
+  }
+
+  &::after {
+    display: none;
+    grid-area: div;
+    transform-origin: 50% 0;
+
+    @include media-breakpoint-up(lg) {
+      display: block;
+    }
+  }
+
+  &.is-reading::after {
+    display: none;
+  }
+
+  @include pf-viewer-motion {
+    &::before {
+      transform: scaleX(0);
+    }
+
+    &::after {
+      transform: scaleY(0);
+    }
+
+    &.is-framed::before {
+      transform: none;
+      transition: transform 1s var(--pf-stage-ease) .1s;
+    }
+
+    &.is-framed::after {
+      transform: none;
+      transition: transform 1.1s var(--pf-stage-ease) .45s;
+    }
+  }
+
+  // The head: the count, the gallery's name centered, Close (and a clip's
+  // own buttons) at the end. The panel's top row lives here on the stage,
+  // its parts laid in the head's grid.
+  .pf-viewer__head {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-area: head;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1rem;
+    padding: max(.75rem, env(safe-area-inset-top, 0px)) max(1rem, env(safe-area-inset-right, 0px)) .75rem max(1rem, env(safe-area-inset-left, 0px));
+
+    @include media-breakpoint-up(lg) {
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      padding: 0 0 1rem;
+    }
+  }
+
+  .pf-viewer__head > .pf-viewer__top {
+    display: contents;
+  }
+
+  .pf-viewer__gallery {
+    @extend %pf-viewer-kicker;
+    display: none;
+    grid-row: 1;
+    grid-column: 2;
+    overflow: hidden;
+    max-width: 36rem;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    @include media-breakpoint-up(lg) {
+      display: block;
+    }
+  }
+
+  .pf-viewer__count {
+    display: block;
+    grid-row: 1;
+    grid-column: 1;
+  }
+
+  .pf-viewer__actions {
+    grid-row: 1;
+    grid-column: -2;
+    justify-self: end;
+  }
+
+  // The arrows are at the text's foot; Close is in the head at every
+  // width, the stage's own × not needed.
+  .pf-viewer__shut {
+    display: none;
+  }
+
+  .pf-viewer__close {
+    display: inline-flex;
+  }
+
+  .pf-viewer__stage {
+    grid-area: pic;
+    padding: 3.5rem max(1rem, env(safe-area-inset-right, 0px)) .75rem max(1rem, env(safe-area-inset-left, 0px));
+
+    @include media-breakpoint-up(lg) {
+      padding: 4rem 2.5rem 1.5rem 0;
+    }
+  }
+
+  &.is-reading .pf-viewer__stage {
+    display: none;
+  }
+
+  // The tools (Zoom) at the picture's top corner, clear of the head.
+  .pf-viewer__tools {
+    top: .75rem;
+    right: max(.5rem, env(safe-area-inset-right, 0px));
+
+    @include media-breakpoint-up(lg) {
+      top: 1.5rem;
+      right: 2.5rem;
+    }
+  }
+
+  // The text: on the stage's glass, no panel of its own.
+  .pf-viewer__panel {
+    --pf-pad-start: max(1rem, env(safe-area-inset-left, 0px));
+    --pf-pad-end: max(1rem, env(safe-area-inset-right, 0px));
+    --pf-pad-top: 1.25rem;
+    grid-area: text;
+    width: auto;
+    padding: var(--pf-pad-top) var(--pf-pad-end) 2rem var(--pf-pad-start);
+    background: none;
+    border: 0;
+    @include pf-thin-scrollbar;
+
+    @include media-breakpoint-up(lg) {
+      --pf-pad-start: 2.5rem;
+      --pf-pad-end: 1rem;
+      --pf-pad-top: 2rem;
+      padding: var(--pf-pad-top) var(--pf-pad-end) 1.5rem var(--pf-pad-start);
+    }
+
+    // The text's own entrance (.fx below), not the panel's rise.
+    > * {
+      animation: none;
+    }
+  }
+
+  // Its scrollbar clear of the words on both sides alike.
+  &.is-reading .pf-viewer__panel {
+    @include media-breakpoint-up(lg) {
+      --pf-pad-start: 1.5rem;
+      --pf-pad-end: 1.5rem;
+    }
+  }
+
+  .pf-viewer__title {
+    font-size: clamp(1.5rem, 1.1rem + 1.2vw, 2.125rem);
+    font-weight: 300;
+    letter-spacing: -.01em;
+    line-height: 1.15;
+  }
+
+  &.is-reading .pf-viewer__title {
+    font-size: clamp(1.75rem, 1.2rem + 1.6vw, 2.5rem);
+  }
+
+  // The rules in the text: drawn lines, not borders.
+  .pf-viewer__label,
+  .pf-exhibit-object__scale {
+    position: relative;
+    border: 0;
+  }
+
+  .pf-viewer__label::after,
+  .pf-exhibit-object__scale::before {
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    height: 1px;
+    background: $pf-hairline;
+  }
+
+  .pf-exhibit-object__scale::before {
+    inset: 0 0 auto;
+  }
+
+  // The arrows at the text's foot, and the keys' hint beside them.
+  .pf-viewer__steps {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    grid-area: foot;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    padding: .75rem max(1rem, env(safe-area-inset-right, 0px)) max(.75rem, env(safe-area-inset-bottom, 0px)) max(1rem, env(safe-area-inset-left, 0px));
+    border-top: 1px solid $pf-hairline;
+
+    @include media-breakpoint-up(lg) {
+      padding: 1rem 0 0 2.5rem;
+    }
+
+    &:not(:has(.pf-viewer__step:not([hidden]))) {
+      display: none;
+    }
+  }
+
+  &.is-reading .pf-viewer__steps {
+    @include media-breakpoint-up(lg) {
+      padding-inline: 1.5rem;
+    }
+  }
+
+  .pf-viewer__hint {
+    @extend %pf-viewer-kicker;
+    display: none;
+
+    @media (hover: hover) and (pointer: fine) {
+      @include media-breakpoint-up(lg) {
+        display: block;
+      }
+    }
+  }
+
+  .pf-viewer__pair {
+    display: flex;
+    gap: .5rem;
+    margin-inline-start: auto;
+  }
+
+  .pf-viewer__pair .pf-viewer__step {
+    position: static;
+    background: none;
+    translate: none;
+    transition: color .3s ease, background-color .3s ease;
+
+    &:hover {
+      background: color-mix(in srgb, var(--pf-viewer-accent) 6%, transparent);
+    }
+  }
+
+  // The text's entrance: out (and the rules drawn back) until .is-in.
+  .pf-viewer__panel > :is(.pf-exhibit-thumb, .pf-viewer__title, .pf-viewer__label, .pf-viewer__body, .pf-exhibit-object__scale),
+  .pf-viewer__media,
+  .pf-viewer__tools {
+    opacity: 0;
+    transition: opacity .15s ease;
+  }
+
+  &.is-in {
+    .pf-viewer__panel > :is(.pf-exhibit-thumb, .pf-viewer__title, .pf-viewer__label, .pf-viewer__body, .pf-exhibit-object__scale),
+    .pf-viewer__media,
+    .pf-viewer__tools {
+      opacity: 1;
+    }
+  }
+
+  @include pf-viewer-motion {
+    .pf-viewer__panel > :is(.pf-exhibit-thumb, .pf-viewer__title, .pf-viewer__label, .pf-viewer__body, .pf-exhibit-object__scale) {
+      translate: 0 6px;
+      transition: opacity .2s ease, translate .2s ease;
+    }
+
+    .pf-viewer__media {
+      scale: .985;
+      transition: opacity .2s ease, scale .2s ease;
+    }
+
+    .pf-viewer__label::after,
+    .pf-exhibit-object__scale::before {
+      transform: scaleX(0);
+      transform-origin: 100% 50%;
+      transition: transform .22s ease;
+    }
+
+    &.is-in {
+      .pf-viewer__panel > :is(.pf-exhibit-thumb, .pf-viewer__title, .pf-viewer__label, .pf-viewer__body, .pf-exhibit-object__scale),
+      .pf-viewer__media {
+        translate: none;
+        scale: none;
+        transition: opacity .6s ease var(--pf-d, 0s), translate .7s var(--pf-stage-ease) var(--pf-d, 0s), scale .9s var(--pf-stage-ease) var(--pf-d, 0s);
+      }
+
+      .pf-viewer__label::after,
+      .pf-exhibit-object__scale::before {
+        transform: none;
+        transform-origin: 0 50%;
+        transition: transform .9s var(--pf-stage-ease) var(--pf-d, .15s);
+      }
+    }
+  }
+
+  .pf-viewer__media {
+    --pf-d: .05s;
+  }
+
+  .pf-exhibit-thumb,
+  .pf-viewer__title {
+    --pf-d: .16s;
+  }
+
+  .pf-viewer__label {
+    --pf-d: .22s;
+  }
+
+  .pf-viewer__body {
+    --pf-d: .3s;
+  }
+
+  .pf-exhibit-object__scale {
+    --pf-d: .4s;
+  }
+}
+
+@include pf-solid-chrome {
+  .pf-viewer--exhibit.is-staged {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@keyframes pf-stage-in {
+  from {
+    opacity: 0;
+  }
+}
+
 // An entry's ends (js/exhibition.js nextCue()): the ways on and back.
 // Scrolling on at the panel's end fades in a veil over the whole panel
 // under its top row, the words centered in it (.pf-exhibit-onward; not
@@ -6533,52 +6876,15 @@ html.pf-reading-dark .pf-viewer--exhibit {
   filter: brightness(1.25);
 }
 
-// A step by a cue (js/exhibition.js stepFade()): the panel holds its
-// place and its text cross-fades while the rest (the picture, the page
-// behind) fades over to the next entry's, without the rise a page visit
-// takes. The side panel's slide and the text's rise don't play again, so
-// a picture's entry and a text's side panel pass smoothly one into the
-// other. Only while it runs: a named element is a backdrop root.
-html.pf-exhibit-stepping .pf-viewer__panel {
-  view-transition-name: pf-exhibit-panel;
-}
-
-// Kept off after a step until a tile opens the view again: turned back
-// on, they would play over the entry.
-html.pf-exhibit-stepped {
-  .pf-viewer--exhibit.pf-viewer.is-side,
-  .pf-viewer--exhibit .pf-viewer__panel > * {
-    animation: none;
-  }
-}
-
-html.pf-exhibit-stepping::view-transition-old(root) {
-  animation: pf-vt-out .45s ease both;
-}
-
-html.pf-exhibit-stepping::view-transition-new(root) {
-  animation: pf-exhibit-fade-in .45s ease both;
-}
-
-html.pf-exhibit-stepping::view-transition-group(pf-exhibit-panel) {
-  animation-duration: .5s;
-}
-
-@keyframes pf-exhibit-fade-in {
-  from {
-    opacity: 0;
-  }
-}
-
-// Focused when a step switches between a picture's entry and a text's
-// side panel (js/viewer.js show()): the panel is a place to read from,
-// not a control, so it takes no ring.
+// Focused after a cue's step and when the view switches between the
+// stage and a clip's side panel (js/viewer.js show()): the panel is a
+// place to read from, not a control, so it takes no ring.
 .pf-viewer__panel:focus {
   outline: none;
 }
 
 // Scrolling up at the panel's top stays in the panel (the way back reads
-// it), not the page behind a side panel.
+// it), not the page behind a clip's side panel.
 .pf-viewer--exhibit .pf-viewer__panel {
   overscroll-behavior-y: contain;
 }
@@ -6589,22 +6895,17 @@ html.pf-exhibit-stepping::view-transition-group(pf-exhibit-panel) {
 // title, and shows whole over everything (is-photo) until Transcript takes
 // it away. From lg nothing here shows: the photo stands beside the panel.
 .pf-exhibit-thumb,
-.pf-exhibit-phone-step,
 .pf-exhibit-back {
   display: none;
 }
 
-// The count, between the phone's arrows when they show.
-.pf-exhibit-phone-steps {
-  display: flex;
-  align-items: center;
-  gap: .75rem;
-  min-width: 0;
-}
-
 @include media-breakpoint-down(lg) {
   .pf-viewer--exhibit.is-clip[open]:not(.is-side, .is-full) {
-    grid-template-rows: minmax(0, 1fr);
+    grid-template:
+      "head" auto
+      "rule" 1px
+      "text" minmax(0, 1fr)
+      "foot" auto / minmax(0, 1fr);
 
     .pf-viewer__stage {
       position: absolute;
@@ -6621,17 +6922,8 @@ html.pf-exhibit-stepping::view-transition-group(pf-exhibit-panel) {
     .pf-viewer__panel {
       position: relative;
       z-index: 1;
-      grid-row: 1;
+      grid-area: text;
       border-top: 0;
-    }
-
-    // The way out and the arrows, in the top row now the stage's are gone.
-    .pf-viewer__close {
-      display: inline-flex;
-    }
-
-    .pf-exhibit-phone-step {
-      @include pf-exhibit-step;
     }
 
     // The thumbnail: the photo, its name in the stage buttons' voice over

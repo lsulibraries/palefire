@@ -998,7 +998,7 @@
       // The pinned top row's height, under which a clip's player pins:
       // measured when a clip is shown (panelAudio()) and as it resizes.
       if (window.ResizeObserver) {
-        new ResizeObserver(() => topHeight(view)).observe(view.panel.querySelector('.pf-viewer__top'));
+        new ResizeObserver(() => topHeight(view)).observe(view.top);
       }
       view.body.addEventListener('click', (event) => {
         const link = event.target.closest('a[data-pf-lightbox]');
@@ -1015,28 +1015,12 @@
   // An oral history clip on a phone or tablet (below lg, _exhibition.scss):
   // the transcript takes the whole screen in the view's glass, the photo
   // a thumbnail beside the title that shows it whole (is-photo), with a
-  // way back to the transcript; the arrows, gone with the stage, beside
-  // the count. Hidden from lg, where the photo stands beside the panel.
+  // way back to the transcript. Hidden from lg, where the photo stands
+  // beside the panel.
   const ICON_PREV = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M10 3 5 8l5 5"/></svg>';
-  const ICON_NEXT = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="m6 3 5 5-5 5"/></svg>';
   const ICON_WHOLE = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true" focusable="false"><path d="M9.5 2.5h4v4M13.5 2.5l-5 5M6.5 13.5h-4v-4M2.5 13.5l5-5"/></svg>';
 
   function phoneParts(view) {
-    const top = view.panel.querySelector('.pf-viewer__top');
-    const steps = document.createElement('span');
-    steps.className = 'pf-exhibit-phone-steps';
-    [[-1, ICON_PREV, Drupal.t('Previous')], [1, ICON_NEXT, Drupal.t('Next')]].forEach(([delta, svg, name]) => {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'pf-exhibit-phone-step';
-      button.innerHTML = svg + '<span class="visually-hidden">' + name + '</span>';
-      button.addEventListener('click', () => view.steps[delta < 0 ? 0 : 1].click());
-      steps.append(button);
-    });
-    steps.insertBefore(view.count, steps.lastChild);
-    top.prepend(steps);
-    view.phoneSteps = steps;
-
     const thumb = document.createElement('button');
     thumb.type = 'button';
     thumb.className = 'pf-exhibit-thumb';
@@ -1147,9 +1131,14 @@
   }
 
   // --pf-viewer-top-h for the pinned player (_exhibition.scss); kept
-  // while the dialog is closed (no height then).
+  // while the dialog is closed (no height then). On the stage the row is
+  // in its head, not over the panel's text: none.
   function topHeight(view) {
-    const height = view.panel.querySelector('.pf-viewer__top').offsetHeight;
+    if (view.top.parentElement !== view.panel) {
+      view.panel.style.setProperty('--pf-viewer-top-h', '0px');
+      return;
+    }
+    const height = view.top.offsetHeight;
     if (height) {
       view.panel.style.setProperty('--pf-viewer-top-h', height + 'px');
     }
@@ -2028,12 +2017,13 @@
       view.media.replaceChildren();
     }
 
-    // No picture, only a plate: the panel alone, a side panel over the
-    // page (showEntry()), with the count and arrows in its top row
-    // (.is-reading, _exhibition.scss), and at its end the way on to the
-    // next entry (nextCue()).
+    // No picture, only a plate: the text alone, one column centered on
+    // the stage (.is-reading, _exhibition.scss), and at its end the way on
+    // to the next entry (nextCue()).
     const reading = plateOnly(tile);
     view.dialog.classList.toggle('is-reading', reading);
+    view.gallery.textContent = sectionName(tile);
+    topHeight(view);
 
     // The entry's heading, caption and the rest of its content.
     view.title.textContent = heading.textContent.trim();
@@ -2078,13 +2068,18 @@
     // (neighbor()), so they show while the page has more than one entry.
     const total = stepCount();
     viewer.sync({ steps: total, extra: clip ? [keepButton(view)] : [], text: reading });
-    view.phoneSteps.querySelectorAll('button').forEach((b) => {
-      b.hidden = total < 2;
-    });
     // The way on at the panel's end, on every entry of a wall with more
     // than one; not in a clip's side panel (sideHandler), which has no
     // arrows to step with.
-    nextCue(view, total > 1 && !(view.side && !reading));
+    nextCue(view, total > 1 && !view.side);
+  }
+
+  // The name of the gallery (the page's section) el is in, for the
+  // stage's head; empty outside one.
+  function sectionName(el) {
+    const section = el && el.closest('section');
+    const title = section && section.querySelector('.pf-section__title');
+    return title ? title.textContent.replace(/\s+/g, ' ').trim() : '';
   }
 
   // An entry's ends: the ways on and back. Scrolling on while the panel
@@ -2094,7 +2089,7 @@
   // the landing's scroll cue line filling down in the accent with the
   // pull; from 85% "Opening the next page", and at a full pull (55% of the
   // panel, at least 240px), after a breath, the view cross-fades to the
-  // next entry as the arrow steps (stepFade()). Scrolling up at the top is
+  // next entry as the arrow steps (stepOn()). Scrolling up at the top is
   // its mirror, back to the previous entry. Neither takes room (a box of
   // no height, its band hung over the text, fitBand()), so the scrollbar
   // is the text's own. Scrolling counts toward it only once the panel
@@ -2268,63 +2263,6 @@
     inner.style.paddingBlock = '1.5rem';
   }
 
-  // A step by a cue: the panel holds its place while its text cross-fades
-  // and the rest (the picture, the page behind) fades over to the next
-  // entry's, the side panel's slide and the text's rise not played again,
-  // so a picture's entry and a text's side panel pass smoothly one into
-  // the other (html.pf-exhibit-stepping, _exhibition.scss). Those stay
-  // off until a tile opens the view again (.pf-exhibit-stepped, cleared
-  // in openObject()): turned back on, they would play over the entry.
-  function stepFade(view, step) {
-    const html = document.documentElement;
-    html.classList.add('pf-exhibit-stepping', 'pf-exhibit-stepped');
-    // Held from now: the fade's update runs a frame later.
-    holdPage(view);
-    const fade = document.startViewTransition(() => stepOn(view, step));
-    fade.finished.finally(() => {
-      html.classList.remove('pf-exhibit-stepping');
-      if (view.holdFor) {
-        view.holdFor(400);
-      }
-    });
-  }
-
-  // Holds the page behind still while the scroll that made a step keeps
-  // going: while the step fades its events land on the fade, and where
-  // the next entry's panel sits elsewhere (a picture's panel and a text's
-  // side panel), on the page. Let go once the wheel has rested 400ms (at
-  // least 1.2s from the step, past the fade); over the panel, the panel
-  // and its cues have the wheel as ever.
-  function holdPage(view) {
-    if (view.holdFor) {
-      view.holdFor(1200);
-      return;
-    }
-    let timer = 0;
-    const hold = (event) => {
-      view.holdFor(400);
-      if (event.defaultPrevented) {
-        return;
-      }
-      event.preventDefault();
-      // Over the panel it scrolls the panel, by hand: the browser keeps a
-      // scroll going where it started, and the last panel could not take
-      // it, so left alone it would go on scrolling the page.
-      if (event.target instanceof Element && event.target.closest('.pf-viewer__panel') === view.panel) {
-        view.panel.scrollTop += event.deltaY * (event.deltaMode === 1 ? 16 : 1);
-      }
-    };
-    view.holdFor = (ms) => {
-      window.clearTimeout(timer);
-      timer = window.setTimeout(() => {
-        window.removeEventListener('wheel', hold);
-        view.holdFor = null;
-      }, ms);
-    };
-    window.addEventListener('wheel', hold, { passive: false });
-    view.holdFor(1200);
-  }
-
   // Whether something scrollable between the target and the panel can still move
   // dy (down positive).
   function innerScroll(el, panel, dy) {
@@ -2338,11 +2276,11 @@
     return false;
   }
 
-  // The step itself. Focus left on Close (where opening put it) goes to
-  // the panel: the reader scrolled on to read, and Close focused after a
+  // The step itself, as the arrow's (the stage fades it, js/viewer.js
+  // leave()). Focus left on Close (where opening put it) goes to the
+  // panel: the reader scrolled on to read, and Close focused after a
   // scroll shows its ring, as if it were chosen.
   function stepOn(view, step) {
-    holdPage(view);
     step.click();
     const now = document.activeElement;
     if (now && now.matches('.pf-viewer__close, .pf-viewer__shut')) {
@@ -2387,11 +2325,8 @@
     }
     view.wayBusy = true;
     const step = view.steps[ways[way].step];
-    if (!viewer.canMorph()) {
-      stepOn(view, step);
-      return;
-    }
-    view.wayTimer = window.setTimeout(() => stepFade(view, step), 220);
+    // A breath at the full pull first, with motion.
+    view.wayTimer = window.setTimeout(() => stepOn(view, step), viewer.canMorph() ? 220 : 0);
   }
 
   /* ---------------------------------------------------------------------
@@ -2487,6 +2422,7 @@
     const photo = card.querySelector('.pf-interview__photo img');
     stopAudio(view);
     view.dialog.classList.remove('is-reading');
+    view.gallery.textContent = sectionName(card);
     nextCue(view, false);
     view.dialog.removeAttribute('aria-label');
     view.dialog.setAttribute('aria-labelledby', 'pf-viewer-title');
@@ -2607,9 +2543,6 @@
     view.scale.replaceChildren();
     view.count.textContent = Drupal.t('@n of @total', { '@n': interviews.index + 1, '@total': n });
     viewer.sync({ steps: n });
-    view.phoneSteps.querySelectorAll('button').forEach((b) => {
-      b.hidden = n < 2;
-    });
   }
 
   /* ---------------------------------------------------------------------
@@ -2668,6 +2601,7 @@
     setWash(view, null);
     view.body.replaceChildren();
     view.dialog.classList.remove('is-reading', 'is-transcript');
+    view.gallery.textContent = sectionName(link);
     nextCue(view, false);
     view.scale.hidden = true;
     view.scale.replaceChildren();
@@ -2780,19 +2714,16 @@
     return !!entry && !entryMedia(entry).links.length && !!tile.querySelector('.pf-exhibit-plate');
   }
 
-  // Fills the view with a wall's entry index. A plate alone is a side
-  // panel over the page, no modal and nothing dimmed or blurred, so the
-  // exhibition stays in reach; anything else is on the stage. Stepping
-  // from one to the other reopens the view the other way, quietly
-  // (js/viewer.js show()).
+  // Fills the view with a wall's entry index, on the stage: a plate alone
+  // as one column of text, anything else beside its picture. From a
+  // clip's side panel the view reopens on the stage, quietly (js/viewer.js
+  // show()).
   function showEntry(index) {
-    const n = wallState.tiles.length;
-    const reading = plateOnly(wallState.tiles[(index + n) % n]);
-    if (reading === viewer.isSide()) {
+    if (!viewer.isSide()) {
       fillObject(index);
       return;
     }
-    viewer.show(objectHandler, () => fillObject(index), { kind: 'exhibit', side: reading });
+    viewer.show(objectHandler, () => fillObject(index), { kind: 'exhibit' });
   }
 
   // Opens an entry on a wall. animate: grow out of its tile.
@@ -2802,15 +2733,12 @@
       return;
     }
     objectView();
-    // Opened afresh: its side panel's slide and its text's rise play again.
-    document.documentElement.classList.remove('pf-exhibit-stepped');
     // Every tile on the wall, across its sub-galleries' lists.
     wallState.tiles = Array.from(tile.closest('[data-pf-wall]').querySelectorAll('[data-pf-tile]'));
     const index = wallState.tiles.indexOf(tile);
     history.replaceState(history.state, '', location.pathname + location.search + '#' + tile.dataset.pfTile);
     const reel = !!tile.querySelector('.pf-exhibit-reel');
-    const side = reel || plateOnly(tile);
-    viewer.show(reel ? sideHandler : objectHandler, () => fillObject(index), { from: animate && !side ? tile.querySelector('.pf-exhibit-wall__img') : null, kind: 'exhibit', side: side });
+    viewer.show(reel ? sideHandler : objectHandler, () => fillObject(index), { from: animate && !reel ? tile.querySelector('.pf-exhibit-wall__img') : null, kind: 'exhibit', side: reel });
   }
 
   // animate: shrink back into the tile (scrolled into view first), or the
