@@ -5454,13 +5454,16 @@ function _palefire_focal_point(FileInterface $file, ?int $width, ?int $height, C
  * Whether a gallery's lead is shown whole, uncropped.
  *
  * Whole (centered on a compact opening; framed over a blurred copy of
- * itself on a cover or wall opening) on every gallery but the exhibition's
- * first, which fills the screen as its cover, unless its lead is under
- * 720p (long side under 1,280px or short side under 720px), too small to
- * enlarge. A rule rather than a choice: "Show whole image"
- * (field_exhibit_lead_whole) is no longer read.
+ * itself on a cover or wall opening) on every wall, and on every other
+ * gallery but the exhibition's first, which fills the screen as its cover,
+ * unless its lead is under 720p (long side under 1,280px or short side
+ * under 720px), too small to enlarge. A rule rather than a choice: "Show
+ * whole image" (field_exhibit_lead_whole) is no longer read.
  */
 function _palefire_exhibit_whole(ParagraphInterface $page, ?array $lead, CacheableMetadata $cache): bool {
+  if ($page->hasField('field_exhibit_display') && $page->get('field_exhibit_display')->value === 'wall') {
+    return TRUE;
+  }
   $node = $page->getParentEntity();
   if ($node && $node->hasField('field_scroll_section')) {
     // Reordering the galleries changes which is first.

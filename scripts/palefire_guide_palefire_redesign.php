@@ -879,6 +879,11 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Mon Nov 23: Every wall shows its whole picture', <<<'HTML'
+<ul>
+<li>Exhibition sections laid out as a wall of pictures now always open on their whole picture in a frame, the first section too. Only a first section that reads as a story keeps the full-screen picture.</li>
+</ul>
+HTML),
   $text('Mon Nov 23: Exhibition walls keep to the page column', <<<'HTML'
 <ul>
 <li>On wide screens, the pictures on an exhibition wall now sit in the same centered column as the sections on the Special Collections homepage, instead of running to the edge of the window. Rows are shorter and easier to scan. Laptops and phones look the same as before.</li>

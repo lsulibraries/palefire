@@ -189,6 +189,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-23:** `_palefire_exhibit_whole()`: TRUE for any gallery whose `field_exhibit_display` is `wall`, before the first-gallery test.
 - **2026-11-23:** Wall column: `html[data-pf-mode="exhibition"] .pf-exhibit-wall` `padding-inline: max(0px, (100% - var(--pf-col-max, 1280px)) / 2)`; where a lead’s layout pulls the wall out by the gutter, its padding is `--pf-wall-pad` (`max(gutter, (100% + 2 * gutter - 1280px) / 2)`); a walled gallery’s `.pf-exhibit-next` takes `max(gutter, (100% - 1280px) / 2)`.
 - **2026-11-23:** Whole leads are a rule (`_palefire_exhibit_whole()` in `palefire.theme`): `lead_whole` on every gallery but the first published `exhibit_page` in the node’s `field_scroll_section`, and on a first gallery whose lead is under 720p; the gallery takes the node as a cache dependency. `field_exhibit_lead_whole` is no longer read.
 - **2026-11-21:** Caption credit rows (`.pf-viewer__credit`, a `<dl>` built by `setLabel()` in `js/exhibition.js`): Source / Call no. / View rows after a caption’s line break, `%pf-viewer-kicker` names, a `6.5rem` name column from md, `$pf-hairline` between rows (drawn with `.is-in` on the stage).
