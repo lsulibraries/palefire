@@ -879,6 +879,12 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Mon Nov 23: Mossville ends where it should; darker object view', <<<'HTML'
+<ul>
+<li>Mossville’s Full Interviews now shows all 49 interviews at once instead of folding them under “Read more”, and the page no longer runs on into several screens of blank space below the footer.</li>
+<li>An opened exhibition item now sits on the same darker glass as the menu bar, so the page behind is quieter and the text reads more easily.</li>
+</ul>
+HTML),
   $text('Mon Nov 23: A Lady in the South gets its own About', <<<'HTML'
 <ul>
 <li>About the Exhibition on A Lady in the South is now a wall like the other sections: the two narrators as portrait tiles, the exhibition’s poster with the acknowledgments, and the narrators’ own words as a text plate. It opens on the 1933 Home Economics Club page, so it no longer looks like the end of the section before it.</li>

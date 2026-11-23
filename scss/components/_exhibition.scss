@@ -4970,7 +4970,10 @@ $pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last
     transition: max-height .5s $pf-exhibit-ease;
   }
 
+  // Positioned while folded, so nothing positioned inside it (a visually
+  // hidden label) is laid out past the clip and lengthens the page.
   &.is-folded {
+    position: relative;
     max-height: var(--pf-intro-clip, 7rem);
     -webkit-mask-image: linear-gradient(to bottom, #000 45%, transparent);
     mask-image: linear-gradient(to bottom, #000 45%, transparent);
@@ -6285,17 +6288,14 @@ html.pf-a11y-motion .pf-exhibit-object__body :is(.pf-audio, .pf-audio__now) {
 }
 
 // The object view in glass: the exhibition stays in sight behind it,
-// blurred and dimmed, as behind the utility drawers (search, hours:
-// _utility-panels.scss). The view itself is the glass: the page dimmed
-// (black on dark swatches, the page color on light ones, the drawers'
-// backdrop) under the drawers' glass, blurred. The panel is darker glass,
-// the breadcrumb bar's (.pf-landing__bar), over it. Solid where
+// blurred. The view itself is the glass: the header's (--pf-sidebar-bg,
+// _reading-themes.scss), the swatch's chrome color at 90%, so the view
+// reads as the menu bar's darker glass opened over the page. The panel
+// is that glass too. Solid where
 // transparency is reduced or contrast raised, or without backdrop-filter.
 // The stage's buttons keep their own 75% page-color backing.
 .pf-viewer--exhibit {
-  --pf-viewer-glass:
-    linear-gradient(rgba(var(--pf-g-bg-rgb, 247, 244, 236), #{$pf-panel-glass}), rgba(var(--pf-g-bg-rgb, 247, 244, 236), #{$pf-panel-glass})),
-    rgba(var(--pf-g-bg-rgb, 247, 244, 236), #{$pf-panel-backdrop-light});
+  --pf-viewer-glass: var(--pf-sidebar-bg, var(--bs-body-bg));
   background: var(--pf-viewer-glass);
   -webkit-backdrop-filter: var(--pf-glass-filter, blur(26px));
   backdrop-filter: var(--pf-glass-filter, blur(26px));
@@ -6313,12 +6313,6 @@ html.pf-a11y-motion .pf-exhibit-object__body :is(.pf-audio, .pf-audio__now) {
   &.is-side {
     background: transparent;
   }
-}
-
-html.pf-reading-dark .pf-viewer--exhibit {
-  --pf-viewer-glass:
-    linear-gradient(color-mix(in srgb, color-mix(in srgb, var(--pf-g-bg) 80%, #000) #{$pf-panel-glass-dark}, transparent), color-mix(in srgb, color-mix(in srgb, var(--pf-g-bg) 80%, #000) #{$pf-panel-glass-dark}, transparent)),
-    rgb(0 0 0 / #{$pf-panel-backdrop-dark});
 }
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {

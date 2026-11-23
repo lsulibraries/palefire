@@ -603,9 +603,12 @@
       if (!body) {
         return;
       }
+      // The opening text only: an oral history's catalog of interviews
+      // ([interviews:<set>]) is a text block too, but the gallery itself,
+      // not words to fold behind "Read more".
       const blocks = [];
       for (const el of body.children) {
-        if (!el.matches('.pf-guide-block--text') || el.querySelector(':scope > .pf-guide-block__title')) {
+        if (!el.matches('.pf-guide-block--text') || el.matches('.pf-guide-block--interviews') || el.querySelector(':scope > .pf-guide-block__title')) {
           break;
         }
         blocks.push(el);
