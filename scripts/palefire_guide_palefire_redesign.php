@@ -879,6 +879,12 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Mon Nov 23: Exhibition sections show their whole picture', <<<'HTML'
+<ul>
+<li>Every section of a digital exhibition after the first now shows its opening picture whole, uncropped, over a soft blurred copy of itself. Before, most were cropped to fill the screen. The first section keeps its full-screen picture as the exhibition’s cover.</li>
+<li>Editors no longer need the “Show whole image” box; it can be removed from the form.</li>
+</ul>
+HTML),
   $text('Sat Nov 21: Picture details in rows', <<<'HTML'
 <ul>
 <li>When you open a picture in an exhibition, the details under its description (which collection it comes from, its call number and the catalog link) now sit in their own labeled rows, Source, Call no. and View, like the details on a museum wall label.</li>

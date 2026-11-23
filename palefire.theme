@@ -5451,12 +5451,41 @@ function _palefire_focal_point(FileInterface $file, ?int $width, ?int $height, C
 }
 
 /**
+ * Whether a gallery's lead is shown whole, uncropped.
+ *
+ * Whole (centered on a compact opening; framed over a blurred copy of
+ * itself on a cover or wall opening) on every gallery but the exhibition's
+ * first, which fills the screen as its cover, unless its lead is under
+ * 720p (long side under 1,280px or short side under 720px), too small to
+ * enlarge. A rule rather than a choice: "Show whole image"
+ * (field_exhibit_lead_whole) is no longer read.
+ */
+function _palefire_exhibit_whole(ParagraphInterface $page, ?array $lead, CacheableMetadata $cache): bool {
+  $node = $page->getParentEntity();
+  if ($node && $node->hasField('field_scroll_section')) {
+    // Reordering the galleries changes which is first.
+    $cache->addCacheableDependency($node);
+    foreach ($node->get('field_scroll_section')->referencedEntities() as $section) {
+      if ($section->bundle() === 'exhibit_page' && $section->isPublished()) {
+        if ($section->id() !== $page->id()) {
+          return TRUE;
+        }
+        break;
+      }
+    }
+  }
+  $w = (int) ($lead['width'] ?? 0);
+  $h = (int) ($lead['height'] ?? 0);
+  return $w > 0 && $h > 0 && (max($w, $h) < 1280 || min($w, $h) < 720);
+}
+
+/**
  * Implements hook_preprocess_HOOK() for paragraph--exhibit-page.
  *
  * lead: the gallery's lead image (decorative), or NULL.
  * focus: where a cropped lead stays in view (object-position keyword).
  * lead_x: the pan's horizontal position (Left / Right keep that side).
- * lead_whole: "Show whole image": uncropped and centred, not a band.
+ * lead_whole: the lead shown whole, uncropped (_palefire_exhibit_whole()).
  * lead_mirror: "Mirror lead image": flipped left to right on the page
  * (.pf-exhibit-mirror), never in the lightbox.
  * lead_caption: field_exhibit_lead_caption rendered, or NULL. With one, the
@@ -5502,7 +5531,7 @@ function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
     $variables['focus'] = $variables['lead']['focus'];
     $variables['lead_x'] = explode(' ', $variables['focus'])[0];
   }
-  $variables['lead_whole'] = $paragraph->hasField('field_exhibit_lead_whole') && (bool) $paragraph->get('field_exhibit_lead_whole')->value;
+  $variables['lead_whole'] = _palefire_exhibit_whole($paragraph, $variables['lead'], $cache);
   $variables['lead_mirror'] = $paragraph->hasField('field_exhibit_lead_mirror') && (bool) $paragraph->get('field_exhibit_lead_mirror')->value;
   $variables['lead_caption'] = NULL;
   if ($variables['lead'] && $paragraph->hasField('field_exhibit_lead_caption') && trim(strip_tags((string) $paragraph->get('field_exhibit_lead_caption')->value)) !== '') {
