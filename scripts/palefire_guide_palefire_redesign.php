@@ -879,6 +879,11 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Mon Nov 23: Biographies on the glass', <<<'HTML'
+<ul>
+<li>In oral history exhibitions, a speaker’s biography beside the transcript no longer sits on a solid gray panel. It shares the soft blurred background of the rest of the view.</li>
+</ul>
+HTML),
   $text('Mon Nov 23: A clear end to every exhibition', <<<'HTML'
 <ul>
 <li>When you step through an exhibition’s items, the last one now ends the exhibition instead of jumping back to the first. Scrolling on, or pressing the right arrow, shows “End of the exhibition” with its title and two choices: Back to the gallery, or Start again. The arrow buttons dim at the first and last items.</li>

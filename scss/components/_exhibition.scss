@@ -6526,6 +6526,21 @@ html.pf-reading-dark .pf-viewer--exhibit {
     }
   }
 
+  // The speaker's biography (.pf-viewer__bio) from lg, in the picture's
+  // column: on the stage's glass as the text is, not a panel of the page
+  // color; the picture and its tools leave from under it (visibility, so
+  // the stage's own fades are untouched) instead of being covered.
+  @include media-breakpoint-up(lg) {
+    > .pf-viewer__bio {
+      background: none;
+      @include pf-thin-scrollbar;
+    }
+
+    &:has(> .pf-viewer__bio.is-open) :is(.pf-viewer__media, .pf-viewer__tools) {
+      visibility: hidden;
+    }
+  }
+
   // The text: on the stage's glass, no panel of its own.
   .pf-viewer__panel {
     --pf-pad-start: max(1rem, env(safe-area-inset-left, 0px));
