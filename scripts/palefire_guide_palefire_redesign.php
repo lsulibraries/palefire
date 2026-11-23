@@ -879,6 +879,12 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Mon Nov 23: No more double posters', <<<'HTML'
+<ul>
+<li>When a section of an exhibition has no opening picture chosen, it borrows its first picture. That picture is no longer shown a second time further down: it stays framed at the top, with its caption and a View link.</li>
+<li>This tidies the “About the Exhibition” sections of six oral history exhibitions, which showed the poster twice.</li>
+</ul>
+HTML),
   $text('Mon Nov 23: The player follows you down a transcript', <<<'HTML'
 <ul>
 <li>In an exhibition’s object view on a computer, an interview’s player no longer sits fixed over the transcript on a solid band. It scrolls away with the text.</li>

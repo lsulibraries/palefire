@@ -5485,7 +5485,10 @@ function _palefire_exhibit_whole(ParagraphInterface $page, ?array $lead, Cacheab
 /**
  * Implements hook_preprocess_HOOK() for paragraph--exhibit-page.
  *
- * lead: the gallery's lead image (decorative), or NULL.
+ * lead: the gallery's lead image (decorative), or NULL. Without one chosen,
+ * the gallery's first picture; when that is a figure of a story gallery's
+ * own (not in an image group or entry), it is not shown again below and
+ * its caption is the lead's (_palefire_exhibit_borrow()).
  * focus: where a cropped lead stays in view (object-position keyword).
  * lead_x: the pan's horizontal position (Left / Right keep that side).
  * lead_whole: the lead shown whole, uncropped (_palefire_exhibit_whole()).
@@ -5519,11 +5522,13 @@ function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
     $item = _palefire_media_image_item($paragraph->get('field_exhibit_lead')->first(), $cache);
     $variables['lead'] = $item ? _palefire_exhibit_image($item, '100vw', $cache) : NULL;
   }
-  // No lead chosen: the gallery's first picture opens it, decorative (it
-  // is shown again below, with its caption), so every gallery has one.
+  // No lead chosen: the gallery's first picture opens it, so every gallery
+  // has one; decorative where it is shown again below, with its caption.
+  $borrowed = NULL;
   if (!$variables['lead'] && ($picture = _palefire_exhibit_first_picture($paragraph))) {
     $item = _palefire_media_image_item($picture, $cache);
     $variables['lead'] = $item ? _palefire_exhibit_image($item, '100vw', $cache) : NULL;
+    $borrowed = $variables['lead'] ? $picture->getEntity() : NULL;
   }
   $focus = $paragraph->hasField('field_exhibit_lead_focus') ? (string) $paragraph->get('field_exhibit_lead_focus')->value : '';
   $variables['focus'] = in_array($focus, ['top', 'bottom', 'left', 'right'], TRUE) ? $focus : 'center';
@@ -5543,6 +5548,9 @@ function palefire_preprocess_paragraph__exhibit_page(array &$variables): void {
   // A captioned lead's label in its corner, beside the View link that opens
   // it (the picture itself is not a link): the caption's first sentence.
   $variables['lead_label'] = $variables['lead_caption'] ? _palefire_exhibit_sentence((string) $paragraph->get('field_exhibit_lead_caption')->value, 80) : '';
+  if ($borrowed) {
+    _palefire_exhibit_borrow($variables, $paragraph, $borrowed, $cache);
+  }
   // Opening: "cover" (stored as "full", also when empty, for galleries
   // made before the field), "full" (stored as "pan") or "compact" (the
   // band above, as before).
@@ -6082,6 +6090,52 @@ function _palefire_exhibit_sentence(string $html, int $max = 90): string {
   $text = _palefire_plain_excerpt($html, 2000);
   $text = preg_match('/^(.{12,}?)(?<!\bca)(?<!\bc)(?<!\bvol)(?<!\b[Nn]o)(?<!\bpp)(?<!\bp)(?<!\bSt)(?<!\bDr)(?<!\bMr)(?<!\bMrs)(?<!\bMs)(?<!\bJr)(?<!\bSr)(?<!\be\.g)(?<!\bi\.e)(?<!\b\p{Lu})[.!?](?:\s|$)/u', $text, $m) ? $m[1] : rtrim($text, '.');
   return mb_strlen($text) > $max ? rtrim(mb_substr($text, 0, mb_strrpos(mb_substr($text, 0, $max - 2), ' ') ?: $max - 2), ' ,;:') . '…' : $text;
+}
+
+/**
+ * The lead borrowed from a story gallery's own figure is that figure.
+ *
+ * When the gallery's first picture opens it (no lead chosen) and it is a
+ * figure set straight in the gallery, not in an image group or an entry,
+ * the figure is not rendered again below (its block's #access), and its
+ * caption (or, without one, its alt text) becomes the lead's, so the lead
+ * is content: alt text, the View link into the viewer, the caption. A
+ * wall's tiles and a timeline are left as they are.
+ *
+ * @param array $variables
+ *   The exhibit_page variables, after lead_caption and lead_label are set.
+ * @param \Drupal\paragraphs\ParagraphInterface $paragraph
+ *   The gallery.
+ * @param object $figure
+ *   The paragraph the lead came from.
+ * @param \Drupal\Core\Cache\CacheableMetadata $cache
+ *   Collects the figure as a dependency.
+ */
+function _palefire_exhibit_borrow(array &$variables, ParagraphInterface $paragraph, $figure, CacheableMetadata $cache): void {
+  $display = $paragraph->hasField('field_exhibit_display') ? (string) $paragraph->get('field_exhibit_display')->value : '';
+  if (!$figure instanceof ParagraphInterface || $figure->bundle() !== 'exhibit_figure' || in_array($display, ['wall', 'timeline'], TRUE) || !$paragraph->hasField('field_guide_blocks')) {
+    return;
+  }
+  foreach ($paragraph->get('field_guide_blocks') as $delta => $ref) {
+    if ((int) $ref->target_id !== (int) $figure->id()) {
+      continue;
+    }
+    if (isset($variables['content']['field_guide_blocks'][$delta])) {
+      $variables['content']['field_guide_blocks'][$delta]['#access'] = FALSE;
+    }
+    $cache->addCacheableDependency($figure);
+    if (!$variables['lead_caption'] && $figure->hasField('field_figure_caption') && trim(strip_tags((string) $figure->get('field_figure_caption')->value)) !== '') {
+      $variables['lead_caption'] = $figure->get('field_figure_caption')->view(['label' => 'hidden', 'type' => 'text_default']);
+      $variables['lead_label'] = _palefire_exhibit_sentence((string) $figure->get('field_figure_caption')->value, 80);
+    }
+    // No caption: its alt text stands in, so the picture is not lost to a
+    // screen reader now that it is shown once.
+    elseif (!$variables['lead_caption'] && trim((string) $variables['lead']['alt']) !== '') {
+      $variables['lead_caption'] = ['#plain_text' => trim((string) $variables['lead']['alt'])];
+      $variables['lead_label'] = _palefire_exhibit_sentence(trim((string) $variables['lead']['alt']), 80);
+    }
+    return;
+  }
 }
 
 /**
