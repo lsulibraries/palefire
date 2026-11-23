@@ -1015,8 +1015,9 @@ class PalefireHooks {
    *
    * Its family's exhibitions (exhibitFamily()) in the exhibitions band
    * Oral History's Showcase uses (includes/exhibit-carousel.html.twig,
-   * exhibitionCard() items): this one shown first, where the reader is,
-   * then the one after it and on round, so Next reads straight through;
+   * exhibitionCard() items), in the family's own order, the same on every
+   * exhibition, the band opened on this one (start: its place), so the
+   * count says where it stands and Previous and Next are its neighbors;
    * then the way back to the family's home (includes/exhibit-end.html.twig).
    * Empty for a family of one. This one's button and canvas go back to its
    * start (#main-content, "Back to the start", an up arrow: top), not to
@@ -1027,10 +1028,9 @@ class PalefireHooks {
     $family = self::exhibitFamily($node, $cache);
     $count = count($family['items']);
     $others = [];
-    for ($step = 0; $count > 1 && $step < $count; $step++) {
-      $item = $family['items'][($family['index'] + $step) % $count];
+    foreach ($count > 1 ? $family['items'] : [] as $i => $item) {
       $card = self::exhibitionCard($item['node'], $cache);
-      if ($step === 0) {
+      if ($i === $family['index']) {
         $card['url'] = '#main-content';
         $card['cta'] = (string) t('Back to the start');
         $card['top'] = TRUE;
@@ -1041,6 +1041,7 @@ class PalefireHooks {
     $cache->applyTo($render);
     return [
       'others' => $others,
+      'start' => $others ? $family['index'] : 0,
       'parent' => $family['parent'],
       'all' => $family['all'],
       'cache' => $render,

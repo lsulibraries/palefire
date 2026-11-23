@@ -48,6 +48,9 @@
  * - items: PalefireHooks::exhibitionCard() arrays (showcase() adds post,
  *   featured and note; exhibitEnd() adds top to the exhibition just read,
  *   whose button goes up to its start, an up arrow).
+ * - start: the one shown first (default 0, the first): an exhibition's own
+ *   end band opens on it, its rail set there by js/exhibit-showcase.js;
+ *   without script the summary is still this one.
  * - id: the band's id (the TOC's target on the Exhibitions page).
  * - label: the carousel's accessible name.
  * - heading: 'h2' (default) or 'h3' under a section's own heading.
@@ -78,10 +81,12 @@
 {% import _self as pf %}
 {% set heading = heading == 'h3' ? 'h3' : 'h2' %}
 {% set shown = items|length %}
+{% set start = start|default(0) %}
+{% set start = start >= 0 and start < shown ? start : 0 %}
 {% set captioned = items|filter(ex => ex.object)|length > 0 %}
 {% if items %}
   {{ attach_library('palefire/exhibit-showcase') }}
-  <section class="pf-showcase__carousel{{ captioned ? ' pf-showcase__carousel--captioned' }}" id="{{ id }}" aria-roledescription="{{ 'carousel'|t }}" aria-label="{{ label }}" data-pf-showcase-carousel>
+  <section class="pf-showcase__carousel{{ captioned ? ' pf-showcase__carousel--captioned' }}" id="{{ id }}" aria-roledescription="{{ 'carousel'|t }}" aria-label="{{ label }}" data-pf-showcase-carousel data-pf-showcase-start="{{ start }}">
     {# The plate: two layers that crossfade, given their pictures by
        js/exhibit-showcase.js once the band nears the screen (none without
        script: it is decorative). #}
@@ -103,10 +108,10 @@
     <div class="pf-showcase__stage{{ captioned ? ' pf-showcase__stage--captioned' }}">
       <div class="pf-showcase__rail" aria-hidden="true" tabindex="-1" data-pf-showcase-scene>
         {% for ex in items %}
-          <div class="pf-showcase__card{{ loop.first ? ' is-active' }}{{ ex.cover ? '' : ' is-blank' }}" data-pf-showcase-card data-url="{{ ex.url }}"{% if ex.cover %} data-plate="{{ ex.cover.small }}"{% endif %}>
+          <div class="pf-showcase__card{{ loop.index0 == start ? ' is-active' }}{{ ex.cover ? '' : ' is-blank' }}" data-pf-showcase-card data-url="{{ ex.url }}"{% if ex.cover %} data-plate="{{ ex.cover.small }}"{% endif %}>
             {% if ex.cover %}
               <span class="pf-showcase__edge pf-showcase__edge--start">{{ pf.picture(ex.cover, false) }}</span>
-              <span class="pf-showcase__face">{{ pf.picture(ex.cover, loop.first) }}</span>
+              <span class="pf-showcase__face">{{ pf.picture(ex.cover, loop.index0 == start) }}</span>
               <span class="pf-showcase__edge pf-showcase__edge--end">{{ pf.picture(ex.cover, false) }}</span>
             {% else %}
               <span class="pf-showcase__face"></span>
@@ -122,7 +127,7 @@
       {% if captioned %}
         <div class="pf-showcase__captions">
           {% for ex in items %}
-            <div class="pf-showcase__caption{{ loop.first ? ' is-active' }}" data-pf-showcase-caption>
+            <div class="pf-showcase__caption{{ loop.index0 == start ? ' is-active' }}" data-pf-showcase-caption>
               {% if ex.object %}{% include '@palefire/includes/object-label.html.twig' with ex.object|merge({compact: true}) only %}{% endif %}
             </div>
           {% endfor %}
@@ -136,7 +141,7 @@
       <div class="pf-showcase__summaries">
         {% for ex in items %}
           {% set plain_kicker = ex.kicker == 'Exhibition'|t %}
-          <div class="pf-showcase__summary{{ loop.first ? ' is-active' }}" data-pf-showcase-summary data-title="{{ ex.title }}">
+          <div class="pf-showcase__summary{{ loop.index0 == start ? ' is-active' }}" data-pf-showcase-summary data-title="{{ ex.title }}">
             <div class="pf-showcase__label">
               {% if ex.featured or not plain_kicker or ex.unpublished %}
                 <p class="pf-showcase__feature">
@@ -220,22 +225,22 @@
            place and nothing moves when it appears. #}
         <div class="pf-showcase__controls" data-pf-showcase-controls>
           <div class="pf-showcase__browse">
-            <button type="button" class="pf-showcase__arrow" data-pf-showcase-prev disabled>
+            <button type="button" class="pf-showcase__arrow" data-pf-showcase-prev{{ start == 0 ? ' disabled' }}>
               {{ pf.arrow('left') }}
               <span class="visually-hidden">{{ 'Previous exhibition'|t }}</span>
             </button>
-            <button type="button" class="pf-showcase__arrow" data-pf-showcase-next>
+            <button type="button" class="pf-showcase__arrow" data-pf-showcase-next{{ start == shown - 1 ? ' disabled' }}>
               {{ pf.arrow('right') }}
               <span class="visually-hidden">{{ 'Next exhibition'|t }}</span>
             </button>
             <p class="pf-showcase__upnext" aria-hidden="true">
               <span class="pf-showcase__upnext-label">{{ 'Next'|t }}</span>
-              <span class="pf-showcase__upnext-title" data-pf-showcase-upnext>{{ items[1].title }}</span>
+              <span class="pf-showcase__upnext-title" data-pf-showcase-upnext>{{ start < shown - 1 ? items[start + 1].title }}</span>
             </p>
           </div>
           <div class="pf-showcase__progress" aria-hidden="true">
-            <p class="pf-showcase__count"><span data-pf-showcase-n>01</span> / {{ '%02d'|format(shown) }}</p>
-            <span class="pf-showcase__meter"><span class="pf-showcase__meter-fill" style="transform: scaleX({{ 1 / shown }})" data-pf-showcase-meter></span></span>
+            <p class="pf-showcase__count"><span data-pf-showcase-n>{{ '%02d'|format(start + 1) }}</span> / {{ '%02d'|format(shown) }}</p>
+            <span class="pf-showcase__meter"><span class="pf-showcase__meter-fill" style="transform: scaleX({{ (start + 1) / shown }})" data-pf-showcase-meter></span></span>
           </div>
         </div>
         <p class="visually-hidden" aria-live="polite" data-pf-showcase-live></p>

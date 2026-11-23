@@ -237,7 +237,18 @@
       }
     });
 
-    show(indexAt());
+    // A band may open on another than the first (data-pf-showcase-start:
+    // an exhibition's own end band, on that exhibition): the rail set
+    // there at once, without a glide, and nothing announced (the reader
+    // has not moved it).
+    const start = Math.max(0, Math.min(total - 1, parseInt(region.dataset.pfShowcaseStart, 10) || 0));
+    if (start) {
+      const x = Math.min(maxScroll(), offset(start));
+      rail.scrollTo({ left: rtl() ? -x : x, behavior: 'instant' });
+      current = start;
+      said = start;
+    }
+    show(start || indexAt());
     if ('IntersectionObserver' in window) {
       const watch = new IntersectionObserver((entries) => {
         if (entries.some((entry) => entry.isIntersecting)) {

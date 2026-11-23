@@ -189,6 +189,7 @@ On page: ✔ shown live · ▣ shown as a plate · – not yet.
 
 ## Changelog
 
+- **2026-11-23:** Exhibitions band: `start` (the one shown first; `data-pf-showcase-start` on `.pf-showcase__carousel`), used by an exhibition’s end band to open on itself in the family’s order.
 - **2026-11-23:** Stage biography: `.pf-viewer--exhibit.is-staged > .pf-viewer__bio` from lg `background: none` with `pf-thin-scrollbar`; `:has(> .pf-viewer__bio.is-open)` sets `.pf-viewer__media` and `.pf-viewer__tools` to `visibility: hidden`.
 - **2026-11-23:** Object view ends: `.pf-viewer__step[aria-disabled="true"]` (opacity .35, focusable; `sync({ ends: [first, last] })`, `handler.end(delta)`, `viewer.go(fill)`); the end card `.pf-exhibit-onward.is-end` (no line, no “Opening” words) holds at a full pull as `.is-held` with `.pf-exhibit-onward__end` (`role="group"`) and two `.pf-exhibit-onward__way` buttons (mono UI, hairline border, accent on hover, 2px accent focus ring). On the stage the bands have `background: none` and the panel’s other children take `filter: opacity(calc(1 - var(--pf-fade)))` while `.is-pulling` (`@property --pf-fade`, .2s with motion). Stage panel from lg: `margin-inline-end: calc(-1 * var(--pf-reach))`, padding-right `calc(var(--pf-pad-end) + var(--pf-reach))`; `--pf-frame-x: max(1.5rem, (100vw - 78rem) / 2)`, a text entry’s reach adds the room beside its 43rem column. `.pf-exhibit-wall__tools`: `border-top` only.
 - **2026-11-23:** `_palefire_exhibit_whole()`: TRUE for any gallery whose `field_exhibit_display` is `wall`, before the first-gallery test.

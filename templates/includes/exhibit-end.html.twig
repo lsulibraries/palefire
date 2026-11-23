@@ -4,15 +4,16 @@
  * After an exhibition's last gallery: its family's exhibitions and the
  * way back (PalefireHooks::exhibitEnd(), page.html.twig). They are in the
  * exhibitions band of Oral History's Showcase
- * (includes/exhibit-carousel.html.twig), this one shown first, then the
- * next and on round, without its index rule: the band's title is the
+ * (includes/exhibit-carousel.html.twig), in the family's order and
+ * opened on this one, without its index rule: the band's title is the
  * panel's (visually hidden) heading. Then a plain link back to the
  * family's home and, for Special Collections, every exhibition: quieter
  * than the band's Enter, well below it, so it reads as the way out. _exhibition.scss
  * (.pf-exhibit-end), _exhibit-showcase.scss.
  *
- * - end.others: PalefireHooks::exhibitionCard() arrays, this exhibition
- *   first. Empty when the family has one.
+ * - end.others: PalefireHooks::exhibitionCard() arrays, in the family's
+ *   order. Empty when the family has one.
+ * - end.start: this exhibition's place in them, the one shown first.
  * - end.parent: title, url. end.all: url or NULL.
  */
 #}
@@ -24,6 +25,7 @@
     <div class="pf-showcase pf-exhibit-end__showcase" data-pf-showcase data-toc-skip>
       {% include '@palefire/includes/exhibit-carousel.html.twig' with {
         items: end.others,
+        start: end.start,
         id: 'pf-exhibit-end-band',
         label: 'More from @parent'|t({'@parent': end.parent.title}),
         heading: 'h3',

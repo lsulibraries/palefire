@@ -879,6 +879,11 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Mon Nov 23: The exhibitions at the end keep their order', <<<'HTML'
+<ul>
+<li>The row of exhibitions at the end of each exhibition now always lists them in the same order. It opens on the exhibition you just finished, so you can see where it sits and step back or forward to its neighbors.</li>
+</ul>
+HTML),
   $text('Mon Nov 23: Biographies on the glass', <<<'HTML'
 <ul>
 <li>In oral history exhibitions, a speaker’s biography beside the transcript no longer sits on a solid gray panel. It shares the soft blurred background of the rest of the view.</li>
