@@ -853,6 +853,11 @@ $pf-opener-moving: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) #{$pf-o
   padding: 0 var(--pf-section-pad-inline) clamp(2.5rem, 5vw, 4rem);
 }
 
+// Under a wall, on the wall's column (.pf-exhibit-wall), not the gutter.
+.pf-section:has(> .pf-section__inner > .pf-gallery.is-walled) > .pf-exhibit-next {
+  padding-inline: max(var(--pf-section-pad-inline), (100% - var(--pf-col-max, 1280px)) / 2);
+}
+
 .pf-exhibit-next__link {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
@@ -4305,7 +4310,7 @@ $pf-bare-wash-lg:
       position: relative;
       z-index: 1;
       margin: 0 calc(-1 * var(--pf-section-pad-inline, 0px));
-      padding: clamp(2rem, 4vw, 3rem) var(--pf-section-pad-inline, 0px) 0;
+      padding: clamp(2rem, 4vw, 3rem) var(--pf-wall-pad) 0;
       background: var(--bs-body-bg);
       box-shadow: 0 -2px 0 var(--bs-body-bg);
     }
@@ -4391,7 +4396,7 @@ $pf-wall-photo: 'html[data-pf-mode="exhibition"]:not(.pf-a11y-motion) .pf-sectio
         position: relative;
         z-index: 1;
         margin: 0 calc(-1 * var(--pf-section-pad-inline, 0px));
-        padding: clamp(2rem, 4vw, 3rem) var(--pf-section-pad-inline, 0px) 0;
+        padding: clamp(2rem, 4vw, 3rem) var(--pf-wall-pad) 0;
         background: var(--bs-body-bg);
         // Over the half pixel the pinned spacer's rounding leaves between
         // its wash and this edge, where the photograph showed as a line.
@@ -4990,6 +4995,18 @@ $pf-last-cover: 'html[data-pf-mode="exhibition"] .pf-sections > .pf-section:last
   @include media-breakpoint-up(xl) {
     --pf-wall-row: 15rem;
   }
+}
+
+// Its tools, sub-galleries and tiles in the page's centered column, as
+// on /v2/special (--pf-col-max, 1280px; past it the margins grow), so a
+// row on a wide screen is one the eye can take in; the cover above stays
+// full bleed. Padding, not a max-width: where the wall runs edge to edge
+// on the page color (a lead's layouts, below) it pads itself back by the
+// section's gutter (--pf-wall-pad), never less. A percentage padding is
+// of the gallery's width, the wall's own without those negative margins.
+html[data-pf-mode="exhibition"] .pf-exhibit-wall {
+  --pf-wall-pad: max(var(--pf-section-pad-inline, 0px), (100% + 2 * var(--pf-section-pad-inline, 0px) - var(--pf-col-max, 1280px)) / 2);
+  padding-inline: max(0px, (100% - var(--pf-col-max, 1280px)) / 2);
 }
 
 .pf-exhibit-wall__tools {
