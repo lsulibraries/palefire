@@ -11,6 +11,8 @@
  *
  * A page drives it with a handler (Drupal.palefireViewer.show()):
  * - step(delta): the arrows, arrow keys and swipe. Without it, none.
+ * - end(delta): a step asked for past an end (sync({ ends })), instead of
+ *   nothing: the page may say it is the end.
  * - close(): Close, the stage's ×, Esc. Usually viewer.close(); a page can
  *   go back a level instead (an image opened from an entry).
  * - closed(): after the dialog has closed (address, focus).
@@ -146,10 +148,19 @@
       foot: dialog.querySelector('.pf-viewer__steps'),
       pair: dialog.querySelector('.pf-viewer__pair'),
     };
+    // Past an end (sync({ ends })) the arrow stays, dimmed and focusable
+    // (aria-disabled), and a step is the page's to answer (handler.end).
     const step = (delta) => {
-      if (handler.step) {
-        leave(() => handler.step(delta));
+      if (!handler.step) {
+        return;
       }
+      if ((delta > 0 ? parts.next : parts.prev).getAttribute('aria-disabled') === 'true') {
+        if (handler.end) {
+          handler.end(delta);
+        }
+        return;
+      }
+      leave(() => handler.step(delta));
     };
     const shut = () => (handler.close ? handler.close() : close(null));
     dialog.querySelector('.pf-viewer__prev').addEventListener('click', () => step(-1));
@@ -369,9 +380,17 @@
   // image shows (the reader may want the panel alone). extra: the page's
   // own buttons for the panel's top row. text: the panel is the thing (an
   // exhibition's text plate), so it is never folded away and has no fold.
-  function sync({ steps = 0, bare = false, zoom: zoomable, hide = false, extra = [], text = false } = {}) {
-    view.steps.forEach((button) => {
+  // ends: [first, last], at the first or the last thing: that way's arrow
+  // is aria-disabled (no going round).
+  function sync({ steps = 0, bare = false, zoom: zoomable, hide = false, extra = [], text = false, ends = [] } = {}) {
+    view.steps.forEach((button, i) => {
       button.hidden = steps < 2;
+      if (ends[i]) {
+        button.setAttribute('aria-disabled', 'true');
+      }
+      else {
+        button.removeAttribute('aria-disabled');
+      }
     });
     view.zoom.hidden = zoomable === undefined ? !view.media.querySelector('.pf-viewer__zoomable') : !zoomable;
     view.zoom.setAttribute('aria-pressed', 'false');
@@ -575,6 +594,8 @@
     icon: icon,
     canMorph: canMorph,
     setSide: setSide,
+    // A jump that is not a step (fill() puts it in), faded as a step is.
+    go: (fill) => leave(fill),
     inSight: inSight,
     isOpen: () => !!view && view.dialog.open,
     isSide: () => !!view && view.dialog.open && !!view.side,

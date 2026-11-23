@@ -1153,6 +1153,7 @@
   // What the viewer's arrows, Close and Esc do here.
   const objectHandler = {
     step: (delta) => stepObject(delta),
+    end: (delta) => showEnd(delta),
     close: () => closeObject(true),
     closed: objectClosed,
   };
@@ -2062,9 +2063,10 @@
     // the exhibition while it plays.
     const clip = !!view.body.querySelector('[data-pf-audio] audio');
     // The arrows step on past the wall's ends into the next section's
-    // (neighbor()), so they show while the page has more than one entry.
+    // (neighbor()), so they show while the page has more than one entry;
+    // at the exhibition's first and last entries that way's is dimmed.
     const total = stepCount();
-    viewer.sync({ steps: total, extra: clip ? [keepButton(view)] : [], text: reading });
+    viewer.sync({ steps: total, extra: clip ? [keepButton(view)] : [], text: reading, ends: [!neighbor(-1), !neighbor(1)] });
     // The way on at the panel's end, on every entry of a wall with more
     // than one; not in a clip's side panel (sideHandler), which has no
     // arrows to step with.
@@ -2087,7 +2089,9 @@
   // pull; from 85% "Opening the next page", and at a full pull (55% of the
   // panel, at least 240px), after a breath, the view cross-fades to the
   // next entry as the arrow steps (stepOn()). Scrolling up at the top is
-  // its mirror, back to the previous entry. Neither takes room (a box of
+  // its mirror, back to the previous entry. There is no going round: at the
+  // exhibition's first entry there is no way back, and at its last the
+  // way on is its end (showEnd()). Neither takes room (a box of
   // no height, its band hung over the text, fitBand()), so the scrollbar
   // is the text's own. Scrolling counts toward it only once the panel
   // has stood still at that end a moment (450ms; just after a
@@ -2113,7 +2117,12 @@
     const line = '<span class="pf-hero-cue__line"></span>';
     const words = '<span class="' + name + '__prompt"><span class="' + name + '__say"></span><span class="' + name + '__ready"></span></span>'
       + '<span class="' + name + '__title"></span>';
-    band.innerHTML = '<div class="' + name + '__band">' + (way === 'on' ? words + line : line + words) + '</div>';
+    // The way on's end card: its ways out, inert until it holds.
+    const end = '<span class="' + name + '__end" role="group" aria-label="' + Drupal.t('End of the exhibition') + '">'
+      + '<button type="button" class="' + name + '__way ' + name + '__gallery">' + Drupal.t('Back to the gallery') + '</button>'
+      + '<button type="button" class="' + name + '__way ' + name + '__again">' + Drupal.t('Start again') + '</button></span>';
+    band.innerHTML = '<div class="' + name + '__band">' + (way === 'on' ? words + line + end : line + words) + '</div>';
+    band.inert = true;
     view[ways[way].el] = band;
     return band;
   }
@@ -2132,6 +2141,8 @@
         view.panel.prepend(back);
       }
       listenWays(view);
+      view.cue.querySelector('.pf-exhibit-onward__gallery').addEventListener('click', () => closeObject(true));
+      view.cue.querySelector('.pf-exhibit-onward__again').addEventListener('click', startAgain);
     }
     // A step ends the touch that made it, and the next entry stands still
     // a little longer before scrolling counts.
@@ -2150,19 +2161,73 @@
       window.clearTimeout(view.pulls[way + 'Timer']);
       setPull(view, way, 0);
     });
+    const to = on ? neighbor(1) : null;
+    const from = on ? neighbor(-1) : null;
+    view.rewind.hidden = !from;
+    view.cue.classList.toggle('is-end', on && !to);
     if (!on) {
       return;
     }
-    const to = neighbor(1);
-    const onward = to.tiles !== wallState.tiles;
-    view.cue.querySelector('.pf-exhibit-onward__say').textContent = onward ? Drupal.t('Keep scrolling for the next section') : Drupal.t('Keep scrolling for the next page');
-    view.cue.querySelector('.pf-exhibit-onward__ready').textContent = onward ? Drupal.t('Opening the next section') : Drupal.t('Opening the next page');
-    view.cue.querySelector('.pf-exhibit-onward__title').textContent = tileTitle(to.tiles[to.index]);
-    const from = neighbor(-1);
+    if (to) {
+      const onward = to.tiles !== wallState.tiles;
+      view.cue.querySelector('.pf-exhibit-onward__say').textContent = onward ? Drupal.t('Keep scrolling for the next section') : Drupal.t('Keep scrolling for the next page');
+      view.cue.querySelector('.pf-exhibit-onward__ready').textContent = onward ? Drupal.t('Opening the next section') : Drupal.t('Opening the next page');
+      view.cue.querySelector('.pf-exhibit-onward__title').textContent = tileTitle(to.tiles[to.index]);
+    }
+    else {
+      view.cue.querySelector('.pf-exhibit-onward__say').textContent = Drupal.t('End of the exhibition');
+      view.cue.querySelector('.pf-exhibit-onward__ready').textContent = '';
+      view.cue.querySelector('.pf-exhibit-onward__title').textContent = exhibitionTitle();
+    }
+    if (!from) {
+      return;
+    }
     const backward = from.tiles !== wallState.tiles;
     view.rewind.querySelector('.pf-exhibit-rewind__say').textContent = backward ? Drupal.t('Keep scrolling up for the previous section') : Drupal.t('Keep scrolling up for the previous page');
     view.rewind.querySelector('.pf-exhibit-rewind__ready').textContent = backward ? Drupal.t('Opening the previous section') : Drupal.t('Opening the previous page');
     view.rewind.querySelector('.pf-exhibit-rewind__title').textContent = tileTitle(from.tiles[from.index]);
+  }
+
+  // The exhibition's own title (the cover's heading, without its
+  // subtitle), for its end card.
+  function exhibitionTitle() {
+    const heading = document.querySelector('.pf-exhibit-cover__title');
+    const first = heading && Array.from(heading.childNodes).find((node) => node.nodeType === Node.TEXT_NODE && node.data.trim());
+    return first ? first.data.replace(/\s+/g, ' ').trim() : document.title.split(' | ')[0];
+  }
+
+  // The end card held open (a full pull, or a step asked for past the
+  // last entry: the arrow, the arrow key or a swipe), its first way out
+  // focused when the keyboard asked for it.
+  function showEnd(delta) {
+    const view = wallState.view;
+    if (delta < 0 || !view || !view.cue || !view.cue.classList.contains('is-end') || view.cue.hidden) {
+      return;
+    }
+    if (!view.held) {
+      view.panel.scrollTop = view.panel.scrollHeight;
+      fitBand(view, 'on');
+      view.pulls.on = Math.max(240, view.panel.clientHeight * .55);
+      setPull(view, 'on', 1);
+    }
+    view.cue.querySelector('.pf-exhibit-onward__gallery').focus({ preventScroll: true });
+  }
+
+  // Start again: the first entry of the exhibition's first wall, faded in
+  // as a step, the panel focused (the card's button goes with the card).
+  function startAgain() {
+    const first = walls()[0];
+    const view = wallState.view;
+    if (!first || !view) {
+      return;
+    }
+    viewer.go(() => {
+      wallState.tiles = Array.from(first.querySelectorAll('[data-pf-tile]'));
+      showEntry(0);
+      history.replaceState(history.state, '', location.pathname + location.search + '#' + wallState.tile.dataset.pfTile);
+      view.panel.tabIndex = -1;
+      view.panel.focus({ preventScroll: true });
+    });
   }
 
   // A tile's entry title.
@@ -2237,7 +2302,7 @@
     panel.addEventListener('touchend', () => {
       if (!view.wayBusy) {
         Object.keys(ways).forEach((way) => {
-          if (view.pulls[way]) {
+          if (view.pulls[way] && !(way === 'on' && view.held)) {
             setPull(view, way, 0);
           }
         });
@@ -2286,14 +2351,45 @@
     }
   }
 
+  // On the stage the bands have no fill: the text under them fades as
+  // they rise (the panel's --pf-fade, .is-pulling, _exhibition.scss), kept
+  // a moment after a band lets go so the text fades back in.
   function setPull(view, way, progress) {
     const band = view[ways[way].el];
     if (!progress) {
       view.pulls[way] = 0;
     }
+    const end = band.classList.contains('is-end');
     band.style.setProperty(ways[way].prop, progress.toFixed(3));
-    band.classList.toggle('is-ready', progress >= .85);
-    band.classList.toggle('is-going', progress >= 1);
+    band.classList.toggle('is-ready', progress >= .85 && !end);
+    band.classList.toggle('is-going', progress >= 1 && !end);
+    if (way === 'on') {
+      // The end card holds at a full pull, its ways out live; letting go
+      // (scrolling back, a step) puts focus left in it on the panel.
+      const held = end && progress >= 1;
+      if (!held && band.contains(document.activeElement)) {
+        view.panel.tabIndex = -1;
+        view.panel.focus({ preventScroll: true });
+      }
+      view.held = held;
+      band.classList.toggle('is-held', held);
+      band.inert = !held;
+      if (held) {
+        band.removeAttribute('aria-hidden');
+      }
+      else {
+        band.setAttribute('aria-hidden', 'true');
+      }
+    }
+    const fade = Math.max(...Object.keys(ways).map((w) => parseFloat(view[ways[w].el].style.getPropertyValue(ways[w].prop)) || 0));
+    view.panel.style.setProperty('--pf-fade', Math.min(1, fade * 2.5).toFixed(3));
+    window.clearTimeout(view.fadeTimer);
+    if (fade > 0) {
+      view.panel.classList.add('is-pulling');
+    }
+    else {
+      view.fadeTimer = window.setTimeout(() => view.panel.classList.remove('is-pulling'), 300);
+    }
   }
 
   // dy: how far the reader pulled that way (px; the other way is negative).
@@ -2318,6 +2414,10 @@
     if (view.pulls[way] < need) {
       // Stopped short: it lets go.
       view.pulls[way + 'Timer'] = window.setTimeout(() => setPull(view, way, 0), 700);
+      return;
+    }
+    // The end: the card holds; nothing to step to.
+    if (band.classList.contains('is-end')) {
       return;
     }
     view.wayBusy = true;
@@ -2411,7 +2511,7 @@
     const view = objectView();
     const list = interviews.list;
     const n = list.length;
-    interviews.index = (index + n) % n;
+    interviews.index = Math.max(0, Math.min(n - 1, index));
     const tape = list[interviews.index];
     const card = tape.closest('[data-pf-interview]');
     const tapes = Array.from(card.querySelectorAll('a[data-pf-tape]'));
@@ -2539,7 +2639,7 @@
     view.scale.hidden = true;
     view.scale.replaceChildren();
     view.count.textContent = Drupal.t('@n of @total', { '@n': interviews.index + 1, '@total': n });
-    viewer.sync({ steps: n });
+    viewer.sync({ steps: n, ends: [interviews.index === 0, interviews.index === n - 1] });
   }
 
   /* ---------------------------------------------------------------------
@@ -2573,7 +2673,7 @@
     const view = objectView();
     const loose = wallState.loose;
     const n = loose.links.length;
-    loose.index = (index + n) % n;
+    loose.index = Math.max(0, Math.min(n - 1, index));
     const link = loose.links[loose.index];
     const frame = document.createElement('div');
     frame.className = 'pf-viewer__frame';
@@ -2602,7 +2702,7 @@
     view.scale.hidden = true;
     view.scale.replaceChildren();
     view.count.textContent = n > 1 ? Drupal.t('Image @n of @total', { '@n': loose.index + 1, '@total': n }) : '';
-    viewer.sync({ steps: n, bare: !caption && n < 2 });
+    viewer.sync({ steps: n, bare: !caption && n < 2, ends: [loose.index === 0, loose.index === n - 1] });
   }
 
   // A caption in the panel: what it shows, then where it is from as rows
@@ -2753,12 +2853,16 @@
 
   function stepObject(delta) {
     if (wallState.loose) {
-      if (wallState.loose.links.length > 1) {
-        fillLoose(wallState.loose.index + delta);
+      const at = wallState.loose.index + delta;
+      if (at >= 0 && at < wallState.loose.links.length) {
+        fillLoose(at);
       }
     }
     else if (stepCount() > 1) {
       const to = neighbor(delta);
+      if (!to) {
+        return;
+      }
       wallState.tiles = to.tiles;
       showEntry(to.index);
       history.replaceState(history.state, '', location.pathname + location.search + '#' + wallState.tile.dataset.pfTile);
@@ -2775,8 +2879,8 @@
   }
 
   // The entry delta (1 or -1) away: the next on this wall, or past either
-  // end the first (last) of the next (previous) section's wall, round from
-  // the last section to the first; with one wall, round it.
+  // end the first (last) of the next (previous) section's wall; null past
+  // the exhibition's first or last entry (no going round).
   function neighbor(delta) {
     const tiles = wallState.tiles;
     const to = wallState.index + delta;
@@ -2785,10 +2889,10 @@
     }
     const all = walls();
     const here = tiles.length ? all.indexOf(tiles[0].closest('[data-pf-wall]')) : -1;
-    if (all.length < 2 || here < 0) {
-      return { tiles, index: (to + tiles.length) % tiles.length };
+    const wall = here < 0 ? null : all[here + delta];
+    if (!wall) {
+      return null;
     }
-    const wall = all[(here + delta + all.length) % all.length];
     const next = Array.from(wall.querySelectorAll('[data-pf-tile]'));
     return { tiles: next, index: delta > 0 ? 0 : next.length - 1 };
   }

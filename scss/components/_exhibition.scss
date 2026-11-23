@@ -5016,7 +5016,7 @@ html[data-pf-mode="exhibition"] .pf-exhibit-wall {
   justify-content: space-between;
   gap: 0.75rem 1.5rem;
   padding-block: 0.75rem;
-  border-block: 1px solid $pf-hairline;
+  border-top: 1px solid $pf-hairline;
 }
 
 // A sub-gallery (_palefire_exhibit_wall(): an entry with no image heads the
@@ -5032,8 +5032,6 @@ html[data-pf-mode="exhibition"] .pf-exhibit-wall {
 
   .pf-exhibit-wall__tools + & {
     margin-top: 0.5rem;
-    padding-top: 0;
-    border-top: 0;
   }
 
   @include media-breakpoint-up(md) {
@@ -6330,6 +6328,10 @@ html.pf-reading-dark .pf-viewer--exhibit {
 .pf-viewer--exhibit.is-staged {
   --pf-stage-ease: cubic-bezier(.2, .7, .1, 1);
   --pf-text-w: 28rem;
+  // The frame's side margins from lg; the panel reaches through the right
+  // one (--pf-reach), so its scrollbar is at the screen's edge.
+  --pf-frame-x: max(1.5rem, (100vw - 78rem) / 2);
+  --pf-reach: var(--pf-frame-x);
   // Blurred heavily and a little grayed, so the page reads as a place,
   // not as text.
   -webkit-backdrop-filter: blur(22px) saturate(.7);
@@ -6354,7 +6356,7 @@ html.pf-reading-dark .pf-viewer--exhibit {
         "rule rule rule" 1px
         "pic div text" minmax(0, 1fr)
         "pic div foot" auto / minmax(0, 1.5fr) 1px minmax(19rem, var(--pf-text-w));
-      padding: max(1.5rem, (100dvh - 52rem) / 2) max(1.5rem, (100vw - 78rem) / 2);
+      padding: max(1.5rem, (100dvh - 52rem) / 2) var(--pf-frame-x);
     }
   }
 
@@ -6540,7 +6542,11 @@ html.pf-reading-dark .pf-viewer--exhibit {
       --pf-pad-start: 2.5rem;
       --pf-pad-end: 1rem;
       --pf-pad-top: 2rem;
-      padding: var(--pf-pad-top) var(--pf-pad-end) 1.5rem var(--pf-pad-start);
+      // Out to the screen's right edge, its scrollbar there and not by the
+      // words; the words keep their column (the bands hang from it,
+      // --pf-pad-end).
+      margin-inline-end: calc(-1 * var(--pf-reach));
+      padding: var(--pf-pad-top) calc(var(--pf-pad-end) + var(--pf-reach)) 1.5rem var(--pf-pad-start);
     }
 
     // The text's own entrance (.fx below), not the panel's rise.
@@ -6549,11 +6555,13 @@ html.pf-reading-dark .pf-viewer--exhibit {
     }
   }
 
-  // Its scrollbar clear of the words on both sides alike.
+  // The centered column: its reach is the frame's margin and the room
+  // beside the column.
   &.is-reading .pf-viewer__panel {
     @include media-breakpoint-up(lg) {
       --pf-pad-start: 1.5rem;
       --pf-pad-end: 1.5rem;
+      --pf-reach: calc(var(--pf-frame-x) + max(0px, (100vw - 2 * var(--pf-frame-x) - 43rem) / 2));
     }
   }
 
@@ -6907,6 +6915,81 @@ html.pf-reading-dark .pf-viewer--exhibit {
   .pf-exhibit-onward__ready,
   .pf-exhibit-rewind__ready {
     opacity: 1;
+  }
+}
+
+// The exhibition's end (js/exhibition.js nextCue(), showEnd()): the way
+// on holds at a full pull on "End of the exhibition", the exhibition's
+// title and two ways out, Back to the gallery and Start again (live only
+// while it holds, .is-held). No line to fill: nothing opens.
+.pf-exhibit-onward__end {
+  display: none;
+}
+
+.pf-exhibit-onward.is-end {
+  .pf-hero-cue__line,
+  .pf-exhibit-onward__ready {
+    display: none;
+  }
+
+  .pf-exhibit-onward__end {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: .5rem;
+    margin-top: .6rem;
+  }
+
+  &.is-held .pf-exhibit-onward__band {
+    pointer-events: auto;
+  }
+
+  .pf-exhibit-onward__way {
+    flex: none;
+    padding: .55rem .8rem;
+    font: var(--pf-mono-ui)/1.5 var(--pf-viewer-mono);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--bs-body-color);
+    background: none;
+    border: 1px solid $pf-hairline;
+    transition: color .3s ease;
+
+    &:hover {
+      color: var(--pf-viewer-accent);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--pf-viewer-accent);
+      outline-offset: 2px;
+    }
+  }
+}
+
+// On the stage the bands sit on its glass, no fill of their own: the text
+// under them fades as they rise instead (--pf-fade, set with the pull;
+// .is-pulling only while one shows, as a filter makes a containing block).
+@property --pf-fade {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+.pf-viewer--exhibit.is-staged {
+  .pf-exhibit-onward__band,
+  .pf-exhibit-rewind__band {
+    background: none;
+  }
+
+  .pf-viewer__panel.is-pulling > :not(.pf-exhibit-onward, .pf-exhibit-rewind) {
+    filter: opacity(calc(1 - var(--pf-fade)));
+  }
+
+  @include pf-viewer-motion {
+    .pf-viewer__panel {
+      transition: --pf-fade .2s ease;
+    }
   }
 }
 

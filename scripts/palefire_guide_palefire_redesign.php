@@ -879,6 +879,13 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Mon Nov 23: A clear end to every exhibition', <<<'HTML'
+<ul>
+<li>When you step through an exhibition’s items, the last one now ends the exhibition instead of jumping back to the first. Scrolling on, or pressing the right arrow, shows “End of the exhibition” with its title and two choices: Back to the gallery, or Start again. The arrow buttons dim at the first and last items.</li>
+<li>The “keep scrolling” message now sits on the same soft blurred backdrop as the rest of the view, and the scroll bar sits at the right edge of the screen instead of next to the words.</li>
+<li>The bar of tools above each wall of pictures has a single line above it, not one above and one below.</li>
+</ul>
+HTML),
   $text('Mon Nov 23: Every wall shows its whole picture', <<<'HTML'
 <ul>
 <li>Exhibition sections laid out as a wall of pictures now always open on their whole picture in a frame, the first section too. Only a first section that reads as a story keeps the full-screen picture.</li>

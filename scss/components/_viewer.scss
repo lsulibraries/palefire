@@ -220,6 +220,17 @@ html.pf-viewer-open {
   translate: 0 -50%;
   transition: color .3s ease, border-color .3s ease;
 
+  // At an end (sync({ ends })): dimmed, still focusable, so focus on it
+  // never drops; no going round.
+  &[aria-disabled="true"] {
+    opacity: .35;
+    cursor: default;
+
+    &:hover {
+      color: var(--bs-body-color);
+    }
+  }
+
   &:hover {
     color: var(--pf-viewer-accent);
   }
