@@ -23,8 +23,13 @@
  * caption, so the wall does not open on a portrait either. An existing
  * lead is kept.
  *
- * Only while the gallery is still those six blocks, in that order, with no
- * entries: each figure’s file and each text’s heading are checked first,
+ * The exhibition’s poster (lady_menu2), where it has since been added as a
+ * seventh block after Acknowledgments, becomes that plate’s picture, so
+ * Acknowledgments is a picture tile too (the poster, then the credits).
+ *
+ * Only while the gallery is still those six blocks (or seven, with the
+ * poster last), in that order, with no entries: each figure’s file and
+ * each text’s heading are checked first,
  * and nothing is saved if one differs. Saved in place, without a new
  * revision, as the other exhibition scripts. Needs the Summary field on
  * entries (palefire_exhibit_bio_setup.php).
@@ -62,6 +67,8 @@ $expected = [
   ['text', 'In their words'],
   ['text', 'Acknowledgments'],
 ];
+// Added since: the poster, last. Taken into Acknowledgments where present.
+$poster = 'lady_menu2';
 // Text plates’ summaries (a picture tile needs none).
 $summaries = [
   'In their words' => 'Dorothy Colvin Howell and A.B. Clark remember making do with orange crates, husbands drying the silver, and what the houses meant in the life of the American woman.',
@@ -109,8 +116,15 @@ $file_of = function ($figure): string {
 // Check everything before changing anything.
 $blocks = $about->get('field_guide_blocks')->referencedEntities();
 $problems = [];
-if (count($blocks) !== count($expected)) {
-  $problems[] = count($blocks) . ' blocks, expected ' . count($expected);
+$has_poster = count($blocks) === count($expected) + 1;
+if ($has_poster) {
+  $last = end($blocks);
+  if ($last->bundle() !== 'exhibit_figure' || !str_starts_with($file_of($last), $poster)) {
+    $problems[] = 'block ' . count($blocks) . " should be the poster $poster, but is " . ($last->bundle() === 'exhibit_figure' ? $file_of($last) : $last->bundle());
+  }
+}
+elseif (count($blocks) !== count($expected)) {
+  $problems[] = count($blocks) . ' blocks, expected ' . count($expected) . ' (or ' . (count($expected) + 1) . ' with the poster last)';
 }
 foreach ($expected as $i => [$type, $name]) {
   $block = $blocks[$i] ?? NULL;
@@ -137,7 +151,16 @@ if ($problems) {
 
 $new = [];
 $pending = [];
-foreach ($expected as $i => [$type, $name]) {
+$tiles = 0;
+// The poster goes before Acknowledgments, as a tile’s picture comes before
+// its text.
+$plan = $expected;
+if ($has_poster) {
+  array_splice($plan, count($plan) - 1, 0, [['figure', $poster]]);
+  $poster_block = array_pop($blocks);
+  array_splice($blocks, count($blocks) - 1, 0, [$poster_block]);
+}
+foreach ($plan as $i => [$type, $name]) {
   $block = $blocks[$i];
   if ($type === 'figure') {
     $pending[] = Paragraph::create([
@@ -163,6 +186,7 @@ foreach ($expected as $i => [$type, $name]) {
     $values['field_entry_summary'] = $summaries[$name];
   }
   echo ($pending ? 'Picture tile: ' : 'Text plate: ') . $name . ' (' . str_word_count(strip_tags($body)) . ' words)' . PHP_EOL;
+  $tiles += $pending ? 1 : 0;
   $new[] = Paragraph::create($values);
   $pending = [];
 }
@@ -179,7 +203,7 @@ else {
 }
 echo 'Display: ' . ((string) $about->get('field_exhibit_display')->value ?: 'story') . ' → wall' . PHP_EOL;
 if (!$apply) {
-  echo 'Dry run: About the Exhibition becomes ' . count($new) . ' entries (2 picture tiles, 2 text plates). Nothing saved. Add apply=1 to save.' . PHP_EOL;
+  echo 'Dry run: About the Exhibition becomes ' . count($new) . " entries ($tiles picture tiles, " . (count($new) - $tiles) . ' text plates). Nothing saved. Add apply=1 to save.' . PHP_EOL;
   return;
 }
 $about->set('field_guide_blocks', $new);

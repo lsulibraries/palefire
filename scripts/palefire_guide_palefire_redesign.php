@@ -879,6 +879,11 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Mon Nov 23: A Lady in the South gets its own About', <<<'HTML'
+<ul>
+<li>About the Exhibition on A Lady in the South is now a wall like the other sections: the two narrators as portrait tiles, the exhibition’s poster with the acknowledgments, and the narrators’ own words as a text plate. It opens on the 1933 Home Economics Club page, so it no longer looks like the end of the section before it.</li>
+</ul>
+HTML),
   $text('Mon Nov 23: No more double posters', <<<'HTML'
 <ul>
 <li>When a section of an exhibition has no opening picture chosen, it borrows its first picture. That picture is no longer shown a second time further down: it stays framed at the top, with its caption and a View link.</li>
