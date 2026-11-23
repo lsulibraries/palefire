@@ -6184,6 +6184,13 @@ $pf-deck-strokes: 15, 20, 22, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 90;
   }
 }
 
+@keyframes pf-viewer-mini-in {
+  from {
+    opacity: 0;
+    translate: 0 4px;
+  }
+}
+
 @keyframes pf-audio-now-marquee {
   to {
     transform: translateX(-50%);
@@ -6214,6 +6221,26 @@ $pf-deck-strokes: 15, 20, 22, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 90;
 
 html.pf-a11y-motion .pf-exhibit-object__body {
   @include pf-audio-now-still;
+}
+
+// On the stage from lg the player is not pinned: it scrolls away with the
+// transcript, and a slim one in the foot follows it (.pf-viewer__mini;
+// js/exhibition.js footPlayer()). Nothing sits over the text there to
+// need a solid fill, and no glass could blur it inside the stage.
+@include media-breakpoint-up(lg) {
+  .pf-viewer--exhibit.is-staged .pf-exhibit-object__body {
+    .pf-audio {
+      position: relative;
+      animation: none;
+      background-color: transparent;
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+
+    .pf-audio__now {
+      display: none;
+    }
+  }
 }
 
 @keyframes pf-audio-now-slot {
@@ -6663,6 +6690,82 @@ html.pf-reading-dark .pf-viewer--exhibit {
 
     &:hover {
       background: color-mix(in srgb, var(--pf-viewer-accent) 6%, transparent);
+    }
+  }
+
+  // The slim player in the foot (js/exhibition.js footPlayer()): from lg,
+  // once the panel's player has scrolled away, Play, the time and the
+  // title, in the hint's place, the arrows staying where they are.
+  .pf-viewer__mini {
+    display: none;
+  }
+
+  @include media-breakpoint-up(lg) {
+    .pf-viewer__mini:not([hidden]) {
+      display: flex;
+      flex: 1 1 auto;
+      gap: .875rem;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .pf-viewer__steps:has(> .pf-viewer__mini:not([hidden])) {
+      display: flex;
+
+      .pf-viewer__hint {
+        display: none;
+      }
+    }
+  }
+
+  .pf-viewer__mini-play {
+    flex: none;
+    width: 2.5rem;
+    height: 2.5rem;
+
+    svg {
+      width: .95rem;
+      height: .95rem;
+    }
+  }
+
+  .pf-viewer__mini.is-playing {
+    .pf-audio__icon-play {
+      display: none;
+    }
+
+    .pf-audio__icon-pause {
+      display: inline;
+    }
+  }
+
+  .pf-viewer__mini-now {
+    display: flex;
+    gap: .875rem;
+    align-items: baseline;
+    min-width: 0;
+    margin: 0;
+    font: var(--pf-mono-label)/1.5 var(--pf-viewer-mono);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--pf-viewer-muted);
+  }
+
+  .pf-viewer__mini-time {
+    flex: none;
+    font-variant-numeric: tabular-nums;
+    color: var(--bs-body-color);
+  }
+
+  .pf-viewer__mini-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @include pf-viewer-motion {
+    .pf-viewer__mini:not([hidden]) {
+      animation: pf-viewer-mini-in .35s $pf-viewer-ease both;
     }
   }
 

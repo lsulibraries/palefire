@@ -1069,7 +1069,8 @@
   // A clip in the panel's copy of its entry: the copied player has no
   // listeners, so it is set up again, labelled by the view's title. The
   // transcript is the panel's text: shown under a label, not folded in a
-  // <details>, while the player stays pinned (_exhibition.scss).
+  // <details>, while the player stays pinned (_exhibition.scss), or on the
+  // stage from lg scrolls away and is followed in the foot (footPlayer()).
   function panelAudio(view) {
     if (view.body.querySelector('[data-pf-audio]')) {
       // Again once the dialog is open: on the first opening it is filled
@@ -1128,6 +1129,89 @@
     // A transcript in the panel: from lg a wider reading column
     // (.is-transcript, _exhibition.scss).
     view.dialog.classList.toggle('is-transcript', !!view.body.querySelector('.pf-exhibit-audio__read'));
+    footPlayer(view);
+  }
+
+  // On the stage from lg the panel's player is not pinned: it scrolls away
+  // with the transcript (_exhibition.scss). Once it has, a slim one in the
+  // foot, where the keys' hint was, plays and pauses the same clip (its
+  // own Play, so one clip at a time still holds), with the time and the
+  // title. Shown by the stylesheet from lg only; below it the player pins
+  // and never leaves the panel. Reset with every entry.
+  function footPlayer(view) {
+    let mini = view.mini;
+    if (!view.foot) {
+      return;
+    }
+    if (!mini) {
+      const el = document.createElement('div');
+      el.className = 'pf-viewer__mini';
+      el.hidden = true;
+      el.innerHTML = '<button type="button" class="pf-audio__play pf-viewer__mini-play" aria-describedby="pf-viewer-title"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path class="pf-audio__icon-play" d="M5 3.2v9.6L12.6 8z"/><path class="pf-audio__icon-pause" d="M4.5 3h2.5v10H4.5zM9 3h2.5v10H9z"/></svg><span class="visually-hidden"></span></button><p class="pf-viewer__mini-now" aria-hidden="true"><span class="pf-viewer__mini-time"></span><span class="pf-viewer__mini-title"></span></p>';
+      mini = { el, wrap: null, signal: null, observer: null };
+      view.mini = mini;
+      el.querySelector('button').addEventListener('click', () => {
+        const play = mini.wrap && mini.wrap.querySelector('.pf-audio__play');
+        if (play) {
+          play.click();
+        }
+      });
+    }
+    if (mini.el.parentElement !== view.foot) {
+      view.foot.prepend(mini.el);
+    }
+    // Hidden with focus in it: on to the panel's Play, else an arrow, never
+    // lost to the page.
+    const hide = () => {
+      const focused = mini.el.contains(document.activeElement);
+      mini.el.hidden = true;
+      if (focused) {
+        const to = (mini.wrap && mini.wrap.querySelector('.pf-audio__play'))
+          || [view.next, view.prev].find((button) => button && !button.hidden && button.getAttribute('aria-disabled') !== 'true')
+          || view.close;
+        if (to) {
+          to.focus({ preventScroll: true });
+        }
+      }
+    };
+    if (mini.signal) {
+      mini.signal.abort();
+    }
+    if (mini.observer) {
+      mini.observer.disconnect();
+    }
+    mini.wrap = view.body.querySelector('[data-pf-audio].is-custom');
+    hide();
+    const player = mini.wrap;
+    const audio = player && player.querySelector('audio');
+    if (!audio || !view.dialog.classList.contains('is-staged') || !('IntersectionObserver' in window)) {
+      mini.wrap = null;
+      return;
+    }
+    mini.signal = new AbortController();
+    const text = mini.el.querySelector('.visually-hidden');
+    const time = mini.el.querySelector('.pf-viewer__mini-time');
+    mini.el.querySelector('.pf-viewer__mini-title').textContent = view.title.textContent.trim();
+    const sync = () => {
+      mini.el.classList.toggle('is-playing', !audio.paused);
+      text.textContent = audio.paused ? Drupal.t('Play') : Drupal.t('Pause');
+      time.textContent = clock(audio.currentTime);
+    };
+    ['play', 'pause', 'timeupdate', 'loadedmetadata', 'ended'].forEach((type) => {
+      audio.addEventListener(type, sync, { signal: mini.signal.signal });
+    });
+    sync();
+    // Gone above the panel's top: shown; back in view: hidden.
+    mini.observer = new IntersectionObserver(([entry]) => {
+      const gone = !entry.isIntersecting && entry.rootBounds && entry.boundingClientRect.bottom <= entry.rootBounds.top + 1;
+      if (gone) {
+        mini.el.hidden = false;
+      }
+      else if (!mini.el.hidden) {
+        hide();
+      }
+    }, { root: view.panel });
+    mini.observer.observe(player);
   }
 
   // --pf-viewer-top-h for the pinned player (_exhibition.scss); kept

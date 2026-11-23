@@ -879,6 +879,13 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Mon Nov 23: The player follows you down a transcript', <<<'HTML'
+<ul>
+<li>In an exhibition’s object view on a computer, an interview’s player no longer sits fixed over the transcript on a solid band. It scrolls away with the text.</li>
+<li>Once it has gone, a slim player appears at the foot beside the arrows: play or pause, the time and the clip’s title. Scroll back up and the full player is there again.</li>
+<li>Phones and side panels keep the fixed player.</li>
+</ul>
+HTML),
   $text('Mon Nov 23: The exhibitions at the end keep their order', <<<'HTML'
 <ul>
 <li>The row of exhibitions at the end of each exhibition now always lists them in the same order. It opens on the exhibition you just finished, so you can see where it sits and step back or forward to its neighbors.</li>
