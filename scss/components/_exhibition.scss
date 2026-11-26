@@ -6232,8 +6232,11 @@ html.pf-a11y-motion .pf-exhibit-object__body {
 // need a solid fill, and no glass could blur it inside the stage.
 @include media-breakpoint-up(lg) {
   .pf-viewer--exhibit.is-staged .pf-exhibit-object__body {
+    // Its sticky offset dropped too: relative, it would shift the player
+    // up by the panel's top padding, over the credit above it.
     .pf-audio {
       position: relative;
+      top: auto;
       animation: none;
       background-color: transparent;
       -webkit-backdrop-filter: none;

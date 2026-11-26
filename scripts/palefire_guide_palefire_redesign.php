@@ -879,6 +879,11 @@ HTML),
 <li>Teaching &amp; Research on the Special Collections homepage is back to its list of rows, like What Hill Holds. It had picked up the exhibitions’ picture carousel by mistake, because its pages are built the same way as exhibitions.</li>
 </ul>
 HTML),
+  $text('Wed Nov 25: Room above the play button', <<<'HTML'
+<ul>
+<li>In an exhibition’s item view on a wide screen, a clip’s play button sat on top of the “Interviewed by” line above it. The player now sits clear of it, with the same space as everywhere else.</li>
+</ul>
+HTML),
   $text('Mon Nov 23: Mossville ends where it should; darker object view', <<<'HTML'
 <ul>
 <li>Mossville’s Full Interviews now shows all 49 interviews at once instead of folding them under “Read more”, and the page no longer runs on into several screens of blank space below the footer.</li>
